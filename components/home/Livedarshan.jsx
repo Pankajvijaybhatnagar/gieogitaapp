@@ -1,10 +1,12 @@
 import { FontAwesome } from '@expo/vector-icons';
 import { useEffect, useRef } from 'react';
+import { useRouter } from 'expo-router';
 import { Animated, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { COLORS } from './constant';
 import { SectionHeader } from './Sharedui';
 
 export default function LiveDarshan() {
+  const router = useRouter();
   const pulseAnim = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
@@ -19,7 +21,11 @@ export default function LiveDarshan() {
   return (
     <>
       <SectionHeader title="🔴 Live" accent="Darshan" />
-      <TouchableOpacity style={styles.liveBanner} activeOpacity={0.88}>
+      <TouchableOpacity
+        style={styles.liveBanner}
+        activeOpacity={0.88}
+        onPress={() => router.push('/home/livedarshan')}
+      >
         <View style={styles.livePlay}>
           <FontAwesome name="play" size={18} color={COLORS.gold} />
         </View>

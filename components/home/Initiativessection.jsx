@@ -1,9 +1,12 @@
 import { FontAwesome } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { aboutInitiatives, COLORS } from './constant';
 import { SectionHeader } from './Sharedui';
 
 export default function InitiativesSection() {
+  const router = useRouter();
+
   return (
     <>
       <SectionHeader title="🌿 Our" accent="Initiatives" />
@@ -19,7 +22,12 @@ export default function InitiativesSection() {
           serve society with love, devotion, and selfless service.
         </Text>
         {aboutInitiatives.map((init) => (
-          <TouchableOpacity key={init.title} style={styles.initiativeCard} activeOpacity={0.85}>
+          <TouchableOpacity
+            key={init.title}
+            style={styles.initiativeCard}
+            activeOpacity={0.85}
+            onPress={() => router.push(init.route)}  
+          >
             <View style={styles.initiativeIcon}>
               <Text style={styles.initiativeIconText}>{init.icon}</Text>
             </View>

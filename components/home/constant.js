@@ -75,7 +75,7 @@ export const sevaList = [
 ];
 
 export const aboutInitiatives = [
-  { icon: '📚', title: 'Bal Sanskar', desc: 'Vedic teachings for children' },
-  { icon: '🐄', title: 'GIEO Gaushala', desc: 'Cow seva & protection' },
-  { icon: '🌏', title: 'Join GIEO Gita', desc: 'Spread Gita wisdom globally' },
+  { icon: '📚', title: 'Bal Sanskar', desc: 'Vedic teachings for children', route: 'home/balSanskar' },
+  { icon: '🐄', title: 'GIEO Gaushala', desc: 'Cow seva & protection', route: 'home/GieoGaushala' },
+  { icon: '🌏', title: 'Join GIEO Gita', desc: 'Spread Gita wisdom globally', route: 'home/JoinGieoGita' },
 ];
