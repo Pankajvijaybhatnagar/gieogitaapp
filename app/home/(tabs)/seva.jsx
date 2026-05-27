@@ -1,16 +1,17 @@
 import { useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import BirthdayBanner from '../../components/pledge/BirthdayBanner';
-import ContactFooter from '../../components/pledge/ContactFooter';
-import HeroSection from '../../components/pledge/HeroSection';
-import HowItWorks from '../../components/pledge/HowItWorks';
-import PaymentModal from '../../components/pledge/PaymentModal';
-import SevaList from '../../components/pledge/SevaList';
-import TrustSection from '../../components/pledge/TrustSection';
-import { GoldDivider } from '../../components/pledge/SharedUI';
-import { C } from '../../components/pledge/constants';
+import HeroSection from '../../../components/pledge/HeroSection';
+import HowItWorks from '../../../components/pledge/HowItWorks';
+import { GoldDivider } from '../../../components/pledge/SharedUI';
+import SevaList from '../../../components/pledge/SevaList';
+import TrustSection from '../../../components/pledge/TrustSection';
+import ContactFooter from '../../../components/pledge/ContactFooter';
+import PaymentModal from '../../../components/pledge/PaymentModal';
+import { C } from '../../../components/pledge/constants';
 
-export default function MyPledgeScreen() {
+
+
+export default function SevaScreen() {
   const [selectedSeva, setSelectedSeva] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -33,7 +34,7 @@ export default function MyPledgeScreen() {
 
         <GoldDivider />
 
-        <BirthdayBanner onDonate={handleDonate} />
+        {/* <BirthdayBanner onDonate={handleDonate} /> */}
 
         <GoldDivider />
 

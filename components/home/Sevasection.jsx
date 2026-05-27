@@ -1,8 +1,11 @@
+import { useRouter } from 'expo-router';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { COLORS, sevaList } from './constant';
 import { SectionHeader } from './Sharedui';
 
 export default function SevaSection() {
+  const router = useRouter();
+
   return (
     <>
       <SectionHeader title="🙏 Choose Your" accent="Seva" />
@@ -15,8 +18,14 @@ export default function SevaSection() {
         </Text>
         <View style={styles.sevaChips}>
           {sevaList.map((seva) => (
-            <TouchableOpacity key={seva} style={styles.sevaChip} activeOpacity={0.75}>
-              <Text style={styles.sevaChipText}>{seva}</Text>
+            <TouchableOpacity
+              key={seva.name}
+              style={styles.sevaChip}
+              activeOpacity={0.75}
+              onPress={() => router.push(seva.route)}
+            >
+              <Text style={styles.sevaChipIcon}>{seva.icon}</Text>
+              <Text style={styles.sevaChipText}>{seva.name}</Text>
             </TouchableOpacity>
           ))}
         </View>
@@ -64,6 +73,9 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   sevaChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
     backgroundColor: 'rgba(44,26,10,0.08)',
     borderWidth: 1,
     borderColor: 'rgba(201,162,39,0.5)',
@@ -71,6 +83,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 5,
   },
+  sevaChipIcon: { fontSize: 12 },
   sevaChipText: {
     fontSize: 11,
     color: COLORS.warmBrown,

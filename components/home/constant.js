@@ -69,9 +69,15 @@ export const upcomingEvents = [
 ];
 
 export const sevaList = [
-  'Shringaar Seva', 'Aarti Seva', 'Anna Seva',
-  'Gaushala Seva', 'Vidya Seva', 'Jal Seva',
-  'Gau-Poojan Seva', 'Gau-Grass Seva', 'Chikitsa Seva',
+  { name: 'Shringaar Seva', icon: '🌸', route: '/home/seva', desc: 'Adornment & decoration offerings' },
+  { name: 'Aarti Seva',     icon: '🪔', route: '/home/seva', desc: 'Sacred lamp ceremony seva'        },
+  { name: 'Anna Seva',      icon: '🍽️', route: '/home/seva', desc: 'Food offering & distribution'     },
+  { name: 'Gaushala Seva',  icon: '🐄', route: '/home/seva', desc: 'Sacred cow shelter seva'          },
+  { name: 'Vidya Seva',     icon: '📚', route: '/home/seva', desc: 'Education & knowledge service'    },
+  { name: 'Jal Seva',       icon: '💧', route: '/home/seva', desc: 'Sacred water offering seva'       },
+  { name: 'Gau-Poojan Seva',icon: '🙏', route: '/home/seva', desc: 'Cow worship & puja ceremony'      },
+  { name: 'Gau-Grass Seva', icon: '🌿', route: '/home/seva', desc: 'Feeding grass to sacred cows'     },
+  { name: 'Chikitsa Seva',  icon: '💊', route: '/home/seva', desc: 'Medical & health care service'    },
 ];
 
 export const aboutInitiatives = [

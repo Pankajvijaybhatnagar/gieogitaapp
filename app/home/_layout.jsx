@@ -8,10 +8,12 @@ import {
   ScrollView,
   Alert,
 } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useRouter, usePathname } from 'expo-router';
 import { FontAwesome } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useDispatch } from 'react-redux';
-import { logout } from '@/components/redux/authSlice'; // ← your existing auth slice
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { logout } from '@/components/redux/authSlice';
 
 // ─── COLOR PALETTE ────────────────────────────────────────────────────────────
 const COLORS = {
@@ -30,42 +32,137 @@ const COLORS = {
   dangerLight: '#E74C3C',
 };
 
-// ─── DRAWER NAV ITEMS — exact routes from folder structure ───────────────────
+// ─── DRAWER NAV ITEMS ─────────────────────────────────────────────────────────
 const DRAWER_ITEMS = [
-  { label: 'Home', icon: 'home', route: '/home/(tabs)' },
-  { label: 'Chants', icon: 'music', route: '/home/(tabs)/chants' },
-  { label: 'Reading', icon: 'book', route: '/home/(tabs)/reading' },
-  { label: 'Events', icon: 'calendar', route: '/home/eventgroup' },
-  { label: 'Seva', icon: 'heart', route: '/home/mypledge' },
-  { label: 'Health', icon: 'medkit', route: '/home/health' },
-  { label: 'Promotional', icon: 'bullhorn', route: '/home/promotional' },
-  { label: 'Help', icon: 'question-circle', route: '/home/help' },
-  { label: 'Profile', icon: 'user-circle', route: '/home/(tabs)/profile' },
+  { label: 'Home',         icon: 'home',            route: '/home/(tabs)'         },
+  { label: 'Chants',       icon: 'music',           route: '/home/(tabs)/chants'  },
+  { label: 'Reading',      icon: 'book',            route: '/home/(tabs)/reading' },
+  { label: 'Profile',      icon: 'user-circle',     route: '/home/(tabs)/profile' },
+  { label: 'Events',       icon: 'calendar',        route: '/home/eventgroup'     },
+  { label: 'Live Darshan', icon: 'video-camera',    route: '/home/livedarshan'    },
+  { label: 'Bal Sanskar',  icon: 'child',           route: '/home/balSanskar'     },
+  { label: 'Gaushala',     icon: 'leaf',            route: '/home/GieoGaushala'   },
+  { label: 'Join Gieo',    icon: 'users',           route: '/home/JoinGieoGita'   },
+  { label: 'Health',       icon: 'medkit',          route: '/home/health'         },
+  { label: 'Promotional',  icon: 'bullhorn',        route: '/home/promotional'    },
+  { label: 'Help',         icon: 'question-circle', route: '/home/help'           },
 ];
+
+// ─── BOTTOM TAB CONFIG ────────────────────────────────────────────────────────
+const TABS = [
+  { label: 'Home',    icon: 'home-outline',       iconFocused: 'home',        route: '/home/(tabs)'         },
+  { label: 'Chants',  icon: 'music-note-outline',  iconFocused: 'music-note',  route: '/home/(tabs)/chants'  },
+  { label: 'Seva',    icon: 'hand-heart-outline',  iconFocused: 'hand-heart',  route: '/home/(tabs)/seva'    },
+  { label: 'Reading', icon: 'book-open-outline',   iconFocused: 'book-open',   route: '/home/(tabs)/reading' },
+  { label: 'Profile', icon: 'account-outline',     iconFocused: 'account',     route: '/home/(tabs)/profile' },
+];
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SHARED BOTTOM TAB BAR
+// ─────────────────────────────────────────────────────────────────────────────
+function SharedTabBar() {
+  const router = useRouter();
+  const pathname = usePathname();
+  const insets = useSafeAreaInsets();
+
+  const isTabActive = (route) => {
+    // strip /home and /(tabs) to get the clean segment e.g. '/chants'
+    const segment = route
+      .replace('/home', '')
+      .replace('/(tabs)', '') || '/';
+
+    if (segment === '/') {
+      // Home tab is active when on the root tabs screen
+      return (
+        pathname === '/' ||
+        pathname === '/index' ||
+        pathname === '/home' ||
+        pathname.endsWith('/(tabs)') ||
+        pathname.endsWith('/index')
+      );
+    }
+    // e.g. segment = '/chants', pathname = '/chants' or '/home/chants'
+    return pathname.endsWith(segment.replace('/', ''));
+  };
+
+  return (
+    <View style={[tabStyles.tabBar, { paddingBottom: insets.bottom + 8 }]}>
+      {/* Gold top line */}
+      <View style={tabStyles.topGoldLine} />
+
+      <View style={tabStyles.tabBarInner}>
+        {TABS.map((tab, index) => {
+          const isSeva   = tab.label === 'Seva';
+          const isActive = isTabActive(tab.route);
+
+          return (
+            <TouchableOpacity
+              key={index}
+              onPress={() => router.push(tab.route)}
+              activeOpacity={0.75}
+              style={[tabStyles.tabItem, isSeva && tabStyles.tabItemSeva]}
+            >
+              {/* Active pill highlight — regular tabs only */}
+              {isActive && !isSeva && <View style={tabStyles.activePill} />}
+
+              {isSeva ? (
+                /* ── Elevated Seva centre button ── */
+                <View style={[tabStyles.sevaButton, isActive && tabStyles.sevaButtonActive]}>
+                  <MaterialCommunityIcons
+                    name={isActive ? tab.iconFocused : tab.icon}
+                    size={26}
+                    color={isActive ? COLORS.deepBrown : COLORS.goldLight}
+                  />
+                </View>
+              ) : (
+                /* ── Regular tab icon ── */
+                <View style={tabStyles.iconWrap}>
+                  <MaterialCommunityIcons
+                    name={isActive ? tab.iconFocused : tab.icon}
+                    size={22}
+                    color={isActive ? COLORS.goldLight : COLORS.goldDark}
+                  />
+                  {isActive && <View style={tabStyles.activeDot} />}
+                </View>
+              )}
+
+              <Text
+                style={[
+                  tabStyles.tabLabel,
+                  isActive && tabStyles.tabLabelActive,
+                  isSeva && tabStyles.tabLabelSeva,
+                  isSeva && isActive && tabStyles.tabLabelSevaActive,
+                ]}
+              >
+                {tab.label}
+              </Text>
+            </TouchableOpacity>
+          );
+        })}
+      </View>
+    </View>
+  );
+}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // CUSTOM DRAWER CONTENT
 // ─────────────────────────────────────────────────────────────────────────────
-function CustomDrawerContent(props) {
+function CustomDrawerContent({ navigation }) {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  // ── LOGOUT HANDLER ──────────────────────────────────────────────
   const handleLogout = () => {
     Alert.alert(
       '🕉️ Logout',
       'Are you sure you want to logout?',
       [
-        {
-          text: 'Cancel',
-          style: 'cancel',
-        },
+        { text: 'Cancel', style: 'cancel' },
         {
           text: 'Logout',
           style: 'destructive',
           onPress: () => {
-            dispatch(logout());          // clear Redux auth state
-            router.replace('/login');    // redirect to login screen
+            dispatch(logout());
+            router.replace('/login');
           },
         },
       ],
@@ -80,11 +177,9 @@ function CustomDrawerContent(props) {
           DRAWER HEADER
       ══════════════════════════════════ */}
       <View style={drawerStyles.header}>
-        {/* Decorative blobs */}
         <View style={drawerStyles.blob1} />
         <View style={drawerStyles.blob2} />
 
-        {/* GIEO GITA Logo row */}
         <View style={drawerStyles.logoRow}>
           <View style={drawerStyles.logoCircle}>
             <Text style={drawerStyles.logoEmoji}>🪷</Text>
@@ -95,7 +190,6 @@ function CustomDrawerContent(props) {
           </View>
         </View>
 
-        {/* App tagline box */}
         <View style={drawerStyles.taglineBox}>
           <Text style={drawerStyles.taglineBig}>Gieo Gita</Text>
           <Text style={drawerStyles.taglineSmall}>
@@ -118,16 +212,16 @@ function CustomDrawerContent(props) {
           <TouchableOpacity
             key={index}
             style={drawerStyles.drawerItem}
-            onPress={() => router.push(item.route)}
+            onPress={() => {
+              router.push(item.route);
+              navigation.closeDrawer();
+            }}
             activeOpacity={0.72}
           >
-            {/* Icon box */}
             <View style={drawerStyles.drawerItemIconBox}>
               <FontAwesome name={item.icon} size={15} color={COLORS.goldDark} />
             </View>
-            {/* Label */}
             <Text style={drawerStyles.drawerItemLabel}>{item.label}</Text>
-            {/* Chevron */}
             <FontAwesome
               name="chevron-right"
               size={10}
@@ -158,8 +252,6 @@ function CustomDrawerContent(props) {
       {/* ══════════════════════════════════
           LOGOUT BUTTON + FOOTER
       ══════════════════════════════════ */}
-
-      {/* Logout button — above footer */}
       <View style={drawerStyles.logoutSection}>
         <TouchableOpacity
           style={drawerStyles.logoutBtn}
@@ -170,11 +262,15 @@ function CustomDrawerContent(props) {
             <FontAwesome name="sign-out" size={16} color={COLORS.dangerLight} />
           </View>
           <Text style={drawerStyles.logoutText}>Logout</Text>
-          <FontAwesome name="chevron-right" size={10} color={COLORS.dangerLight} style={{ opacity: 0.5 }} />
+          <FontAwesome
+            name="chevron-right"
+            size={10}
+            color={COLORS.dangerLight}
+            style={{ opacity: 0.5 }}
+          />
         </TouchableOpacity>
       </View>
 
-      {/* Footer */}
       <View style={drawerStyles.footer}>
         <Text style={drawerStyles.footerText}>🕉️  Jai Shri Krishna  🕉️</Text>
       </View>
@@ -198,68 +294,85 @@ function HeaderTitle() {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// HOME LAYOUT — original Drawer.Screen route name unchanged
+// HOME LAYOUT
 // ─────────────────────────────────────────────────────────────────────────────
 export default function HomeLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <Drawer
-        drawerContent={(props) => <CustomDrawerContent {...props} />}
-        screenOptions={({ navigation }) => ({
-          // ── Header ────────────────────────────────────────────────
-          headerStyle: {
-            backgroundColor: COLORS.deepBrown,
-            borderBottomWidth: 1.5,
-            borderBottomColor: COLORS.gold,
-            elevation: 0,
-            shadowOpacity: 0,
-          },
-          headerTintColor: COLORS.goldLight,
-          headerTitleAlign: 'center',
-          headerTitle: () => <HeaderTitle />,
+      {/*
+        Outer View is a column:
+          Row 1 — Drawer (flex:1, takes all remaining space)
+          Row 2 — SharedTabBar (fixed height, always visible)
+      */}
+      <View style={{ flex: 1 }}>
 
-          // ── Menu button (left) ────────────────────────────────────
-          headerLeft: () => (
-            <TouchableOpacity
-              style={headerStyles.menuBtn}
-              onPress={() => navigation.toggleDrawer()}
-            >
-              <FontAwesome name="bars" size={17} color={COLORS.goldLight} />
-            </TouchableOpacity>
-          ),
+        {/* ── Drawer fills everything above the tab bar ── */}
+        <View style={{ flex: 1 }}>
+          <Drawer
+            drawerContent={(props) => <CustomDrawerContent {...props} />}
+            screenOptions={({ navigation }) => ({
+              // ── Header ──────────────────────────────────────────
+              headerStyle: {
+                backgroundColor: COLORS.deepBrown,
+                borderBottomWidth: 1.5,
+                borderBottomColor: COLORS.gold,
+                elevation: 0,
+                shadowOpacity: 0,
+              },
+              headerTintColor: COLORS.goldLight,
+              headerTitleAlign: 'center',
+              headerTitle: () => <HeaderTitle />,
 
-          // ── Right icons ───────────────────────────────────────────
-          headerRight: () => (
-            <View style={headerStyles.rightRow}>
-              <TouchableOpacity style={headerStyles.iconBtn}>
-                <FontAwesome name="bell" size={15} color={COLORS.goldLight} />
-                <View style={headerStyles.notifDot} />
-              </TouchableOpacity>
-              <TouchableOpacity style={headerStyles.iconBtn}>
-                <FontAwesome name="search" size={15} color={COLORS.goldLight} />
-              </TouchableOpacity>
-            </View>
-          ),
+              // ── Menu button (left) ───────────────────────────────
+              headerLeft: () => (
+                <TouchableOpacity
+                  style={headerStyles.menuBtn}
+                  onPress={() => navigation.toggleDrawer()}
+                >
+                  <FontAwesome name="bars" size={17} color={COLORS.goldLight} />
+                </TouchableOpacity>
+              ),
 
-          // ── Drawer panel ──────────────────────────────────────────
-          drawerStyle: {
-            backgroundColor: COLORS.cream,
-            width: 300,
-          },
-          drawerActiveTintColor: COLORS.goldLight,
-          drawerInactiveTintColor: COLORS.warmBrown,
-          drawerActiveBackgroundColor: 'rgba(201,162,39,0.1)',
-        })}
-      >
-        {/* ── original Drawer.Screen unchanged ── */}
-        <Drawer.Screen
-          name="(tabs)"
-          options={{
-            drawerLabel: 'Home',
-            title: 'Overview',
-          }}
-        />
-      </Drawer>
+              // ── Right icons ──────────────────────────────────────
+              headerRight: () => (
+                <View style={headerStyles.rightRow}>
+                  <TouchableOpacity style={headerStyles.iconBtn}>
+                    <FontAwesome name="bell" size={15} color={COLORS.goldLight} />
+                    <View style={headerStyles.notifDot} />
+                  </TouchableOpacity>
+                  <TouchableOpacity style={headerStyles.iconBtn}>
+                    <FontAwesome name="search" size={15} color={COLORS.goldLight} />
+                  </TouchableOpacity>
+                </View>
+              ),
+
+              // ── Drawer panel ─────────────────────────────────────
+              drawerStyle: {
+                backgroundColor: COLORS.cream,
+                width: 300,
+              },
+              drawerActiveTintColor: COLORS.goldLight,
+              drawerInactiveTintColor: COLORS.warmBrown,
+              drawerActiveBackgroundColor: 'rgba(201,162,39,0.1)',
+            })}
+          >
+            {/* ── All screens registered ── */}
+            <Drawer.Screen name="(tabs)"       options={{ drawerLabel: 'Home',         title: 'Home'         }} />
+            <Drawer.Screen name="eventgroup"   options={{ drawerLabel: 'Events',       title: 'Events'       }} />
+            <Drawer.Screen name="livedarshan"  options={{ drawerLabel: 'Live Darshan', title: 'Live Darshan' }} />
+            <Drawer.Screen name="balSanskar"   options={{ drawerLabel: 'Bal Sanskar',  title: 'Bal Sanskar'  }} />
+            <Drawer.Screen name="GieoGaushala" options={{ drawerLabel: 'Gaushala',     title: 'Gaushala'     }} />
+            <Drawer.Screen name="JoinGieoGita" options={{ drawerLabel: 'Join Gieo',    title: 'Join Gieo'    }} />
+            <Drawer.Screen name="health"       options={{ drawerLabel: 'Health',       title: 'Health'       }} />
+            <Drawer.Screen name="promotional"  options={{ drawerLabel: 'Promotional',  title: 'Promotional'  }} />
+            <Drawer.Screen name="help"         options={{ drawerLabel: 'Help',         title: 'Help'         }} />
+          </Drawer>
+        </View>
+
+        {/* ── Tab bar always visible at the bottom on ALL screens ── */}
+        <SharedTabBar />
+
+      </View>
     </GestureHandlerRootView>
   );
 }
@@ -323,14 +436,110 @@ const headerStyles = StyleSheet.create({
   },
 });
 
+// ─── BOTTOM TAB STYLES ────────────────────────────────────────────────────────
+const tabStyles = StyleSheet.create({
+  tabBar: {
+    backgroundColor: COLORS.deepBrown,
+  },
+  topGoldLine: {
+    height: 1,
+    backgroundColor: COLORS.gold,
+    opacity: 0.35,
+  },
+  tabBarInner: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'flex-end',
+    paddingTop: 6,
+    paddingHorizontal: 4,
+  },
+  tabItem: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    paddingVertical: 4,
+    position: 'relative',
+    minHeight: 54,
+  },
+  activePill: {
+    position: 'absolute',
+    top: 0,
+    left: '12%',
+    right: '12%',
+    height: '100%',
+    backgroundColor: 'rgba(201,162,39,0.1)',
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: 'rgba(201,162,39,0.22)',
+  },
+  iconWrap: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 4,
+  },
+  activeDot: {
+    width: 4,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: COLORS.gold,
+    marginTop: 3,
+  },
+  tabLabel: {
+    fontSize: 9,
+    color: COLORS.goldDark,
+    letterSpacing: 0.5,
+    fontWeight: '600',
+    textTransform: 'uppercase',
+  },
+  tabLabelActive: {
+    color: COLORS.goldLight,
+  },
+  tabItemSeva: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    paddingVertical: 4,
+    minHeight: 54,
+    marginTop: -20,
+  },
+  sevaButton: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: COLORS.warmBrown,
+    borderWidth: 2,
+    borderColor: COLORS.gold,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 4,
+    shadowColor: COLORS.gold,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.4,
+    shadowRadius: 8,
+    elevation: 10,
+  },
+  sevaButtonActive: {
+    backgroundColor: COLORS.goldLight,
+    borderColor: COLORS.goldDark,
+  },
+  tabLabelSeva: {
+    fontSize: 9,
+    color: COLORS.goldDark,
+    fontWeight: '700',
+    letterSpacing: 0.5,
+    textTransform: 'uppercase',
+  },
+  tabLabelSevaActive: {
+    color: COLORS.goldLight,
+  },
+});
+
 // ─── DRAWER STYLES ────────────────────────────────────────────────────────────
 const drawerStyles = StyleSheet.create({
   root: {
     flex: 1,
     backgroundColor: COLORS.cream,
   },
-
-  // ── HEADER ──────────────────────────────────────────────────────
   header: {
     backgroundColor: COLORS.deepBrown,
     paddingTop: 50,
@@ -407,8 +616,6 @@ const drawerStyles = StyleSheet.create({
     color: COLORS.goldDark,
     fontStyle: 'italic',
   },
-
-  // ── NAV ITEMS ───────────────────────────────────────────────────
   itemsScroll: {
     flex: 1,
   },
@@ -449,8 +656,6 @@ const drawerStyles = StyleSheet.create({
     color: COLORS.warmBrown,
     letterSpacing: 0.2,
   },
-
-  // ── MID DIVIDER ─────────────────────────────────────────────────
   midDivider: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -467,8 +672,6 @@ const drawerStyles = StyleSheet.create({
     fontSize: 13,
     marginHorizontal: 8,
   },
-
-  // ── VERSE BOX ───────────────────────────────────────────────────
   verseBox: {
     backgroundColor: COLORS.warmBrown,
     marginHorizontal: 16,
@@ -492,8 +695,6 @@ const drawerStyles = StyleSheet.create({
     fontWeight: '700',
     letterSpacing: 0.5,
   },
-
-  // ── LOGOUT ──────────────────────────────────────────────────────
   logoutSection: {
     paddingHorizontal: 10,
     paddingVertical: 8,
@@ -528,8 +729,6 @@ const drawerStyles = StyleSheet.create({
     color: COLORS.dangerLight,
     letterSpacing: 0.2,
   },
-
-  // ── FOOTER ──────────────────────────────────────────────────────
   footer: {
     backgroundColor: COLORS.deepBrown,
     paddingVertical: 13,
