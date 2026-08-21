@@ -1,19 +1,18 @@
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { useAuth } from '@/context/AuthContext';
+import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Link, usePathname, useRouter } from 'expo-router';
 import { Drawer } from 'expo-router/drawer';
 import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  ScrollView,
   Alert,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import { useRouter, usePathname } from 'expo-router';
-import { FontAwesome } from '@expo/vector-icons';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useDispatch } from 'react-redux';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { logout } from '@/components/redux/authSlice';
+import { useDispatch } from 'react-redux';
 
 // ─── COLOR PALETTE ────────────────────────────────────────────────────────────
 const COLORS = {
@@ -34,27 +33,52 @@ const COLORS = {
 
 // ─── DRAWER NAV ITEMS ─────────────────────────────────────────────────────────
 const DRAWER_ITEMS = [
-  { label: 'Home',         icon: 'home',            route: '/home/(tabs)'         },
-  { label: 'Chants',       icon: 'music',           route: '/home/(tabs)/chants'  },
-  { label: 'Reading',      icon: 'book',            route: '/home/(tabs)/reading' },
-  { label: 'Profile',      icon: 'user-circle',     route: '/home/(tabs)/profile' },
-  { label: 'Events',       icon: 'calendar',        route: '/home/eventgroup'     },
-  { label: 'Live Darshan', icon: 'video-camera',    route: '/home/livedarshan'    },
-  { label: 'Bal Sanskar',  icon: 'child',           route: '/home/balSanskar'     },
-  { label: 'Gaushala',     icon: 'leaf',            route: '/home/GieoGaushala'   },
-  { label: 'Join Gieo',    icon: 'users',           route: '/home/JoinGieoGita'   },
-  { label: 'Health',       icon: 'medkit',          route: '/home/health'         },
-  { label: 'Promotional',  icon: 'bullhorn',        route: '/home/promotional'    },
-  { label: 'Help',         icon: 'question-circle', route: '/home/help'           },
+  { label: 'Home', icon: 'home', route: '/home/(tabs)' },
+  { label: 'Chants', icon: 'music', route: '/home/(tabs)/chants' },
+  { label: 'Reading', icon: 'book', route: '/home/(tabs)/reading' },
+  { label: 'Profile', icon: 'user-circle', route: '/home/(tabs)/profile' },
+  { label: 'Events', icon: 'calendar', route: '/home/eventgroup' },
+  { label: 'Live Darshan', icon: 'video-camera', route: '/home/livedarshan' },
+  { label: 'Bal Sanskar', icon: 'child', route: '/home/balSanskar' },
+  { label: 'Gaushala', icon: 'leaf', route: '/home/GieoGaushala' },
+  { label: 'Join Gieo', icon: 'users', route: '/home/JoinGieoGita' },
+  { label: 'Health', icon: 'medkit', route: '/home/health' },
+  { label: 'Promotional', icon: 'bullhorn', route: '/home/promotional' },
+  { label: 'Help', icon: 'question-circle', route: '/home/help' },
 ];
 
 // ─── BOTTOM TAB CONFIG ────────────────────────────────────────────────────────
 const TABS = [
-  { label: 'Home',    icon: 'home-outline',       iconFocused: 'home',        route: '/home/(tabs)'         },
-  { label: 'Chants',  icon: 'music-note-outline',  iconFocused: 'music-note',  route: '/home/(tabs)/chants'  },
-  { label: 'Seva',    icon: 'hand-heart-outline',  iconFocused: 'hand-heart',  route: '/home/(tabs)/seva'    },
-  { label: 'Reading', icon: 'book-open-outline',   iconFocused: 'book-open',   route: '/home/(tabs)/reading' },
-  { label: 'Profile', icon: 'account-outline',     iconFocused: 'account',     route: '/home/(tabs)/profile' },
+  {
+    label: 'Home',
+    icon: 'home-outline',
+    iconFocused: 'home',
+    route: '/home/(tabs)',
+  },
+  {
+    label: 'Chants',
+    icon: 'music-note-outline',
+    iconFocused: 'music-note',
+    route: '/home/(tabs)/chants',
+  },
+  {
+    label: 'Seva',
+    icon: 'hand-heart-outline',
+    iconFocused: 'hand-heart',
+    route: '/home/(tabs)/seva',
+  },
+  {
+    label: 'Reading',
+    icon: 'book-open-outline',
+    iconFocused: 'book-open',
+    route: '/home/(tabs)/reading',
+  },
+  {
+    label: 'Profile',
+    icon: 'account-outline',
+    iconFocused: 'account',
+    route: '/home/(tabs)/profile',
+  },
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -65,11 +89,9 @@ function SharedTabBar() {
   const pathname = usePathname();
   const insets = useSafeAreaInsets();
 
-  const isTabActive = (route) => {
+  const isTabActive = route => {
     // strip /home and /(tabs) to get the clean segment e.g. '/chants'
-    const segment = route
-      .replace('/home', '')
-      .replace('/(tabs)', '') || '/';
+    const segment = route.replace('/home', '').replace('/(tabs)', '') || '/';
 
     if (segment === '/') {
       // Home tab is active when on the root tabs screen
@@ -92,7 +114,7 @@ function SharedTabBar() {
 
       <View style={tabStyles.tabBarInner}>
         {TABS.map((tab, index) => {
-          const isSeva   = tab.label === 'Seva';
+          const isSeva = tab.label === 'Seva';
           const isActive = isTabActive(tab.route);
 
           return (
@@ -100,14 +122,17 @@ function SharedTabBar() {
               key={index}
               onPress={() => router.push(tab.route)}
               activeOpacity={0.75}
-              style={[tabStyles.tabItem, isSeva && tabStyles.tabItemSeva]}
-            >
+              style={[tabStyles.tabItem, isSeva && tabStyles.tabItemSeva]}>
               {/* Active pill highlight — regular tabs only */}
               {isActive && !isSeva && <View style={tabStyles.activePill} />}
 
               {isSeva ? (
                 /* ── Elevated Seva centre button ── */
-                <View style={[tabStyles.sevaButton, isActive && tabStyles.sevaButtonActive]}>
+                <View
+                  style={[
+                    tabStyles.sevaButton,
+                    isActive && tabStyles.sevaButtonActive,
+                  ]}>
                   <MaterialCommunityIcons
                     name={isActive ? tab.iconFocused : tab.icon}
                     size={26}
@@ -132,8 +157,7 @@ function SharedTabBar() {
                   isActive && tabStyles.tabLabelActive,
                   isSeva && tabStyles.tabLabelSeva,
                   isSeva && isActive && tabStyles.tabLabelSevaActive,
-                ]}
-              >
+                ]}>
                 {tab.label}
               </Text>
             </TouchableOpacity>
@@ -150,29 +174,29 @@ function SharedTabBar() {
 function CustomDrawerContent({ navigation }) {
   const router = useRouter();
   const dispatch = useDispatch();
+  const { user, logout, access_token } = useAuth();
 
   const handleLogout = () => {
     Alert.alert(
-      '🕉️ Logout',
+      ' Logout',
       'Are you sure you want to logout?',
       [
         { text: 'Cancel', style: 'cancel' },
         {
           text: 'Logout',
           style: 'destructive',
-          onPress: () => {
-            dispatch(logout());
-            router.replace('/login');
+          onPress: async () => {
+            const res = await logout();
+            if (res.status) router.replace('/login2');
           },
         },
       ],
-      { cancelable: true }
+      { cancelable: true },
     );
   };
 
   return (
     <View style={drawerStyles.root}>
-
       {/* ══════════════════════════════════
           DRAWER HEADER
       ══════════════════════════════════ */}
@@ -185,8 +209,9 @@ function CustomDrawerContent({ navigation }) {
             <Text style={drawerStyles.logoEmoji}>🪷</Text>
           </View>
           <View>
-            <Text style={drawerStyles.logoMain}>GIEO GITA</Text>
+            <Text style={drawerStyles.logoMain}>GIEO GITA </Text>
             <Text style={drawerStyles.logoSub}>॥ कृष्ण कृपा ॥</Text>
+            <Link href={'/login2'}>login 2</Link>
           </View>
         </View>
 
@@ -195,6 +220,12 @@ function CustomDrawerContent({ navigation }) {
           <Text style={drawerStyles.taglineSmall}>
             Eighteen verse Gita recitation campaign
           </Text>
+          <TouchableOpacity
+            onPress={() => {
+              console.log(user);
+            }}>
+            <Text>Consoling User</Text>
+          </TouchableOpacity>
         </View>
       </View>
 
@@ -204,8 +235,7 @@ function CustomDrawerContent({ navigation }) {
       <ScrollView
         style={drawerStyles.itemsScroll}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 10 }}
-      >
+        contentContainerStyle={{ paddingBottom: 10 }}>
         <Text style={drawerStyles.menuLabel}>NAVIGATION</Text>
 
         {DRAWER_ITEMS.map((item, index) => (
@@ -216,8 +246,7 @@ function CustomDrawerContent({ navigation }) {
               router.push(item.route);
               navigation.closeDrawer();
             }}
-            activeOpacity={0.72}
-          >
+            activeOpacity={0.72}>
             <View style={drawerStyles.drawerItemIconBox}>
               <FontAwesome name={item.icon} size={15} color={COLORS.goldDark} />
             </View>
@@ -241,7 +270,9 @@ function CustomDrawerContent({ navigation }) {
         {/* ── Bhagavad Gita verse ── */}
         <View style={drawerStyles.verseBox}>
           <Text style={drawerStyles.verseText}>
-            {"\"यदा यदा हि धर्मस्य...\"\nWhenever dharma declines,\nI manifest myself."}
+            {
+              '"यदा यदा हि धर्मस्य..."\nWhenever dharma declines,\nI manifest myself.'
+            }
           </Text>
           <Text style={drawerStyles.verseRef}>— Bhagavad Gita 4.7</Text>
         </View>
@@ -256,8 +287,7 @@ function CustomDrawerContent({ navigation }) {
         <TouchableOpacity
           style={drawerStyles.logoutBtn}
           onPress={handleLogout}
-          activeOpacity={0.8}
-        >
+          activeOpacity={0.8}>
           <View style={drawerStyles.logoutIconBox}>
             <FontAwesome name="sign-out" size={16} color={COLORS.dangerLight} />
           </View>
@@ -272,9 +302,8 @@ function CustomDrawerContent({ navigation }) {
       </View>
 
       <View style={drawerStyles.footer}>
-        <Text style={drawerStyles.footerText}>🕉️  Jai Shri Krishna  🕉️</Text>
+        <Text style={drawerStyles.footerText}>🕉️ Jai Shri Krishna 🕉️</Text>
       </View>
-
     </View>
   );
 }
@@ -305,11 +334,10 @@ export default function HomeLayout() {
           Row 2 — SharedTabBar (fixed height, always visible)
       */}
       <View style={{ flex: 1 }}>
-
         {/* ── Drawer fills everything above the tab bar ── */}
         <View style={{ flex: 1 }}>
           <Drawer
-            drawerContent={(props) => <CustomDrawerContent {...props} />}
+            drawerContent={props => <CustomDrawerContent {...props} />}
             screenOptions={({ navigation }) => ({
               // ── Header ──────────────────────────────────────────
               headerStyle: {
@@ -327,8 +355,7 @@ export default function HomeLayout() {
               headerLeft: () => (
                 <TouchableOpacity
                   style={headerStyles.menuBtn}
-                  onPress={() => navigation.toggleDrawer()}
-                >
+                  onPress={() => navigation.toggleDrawer()}>
                   <FontAwesome name="bars" size={17} color={COLORS.goldLight} />
                 </TouchableOpacity>
               ),
@@ -337,11 +364,19 @@ export default function HomeLayout() {
               headerRight: () => (
                 <View style={headerStyles.rightRow}>
                   <TouchableOpacity style={headerStyles.iconBtn}>
-                    <FontAwesome name="bell" size={15} color={COLORS.goldLight} />
+                    <FontAwesome
+                      name="bell"
+                      size={15}
+                      color={COLORS.goldLight}
+                    />
                     <View style={headerStyles.notifDot} />
                   </TouchableOpacity>
                   <TouchableOpacity style={headerStyles.iconBtn}>
-                    <FontAwesome name="search" size={15} color={COLORS.goldLight} />
+                    <FontAwesome
+                      name="search"
+                      size={15}
+                      color={COLORS.goldLight}
+                    />
                   </TouchableOpacity>
                 </View>
               ),
@@ -354,24 +389,49 @@ export default function HomeLayout() {
               drawerActiveTintColor: COLORS.goldLight,
               drawerInactiveTintColor: COLORS.warmBrown,
               drawerActiveBackgroundColor: 'rgba(201,162,39,0.1)',
-            })}
-          >
+            })}>
             {/* ── All screens registered ── */}
-            <Drawer.Screen name="(tabs)"       options={{ drawerLabel: 'Home',         title: 'Home'         }} />
-            <Drawer.Screen name="eventgroup"   options={{ drawerLabel: 'Events',       title: 'Events'       }} />
-            <Drawer.Screen name="livedarshan"  options={{ drawerLabel: 'Live Darshan', title: 'Live Darshan' }} />
-            <Drawer.Screen name="balSanskar"   options={{ drawerLabel: 'Bal Sanskar',  title: 'Bal Sanskar'  }} />
-            <Drawer.Screen name="GieoGaushala" options={{ drawerLabel: 'Gaushala',     title: 'Gaushala'     }} />
-            <Drawer.Screen name="JoinGieoGita" options={{ drawerLabel: 'Join Gieo',    title: 'Join Gieo'    }} />
-            <Drawer.Screen name="health"       options={{ drawerLabel: 'Health',       title: 'Health'       }} />
-            <Drawer.Screen name="promotional"  options={{ drawerLabel: 'Promotional',  title: 'Promotional'  }} />
-            <Drawer.Screen name="help"         options={{ drawerLabel: 'Help',         title: 'Help'         }} />
+            <Drawer.Screen
+              name="(tabs)"
+              options={{ drawerLabel: 'Home', title: 'Home' }}
+            />
+            <Drawer.Screen
+              name="eventgroup"
+              options={{ drawerLabel: 'Events', title: 'Events' }}
+            />
+            <Drawer.Screen
+              name="livedarshan"
+              options={{ drawerLabel: 'Live Darshan', title: 'Live Darshan' }}
+            />
+            <Drawer.Screen
+              name="balSanskar"
+              options={{ drawerLabel: 'Bal Sanskar', title: 'Bal Sanskar' }}
+            />
+            <Drawer.Screen
+              name="GieoGaushala"
+              options={{ drawerLabel: 'Gaushala', title: 'Gaushala' }}
+            />
+            <Drawer.Screen
+              name="JoinGieoGita"
+              options={{ drawerLabel: 'Join Gieo', title: 'Join Gieo' }}
+            />
+            <Drawer.Screen
+              name="health"
+              options={{ drawerLabel: 'Health', title: 'Health' }}
+            />
+            <Drawer.Screen
+              name="promotional"
+              options={{ drawerLabel: 'Promotional', title: 'Promotional' }}
+            />
+            <Drawer.Screen
+              name="help"
+              options={{ drawerLabel: 'Help', title: 'Help' }}
+            />
           </Drawer>
         </View>
 
         {/* ── Tab bar always visible at the bottom on ALL screens ── */}
         <SharedTabBar />
-
       </View>
     </GestureHandlerRootView>
   );
