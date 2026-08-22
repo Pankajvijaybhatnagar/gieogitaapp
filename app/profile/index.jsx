@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import {
   ActivityIndicator,
@@ -22,6 +22,8 @@ import { useRouter } from 'expo-router';
 
 import { useAuth } from '@/context/AuthContext';
 
+import userServices from '@/lib/services/userServices';
+
 const COLORS = {
   primary: '#A55A12',
   primaryDark: '#713907',
@@ -44,30 +46,26 @@ const COLORS = {
   dangerLight: '#FFF0F0',
 };
 
-const INITIAL_PROFILE = {
-  id: 11,
-  username: 'ankitbkana6459',
-  email: 'ankitbkana@outlook.com',
-  name: 'Ankit',
-  role: 'superadmin',
-  points: 1240,
-  is_verified: 1,
-  created_at: '2025-12-25 21:48:40',
-  address: 'VPO Bakana',
-  city: 'Kurukshetra',
-  district: 'Kurukshetra',
-  state: 'Haryana',
-  country: 'India',
-  phone: '7041049340',
-  dob: '1995-03-04',
-};
-
 export default function ProfileScreen() {
   const router = useRouter();
 
-  const { logout } = useAuth();
+  const {
+    user,
+    access_token,
+    loading: authLoading,
+    isAuthenticated,
+    logout,
+  } = useAuth();
 
-  const [profile, setProfile] = useState(INITIAL_PROFILE);
+  /*
+  |--------------------------------------------------------------------------
+  | PROFILE
+  |--------------------------------------------------------------------------
+  */
+
+  const [profile, setProfile] = useState(user || null);
+
+  const [profileLoading, setProfileLoading] = useState(true);
 
   const [editing, setEditing] = useState(false);
 
@@ -81,23 +79,23 @@ export default function ProfileScreen() {
   |--------------------------------------------------------------------------
   */
 
-  const [name, setName] = useState(INITIAL_PROFILE.name);
+  const [name, setName] = useState('');
 
-  const [username, setUsername] = useState(INITIAL_PROFILE.username);
+  const [username, setUsername] = useState('');
 
-  const [phone, setPhone] = useState(INITIAL_PROFILE.phone);
+  const [phone, setPhone] = useState('');
 
-  const [dob, setDob] = useState(INITIAL_PROFILE.dob);
+  const [dob, setDob] = useState('');
 
-  const [address, setAddress] = useState(INITIAL_PROFILE.address);
+  const [address, setAddress] = useState('');
 
-  const [city, setCity] = useState(INITIAL_PROFILE.city);
+  const [city, setCity] = useState('');
 
-  const [district, setDistrict] = useState(INITIAL_PROFILE.district);
+  const [district, setDistrict] = useState('');
 
-  const [state, setState] = useState(INITIAL_PROFILE.state);
+  const [state, setState] = useState('');
 
-  const [country, setCountry] = useState(INITIAL_PROFILE.country);
+  const [country, setCountry] = useState('');
 
   /*
   |--------------------------------------------------------------------------
@@ -115,7 +113,182 @@ export default function ProfileScreen() {
 
   const cardsTranslate = useRef(new Animated.Value(18)).current;
 
+  /*
+  |--------------------------------------------------------------------------
+  | COPY PROFILE TO FORM
+  |--------------------------------------------------------------------------
+  */
+
+  const copyToForm = useCallback(data => {
+    if (!data) {
+      return;
+    }
+
+    setName(data.name || '');
+
+    setUsername(data.username || '');
+
+    setPhone(data.phone || '');
+
+    setDob(data.dob || '');
+
+    setAddress(data.address || '');
+
+    setCity(data.city || '');
+
+    setDistrict(data.district || '');
+
+    setState(data.state || '');
+
+    setCountry(data.country || '');
+  }, []);
+
+  /*
+  |--------------------------------------------------------------------------
+  | NORMALIZE PROFILE RESPONSE
+  |--------------------------------------------------------------------------
+  */
+
+  const extractProfile = result => {
+    /*
+     * Possible apiRequest structures:
+     *
+     * result.data
+     *
+     * or
+     *
+     * result.data.data
+     */
+
+    if (result?.data?.data && typeof result.data.data === 'object') {
+      return result.data.data;
+    }
+
+    if (
+      result?.data &&
+      typeof result.data === 'object' &&
+      !Array.isArray(result.data)
+    ) {
+      return result.data;
+    }
+
+    return null;
+  };
+
+  /*
+  |--------------------------------------------------------------------------
+  | LOAD PROFILE
+  |--------------------------------------------------------------------------
+  */
+
+  const loadProfile = useCallback(
+    async (showLoader = true) => {
+      if (!access_token) {
+        console.log('[Profile] No access token');
+
+        setProfile(null);
+        setProfileLoading(false);
+        return;
+      }
+
+      try {
+        if (showLoader) {
+          setProfileLoading(true);
+        }
+
+        console.log('[Profile] Fetching current user...');
+
+        const result = await userServices.getCurrentUser(access_token);
+
+        console.log('[Profile] Current user response:', result);
+
+        if (result?.success === false) {
+          throw new Error(result?.error || 'Unable to load profile.');
+        }
+
+        if (result?.data?.status === false) {
+          throw new Error(result?.data?.message || 'Unable to load profile.');
+        }
+
+        const currentUser = extractProfile(result);
+
+        if (!currentUser) {
+          throw new Error('Profile data was not returned by the server.');
+        }
+
+        console.log('[Profile] Current user:', currentUser);
+
+        setProfile(currentUser);
+
+        copyToForm(currentUser);
+      } catch (error) {
+        console.error('[Profile] Load profile error:', error);
+
+        /*
+         * AuthContext user can be used as a
+         * temporary fallback, but backend remains
+         * the primary source.
+         */
+
+        if (user) {
+          setProfile(user);
+          copyToForm(user);
+        }
+      } finally {
+        setProfileLoading(false);
+
+        setRefreshing(false);
+      }
+    },
+    [access_token, copyToForm, user],
+  );
+
+  /*
+  |--------------------------------------------------------------------------
+  | AUTH + INITIAL PROFILE LOAD
+  |--------------------------------------------------------------------------
+  */
+
   useEffect(() => {
+    if (authLoading) {
+      return;
+    }
+
+    if (!isAuthenticated || !access_token) {
+      console.log('[Profile] User is not logged in');
+
+      router.replace('/login2');
+
+      return;
+    }
+
+    loadProfile();
+  }, [authLoading, isAuthenticated, access_token, router, loadProfile]);
+
+  /*
+  |--------------------------------------------------------------------------
+  | SYNC AUTH USER
+  |--------------------------------------------------------------------------
+  */
+
+  useEffect(() => {
+    if (user && !profile) {
+      setProfile(user);
+      copyToForm(user);
+    }
+  }, [user, profile, copyToForm]);
+
+  /*
+  |--------------------------------------------------------------------------
+  | SCREEN ANIMATION
+  |--------------------------------------------------------------------------
+  */
+
+  useEffect(() => {
+    if (profileLoading) {
+      return;
+    }
+
     Animated.parallel([
       Animated.timing(screenOpacity, {
         toValue: 1,
@@ -142,7 +315,7 @@ export default function ProfileScreen() {
         Animated.timing(cardsOpacity, {
           toValue: 1,
           duration: 400,
-          delay: 120,
+          delay: 100,
           useNativeDriver: true,
         }),
 
@@ -150,90 +323,12 @@ export default function ProfileScreen() {
           toValue: 0,
           speed: 15,
           bounciness: 3,
-          delay: 120,
+          delay: 100,
           useNativeDriver: true,
         }),
       ]),
     ]).start();
-  }, []);
-
-  /*
-  |--------------------------------------------------------------------------
-  | HELPERS
-  |--------------------------------------------------------------------------
-  */
-
-  const copyToForm = data => {
-    setName(data.name || '');
-    setUsername(data.username || '');
-    setPhone(data.phone || '');
-    setDob(data.dob || '');
-    setAddress(data.address || '');
-    setCity(data.city || '');
-    setDistrict(data.district || '');
-    setState(data.state || '');
-    setCountry(data.country || '');
-  };
-
-  /*
-  |--------------------------------------------------------------------------
-  | EDIT
-  |--------------------------------------------------------------------------
-  */
-
-  const handleEdit = () => {
-    copyToForm(profile);
-    setEditing(true);
-  };
-
-  const handleCancel = () => {
-    copyToForm(profile);
-    setEditing(false);
-  };
-
-  /*
-  |--------------------------------------------------------------------------
-  | SAVE
-  |--------------------------------------------------------------------------
-  */
-
-  const handleSave = async () => {
-    if (!name.trim()) {
-      Alert.alert('Required', 'Please enter your name.');
-      return;
-    }
-
-    try {
-      setSaving(true);
-
-      await new Promise(resolve => setTimeout(resolve, 600));
-
-      const updated = {
-        ...profile,
-        name: name.trim(),
-        username: username.trim(),
-        phone: phone.trim(),
-        dob: dob.trim(),
-        address: address.trim(),
-        city: city.trim(),
-        district: district.trim(),
-        state: state.trim(),
-        country: country.trim(),
-      };
-
-      setProfile(updated);
-      setEditing(false);
-
-      Alert.alert(
-        'Profile Updated',
-        'Your profile has been updated successfully.',
-      );
-    } catch (error) {
-      Alert.alert('Error', 'Unable to save profile.');
-    } finally {
-      setSaving(false);
-    }
-  };
+  }, [profileLoading]);
 
   /*
   |--------------------------------------------------------------------------
@@ -244,9 +339,128 @@ export default function ProfileScreen() {
   const handleRefresh = async () => {
     setRefreshing(true);
 
-    await new Promise(resolve => setTimeout(resolve, 700));
+    await loadProfile(false);
+  };
 
-    setRefreshing(false);
+  /*
+  |--------------------------------------------------------------------------
+  | EDIT
+  |--------------------------------------------------------------------------
+  */
+
+  const handleEdit = () => {
+    copyToForm(profile);
+
+    setEditing(true);
+  };
+
+  /*
+  |--------------------------------------------------------------------------
+  | CANCEL
+  |--------------------------------------------------------------------------
+  */
+
+  const handleCancel = () => {
+    copyToForm(profile);
+
+    setEditing(false);
+  };
+
+  /*
+  |--------------------------------------------------------------------------
+  | SAVE PROFILE
+  |--------------------------------------------------------------------------
+  */
+
+  const handleSave = async () => {
+    if (!access_token) {
+      Alert.alert('Session Expired', 'Please login again.', [
+        {
+          text: 'OK',
+          onPress: () => router.replace('/login2'),
+        },
+      ]);
+
+      return;
+    }
+
+    if (!name.trim()) {
+      Alert.alert('Required', 'Please enter your name.');
+
+      return;
+    }
+
+    try {
+      setSaving(true);
+
+      /*
+       * IMPORTANT:
+       *
+       * Email is intentionally NOT included.
+       * Verified email cannot be changed.
+       */
+
+      const payload = {
+        name: name.trim(),
+
+        username: username.trim(),
+
+        phone: phone.trim(),
+
+        dob: dob.trim(),
+
+        address: address.trim(),
+
+        city: city.trim(),
+
+        district: district.trim(),
+
+        state: state.trim(),
+
+        country: country.trim(),
+      };
+
+      console.log('[Profile] Update payload:', payload);
+
+      const result = await userServices.updateCurrentUser(
+        payload,
+        access_token,
+      );
+
+      console.log('[Profile] Update response:', result);
+
+      if (result?.success === false) {
+        throw new Error(
+          result?.error || result?.message || 'Profile update failed.',
+        );
+      }
+
+      if (result?.data?.status === false) {
+        throw new Error(result?.data?.message || 'Profile update failed.');
+      }
+
+      /*
+       * Fetch fresh profile from backend.
+       */
+
+      await loadProfile(false);
+
+      setEditing(false);
+
+      Alert.alert(
+        'Profile Updated',
+        'Your profile has been updated successfully.',
+      );
+    } catch (error) {
+      console.error('[Profile] Update profile error:', error);
+
+      Alert.alert(
+        'Update Failed',
+        error?.message || 'Unable to update profile.',
+      );
+    } finally {
+      setSaving(false);
+    }
   };
 
   /*
@@ -271,6 +485,14 @@ export default function ProfileScreen() {
             try {
               const result = await logout();
 
+              console.log('[Profile] Logout result:', result);
+
+              /*
+               * AuthContext.logout()
+               * clears local auth state when
+               * backend logout succeeds.
+               */
+
               if (result?.success) {
                 router.replace('/login2');
               } else {
@@ -280,6 +502,8 @@ export default function ProfileScreen() {
                 );
               }
             } catch (error) {
+              console.error('[Profile] Logout error:', error);
+
               Alert.alert('Logout Failed', 'Unable to logout.');
             }
           },
@@ -293,6 +517,32 @@ export default function ProfileScreen() {
 
   /*
   |--------------------------------------------------------------------------
+  | LOADING
+  |--------------------------------------------------------------------------
+  */
+
+  if (authLoading || profileLoading) {
+    return (
+      <View style={styles.loadingScreen}>
+        <ActivityIndicator size="large" color={COLORS.primary} />
+
+        <Text style={styles.loadingText}>Loading your profile...</Text>
+      </View>
+    );
+  }
+
+  /*
+  |--------------------------------------------------------------------------
+  | NO USER
+  |--------------------------------------------------------------------------
+  */
+
+  if (!isAuthenticated || !access_token || !profile) {
+    return null;
+  }
+
+  /*
+  |--------------------------------------------------------------------------
   | VALUES
   |--------------------------------------------------------------------------
   */
@@ -303,6 +553,12 @@ export default function ProfileScreen() {
     .trim()
     .charAt(0)
     .toUpperCase();
+
+  /*
+  |--------------------------------------------------------------------------
+  | UI
+  |--------------------------------------------------------------------------
+  */
 
   return (
     <View style={styles.screen}>
@@ -327,9 +583,7 @@ export default function ProfileScreen() {
               />
             }
             contentContainerStyle={styles.scrollContent}>
-            {/* ==================================================
-                HEADER
-            ================================================== */}
+            {/* HEADER */}
 
             <Animated.View
               style={[
@@ -362,6 +616,8 @@ export default function ProfileScreen() {
                 </TouchableOpacity>
               </View>
 
+              {/* AVATAR */}
+
               <Animated.View
                 style={[
                   styles.avatarContainer,
@@ -384,9 +640,11 @@ export default function ProfileScreen() {
                 )}
               </Animated.View>
 
-              <Text style={styles.profileName}>{profile.name}</Text>
+              <Text style={styles.profileName}>{profile.name || 'User'}</Text>
 
-              <Text style={styles.username}>@{profile.username}</Text>
+              <Text style={styles.username}>
+                @{profile.username || 'username'}
+              </Text>
 
               <View style={styles.roleBadge}>
                 <Ionicons
@@ -396,14 +654,12 @@ export default function ProfileScreen() {
                 />
 
                 <Text style={styles.roleText}>
-                  {String(profile.role).toUpperCase()}
+                  {String(profile.role || 'user').toUpperCase()}
                 </Text>
               </View>
             </Animated.View>
 
-            {/* ==================================================
-                ACCOUNT SUMMARY
-            ================================================== */}
+            {/* SUMMARY */}
 
             <Animated.View
               style={[
@@ -419,7 +675,7 @@ export default function ProfileScreen() {
               ]}>
               <SummaryItem
                 icon="star-outline"
-                value={profile.points}
+                value={profile.points ?? 0}
                 label="Points"
               />
 
@@ -441,9 +697,7 @@ export default function ProfileScreen() {
               />
             </Animated.View>
 
-            {/* ==================================================
-                PERSONAL DETAILS
-            ================================================== */}
+            {/* PERSONAL DETAILS */}
 
             <Animated.View
               style={[
@@ -511,7 +765,7 @@ export default function ProfileScreen() {
                   />
 
                   <TextInput
-                    value={profile.email}
+                    value={profile.email || ''}
                     editable={false}
                     style={styles.input}
                   />
@@ -549,9 +803,7 @@ export default function ProfileScreen() {
               />
             </Animated.View>
 
-            {/* ==================================================
-                LOCATION
-            ================================================== */}
+            {/* LOCATION */}
 
             <Animated.View
               style={[
@@ -619,9 +871,7 @@ export default function ProfileScreen() {
               </View>
             </Animated.View>
 
-            {/* ==================================================
-                SAVE
-            ================================================== */}
+            {/* SAVE */}
 
             {editing && (
               <Animated.View style={styles.actions}>
@@ -649,9 +899,7 @@ export default function ProfileScreen() {
               </Animated.View>
             )}
 
-            {/* ==================================================
-                ACCOUNT & SECURITY
-            ================================================== */}
+            {/* ACCOUNT & SECURITY */}
 
             <Animated.View
               style={[
@@ -681,9 +929,7 @@ export default function ProfileScreen() {
               />
             </Animated.View>
 
-            {/* ==================================================
-                LEGAL
-            ================================================== */}
+            {/* LEGAL */}
 
             <Animated.View
               style={[
@@ -702,12 +948,7 @@ export default function ProfileScreen() {
                 icon="document-text-outline"
                 title="Privacy Policy"
                 subtitle="Read our privacy policy"
-                onPress={() =>
-                  Alert.alert(
-                    'Privacy Policy',
-                    'Privacy Policy screen will be connected here.',
-                  )
-                }
+                onPress={() => router.push('/privacy-policy')}
               />
 
               <View style={styles.actionDivider} />
@@ -716,18 +957,11 @@ export default function ProfileScreen() {
                 icon="reader-outline"
                 title="Terms & Conditions"
                 subtitle="Read our terms and conditions"
-                onPress={() =>
-                  Alert.alert(
-                    'Terms & Conditions',
-                    'Terms & Conditions screen will be connected here.',
-                  )
-                }
+                onPress={() => router.push('/terms')}
               />
             </Animated.View>
 
-            {/* ==================================================
-                LOGOUT
-            ================================================== */}
+            {/* LOGOUT */}
 
             <Animated.View
               style={[
@@ -895,15 +1129,22 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.background,
   },
 
+  loadingScreen: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: COLORS.background,
+  },
+
+  loadingText: {
+    marginTop: 12,
+    fontSize: 11,
+    color: COLORS.secondary,
+  },
+
   scrollContent: {
     paddingBottom: 28,
   },
-
-  /*
-    |--------------------------------------------------------------------------
-    | HERO
-    |--------------------------------------------------------------------------
-    */
 
   hero: {
     backgroundColor: COLORS.white,
@@ -1006,15 +1247,9 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
   },
 
-  /*
-    |--------------------------------------------------------------------------
-    | SUMMARY
-    |--------------------------------------------------------------------------
-    */
-
   summaryCard: {
-    marginHorizontal: 18,
-    marginTop: 14,
+    marginHorizontal: 7,
+    marginTop: 7,
     paddingVertical: 14,
     backgroundColor: COLORS.white,
     borderWidth: 1,
@@ -1065,15 +1300,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#EEEEEE',
   },
 
-  /*
-    |--------------------------------------------------------------------------
-    | CARDS
-    |--------------------------------------------------------------------------
-    */
-
   card: {
-    marginHorizontal: 18,
-    marginTop: 14,
+    marginHorizontal: 7,
+    marginTop: 7,
     backgroundColor: COLORS.white,
     borderWidth: 1,
     borderColor: COLORS.border,
@@ -1121,12 +1350,6 @@ const styles = StyleSheet.create({
     color: COLORS.secondary,
   },
 
-  /*
-    |--------------------------------------------------------------------------
-    | FIELDS
-    |--------------------------------------------------------------------------
-    */
-
   field: {
     marginBottom: 11,
   },
@@ -1135,7 +1358,7 @@ const styles = StyleSheet.create({
     fontSize: 10.5,
     fontWeight: '600',
     color: '#4B4B4B',
-    marginBottom: 5,
+    marginBottom: 1,
   },
 
   emailLabelRow: {
@@ -1162,7 +1385,7 @@ const styles = StyleSheet.create({
   },
 
   inputWrapper: {
-    height: 44,
+    height: 35,
     borderRadius: 11,
     borderWidth: 1,
     borderColor: '#ECEAE7',
@@ -1180,14 +1403,14 @@ const styles = StyleSheet.create({
   },
 
   inputIcon: {
-    marginLeft: 12,
-    marginRight: 4,
+    marginLeft: 7,
+    marginRight: 1,
   },
 
   input: {
     flex: 1,
     height: '100%',
-    paddingHorizontal: 9,
+    paddingHorizontal: 5,
     fontSize: 11,
     color: '#333333',
   },
@@ -1200,18 +1423,12 @@ const styles = StyleSheet.create({
 
   twoColumn: {
     flexDirection: 'row',
-    gap: 9,
+    gap: 5,
   },
 
   column: {
     flex: 1,
   },
-
-  /*
-    |--------------------------------------------------------------------------
-    | ACCOUNT ACTIONS
-    |--------------------------------------------------------------------------
-    */
 
   accountAction: {
     minHeight: 57,
@@ -1220,8 +1437,8 @@ const styles = StyleSheet.create({
   },
 
   accountActionIcon: {
-    width: 35,
-    height: 35,
+    width: 25,
+    height: 25,
     borderRadius: 11,
     backgroundColor: COLORS.primaryLight,
     alignItems: 'center',
@@ -1251,14 +1468,8 @@ const styles = StyleSheet.create({
     marginVertical: 2,
   },
 
-  /*
-    |--------------------------------------------------------------------------
-    | SAVE
-    |--------------------------------------------------------------------------
-    */
-
   actions: {
-    marginHorizontal: 18,
+    marginHorizontal: 7,
     marginTop: 13,
   },
 
@@ -1299,15 +1510,9 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
   },
 
-  /*
-    |--------------------------------------------------------------------------
-    | LOGOUT
-    |--------------------------------------------------------------------------
-    */
-
   logoutCard: {
-    marginHorizontal: 18,
-    marginTop: 14,
+    marginHorizontal: 7,
+    marginTop: 7,
     backgroundColor: COLORS.white,
     borderWidth: 1,
     borderColor: '#F0D8D8',

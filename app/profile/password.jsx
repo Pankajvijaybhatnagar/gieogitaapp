@@ -19,6 +19,10 @@ import { Ionicons } from '@expo/vector-icons';
 
 import { useRouter } from 'expo-router';
 
+import { useAuth } from '@/context/AuthContext';
+
+import userServices from '@/lib/services/userServices';
+
 const COLORS = {
   primary: '#A55A12',
   primaryDark: '#713907',
@@ -29,11 +33,8 @@ const COLORS = {
 
   text: '#181818',
   secondary: '#737373',
-  light: '#999999',
 
   border: '#EAE7E3',
-  input: '#F5F4F2',
-
   success: '#188044',
   successLight: '#EAF7EF',
 
@@ -42,6 +43,13 @@ const COLORS = {
 
 export default function PasswordScreen() {
   const router = useRouter();
+
+  const {
+    user,
+    access_token,
+    isAuthenticated,
+    loading: authLoading,
+  } = useAuth();
 
   /*
   |--------------------------------------------------------------------------
@@ -89,7 +97,37 @@ export default function PasswordScreen() {
 
   const formOpacity = useRef(new Animated.Value(0)).current;
 
+  /*
+  |--------------------------------------------------------------------------
+  | AUTH CHECK
+  |--------------------------------------------------------------------------
+  */
+
   useEffect(() => {
+    if (authLoading) {
+      return;
+    }
+
+    if (!isAuthenticated || !access_token) {
+      router.replace('/login2');
+    }
+  }, [authLoading, isAuthenticated, access_token, router]);
+
+  /*
+  |--------------------------------------------------------------------------
+  | ANIMATION
+  |--------------------------------------------------------------------------
+  */
+
+  useEffect(() => {
+    if (authLoading) {
+      return;
+    }
+
+    if (!isAuthenticated || !access_token) {
+      return;
+    }
+
     Animated.parallel([
       Animated.timing(opacity, {
         toValue: 1,
@@ -119,7 +157,7 @@ export default function PasswordScreen() {
         useNativeDriver: true,
       }),
     ]).start();
-  }, []);
+  }, [authLoading, isAuthenticated, access_token]);
 
   /*
   |--------------------------------------------------------------------------
@@ -177,11 +215,22 @@ export default function PasswordScreen() {
 
   /*
   |--------------------------------------------------------------------------
-  | SAVE
+  | UPDATE PASSWORD
   |--------------------------------------------------------------------------
   */
 
   const handleUpdate = async () => {
+    if (!access_token) {
+      Alert.alert('Session Expired', 'Please login again.', [
+        {
+          text: 'OK',
+          onPress: () => router.replace('/login2'),
+        },
+      ]);
+
+      return;
+    }
+
     if (!currentPassword) {
       Alert.alert('Required', 'Enter your current password.');
 
@@ -219,10 +268,43 @@ export default function PasswordScreen() {
       setSaving(true);
 
       /*
-       * Dummy request.
+       * Payload expected by your
+       * userServices.updatePassword():
+       *
+       * {
+       *   email,
+       *   current_password,
+       *   new_password
+       * }
        */
 
-      await new Promise(resolve => setTimeout(resolve, 900));
+      const payload = {
+        email: user?.email || '',
+
+        current_password: currentPassword,
+
+        new_password: newPassword,
+      };
+
+      console.log('[Password] Update payload:', {
+        ...payload,
+        current_password: '********',
+        new_password: '********',
+      });
+
+      const result = await userServices.updatePassword(payload, access_token);
+
+      console.log('[Password] Update response:', result);
+
+      if (!result?.success) {
+        throw new Error(
+          result?.error || result?.message || 'Password update failed.',
+        );
+      }
+
+      setCurrentPassword('');
+      setNewPassword('');
+      setConfirmPassword('');
 
       Alert.alert(
         'Password Updated',
@@ -234,16 +316,33 @@ export default function PasswordScreen() {
           },
         ],
       );
-
-      setCurrentPassword('');
-      setNewPassword('');
-      setConfirmPassword('');
     } catch (error) {
-      Alert.alert('Error', 'Unable to update password.');
+      console.error('[Password] Update error:', error);
+
+      Alert.alert(
+        'Password Update Failed',
+        error?.message || 'Unable to update password.',
+      );
     } finally {
       setSaving(false);
     }
   };
+
+  /*
+  |--------------------------------------------------------------------------
+  | LOADING
+  |--------------------------------------------------------------------------
+  */
+
+  if (authLoading || (!isAuthenticated && !access_token)) {
+    return (
+      <View style={styles.loadingScreen}>
+        <ActivityIndicator size="large" color={COLORS.primary} />
+
+        <Text style={styles.loadingText}>Checking your session...</Text>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.screen}>
@@ -280,8 +379,6 @@ export default function PasswordScreen() {
             showsVerticalScrollIndicator={false}
             keyboardShouldPersistTaps="handled"
             contentContainerStyle={styles.content}>
-            {/* ICON */}
-
             <Animated.View
               style={[
                 styles.securityIcon,
@@ -308,8 +405,6 @@ export default function PasswordScreen() {
 
             <Text style={styles.subtitle}>your account secure.</Text>
 
-            {/* FORM */}
-
             <Animated.View
               style={{
                 opacity: formOpacity,
@@ -331,8 +426,6 @@ export default function PasswordScreen() {
                 onToggle={() => setShowNew(previous => !previous)}
                 icon="key-outline"
               />
-
-              {/* STRENGTH */}
 
               {newPassword.length > 0 && (
                 <View style={styles.strengthContainer}>
@@ -373,8 +466,6 @@ export default function PasswordScreen() {
                 icon="shield-checkmark-outline"
               />
 
-              {/* REQUIREMENTS */}
-
               <View style={styles.requirements}>
                 <Text style={styles.requirementsTitle}>
                   Password requirements
@@ -401,13 +492,10 @@ export default function PasswordScreen() {
                 />
               </View>
 
-              {/* UPDATE */}
-
               <TouchableOpacity
                 style={[styles.updateButton, saving && styles.disabledButton]}
                 onPress={handleUpdate}
-                disabled={saving}
-                activeOpacity={0.85}>
+                disabled={saving}>
                 {saving ? (
                   <ActivityIndicator color="#FFFFFF" />
                 ) : (
@@ -418,8 +506,6 @@ export default function PasswordScreen() {
                   </>
                 )}
               </TouchableOpacity>
-
-              {/* SECURITY NOTE */}
 
               <View style={styles.securityNote}>
                 <Ionicons
@@ -440,12 +526,6 @@ export default function PasswordScreen() {
     </View>
   );
 }
-
-/*
-|--------------------------------------------------------------------------
-| PASSWORD FIELD
-|--------------------------------------------------------------------------
-*/
 
 function PasswordField({
   label,
@@ -474,6 +554,7 @@ function PasswordField({
           placeholder="••••••••"
           placeholderTextColor="#A2A2A2"
           style={styles.input}
+          autoCapitalize="none"
         />
 
         <TouchableOpacity style={styles.eyeButton} onPress={onToggle}>
@@ -487,12 +568,6 @@ function PasswordField({
     </View>
   );
 }
-
-/*
-|--------------------------------------------------------------------------
-| REQUIREMENT
-|--------------------------------------------------------------------------
-*/
 
 function Requirement({ text, valid }) {
   return (
@@ -522,6 +597,19 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     backgroundColor: COLORS.background,
+  },
+
+  loadingScreen: {
+    flex: 1,
+    backgroundColor: COLORS.background,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  loadingText: {
+    marginTop: 12,
+    fontSize: 11,
+    color: COLORS.secondary,
   },
 
   header: {
