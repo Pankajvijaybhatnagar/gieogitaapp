@@ -51,8 +51,8 @@ export default function TabLayout() {
       <Tabs.Screen
         name="profile"
         options={{
-          title: 'Profile',
-          presentation: 'transparentModal',
+          // title: 'Profile',
+          // presentation: 'transparentModal',
           animation: 'fade',
           headerShown: false,
         }}

@@ -326,6 +326,8 @@ function HeaderTitle() {
 // HOME LAYOUT
 // ─────────────────────────────────────────────────────────────────────────────
 export default function HomeLayout() {
+  const pathname = usePathname();
+  const isProfile = pathname.includes('/profile');
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       {/*
@@ -339,6 +341,7 @@ export default function HomeLayout() {
           <Drawer
             drawerContent={props => <CustomDrawerContent {...props} />}
             screenOptions={({ navigation }) => ({
+               headerShown: !isProfile,
               // ── Header ──────────────────────────────────────────
               headerStyle: {
                 backgroundColor: COLORS.deepBrown,
