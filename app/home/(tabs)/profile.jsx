@@ -48,6 +48,7 @@ export default function ProfileScreen() {
             <View style={styles.topBarTitle}>
               <Text style={styles.topBarTitleText}>MY PROFILE</Text>
               <Link href={'/profile'}>new profile</Link>
+              <Link href={'/home/chanting'}>new chanting</Link>
             </View>
             <View style={{ width: 38 }} />
           </View>

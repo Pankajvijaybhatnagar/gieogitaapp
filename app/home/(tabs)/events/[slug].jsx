@@ -175,6 +175,11 @@ export default function Event() {
     }
 
     let value = '';
+    // returnng null if start and end tie is 00
+    if(event.start_time=='00:00:00' || event.end_time=='00:00:00'){
+      value='';
+      return
+    }
 
     if (event.start_time) {
       value = formatTime(event.start_time);
