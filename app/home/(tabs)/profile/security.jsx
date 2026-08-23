@@ -25,7 +25,7 @@ const COLORS = {
   primary: '#A55A12',
   primaryDark: '#713907',
   primaryLight: '#FBF1E5',
-
+  brownLight: '#a59069',
   background: '#F8F7F5',
   white: '#FFFFFF',
 
@@ -963,7 +963,7 @@ const styles = StyleSheet.create({
   },
 
   header: {
-    paddingTop: 16,
+    paddingTop: 46,
     paddingHorizontal: 20,
     paddingBottom: 10,
     backgroundColor: COLORS.white,

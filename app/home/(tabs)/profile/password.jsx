@@ -613,7 +613,7 @@ const styles = StyleSheet.create({
   },
 
   header: {
-    paddingTop: 16,
+    paddingTop: 46,
     paddingHorizontal: 20,
     paddingBottom: 10,
     backgroundColor: COLORS.white,

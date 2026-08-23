@@ -701,7 +701,6 @@ export default function ProfileScreen() {
 
             <Animated.View
               style={[
-                styles.card,
                 {
                   opacity: cardsOpacity,
                   transform: [
@@ -711,162 +710,167 @@ export default function ProfileScreen() {
                   ],
                 },
               ]}>
-              <SectionHeader
-                icon="person-outline"
-                title="Personal Details"
-                subtitle={
-                  editing
-                    ? 'Update your information'
-                    : 'Your account information'
-                }
-              />
-
-              <ProfileInput
-                label="Name"
-                value={name}
-                onChangeText={setName}
-                editable={editing}
-                icon="person-outline"
-              />
-
-              <ProfileInput
-                label="Username"
-                value={username}
-                onChangeText={setUsername}
-                editable={editing}
-                icon="at-outline"
-              />
-
-              {/* EMAIL */}
-
-              <View style={styles.field}>
-                <View style={styles.emailLabelRow}>
-                  <Text style={styles.label}>Email</Text>
-
-                  {emailVerified && (
-                    <View style={styles.verifiedBadge}>
-                      <Ionicons
-                        name="checkmark-circle"
-                        size={12}
-                        color={COLORS.success}
-                      />
-
-                      <Text style={styles.verifiedText}>Verified</Text>
-                    </View>
-                  )}
-                </View>
-
-                <View style={[styles.inputWrapper, styles.lockedInput]}>
-                  <Ionicons
-                    name="mail-outline"
-                    size={17}
-                    color="#999999"
-                    style={styles.inputIcon}
-                  />
-
-                  <TextInput
-                    value={profile.email || ''}
-                    editable={false}
-                    style={styles.input}
-                  />
-
-                  <Ionicons
-                    name="lock-closed-outline"
-                    size={15}
-                    color="#A0A0A0"
-                    style={{
-                      marginRight: 13,
-                    }}
-                  />
-                </View>
-
-                <Text style={styles.helper}>
-                  Verified email cannot be changed.
-                </Text>
+              <View style={styles.sectionHeaderOutside}>
+                <SectionHeader
+                  icon="person-outline"
+                  title="Personal Details"
+                  subtitle={
+                    editing
+                      ? 'Update your information'
+                      : 'Your account information'
+                  }
+                />
               </View>
+              <View style={styles.card}>
+                <ProfileInput
+                  label="Name"
+                  value={name}
+                  onChangeText={setName}
+                  editable={editing}
+                  icon="person-outline"
+                />
 
-              <ProfileInput
-                label="Phone"
-                value={phone}
-                onChangeText={setPhone}
-                editable={editing}
-                icon="call-outline"
-                keyboardType="phone-pad"
-              />
+                <ProfileInput
+                  label="Username"
+                  value={username}
+                  onChangeText={setUsername}
+                  editable={editing}
+                  icon="at-outline"
+                />
 
-              <ProfileInput
-                label="Date of Birth"
-                value={dob}
-                onChangeText={setDob}
-                editable={editing}
-                icon="calendar-outline"
-              />
+                {/* EMAIL */}
+
+                <View style={styles.field}>
+                  <View style={styles.emailLabelRow}>
+                    <Text style={styles.label}>Email</Text>
+
+                    {emailVerified && (
+                      <View style={styles.verifiedBadge}>
+                        <Ionicons
+                          name="checkmark-circle"
+                          size={12}
+                          color={COLORS.success}
+                        />
+
+                        <Text style={styles.verifiedText}>Verified</Text>
+                      </View>
+                    )}
+                  </View>
+
+                  <View style={[styles.inputWrapper, styles.lockedInput]}>
+                    <Ionicons
+                      name="mail-outline"
+                      size={17}
+                      color="#999999"
+                      style={styles.inputIcon}
+                    />
+
+                    <TextInput
+                      value={profile.email || ''}
+                      editable={false}
+                      style={styles.input}
+                    />
+
+                    <Ionicons
+                      name="lock-closed-outline"
+                      size={15}
+                      color="#A0A0A0"
+                      style={{
+                        marginRight: 13,
+                      }}
+                    />
+                  </View>
+
+                  <Text style={styles.helper}>
+                    Verified email cannot be changed.
+                  </Text>
+                </View>
+
+                <ProfileInput
+                  label="Phone"
+                  value={phone}
+                  onChangeText={setPhone}
+                  editable={editing}
+                  icon="call-outline"
+                  keyboardType="phone-pad"
+                />
+
+                <ProfileInput
+                  label="Date of Birth"
+                  value={dob}
+                  onChangeText={setDob}
+                  editable={editing}
+                  icon="calendar-outline"
+                />
+              </View>
             </Animated.View>
 
             {/* LOCATION */}
 
             <Animated.View
               style={[
-                styles.card,
                 {
                   opacity: cardsOpacity,
                 },
               ]}>
-              <SectionHeader
-                icon="location-outline"
-                title="Location"
-                subtitle="Your address details"
-              />
-
-              <ProfileInput
-                label="Address"
-                value={address}
-                onChangeText={setAddress}
-                editable={editing}
-                icon="home-outline"
-              />
-
-              <View style={styles.twoColumn}>
-                <View style={styles.column}>
-                  <ProfileInput
-                    label="City"
-                    value={city}
-                    onChangeText={setCity}
-                    editable={editing}
-                    icon="business-outline"
-                  />
-                </View>
-
-                <View style={styles.column}>
-                  <ProfileInput
-                    label="District"
-                    value={district}
-                    onChangeText={setDistrict}
-                    editable={editing}
-                    icon="map-outline"
-                  />
-                </View>
+              <View style={styles.sectionHeaderOutside}>
+                <SectionHeader
+                  icon="location-outline"
+                  title="Location"
+                  subtitle="Your address details"
+                />
               </View>
+              <View style={styles.card}>
+                <ProfileInput
+                  label="Address"
+                  value={address}
+                  onChangeText={setAddress}
+                  editable={editing}
+                  icon="home-outline"
+                />
 
-              <View style={styles.twoColumn}>
-                <View style={styles.column}>
-                  <ProfileInput
-                    label="State"
-                    value={state}
-                    onChangeText={setState}
-                    editable={editing}
-                    icon="navigate-outline"
-                  />
+                <View style={styles.twoColumn}>
+                  <View style={styles.column}>
+                    <ProfileInput
+                      label="City"
+                      value={city}
+                      onChangeText={setCity}
+                      editable={editing}
+                      icon="business-outline"
+                    />
+                  </View>
+
+                  <View style={styles.column}>
+                    <ProfileInput
+                      label="District"
+                      value={district}
+                      onChangeText={setDistrict}
+                      editable={editing}
+                      icon="map-outline"
+                    />
+                  </View>
                 </View>
 
-                <View style={styles.column}>
-                  <ProfileInput
-                    label="Country"
-                    value={country}
-                    onChangeText={setCountry}
-                    editable={editing}
-                    icon="globe-outline"
-                  />
+                <View style={styles.twoColumn}>
+                  <View style={styles.column}>
+                    <ProfileInput
+                      label="State"
+                      value={state}
+                      onChangeText={setState}
+                      editable={editing}
+                      icon="navigate-outline"
+                    />
+                  </View>
+
+                  <View style={styles.column}>
+                    <ProfileInput
+                      label="Country"
+                      value={country}
+                      onChangeText={setCountry}
+                      editable={editing}
+                      icon="globe-outline"
+                    />
+                  </View>
                 </View>
               </View>
             </Animated.View>
@@ -903,62 +907,66 @@ export default function ProfileScreen() {
 
             <Animated.View
               style={[
-                styles.card,
                 {
                   opacity: cardsOpacity,
                 },
               ]}>
-              <SectionHeader
-                icon="settings-outline"
-                title="Account & Security"
-                subtitle="Manage your account"
-              />
+              <View style={styles.sectionHeaderOutside}>
+                <SectionHeader
+                  icon="settings-outline"
+                  title="Account & Security"
+                  subtitle="Manage your account"
+                />
+              </View>
+              <View style={styles.card}>
+                <AccountAction
+                  icon="shield-checkmark-outline"
+                  title="Security & Sessions"
+                  subtitle="View and manage active sessions"
+                  onPress={() => router.push('/home/profile/security')}
+                />
 
-              <AccountAction
-                icon="shield-checkmark-outline"
-                title="Security & Sessions"
-                subtitle="View and manage active sessions"
-                onPress={() => router.push('/home/profile/security')}
-              />
-
-              <AccountAction
-                icon="lock-closed-outline"
-                title="Change Password"
-                subtitle="Update your account password"
-                onPress={() => router.push('/home/profile/password')}
-              />
+                <AccountAction
+                  icon="lock-closed-outline"
+                  title="Change Password"
+                  subtitle="Update your account password"
+                  onPress={() => router.push('/home/profile/password')}
+                />
+              </View>
             </Animated.View>
 
             {/* LEGAL */}
 
             <Animated.View
               style={[
-                styles.card,
                 {
                   opacity: cardsOpacity,
                 },
               ]}>
-              <SectionHeader
-                icon="information-circle-outline"
-                title="Legal"
-                subtitle="Policies and conditions"
-              />
+              <View style={styles.sectionHeaderOutside}>
+                <SectionHeader
+                  icon="information-circle-outline"
+                  title="Legal"
+                  subtitle="Policies and conditions"
+                />
+              </View>
+              <View style={styles.card}>
+                <AccountAction
+                  icon="document-text-outline"
+                  title="Privacy Policy"
+                  subtitle="Read our privacy policy"
+                  onPress={() => router.push('/privacy-policy')}
+                />
 
-              <AccountAction
-                icon="document-text-outline"
-                title="Privacy Policy"
-                subtitle="Read our privacy policy"
-                onPress={() => router.push('/privacy-policy')}
-              />
+                <View style={styles.actionDivider} />
 
-              <View style={styles.actionDivider} />
-
-              <AccountAction
-                icon="reader-outline"
-                title="Terms & Conditions"
-                subtitle="Read our terms and conditions"
-                onPress={() => router.push('/terms')}
-              />
+                <AccountAction
+                  icon="reader-outline"
+                  title="Terms & Conditions"
+                  subtitle="Read our terms and conditions"
+                  onPress={() => router.push('/terms')}
+                />
+              </View>
             </Animated.View>
 
             {/* LOGOUT */}
@@ -1039,14 +1047,14 @@ function SummaryItem({ icon, value, label, valueColor }) {
 function SectionHeader({ icon, title, subtitle }) {
   return (
     <View style={styles.sectionHeader}>
-      <View style={styles.sectionIcon}>
+      {/* <View style={styles.sectionIcon}>
         <Ionicons name={icon} size={18} color={COLORS.primary} />
-      </View>
+      </View> */}
 
       <View style={styles.sectionText}>
         <Text style={styles.sectionTitle}>{title}</Text>
 
-        <Text style={styles.sectionSubtitle}>{subtitle}</Text>
+        {/* <Text style={styles.sectionSubtitle}>{subtitle}</Text> */}
       </View>
     </View>
   );
@@ -1159,6 +1167,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    paddingTop: 15,
   },
 
   iconButton: {
@@ -1318,10 +1327,15 @@ const styles = StyleSheet.create({
     elevation: 1,
   },
 
+  sectionHeaderOutside: {
+    marginHorizontal: 23,
+    marginTop: 10,
+  },
+
   sectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 15,
+    marginBottom: -5,
   },
 
   sectionIcon: {
@@ -1346,7 +1360,7 @@ const styles = StyleSheet.create({
 
   sectionSubtitle: {
     marginTop: 1,
-    fontSize: 9.5,
+    fontSize: 11,
     color: COLORS.secondary,
   },
 
