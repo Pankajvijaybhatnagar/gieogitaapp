@@ -1,7 +1,5 @@
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Tabs, useRouter } from 'expo-router';
-import React, { useEffect, useState } from 'react';
-import { StyleSheet } from 'react-native';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 const COLORS = {
@@ -19,7 +17,7 @@ const COLORS = {
 // ─── TAB LAYOUT ───────────────────────────────────────────────────────────────
 export default function TabLayout() {
   const router = useRouter();
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -38,15 +36,17 @@ export default function TabLayout() {
 
   return (
     <Tabs
-      tabBar={() => null}        // ← SharedTabBar in home/_layout handles this
+      tabBar={() => null} // ← SharedTabBar in home/_layout handles this
       screenOptions={{
-        headerShown: false,      // ← home/_layout drawer header handles this
+        headerShown: false, // ← home/_layout drawer header handles this
         header: () => <></>,
-      }}
-    >
-      <Tabs.Screen name="index"   options={{ title: 'Home'    }} />
-      <Tabs.Screen name="chants"  options={{ title: 'Chants'  }} />
-      <Tabs.Screen name="seva"    options={{ title: 'Seva'    }} />
+      }}>
+      <Tabs.Screen name="index" options={{ title: 'Home' }} />
+      <Tabs.Screen
+        name="chants"
+        options={{ title: 'Chants', headerShown: false }}
+      />
+      <Tabs.Screen name="seva" options={{ title: 'Seva' }} />
       <Tabs.Screen name="reading" options={{ title: 'Reading' }} />
       <Tabs.Screen
         name="profile"

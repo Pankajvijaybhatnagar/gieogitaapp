@@ -17,6 +17,7 @@ import {
 } from 'react-native';
 
 import { Ionicons } from '@expo/vector-icons';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 import { useRouter } from 'expo-router';
 
@@ -96,6 +97,8 @@ export default function ProfileScreen() {
   const [state, setState] = useState('');
 
   const [country, setCountry] = useState('');
+
+  const [showDobPicker, setShowDobPicker] = useState(false);
 
   /*
   |--------------------------------------------------------------------------
@@ -742,48 +745,61 @@ export default function ProfileScreen() {
 
                 <View style={styles.field}>
                   <View style={styles.emailLabelRow}>
-                    <Text style={styles.label}>Email</Text>
-
-                    {emailVerified && (
-                      <View style={styles.verifiedBadge}>
-                        <Ionicons
-                          name="checkmark-circle"
-                          size={12}
-                          color={COLORS.success}
-                        />
-
-                        <Text style={styles.verifiedText}>Verified</Text>
-                      </View>
-                    )}
+                    {editing && <Text style={styles.label}>Email</Text>}
                   </View>
 
-                  <View style={[styles.inputWrapper, styles.lockedInput]}>
-                    <Ionicons
-                      name="mail-outline"
-                      size={17}
-                      color="#999999"
-                      style={styles.inputIcon}
-                    />
+                  {editing ? (
+                    <View style={[styles.inputWrapper, styles.lockedInput]}>
+                      <Ionicons
+                        name="mail-outline"
+                        size={17}
+                        color="#999999"
+                        style={styles.inputIcon}
+                      />
 
-                    <TextInput
-                      value={profile.email || ''}
-                      editable={false}
-                      style={styles.input}
-                    />
+                      <TextInput
+                        value={profile.email || ''}
+                        editable={false}
+                        style={styles.input}
+                      />
 
-                    <Ionicons
-                      name="lock-closed-outline"
-                      size={15}
-                      color="#A0A0A0"
-                      style={{
-                        marginRight: 13,
-                      }}
-                    />
-                  </View>
+                      <Ionicons
+                        name="lock-closed-outline"
+                        size={15}
+                        color="#A0A0A0"
+                        style={{
+                          marginRight: 13,
+                        }}
+                      />
+                    </View>
+                  ) : (
+                    <View style={styles.displayRow}>
+                      <Ionicons
+                        name="mail-outline"
+                        size={17}
+                        color="#999999"
+                        style={styles.displayIcon}
+                      />
 
-                  <Text style={styles.helper}>
-                    Verified email cannot be changed.
-                  </Text>
+                      <Text style={styles.displayLabel}>Email:</Text>
+
+                      <Text style={styles.displayValue}>
+                        {profile.email || '-'}
+                      </Text>
+
+                      {emailVerified && (
+                        <View style={styles.verifiedBadge}>
+                          <Ionicons
+                            name="checkmark-circle"
+                            size={12}
+                            color={COLORS.success}
+                          />
+
+                          <Text style={styles.verifiedText}>Verified</Text>
+                        </View>
+                      )}
+                    </View>
+                  )}
                 </View>
 
                 <ProfileInput
@@ -795,13 +811,60 @@ export default function ProfileScreen() {
                   keyboardType="phone-pad"
                 />
 
-                <ProfileInput
-                  label="Date of Birth"
-                  value={dob}
-                  onChangeText={setDob}
-                  editable={editing}
-                  icon="calendar-outline"
-                />
+                {editing ? (
+                  <View style={styles.field}>
+                    <Text style={styles.label}>Date of Birth</Text>
+
+                    <TouchableOpacity
+                      style={styles.inputWrapper}
+                      activeOpacity={0.75}
+                      onPress={() => setShowDobPicker(true)}>
+                      <Ionicons
+                        name="calendar-outline"
+                        size={16}
+                        color="#777777"
+                        style={styles.inputIcon}
+                      />
+
+                      <Text style={styles.input}>
+                        {dob || 'Select date of birth'}
+                      </Text>
+                    </TouchableOpacity>
+
+                    {showDobPicker && (
+                      <DateTimePicker
+                        value={dob ? new Date(dob) : new Date(2000, 0, 1)}
+                        mode="date"
+                        display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                        maximumDate={new Date()}
+                        onChange={(event, selectedDate) => {
+                          setShowDobPicker(false);
+
+                          if (selectedDate) {
+                            const year = selectedDate.getFullYear();
+                            const month = String(
+                              selectedDate.getMonth() + 1,
+                            ).padStart(2, '0');
+                            const day = String(selectedDate.getDate()).padStart(
+                              2,
+                              '0',
+                            );
+
+                            setDob(`${year}-${month}-${day}`);
+                          }
+                        }}
+                      />
+                    )}
+                  </View>
+                ) : (
+                  <ProfileInput
+                    label="Date of Birth"
+                    value={dob}
+                    onChangeText={setDob}
+                    editable={false}
+                    icon="calendar-outline"
+                  />
+                )}
               </View>
             </Animated.View>
 
@@ -829,48 +892,44 @@ export default function ProfileScreen() {
                   icon="home-outline"
                 />
 
-                <View style={styles.twoColumn}>
-                  <View style={styles.column}>
-                    <ProfileInput
-                      label="City"
-                      value={city}
-                      onChangeText={setCity}
-                      editable={editing}
-                      icon="business-outline"
-                    />
-                  </View>
-
-                  <View style={styles.column}>
-                    <ProfileInput
-                      label="District"
-                      value={district}
-                      onChangeText={setDistrict}
-                      editable={editing}
-                      icon="map-outline"
-                    />
-                  </View>
+                <View style={styles.column}>
+                  <ProfileInput
+                    label="City"
+                    value={city}
+                    onChangeText={setCity}
+                    editable={editing}
+                    icon="business-outline"
+                  />
                 </View>
 
-                <View style={styles.twoColumn}>
-                  <View style={styles.column}>
-                    <ProfileInput
-                      label="State"
-                      value={state}
-                      onChangeText={setState}
-                      editable={editing}
-                      icon="navigate-outline"
-                    />
-                  </View>
+                <View style={styles.column}>
+                  <ProfileInput
+                    label="District"
+                    value={district}
+                    onChangeText={setDistrict}
+                    editable={editing}
+                    icon="map-outline"
+                  />
+                </View>
 
-                  <View style={styles.column}>
-                    <ProfileInput
-                      label="Country"
-                      value={country}
-                      onChangeText={setCountry}
-                      editable={editing}
-                      icon="globe-outline"
-                    />
-                  </View>
+                <View style={styles.column}>
+                  <ProfileInput
+                    label="State"
+                    value={state}
+                    onChangeText={setState}
+                    editable={editing}
+                    icon="navigate-outline"
+                  />
+                </View>
+
+                <View style={styles.column}>
+                  <ProfileInput
+                    label="Country"
+                    value={country}
+                    onChangeText={setCountry}
+                    editable={editing}
+                    icon="globe-outline"
+                  />
                 </View>
               </View>
             </Animated.View>
@@ -1076,26 +1135,41 @@ function ProfileInput({
 }) {
   return (
     <View style={styles.field}>
-      <Text style={styles.label}>{label}</Text>
+      {editable && <Text style={styles.label}>{label}</Text>}
 
-      <View style={[styles.inputWrapper, !editable && styles.readOnlyInput]}>
-        <Ionicons
-          name={icon}
-          size={16}
-          color={editable ? '#777777' : '#9C9C9C'}
-          style={styles.inputIcon}
-        />
+      {editable ? (
+        <View style={styles.inputWrapper}>
+          <Ionicons
+            name={icon}
+            size={16}
+            color="#777777"
+            style={styles.inputIcon}
+          />
 
-        <TextInput
-          value={value || ''}
-          onChangeText={onChangeText}
-          editable={editable}
-          keyboardType={keyboardType}
-          placeholder={label}
-          placeholderTextColor="#A1A1A1"
-          style={styles.input}
-        />
-      </View>
+          <TextInput
+            value={value || ''}
+            onChangeText={onChangeText}
+            editable
+            keyboardType={keyboardType}
+            placeholder={label}
+            placeholderTextColor="#A1A1A1"
+            style={styles.input}
+          />
+        </View>
+      ) : (
+        <View style={styles.displayRow}>
+          <Ionicons
+            name={icon}
+            size={18}
+            color="#9C9C9C"
+            style={styles.displayIcon}
+          />
+
+          <Text style={styles.displayLabel}>{label}:</Text>
+
+          <Text style={styles.displayValue}>{value || '-'}</Text>
+        </View>
+      )}
     </View>
   );
 }
@@ -1424,6 +1498,35 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     height: '100%',
+    paddingHorizontal: 5,
+    fontSize: 11,
+    color: '#333333',
+  },
+
+  displayRow: {
+    minHeight: 15,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 5,
+    borderBottomColor: 'rgba(231, 231, 231, 0.5)',
+    borderBottomWidth: 1,
+  },
+
+  displayIcon: {
+    width: 22,
+    marginLeft: 7,
+    marginRight: 6,
+  },
+
+  displayLabel: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: '#4B4B4B',
+    marginRight: 5,
+  },
+
+  displayValue: {
+    flex: 1,
     paddingHorizontal: 5,
     fontSize: 11,
     color: '#333333',

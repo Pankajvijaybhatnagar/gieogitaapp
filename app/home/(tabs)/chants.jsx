@@ -1,5 +1,4 @@
-import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
-import { Link } from 'expo-router';
+import { FontAwesome } from '@expo/vector-icons';
 import { useEffect, useRef, useState } from 'react';
 import {
   Alert,
@@ -129,7 +128,7 @@ function TotalPaath() {
       <View style={tcStyles.bgCircle2} />
       <Text style={tcStyles.eyebrow}>🕉️ EK MIN EK SAATH — GLOBAL COUNT</Text>
       <Text style={tcStyles.label}>Total Gita Paath</Text>
-      <Link href={'/home/chanting'}>chanting</Link>
+      {/* <Link href={'/home/chanting'}>chanting</Link> */}
       <View style={tcStyles.countBox}>
         <Text style={tcStyles.countText}>{displayed.toLocaleString()}</Text>
       </View>
@@ -623,7 +622,7 @@ export default function EkMinEkSaathScreen() {
       style={mainStyles.container}
       showsVerticalScrollIndicator={false}>
       {/* ── HEADER ── */}
-      <Animated.View style={[mainStyles.header, { opacity: fadeAnim }]}>
+      {/* <Animated.View style={[mainStyles.header, { opacity: fadeAnim }]}>
         <View>
           <Text style={mainStyles.greetingSmall}>🕉️ Jai Shri Krishna</Text>
           <Text style={mainStyles.greeting}>Gita Paath 📖</Text>
@@ -636,7 +635,7 @@ export default function EkMinEkSaathScreen() {
           />
           <View style={mainStyles.notifDot} />
         </TouchableOpacity>
-      </Animated.View>
+      </Animated.View> */}
 
       {/* ── CAMPAIGN BANNER CARD ── */}
       <View style={mainStyles.quoteCard}>
