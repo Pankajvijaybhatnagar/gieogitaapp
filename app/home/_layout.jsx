@@ -1,5 +1,6 @@
 import { useAuth } from '@/context/AuthContext';
 import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
+import { BlurView } from 'expo-blur';
 import { Link, usePathname, useRouter } from 'expo-router';
 import { Drawer } from 'expo-router/drawer';
 import {
@@ -341,15 +342,27 @@ export default function HomeLayout() {
           <Drawer
             drawerContent={props => <CustomDrawerContent {...props} />}
             screenOptions={({ navigation }) => ({
-               headerShown: !isProfile,
+              headerShown: !isProfile,
               // ── Header ──────────────────────────────────────────
               headerStyle: {
-                backgroundColor: COLORS.deepBrown,
+                // backgroundColor: `${COLORS.deepBrown}`,
+                backgroundColor: 'transperent',
                 borderBottomWidth: 1.5,
                 borderBottomColor: COLORS.gold,
                 elevation: 0,
                 shadowOpacity: 0,
               },
+              // ── Glass / Blur background ─────────────────────────
+              headerBackground: () => (
+                <BlurView
+                  intensity={35}
+                  tint="dark"
+                  style={{
+                    flex: 1,
+                    backgroundColor: `${COLORS.deepBrown}E6`,
+                  }}
+                />
+              ),
               headerTintColor: COLORS.goldLight,
               headerTitleAlign: 'center',
               headerTitle: () => <HeaderTitle />,

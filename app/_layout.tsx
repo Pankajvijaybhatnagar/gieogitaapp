@@ -10,6 +10,9 @@ export default function RootLayout() {
     <AuthProvider>
       <Provider store={store}>
         <Stack screenOptions={{ headerShown: false }}>
+          <Stack.Screen 
+          name='index'
+          />
           <Stack.Screen
             name="home"
             options={{

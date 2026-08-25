@@ -1,545 +1,798 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from 'react';
+
 import {
-  View,
-  Text,
-  Pressable,
-  Animated,
-  Image,
-  StyleSheet,
-  Dimensions,
-} from "react-native";
-import { useRouter, useFocusEffect } from "expo-router";
-import { Video }                      from "expo-av";
-import { useSelector }                from "react-redux";
+    Animated,
+    Dimensions,
+    Easing,
+    Image,
+    ImageBackground,
+    Platform,
+    Pressable,
+    SafeAreaView,
+    StatusBar,
+    StyleSheet,
+    Text,
+    View,
+} from 'react-native';
 
-const { width, height } = Dimensions.get("window");
+import { BlurView } from 'expo-blur';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
 
-// ─── COLOR PALETTE ────────────────────────────────────────────────────────────
-const C = {
-  deepBrown:   "#2C1A0A",
-  warmBrown:   "#4A2C0D",
-  gold:        "#C9A227",
-  goldLight:   "#E8C55A",
-  goldDark:    "#8B6914",
-  cream:       "#FDF6E3",
-  saffron:     "#E8721C",
-  saffronLight:"#F4A44A",
-  white:       "#FFFFFF",
+const { width, height } = Dimensions.get('window');
+
+const COLORS = {
+  deepBrown: '#24130D',
+  brown: '#3A2115',
+  warmBrown: '#5A3320',
+  gold: '#D9AD62',
+  lightGold: '#F1D39A',
+  cream: '#FFF4DF',
+  white: '#FFFFFF',
 };
 
-// ─── PULSING RING COMPONENT ───────────────────────────────────────────────────
-function PulsingRing({ delay = 0, size }) {
-  const anim = useRef(new Animated.Value(0)).current;
+export default function GetStartedScreen() {
+  const router = useRouter();
+
+  // ---------------------------------------------------------
+  // Animations
+  // ---------------------------------------------------------
+
+  const fadeIn = useRef(new Animated.Value(0)).current;
+  const contentY = useRef(new Animated.Value(35)).current;
+
+  const logoScale = useRef(new Animated.Value(0.82)).current;
+
+  const glowScale = useRef(new Animated.Value(0.9)).current;
+  const glowOpacity = useRef(new Animated.Value(0.35)).current;
+
+  const maharajY = useRef(new Animated.Value(45)).current;
+  const maharajOpacity = useRef(new Animated.Value(0)).current;
+
+  const buttonScale = useRef(new Animated.Value(1)).current;
+
+  const particle1 = useRef(new Animated.Value(0)).current;
+  const particle2 = useRef(new Animated.Value(0)).current;
+  const particle3 = useRef(new Animated.Value(0)).current;
+
+  // ---------------------------------------------------------
+  // Entrance animation
+  // ---------------------------------------------------------
 
   useEffect(() => {
-    const loop = Animated.loop(
+    Animated.parallel([
+      Animated.timing(fadeIn, {
+        toValue: 1,
+        duration: 1200,
+        easing: Easing.out(Easing.cubic),
+        useNativeDriver: true,
+      }),
+
+      Animated.spring(contentY, {
+        toValue: 0,
+        damping: 16,
+        stiffness: 75,
+        mass: 0.8,
+        useNativeDriver: true,
+      }),
+
+      Animated.spring(logoScale, {
+        toValue: 1,
+        damping: 12,
+        stiffness: 90,
+        useNativeDriver: true,
+      }),
+
+      Animated.timing(maharajOpacity, {
+        toValue: 1,
+        duration: 1300,
+        delay: 400,
+        easing: Easing.out(Easing.cubic),
+        useNativeDriver: true,
+      }),
+
+      Animated.spring(maharajY, {
+        toValue: 0,
+        damping: 18,
+        stiffness: 70,
+        delay: 350,
+        useNativeDriver: true,
+      }),
+    ]).start();
+
+    // -------------------------------------------------------
+    // Breathing divine glow
+    // -------------------------------------------------------
+
+    Animated.loop(
       Animated.sequence([
-        Animated.delay(delay),
-        Animated.timing(anim, { toValue: 1, duration: 2000, useNativeDriver: true }),
-        Animated.timing(anim, { toValue: 0, duration: 0,    useNativeDriver: true }),
-      ])
-    );
-    loop.start();
-    return () => loop.stop();
-  }, []);
+        Animated.parallel([
+          Animated.timing(glowScale, {
+            toValue: 1.08,
+            duration: 2800,
+            easing: Easing.inOut(Easing.sin),
+            useNativeDriver: true,
+          }),
 
-  const scale   = anim.interpolate({ inputRange: [0, 1], outputRange: [1, 1.8] });
-  const opacity = anim.interpolate({ inputRange: [0, 0.5, 1], outputRange: [0.6, 0.2, 0] });
+          Animated.timing(glowOpacity, {
+            toValue: 0.58,
+            duration: 2800,
+            easing: Easing.inOut(Easing.sin),
+            useNativeDriver: true,
+          }),
+        ]),
 
-  return (
-    <Animated.View
-      style={{
-        position: "absolute",
-        width: size, height: size,
-        borderRadius: size / 2,
-        borderWidth: 1.5,
-        borderColor: C.gold,
-        transform: [{ scale }],
-        opacity,
-      }}
-    />
-  );
-}
+        Animated.parallel([
+          Animated.timing(glowScale, {
+            toValue: 0.9,
+            duration: 2800,
+            easing: Easing.inOut(Easing.sin),
+            useNativeDriver: true,
+          }),
 
-// ─── FLOATING PARTICLE ────────────────────────────────────────────────────────
-function FloatingParticle({ x, delay, duration }) {
-  const anim = useRef(new Animated.Value(0)).current;
-
-  useEffect(() => {
-    const loop = Animated.loop(
-      Animated.sequence([
-        Animated.delay(delay),
-        Animated.timing(anim, { toValue: 1, duration, useNativeDriver: true }),
-        Animated.timing(anim, { toValue: 0, duration: 0, useNativeDriver: true }),
-      ])
-    );
-    loop.start();
-    return () => loop.stop();
-  }, []);
-
-  const translateY = anim.interpolate({ inputRange: [0, 1], outputRange: [height + 20, -40] });
-  const opacity    = anim.interpolate({ inputRange: [0, 0.1, 0.8, 1], outputRange: [0, 1, 1, 0] });
-
-  return (
-    <Animated.View
-      style={{
-        position: "absolute",
-        left: x,
-        bottom: 0,
-        width: 4,
-        height: 4,
-        borderRadius: 2,
-        backgroundColor: C.goldLight,
-        transform: [{ translateY }],
-        opacity,
-      }}
-    />
-  );
-}
-
-// ─── MAIN COMPONENT ───────────────────────────────────────────────────────────
-export default function Index() {
-  // ── All original state/refs ───────────────────────────────────────────────
-  const fadeAnim      = useRef(new Animated.Value(0)).current;
-  const [showContent, setShowContent] = useState(false);
-  const router        = useRouter();
-  const videoRef      = useRef(null);
-  const isLoggedIn    = useSelector((state) => state.auth.isLoggedIn);
-
-  // ── New animation values ───────────────────────────────────────────────────
-  const logoScale     = useRef(new Animated.Value(0.5)).current;
-  const logoTranslate = useRef(new Animated.Value(40)).current;
-  const titleSlide    = useRef(new Animated.Value(30)).current;
-  const subtitleSlide = useRef(new Animated.Value(30)).current;
-  const btnScale      = useRef(new Animated.Value(0.85)).current;
-  const dividerWidth  = useRef(new Animated.Value(0)).current;
-  const btnPulse      = useRef(new Animated.Value(1)).current;
-
-  // ── Original useFocusEffect — untouched logic ─────────────────────────────
-  
-  
-  
-  
-  useFocusEffect(
-    React.useCallback(() => {
-      const resetAndPlayVideo = async () => {
-        if (videoRef.current) {
-          try {
-            await videoRef.current.setPositionAsync(0);
-            await videoRef.current.playAsync();
-          } catch (error) {
-            console.error("Error resetting or playing video:", error);
-          }
-        }
-      };
-
-      resetAndPlayVideo();
-
-      const timer = setTimeout(() => {
-        setShowContent(true);
-        fadeIn();
-      }, 3000);
-
-      return () => {
-        clearTimeout(timer);
-      };
-    }, [])
-  );
-
-  // ── Original fade-in + new staggered animations ───────────────────────────
-  const fadeIn = () => {
-    // Original fade
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 1000,
-      useNativeDriver: true,
-    }).start();
-
-    // Staggered entrance animations
-    Animated.stagger(120, [
-      Animated.parallel([
-        Animated.spring(logoScale,     { toValue: 1, friction: 5, useNativeDriver: true }),
-        Animated.timing(logoTranslate, { toValue: 0, duration: 700, useNativeDriver: true }),
+          Animated.timing(glowOpacity, {
+            toValue: 0.32,
+            duration: 2800,
+            easing: Easing.inOut(Easing.sin),
+            useNativeDriver: true,
+          }),
+        ]),
       ]),
-      Animated.timing(dividerWidth, { toValue: 140, duration: 600, useNativeDriver: false }),
-      Animated.timing(titleSlide,   { toValue: 0, duration: 600, useNativeDriver: true }),
-      Animated.timing(subtitleSlide,{ toValue: 0, duration: 600, useNativeDriver: true }),
-      Animated.spring(btnScale,     { toValue: 1, friction: 5, useNativeDriver: true }),
-    ]).start(() => {
-      // Gentle pulse on button after entrance
+    ).start();
+
+    // -------------------------------------------------------
+    // Floating particles
+    // -------------------------------------------------------
+
+    const animateParticle = (value, delay, duration) => {
       Animated.loop(
         Animated.sequence([
-          Animated.timing(btnPulse, { toValue: 1.04, duration: 1200, useNativeDriver: true }),
-          Animated.timing(btnPulse, { toValue: 1,    duration: 1200, useNativeDriver: true }),
-        ])
+          Animated.delay(delay),
+
+          Animated.timing(value, {
+            toValue: -1,
+            duration,
+            easing: Easing.inOut(Easing.sin),
+            useNativeDriver: true,
+          }),
+
+          Animated.timing(value, {
+            toValue: 0,
+            duration,
+            easing: Easing.inOut(Easing.sin),
+            useNativeDriver: true,
+          }),
+        ]),
       ).start();
-    });
+    };
+
+    animateParticle(particle1, 200, 3600);
+    animateParticle(particle2, 800, 4200);
+    animateParticle(particle3, 1200, 5000);
+  }, []);
+
+  // ---------------------------------------------------------
+  // Button press animation
+  // ---------------------------------------------------------
+
+  const handlePressIn = () => {
+    Animated.spring(buttonScale, {
+      toValue: 0.96,
+      damping: 12,
+      stiffness: 250,
+      useNativeDriver: true,
+    }).start();
   };
 
-  // ── Original handleGetStarted — untouched logic ───────────────────────────
-  const handleGetStarted = async () => {
-    if (videoRef.current) {
-      try {
-        await videoRef.current.pauseAsync();
-      } catch (error) {
-        console.error("Error pausing the video:", error);
-      }
-    }
-    if (isLoggedIn) {
-      router.push("/home");
-    } else {
-      router.push("/login");
-    }
+  const handlePressOut = () => {
+    Animated.spring(buttonScale, {
+      toValue: 1,
+      damping: 10,
+      stiffness: 180,
+      useNativeDriver: true,
+    }).start();
   };
 
-  // ── Floating particles data ────────────────────────────────────────────────
-  const particles = [
-    { x: width * 0.1,  delay: 0,    duration: 4000 },
-    { x: width * 0.25, delay: 800,  duration: 5200 },
-    { x: width * 0.4,  delay: 1600, duration: 3800 },
-    { x: width * 0.6,  delay: 400,  duration: 4600 },
-    { x: width * 0.75, delay: 1200, duration: 5000 },
-    { x: width * 0.88, delay: 2000, duration: 4200 },
-  ];
+  const handleGetStarted = () => {
+    router.replace('/home');
+  };
+
+  // ---------------------------------------------------------
+  // Render
+  // ---------------------------------------------------------
 
   return (
-    <View style={S.root}>
-
-      {/* ── BACKGROUND VIDEO (original — untouched) ── */}
-      <Video
-        ref={videoRef}
-        source={require("../assets/intro.mp4")}
-        rate={1.0}
-        volume={1.0}
-        isMuted={false}
-        resizeMode="cover"
-        shouldPlay
-        style={S.video}
-        onPlaybackStatusUpdate={async (status) => {
-          if (status.didJustFinish) {
-            try {
-              await videoRef.current.replayAsync();
-            } catch (error) {
-              console.error("Error replaying video:", error);
-            }
-          }
-        }}
+    <View style={styles.container}>
+      <StatusBar
+        translucent
+        backgroundColor="transparent"
+        barStyle="light-content"
       />
 
-      {/* ── DARK OVERLAY ── */}
-      <View style={S.overlay} />
+      {/* ---------------------------------------------------
+          KRISHNA BACKGROUND
+      --------------------------------------------------- */}
 
-      {/* ── GOLDEN GRADIENT OVERLAY (bottom) ── */}
-      <View style={S.bottomGlow} />
+      <ImageBackground
+        source={require('../assets/images/krishna-bg.jpg')}
+        style={StyleSheet.absoluteFillObject}
+        resizeMode="cover">
+        {/* Dark spiritual overlay */}
 
-      {/* ── FLOATING GOLD PARTICLES ── */}
-      {showContent && particles.map((p, i) => (
-        <FloatingParticle key={i} x={p.x} delay={p.delay} duration={p.duration} />
-      ))}
+        <LinearGradient
+          colors={[
+            'rgba(23,11,7,0.70)',
+            'rgba(45,24,14,0.50)',
+            'rgba(27,13,8,0.74)',
+            'rgba(15,7,5,0.96)',
+          ]}
+          locations={[0, 0.35, 0.68, 1]}
+          style={StyleSheet.absoluteFillObject}
+        />
 
-      {/* ── FADE-IN CONTENT (original condition preserved) ── */}
-      {showContent && (
-        <Animated.View style={[S.contentWrap, { opacity: fadeAnim }]}>
+        {/* Warm center light */}
 
-          {/* Top Om symbol */}
-          <Text style={S.topOm}>ॐ</Text>
+        <LinearGradient
+          colors={[
+            'rgba(217,173,98,0.10)',
+            'rgba(217,173,98,0.02)',
+            'transparent',
+          ]}
+          style={styles.centerLight}
+        />
 
-          {/* Decorative top line */}
-          <View style={S.topLineRow}>
-            <View style={S.topLineLeft} />
-            <Text style={S.topLineDiamond}>◆</Text>
-            <View style={S.topLineRight} />
-          </View>
+        {/* Bottom darkness for Maharaj Ji */}
 
-          {/* ── LOGO + PULSING RINGS ── */}
+        <LinearGradient
+          colors={['transparent', 'rgba(18,8,5,0.40)', 'rgba(13,6,4,0.96)']}
+          locations={[0, 0.42, 1]}
+          style={styles.bottomGradient}
+        />
+      </ImageBackground>
+
+      {/* ---------------------------------------------------
+          FLOATING PARTICLES
+      --------------------------------------------------- */}
+
+      <Animated.View
+        style={[
+          styles.particle,
+          styles.particleOne,
+          {
+            opacity: fadeIn,
+            transform: [
+              {
+                translateY: particle1.interpolate({
+                  inputRange: [-1, 0],
+                  outputRange: [-35, 35],
+                }),
+              },
+            ],
+          },
+        ]}
+      />
+
+      <Animated.View
+        style={[
+          styles.particle,
+          styles.particleTwo,
+          {
+            opacity: fadeIn,
+            transform: [
+              {
+                translateY: particle2.interpolate({
+                  inputRange: [-1, 0],
+                  outputRange: [-45, 45],
+                }),
+              },
+            ],
+          },
+        ]}
+      />
+
+      <Animated.View
+        style={[
+          styles.particle,
+          styles.particleThree,
+          {
+            opacity: fadeIn,
+            transform: [
+              {
+                translateY: particle3.interpolate({
+                  inputRange: [-1, 0],
+                  outputRange: [-30, 30],
+                }),
+              },
+            ],
+          },
+        ]}
+      />
+
+      <SafeAreaView style={styles.safeArea}>
+        {/* -------------------------------------------------
+            TOP BRANDING
+        ------------------------------------------------- */}
+
+        <Animated.View
+          style={[
+            styles.topSection,
+            {
+              opacity: fadeIn,
+              transform: [
+                {
+                  scale: logoScale,
+                },
+              ],
+            },
+          ]}>
+          {/* <View style={styles.omCircle}>
+            <Text style={styles.om}>ॐ</Text>
+          </View> */}
+
+          <Text style={styles.brandName}>GIEO GITA</Text>
+
+          {/* <View style={styles.goldLine} />
+
+          <Text style={styles.brandTagline}>AWAKEN • TRANSFORM • SERVE</Text> */}
+        </Animated.View>
+
+        {/* -------------------------------------------------
+            CENTER CONTENT
+        ------------------------------------------------- */}
+
+        <Animated.View
+          style={[
+            styles.centerContent,
+            {
+              opacity: fadeIn,
+              transform: [
+                {
+                  translateY: contentY,
+                },
+              ],
+            },
+          ]}>
+          {/* <Text style={styles.sanskrit}>श्रीमद्भगवद्गीता</Text>
+
+          <Text style={styles.mainTitle}>ज्ञान की ओर</Text>
+
+          <Text style={styles.mainTitleSecond}>एक दिव्य यात्रा</Text>
+
+          <Text style={styles.description}>
+            Discover the timeless wisdom of the Bhagavad Gita and bring peace,
+            purpose and clarity into your life.
+          </Text> */}
+
+          {/* Decorative divider */}
+
+          {/* <View style={styles.dividerContainer}>
+            <View style={styles.dividerLine} />
+
+            <Text style={styles.dividerSymbol}>✦</Text>
+
+            <View style={styles.dividerLine} />
+          </View> */}
+        </Animated.View>
+
+        {/* -------------------------------------------------
+            MAHARAJ JI SECTION
+        ------------------------------------------------- */}
+
+        <Animated.View
+          style={[
+            styles.maharajSection,
+            {
+              opacity: maharajOpacity,
+              transform: [
+                {
+                  translateY: maharajY,
+                },
+              ],
+            },
+          ]}>
+          {/* Divine glow */}
+
           <Animated.View
             style={[
-              S.logoWrap,
+              styles.divineGlow,
               {
+                opacity: glowOpacity,
                 transform: [
-                  { scale: logoScale },
-                  { translateY: logoTranslate },
+                  {
+                    scale: glowScale,
+                  },
                 ],
               },
             ]}
-          >
-            <PulsingRing size={140} delay={0}    />
-            <PulsingRing size={140} delay={700}  />
-            <PulsingRing size={140} delay={1400} />
-            <View style={S.logoOuterRing}>
-              <View style={S.logoInnerRing}>
-                {/* Original Image — path unchanged */}
-                <Image
-                  style={S.logoImage}
-                  source={require("../assets/logo.png")}
-                />
-              </View>
-            </View>
-          </Animated.View>
+          />
 
-          {/* ── ANIMATED GOLD DIVIDER ── */}
-          <Animated.View style={[S.divider, { width: dividerWidth }]} />
+          {/* Portrait */}
 
-          {/* ── APP NAME ── */}
-          <Animated.Text
-            style={[
-              S.appName,
-              { transform: [{ translateY: titleSlide }] },
-            ]}
-          >
-            GIEO GITA 
-          </Animated.Text>
+          <Image
+            source={require('../assets/images/maharaj-ji.png')}
+            style={styles.maharajImage}
+            resizeMode="contain"
+          />
 
-          {/* ── SUBTITLE ── */}
-          <Animated.Text
-            style={[
-              S.subtitle,
-              { transform: [{ translateY: subtitleSlide }] },
-            ]}
-          >
-            ॥ कृष्ण कृपा ॥
-          </Animated.Text>
+          {/* Glass name plate */}
 
-          {/* Tagline */}
-          <Animated.Text
-            style={[
-              S.tagline,
-              { transform: [{ translateY: subtitleSlide }] },
-            ]}
-          >
-            Spreading the timeless wisdom of Bhagavad Gita
-          </Animated.Text>
+          <View style={styles.namePlateWrapper}>
+            <BlurView intensity={35} tint="dark" style={styles.namePlate}>
+              <Text style={styles.maharajPrefix}>GITA MANISHI</Text>
 
-          {/* ── FEATURE PILLS ── */}
-          <View style={S.pillsRow}>
-            {['📖 Gita Paath', '📿 Daily Chants', '🪷 Gita Seva'].map((p) => (
-              <View key={p} style={S.featurePill}>
-                <Text style={S.featurePillText}>{p}</Text>
-              </View>
-            ))}
+              <Text style={styles.maharajName}>
+                Swami Shri Gyananand Ji Maharaj
+              </Text>
+
+              {/* <Text style={styles.maharajSub}>परम पूज्य गुरुदेव</Text> */}
+            </BlurView>
           </View>
+        </Animated.View>
 
-          {/* ── GET STARTED BUTTON (original onPress preserved) ── */}
-          <Animated.View style={{ transform: [{ scale: btnPulse }, { scale: btnScale }] }}>
+        {/* -------------------------------------------------
+            BOTTOM CTA
+        ------------------------------------------------- */}
+
+        <Animated.View
+          style={[
+            styles.bottomSection,
+            {
+              opacity: fadeIn,
+            },
+          ]}>
+          <Animated.View
+            style={{
+              transform: [
+                {
+                  scale: buttonScale,
+                },
+              ],
+            }}>
             <Pressable
               onPress={handleGetStarted}
-              style={({ pressed }) => [
-                S.getStartedBtn,
-                pressed && S.getStartedBtnPressed,
-              ]}
-            >
-              <View style={S.getStartedBtnInner}>
-                <Text style={S.getStartedBtnText}>Get Started</Text>
-                <Text style={S.getStartedBtnArrow}> ›</Text>
-              </View>
+              onPressIn={handlePressIn}
+              onPressOut={handlePressOut}
+              style={styles.buttonOuter}>
+              <LinearGradient
+                colors={['#E7C27C', '#C99A4E', '#A87535']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.button}>
+                <Text style={styles.buttonText}>GET STARTED</Text>
+
+                <View style={styles.buttonArrow}>
+                  <Text style={styles.arrow}>→</Text>
+                </View>
+              </LinearGradient>
             </Pressable>
           </Animated.View>
 
-          {/* Bottom tagline */}
-          <Text style={S.bottomTagline}>
-            🕉️  Jai Shri Krishna  🕉️
+          <Text style={styles.bottomText}>
+            {/* Begin your journey with the wisdom of the Gita */}
           </Text>
-
         </Animated.View>
-      )}
+      </SafeAreaView>
     </View>
   );
 }
 
-// ─── STYLES ───────────────────────────────────────────────────────────────────
-const S = StyleSheet.create({
+// ============================================================
+// STYLES
+// ============================================================
 
-  // ── ROOT & VIDEO ──────────────────────────────────────────────────────────
-  root: {
+const styles = StyleSheet.create({
+  container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "black",
-  },
-  video: {
-    width: "100%",
-    height: "100%",
-    position: "absolute",
-    zIndex: -1,
+    backgroundColor: COLORS.deepBrown,
   },
 
-  // ── OVERLAYS ──────────────────────────────────────────────────────────────
-  overlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(20, 8, 0, 0.65)",
-    zIndex: 0,
+  safeArea: {
+    flex: 1,
+    paddingTop: Platform.OS === 'android' ? 18 : 0,
   },
-  bottomGlow: {
-    position: "absolute",
-    bottom: 0,
+
+  // ----------------------------------------------------------
+  // Background effects
+  // ----------------------------------------------------------
+
+  centerLight: {
+    position: 'absolute',
+    width: width * 1.4,
+    height: height * 0.75,
+    top: height * 0.08,
+    left: -width * 0.2,
+    borderRadius: width,
+  },
+
+  bottomGradient: {
+    ...StyleSheet.absoluteFillObject,
+  },
+
+  // ----------------------------------------------------------
+  // Particles
+  // ----------------------------------------------------------
+
+  particle: {
+    position: 'absolute',
+    width: 4,
+    height: 4,
+    borderRadius: 4,
+    backgroundColor: COLORS.lightGold,
+    shadowColor: COLORS.gold,
+    shadowOpacity: 0.8,
+    shadowRadius: 8,
+    elevation: 5,
+  },
+
+  particleOne: {
+    top: height * 0.25,
+    left: width * 0.15,
+  },
+
+  particleTwo: {
+    top: height * 0.38,
+    right: width * 0.13,
+    width: 3,
+    height: 3,
+  },
+
+  particleThree: {
+    top: height * 0.52,
+    left: width * 0.78,
+    width: 5,
+    height: 5,
+  },
+
+  // ----------------------------------------------------------
+  // Branding
+  // ----------------------------------------------------------
+
+  topSection: {
+    alignItems: 'center',
+    paddingTop: 15,
+  },
+
+  omCircle: {
+    width: 54,
+    height: 54,
+    borderRadius: 27,
+    borderWidth: 1,
+    borderColor: 'rgba(231,194,124,0.55)',
+    backgroundColor: 'rgba(36,19,13,0.40)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  om: {
+    fontSize: 29,
+    color: COLORS.lightGold,
+    fontWeight: '500',
+  },
+
+  brandName: {
+    marginTop: 10,
+    fontSize: 18,
+    letterSpacing: 5,
+    color: COLORS.cream,
+    fontWeight: '700',
+  },
+
+  goldLine: {
+    marginTop: 8,
+    width: 45,
+    height: 1,
+    backgroundColor: COLORS.gold,
+  },
+
+  brandTagline: {
+    marginTop: 6,
+    fontSize: 7.5,
+    letterSpacing: 2.2,
+    color: 'rgba(255,244,223,0.65)',
+  },
+
+  // ----------------------------------------------------------
+  // Center content
+  // ----------------------------------------------------------
+
+  centerContent: {
+    position: 'absolute',
+    top: height * 0.25,
+    left: 25,
+    right: 25,
+    alignItems: 'center',
+  },
+
+  sanskrit: {
+    fontSize: 18,
+    color: COLORS.lightGold,
+    letterSpacing: 1,
+    marginBottom: 12,
+    fontWeight: '500',
+  },
+
+  mainTitle: {
+    color: COLORS.cream,
+    fontSize: 38,
+    lineHeight: 46,
+    fontWeight: '700',
+    textAlign: 'center',
+    letterSpacing: 0.5,
+  },
+
+  mainTitleSecond: {
+    color: COLORS.lightGold,
+    fontSize: 32,
+    lineHeight: 40,
+    fontWeight: '500',
+    textAlign: 'center',
+    marginTop: 1,
+  },
+
+  description: {
+    marginTop: 17,
+    maxWidth: 320,
+    color: 'rgba(255,244,223,0.78)',
+    fontSize: 14,
+    lineHeight: 22,
+    textAlign: 'center',
+    fontWeight: '400',
+  },
+
+  dividerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 18,
+  },
+
+  dividerLine: {
+    width: 55,
+    height: 1,
+    backgroundColor: 'rgba(217,173,98,0.45)',
+  },
+
+  dividerSymbol: {
+    marginHorizontal: 12,
+    color: COLORS.gold,
+    fontSize: 10,
+  },
+
+  // ----------------------------------------------------------
+  // Maharaj Ji
+  // ----------------------------------------------------------
+
+  maharajSection: {
+    position: 'absolute',
+    bottom: height * 0.205,
     left: 0,
     right: 0,
-    height: height * 0.45,
-    backgroundColor: "rgba(44, 26, 10, 0.7)",
-    zIndex: 0,
+    height: height * 0.32,
+    alignItems: 'center',
+    justifyContent: 'flex-end',
   },
 
-  // ── CONTENT WRAPPER ───────────────────────────────────────────────────────
-  contentWrap: {
-    alignItems: "center",
+  divineGlow: {
+    position: 'absolute',
+    width: width * 0.75,
+    height: width * 0.75,
+    borderRadius: width,
+    backgroundColor: 'rgba(221,176,91,0.22)',
+    shadowColor: COLORS.gold,
+    shadowOpacity: 0.7,
+    shadowRadius: 50,
+  },
+
+  maharajImage: {
+    width: width * 0.92,
+    height: height * 0.35,
     zIndex: 2,
-    paddingHorizontal: 30,
-    width: "100%",
   },
 
-  // ── TOP DECORATION ────────────────────────────────────────────────────────
-  topOm: {
-    fontSize: 28,
-    color: C.gold,
-    opacity: 0.8,
-    marginBottom: 8,
-    letterSpacing: 2,
-  },
-  topLineRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 28,
-    width: 180,
-  },
-  topLineLeft:    { flex: 1, height: 1, backgroundColor: C.goldDark, opacity: 0.6 },
-  topLineRight:   { flex: 1, height: 1, backgroundColor: C.goldDark, opacity: 0.6 },
-  topLineDiamond: { fontSize: 8, color: C.gold, marginHorizontal: 6 },
-
-  // ── LOGO ──────────────────────────────────────────────────────────────────
-  logoWrap: {
-    width: 140,
-    height: 140,
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 24,
-    position: "relative",
-  },
-  logoOuterRing: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    borderWidth: 2,
-    borderColor: C.gold,
-    padding: 5,
-    backgroundColor: "rgba(201,162,39,0.1)",
-  },
-  logoInnerRing: {
-    flex: 1,
-    borderRadius: 55,
+  namePlateWrapper: {
+    position: 'absolute',
+    bottom: -20,
+    zIndex: 5,
+    overflow: 'hidden',
+    borderRadius: 50,
     borderWidth: 1,
-    borderColor: "rgba(201,162,39,0.4)",
-    alignItems: "center",
-    justifyContent: "center",
-    overflow: "hidden",
-    backgroundColor: "rgba(44,26,10,0.5)",
-  },
-  logoImage: {
-    width: 80,
-    height: 80,
-    resizeMode: "contain",
+    borderColor: 'rgba(231,194,124,0.32)',
   },
 
-  // ── DIVIDER ───────────────────────────────────────────────────────────────
-  divider: {
-    height: 2,
-    backgroundColor: C.gold,
-    borderRadius: 1,
-    marginBottom: 16,
-    opacity: 0.8,
+  namePlate: {
+    minWidth: width * 0.74,
+    paddingHorizontal: 20,
+    paddingVertical: 9,
+    alignItems: 'center',
+    backgroundColor: 'rgba(31,16,10,0.55)',
   },
 
-  // ── TEXT ──────────────────────────────────────────────────────────────────
-  appName: {
-    fontSize: 38,
-    fontWeight: "800",
-    color: C.goldLight,
-    letterSpacing: 6,
-    textShadowColor: "rgba(201,162,39,0.5)",
-    textShadowOffset: { width: 0, height: 0 },
-    textShadowRadius: 20,
-    marginBottom: 6,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: C.gold,
+  maharajPrefix: {
+    fontSize: 15,
     letterSpacing: 2,
-    marginBottom: 8,
-    fontStyle: "italic",
-  },
-  tagline: {
-    fontSize: 12,
-    color: "rgba(253,246,227,0.65)",
-    letterSpacing: 0.5,
-    fontStyle: "italic",
-    textAlign: "center",
-    marginBottom: 22,
-    lineHeight: 18,
+    color: COLORS.gold,
+    fontWeight: '700',
   },
 
-  // ── FEATURE PILLS ─────────────────────────────────────────────────────────
-  pillsRow: {
-    flexDirection: "row",
-    gap: 8,
-    marginBottom: 32,
-    flexWrap: "wrap",
-    justifyContent: "center",
-  },
-  featurePill: {
-    backgroundColor: "rgba(201,162,39,0.12)",
-    borderWidth: 1,
-    borderColor: "rgba(201,162,39,0.35)",
-    borderRadius: 20,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-  },
-  featurePillText: {
-    fontSize: 11,
-    color: C.goldLight,
-    fontWeight: "700",
-    letterSpacing: 0.3,
-  },
-
-  // ── GET STARTED BUTTON ────────────────────────────────────────────────────
-  getStartedBtn: {
-    borderRadius: 30,
-    overflow: "hidden",
-    marginBottom: 24,
-    borderWidth: 1.5,
-    borderColor: C.gold,
-    backgroundColor: C.gold,
-    shadowColor: C.gold,
-    shadowOpacity: 0.4,
-    shadowOffset: { width: 0, height: 6 },
-    shadowRadius: 16,
-    elevation: 8,
-  },
-  getStartedBtnPressed: {
-    opacity: 0.88,
-    transform: [{ scale: 0.97 }],
-  },
-  getStartedBtnInner: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingVertical: 16,
-    paddingHorizontal: 48,
-  },
-  getStartedBtnText: {
+  maharajName: {
+    marginTop: 3,
+    color: COLORS.cream,
     fontSize: 18,
-    fontWeight: "800",
-    color: C.deepBrown,
-    letterSpacing: 1,
-  },
-  getStartedBtnArrow: {
-    fontSize: 22,
-    fontWeight: "800",
-    color: C.deepBrown,
+    fontWeight: '600',
+    textAlign: 'center',
   },
 
-  // ── BOTTOM TAGLINE ────────────────────────────────────────────────────────
-  bottomTagline: {
-    fontSize: 12,
-    color: "rgba(201,162,39,0.55)",
-    letterSpacing: 2,
-    fontStyle: "italic",
+  maharajSub: {
+    marginTop: 2,
+    color: 'rgba(255,244,223,0.68)',
+    fontSize: 18,
+  },
+
+  // ----------------------------------------------------------
+  // Bottom CTA
+  // ----------------------------------------------------------
+
+  bottomSection: {
+    position: 'absolute',
+    left: 22,
+    right: 22,
+    bottom: Platform.OS === 'ios' ? 50 : 50,
+    alignItems: 'center',
+  },
+
+  buttonOuter: {
+    width: width * 0.78,
+    borderRadius: 18,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 8,
+    },
+    shadowOpacity: 0.35,
+    shadowRadius: 14,
+    elevation: 10,
+  },
+
+  button: {
+    height: 50,
+    borderRadius: 50,
+    paddingLeft: 24,
+    paddingRight: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderWidth: 1,
+    borderColor: 'rgba(255,244,223,0.35)',
+  },
+
+  buttonText: {
+    color: '#2A160B',
+    fontSize: 18,
+    letterSpacing: 2.5,
+    fontWeight: '800',
+    marginLeft: 10,
+  },
+
+  buttonArrow: {
+    width: 42,
+    height: 42,
+    borderRadius: 25,
+    backgroundColor: 'rgba(43,22,10,0.15)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  arrow: {
+    color: '#2A160B',
+    fontSize: 34,
+    fontWeight: '800',
+    marginTop: -10,
+  },
+
+  bottomText: {
+    marginTop: 10,
+    fontSize: 9,
+    color: 'rgba(255,244,223,0.55)',
+    letterSpacing: 0.3,
+    textAlign: 'center',
   },
 });
