@@ -491,20 +491,18 @@ export default function ProfileScreen() {
 
               console.log('[Profile] Logout result:', result);
 
-              /*
-               * AuthContext.logout()
-               * clears local auth state when
-               * backend logout succeeds.
-               */
-
-              if (result?.success) {
-                router.replace('/login2');
-              } else {
+              if (!result?.success) {
                 Alert.alert(
                   'Logout Failed',
                   result?.error || 'Unable to logout.',
                 );
+                return;
               }
+
+              // Give AuthContext time to update
+              setTimeout(() => {
+                router.push('/login2');
+              }, 100);
             } catch (error) {
               console.error('[Profile] Logout error:', error);
 
