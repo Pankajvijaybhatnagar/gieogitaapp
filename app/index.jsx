@@ -740,7 +740,7 @@ const styles = StyleSheet.create({
   },
 
   buttonOuter: {
-    width: width * 0.78,
+    width: width * 0.58,
     borderRadius: 18,
     shadowColor: '#000',
     shadowOffset: {
@@ -767,7 +767,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#2A160B',
     fontSize: 18,
-    letterSpacing: 2.5,
+    letterSpacing: 0,
     fontWeight: '800',
     marginLeft: 10,
   },
