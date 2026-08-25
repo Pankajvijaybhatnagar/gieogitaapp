@@ -1,7 +1,8 @@
 // app/login2/index.jsx
 
-import { useRouter } from 'expo-router';
-import React, { useEffect, useState } from 'react';
+import { BlurView } from 'expo-blur';
+import { Stack, useRouter } from 'expo-router';
+import React, { useEffect, useRef, useState } from 'react';
 
 import CreateAccountScreen from '@/components/login2/CreateAccountScreen';
 import ForgotPasswordScreen from '@/components/login2/ForgotPasswordScreen';
@@ -9,6 +10,15 @@ import LoginScreen from '@/components/login2/LoginScreen';
 import VerifyCodeScreen from '@/components/login2/VerifyCodeScreen';
 
 import { useAuth } from '@/context/AuthContext';
+import {
+  Animated,
+  Dimensions,
+  Easing,
+  PanResponder,
+  Pressable,
+  StyleSheet,
+  View,
+} from 'react-native';
 
 const Login2 = () => {
   const router = useRouter();
@@ -664,12 +674,14 @@ const Login2 = () => {
 
   /*
   |--------------------------------------------------------------------------
-  | LOGIN
+  | MODAL CONTENT
   |--------------------------------------------------------------------------
   */
 
+  let modalContent = null;
+
   if (screen === 'login') {
-    return (
+    modalContent = (
       <LoginScreen
         onSignIn={handleSignIn}
         onForgotPassword={handleOpenForgotPassword}
@@ -682,16 +694,8 @@ const Login2 = () => {
         messageType={messageType}
       />
     );
-  }
-
-  /*
-  |--------------------------------------------------------------------------
-  | REGISTER
-  |--------------------------------------------------------------------------
-  */
-
-  if (screen === 'register') {
-    return (
+  } else if (screen === 'register') {
+    modalContent = (
       <CreateAccountScreen
         onSignUp={handleSignUp}
         onSignIn={handleRegisterBack}
@@ -703,16 +707,8 @@ const Login2 = () => {
         messageType={messageType}
       />
     );
-  }
-
-  /*
-  |--------------------------------------------------------------------------
-  | FORGOT
-  |--------------------------------------------------------------------------
-  */
-
-  if (screen === 'forgot') {
-    return (
+  } else if (screen === 'forgot') {
+    modalContent = (
       <ForgotPasswordScreen
         onBack={resetFlow}
         onSubmit={handleForgotPassword}
@@ -721,16 +717,8 @@ const Login2 = () => {
         messageType={messageType}
       />
     );
-  }
-
-  /*
-  |--------------------------------------------------------------------------
-  | VERIFY
-  |--------------------------------------------------------------------------
-  */
-
-  if (screen === 'verify') {
-    return (
+  } else if (screen === 'verify') {
+    modalContent = (
       <VerifyCodeScreen
         email={verificationEmail}
         mode={otpMode}
@@ -744,7 +732,258 @@ const Login2 = () => {
     );
   }
 
-  return null;
+  /*
+  |--------------------------------------------------------------------------
+  | BOTTOM SHEET + DRAG TO CLOSE
+  |--------------------------------------------------------------------------
+  */
+
+  const screenHeight = Dimensions.get('window').height;
+
+  const sheetTranslateY = useRef(new Animated.Value(screenHeight)).current;
+
+  const backdropOpacity = useRef(new Animated.Value(0)).current;
+
+  const isClosingRef = useRef(false);
+  const dragStartY = useRef(0);
+
+  useEffect(() => {
+    Animated.parallel([
+      Animated.timing(sheetTranslateY, {
+        toValue: 0,
+        duration: 380,
+        easing: Easing.out(Easing.cubic),
+        useNativeDriver: true,
+      }),
+      Animated.timing(backdropOpacity, {
+        toValue: 1,
+        duration: 300,
+        easing: Easing.out(Easing.ease),
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, [backdropOpacity, sheetTranslateY]);
+
+  const closeModal = () => {
+    if (isClosingRef.current) {
+      return;
+    }
+
+    isClosingRef.current = true;
+
+    Animated.parallel([
+      Animated.timing(sheetTranslateY, {
+        toValue: screenHeight,
+        duration: 330,
+        easing: Easing.in(Easing.cubic),
+        useNativeDriver: true,
+      }),
+      Animated.timing(backdropOpacity, {
+        toValue: 0,
+        duration: 260,
+        easing: Easing.in(Easing.ease),
+        useNativeDriver: true,
+      }),
+    ]).start(({ finished }) => {
+      if (finished) {
+        router.back();
+      }
+    });
+  };
+
+  const panResponder = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => !isClosingRef.current,
+
+      onMoveShouldSetPanResponder: (_, gestureState) =>
+        !isClosingRef.current && Math.abs(gestureState.dy) > 4,
+
+      onPanResponderGrant: () => {
+        sheetTranslateY.stopAnimation(value => {
+          dragStartY.current = value;
+        });
+      },
+
+      onPanResponderMove: (_, gestureState) => {
+        if (isClosingRef.current) {
+          return;
+        }
+
+        // Only allow the sheet to move downward.
+        const nextY = Math.max(
+          0,
+          dragStartY.current + Math.max(0, gestureState.dy),
+        );
+
+        sheetTranslateY.setValue(nextY);
+
+        // Fade the background naturally while dragging.
+        const progress = Math.min(1, nextY / (screenHeight * 0.55));
+
+        backdropOpacity.setValue(Math.max(0.25, 1 - progress * 0.7));
+      },
+
+      onPanResponderRelease: (_, gestureState) => {
+        if (isClosingRef.current) {
+          return;
+        }
+
+        const shouldClose = gestureState.dy > 120 || gestureState.vy > 1.15;
+
+        if (shouldClose) {
+          closeModal();
+          return;
+        }
+
+        Animated.parallel([
+          Animated.spring(sheetTranslateY, {
+            toValue: 0,
+            damping: 22,
+            stiffness: 220,
+            mass: 0.9,
+            useNativeDriver: true,
+          }),
+          Animated.timing(backdropOpacity, {
+            toValue: 1,
+            duration: 180,
+            useNativeDriver: true,
+          }),
+        ]).start();
+      },
+
+      onPanResponderTerminate: () => {
+        if (isClosingRef.current) {
+          return;
+        }
+
+        Animated.parallel([
+          Animated.spring(sheetTranslateY, {
+            toValue: 0,
+            damping: 22,
+            stiffness: 220,
+            mass: 0.9,
+            useNativeDriver: true,
+          }),
+          Animated.timing(backdropOpacity, {
+            toValue: 1,
+            duration: 180,
+            useNativeDriver: true,
+          }),
+        ]).start();
+      },
+    }),
+  ).current;
+
+  return (
+    <View style={styles.modalRoot}>
+      <Stack.Screen
+        options={{
+          presentation: 'transparentModal',
+          animation: 'none',
+          headerShown: false,
+          contentStyle: {
+            backgroundColor: 'transparent',
+          },
+        }}
+      />
+
+      {/* BLURRED BACKGROUND */}
+      <Animated.View
+        pointerEvents="box-none"
+        style={[
+          StyleSheet.absoluteFillObject,
+          {
+            opacity: backdropOpacity,
+          },
+        ]}>
+        <BlurView
+          intensity={42}
+          tint="light"
+          style={StyleSheet.absoluteFillObject}
+        />
+
+        <View style={styles.glassTint} />
+
+        <Pressable style={StyleSheet.absoluteFillObject} onPress={closeModal} />
+      </Animated.View>
+
+      {/* BOTTOM SHEET */}
+      <Animated.View
+        style={[
+          styles.sheet,
+          {
+            transform: [
+              {
+                translateY: sheetTranslateY,
+              },
+            ],
+          },
+        ]}>
+        <View {...panResponder.panHandlers} style={styles.grabberTouchArea}>
+          <View style={styles.grabber} />
+        </View>
+
+        <View style={styles.sheetGlass}>{modalContent}</View>
+      </Animated.View>
+    </View>
+  );
 };
+
+const styles = StyleSheet.create({
+  modalRoot: {
+    flex: 1,
+    backgroundColor: 'transparent',
+  },
+
+  glassTint: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(248, 247, 245, 0.25)',
+  },
+
+  sheet: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: '92%',
+    backgroundColor: 'rgba(255, 255, 255, 0.94)',
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    overflow: 'hidden',
+
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: -10,
+    },
+    shadowOpacity: 0.16,
+    shadowRadius: 24,
+    elevation: 20,
+  },
+
+  sheetGlass: {
+    flex: 1,
+    backgroundColor: 'rgba(255,255,255,0.72)',
+  },
+
+  grabberTouchArea: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 48,
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    zIndex: 100,
+  },
+
+  grabber: {
+    marginTop: 10,
+    width: 46,
+    height: 5,
+    borderRadius: 4,
+    backgroundColor: 'rgba(70,70,70,0.24)',
+  },
+});
 
 export default Login2;
