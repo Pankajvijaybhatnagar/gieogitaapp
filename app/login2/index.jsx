@@ -1,3 +1,5 @@
+// app/login2/index.jsx
+
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 
@@ -97,7 +99,7 @@ const Login2 = () => {
     if (isAuthenticated) {
       console.log('LOGIN2: AUTHENTICATED USER', user);
 
-      router.replace('/home');
+      router.back();
     }
   }, [isAuthenticated, user, router]);
 
@@ -136,7 +138,7 @@ const Login2 = () => {
   const handleAuthSuccess = result => {
     console.log('LOGIN2 AUTH SUCCESS:', result);
 
-    router.replace('/home');
+    router.back();
   };
 
   /*

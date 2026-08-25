@@ -260,13 +260,14 @@ export default function ProfileScreen() {
     if (!isAuthenticated || !access_token) {
       console.log('[Profile] User is not logged in');
 
-      router.replace('/login2');
+      setProfile(null);
+      setProfileLoading(false);
 
       return;
     }
 
     loadProfile();
-  }, [authLoading, isAuthenticated, access_token, router, loadProfile]);
+  }, [authLoading, isAuthenticated, access_token, loadProfile]);
 
   /*
   |--------------------------------------------------------------------------
@@ -541,7 +542,54 @@ export default function ProfileScreen() {
   */
 
   if (!isAuthenticated || !access_token || !profile) {
-    return null;
+    return (
+      <View style={styles.screen}>
+        <View style={styles.guestProfileBackground}>
+          <View style={styles.guestHero}>
+            <View style={styles.guestTopBar}>
+              <View style={styles.iconButton}>
+                <Ionicons name="arrow-back" size={20} color={COLORS.text} />
+              </View>
+
+              <Text style={styles.pageTitle}>My Profile</Text>
+
+              <View style={styles.iconButton}>
+                <Ionicons name="person-outline" size={20} color={COLORS.text} />
+              </View>
+            </View>
+
+            <View style={styles.guestAvatarContainer}>
+              <View style={styles.guestAvatar}>
+                <Ionicons
+                  name="person-outline"
+                  size={36}
+                  color={COLORS.primary}
+                />
+              </View>
+            </View>
+          </View>
+
+          <View style={styles.guestCard} />
+          <View style={styles.guestCard} />
+          <View style={styles.guestCard} />
+        </View>
+
+        <View style={styles.loginOverlay}>
+          <View style={styles.loginButtonContainer}>
+            <Text style={{ marginBottom: 10 }}>
+              Please login to view your profile
+            </Text>
+            <TouchableOpacity
+              style={styles.loginButton}
+              activeOpacity={0.8}
+              onPress={() => router.push('/login2')}>
+              <Ionicons name="log-in-outline" size={18} color={COLORS.white} />
+              <Text style={styles.loginButtonText}>Login</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+    );
   }
 
   /*
@@ -664,7 +712,7 @@ export default function ProfileScreen() {
 
             {/* SUMMARY */}
 
-            <Animated.View
+            {/* <Animated.View
               style={[
                 styles.summaryCard,
                 {
@@ -698,7 +746,7 @@ export default function ProfileScreen() {
                 value={`#${profile.id}`}
                 label="Member ID"
               />
-            </Animated.View>
+            </Animated.View> */}
 
             {/* PERSONAL DETAILS */}
 
@@ -1222,6 +1270,92 @@ const styles = StyleSheet.create({
     marginTop: 12,
     fontSize: 11,
     color: COLORS.secondary,
+  },
+
+  guestProfileBackground: {
+    flex: 1,
+    backgroundColor: COLORS.background,
+  },
+
+  guestHero: {
+    backgroundColor: COLORS.white,
+    paddingTop: 26,
+    paddingHorizontal: 20,
+    paddingBottom: 22,
+    borderBottomWidth: 1,
+    borderBottomColor: '#EEEDEA',
+  },
+
+  guestTopBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingTop: 15,
+  },
+
+  guestAvatarContainer: {
+    alignSelf: 'center',
+    marginTop: 22,
+  },
+
+  guestAvatar: {
+    width: 90,
+    height: 90,
+    borderRadius: 45,
+    backgroundColor: COLORS.primaryLight,
+    borderWidth: 5,
+    borderColor: COLORS.white,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  guestCard: {
+    height: 95,
+    marginHorizontal: 7,
+    marginTop: 7,
+    borderRadius: 17,
+    backgroundColor: COLORS.white,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+  },
+
+  loginOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(255, 255, 255, 0.68)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 100,
+  },
+
+  loginButtonContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  loginButton: {
+    minWidth: 150,
+    height: 46,
+    paddingHorizontal: 28,
+    borderRadius: 23,
+    backgroundColor: COLORS.primary,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 7,
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.12,
+    shadowRadius: 8,
+  },
+
+  loginButtonText: {
+    color: COLORS.white,
+    fontSize: 13,
+    fontWeight: '700',
   },
 
   scrollContent: {
