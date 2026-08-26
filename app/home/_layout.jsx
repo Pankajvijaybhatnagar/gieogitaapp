@@ -379,6 +379,12 @@ export default function HomeLayout() {
               // ── Right icons ──────────────────────────────────────
               headerRight: () => (
                 <View style={headerStyles.rightRow}>
+                  {__DEV__ && (
+                    <Link color={'white'} href={'/_sitemap'}>
+                      S
+                    </Link>
+                  )}
+
                   <TouchableOpacity style={headerStyles.iconBtn}>
                     <FontAwesome
                       name="bell"
