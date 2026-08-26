@@ -1,26 +1,26 @@
-import { Ionicons } from "@expo/vector-icons";
-import { Audio } from "expo-av";
-import { BlurView } from "expo-blur";
-import { Image } from "expo-image";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import { Ionicons } from '@expo/vector-icons';
+import { Audio } from 'expo-av';
+import { BlurView } from 'expo-blur';
+import { Image } from 'expo-image';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Pressable,
   StyleSheet,
   Text,
   View,
-} from "react-native";
+} from 'react-native';
 
 function formatTime(milliseconds = 0) {
   if (!milliseconds || milliseconds < 0) {
-    return "0:00";
+    return '0:00';
   }
 
   const totalSeconds = Math.floor(milliseconds / 1000);
   const minutes = Math.floor(totalSeconds / 60);
   const seconds = totalSeconds % 60;
 
-  return `${minutes}:${String(seconds).padStart(2, "0")}`;
+  return `${minutes}:${String(seconds).padStart(2, '0')}`;
 }
 
 export default function MusicPlayer({
@@ -41,14 +41,14 @@ export default function MusicPlayer({
   const [isPlaying, setIsPlaying] = useState(false);
   const [position, setPosition] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   const updatePlaying = useCallback(
-    (value) => {
+    value => {
       setIsPlaying(value);
       onPlayingChange?.(value);
     },
-    [onPlayingChange]
+    [onPlayingChange],
   );
 
   const unload = useCallback(async () => {
@@ -84,7 +84,7 @@ export default function MusicPlayer({
 
     const loadTrack = async () => {
       setLoading(true);
-      setError("");
+      setError('');
       setPosition(0);
       setDuration(0);
       finishedRef.current = false;
@@ -102,7 +102,7 @@ export default function MusicPlayer({
             shouldPlay: true,
             progressUpdateIntervalMillis: 500,
           },
-          (status) => {
+          status => {
             if (!active || !status.isLoaded) {
               return;
             }
@@ -121,7 +121,7 @@ export default function MusicPlayer({
                 updatePlaying(false);
               }
             }
-          }
+          },
         );
 
         if (!active) {
@@ -133,9 +133,9 @@ export default function MusicPlayer({
 
         onTrackStarted?.(track);
       } catch (err) {
-        console.log("Audio error:", err);
+        console.log('Audio error:', err);
 
-        setError("Unable to play this bhajan.");
+        setError('Unable to play this bhajan.');
         updatePlaying(false);
       } finally {
         if (active) {
@@ -194,11 +194,11 @@ export default function MusicPlayer({
         await sound.playAsync();
       }
     } catch (err) {
-      console.log("Playback toggle error:", err);
+      console.log('Playback toggle error:', err);
     }
   };
 
-  const seekTo = async (event) => {
+  const seekTo = async event => {
     const sound = soundRef.current;
 
     if (!sound || !duration || !progressWidthRef.current) {
@@ -207,10 +207,7 @@ export default function MusicPlayer({
 
     const x = event.nativeEvent.locationX;
 
-    const percentage = Math.min(
-      Math.max(x / progressWidthRef.current, 0),
-      1
-    );
+    const percentage = Math.min(Math.max(x / progressWidthRef.current, 0), 1);
 
     const newPosition = duration * percentage;
 
@@ -218,7 +215,7 @@ export default function MusicPlayer({
       await sound.setPositionAsync(newPosition);
       setPosition(newPosition);
     } catch (err) {
-      console.log("Seek error:", err);
+      console.log('Seek error:', err);
     }
   };
 
@@ -250,11 +247,7 @@ export default function MusicPlayer({
               />
             ) : (
               <View style={styles.coverPlaceholder}>
-                <Ionicons
-                  name="musical-notes"
-                  size={24}
-                  color="#FF7A00"
-                />
+                <Ionicons name="musical-notes" size={24} color="#5a3816" />
               </View>
             )}
 
@@ -264,7 +257,7 @@ export default function MusicPlayer({
               </Text>
 
               <Text style={styles.artist} numberOfLines={1}>
-                {track.artist || "Gieogita Bhajan"}
+                {track.artist || 'Gieogita Bhajan'}
               </Text>
             </View>
           </View>
@@ -272,8 +265,7 @@ export default function MusicPlayer({
           <Pressable
             onPress={handleClose}
             hitSlop={10}
-            style={styles.closeButton}
-          >
+            style={styles.closeButton}>
             <Ionicons name="close" size={22} color="#555" />
           </Pressable>
         </View>
@@ -282,12 +274,10 @@ export default function MusicPlayer({
 
         <Pressable
           onPress={seekTo}
-          onLayout={(event) => {
-            progressWidthRef.current =
-              event.nativeEvent.layout.width;
+          onLayout={event => {
+            progressWidthRef.current = event.nativeEvent.layout.width;
           }}
-          style={styles.progressTouch}
-        >
+          style={styles.progressTouch}>
           <View style={styles.progressBackground}>
             <View
               style={[
@@ -310,24 +300,19 @@ export default function MusicPlayer({
           <Pressable
             disabled={isFirst}
             onPress={onPrevious}
-            style={[
-              styles.controlButton,
-              isFirst && styles.disabledControl,
-            ]}
-          >
+            style={[styles.controlButton, isFirst && styles.disabledControl]}>
             <Ionicons name="play-skip-back" size={25} color="#333" />
           </Pressable>
 
           <Pressable
             disabled={loading || !!error}
             onPress={togglePlayback}
-            style={styles.mainButton}
-          >
+            style={styles.mainButton}>
             {loading ? (
               <ActivityIndicator color="#fff" />
             ) : (
               <Ionicons
-                name={isPlaying ? "pause" : "play"}
+                name={isPlaying ? 'pause' : 'play'}
                 size={29}
                 color="#fff"
                 style={!isPlaying && styles.playIcon}
@@ -338,11 +323,7 @@ export default function MusicPlayer({
           <Pressable
             disabled={isLast}
             onPress={onNext}
-            style={[
-              styles.controlButton,
-              isLast && styles.disabledControl,
-            ]}
-          >
+            style={[styles.controlButton, isLast && styles.disabledControl]}>
             <Ionicons name="play-skip-forward" size={25} color="#333" />
           </Pressable>
         </View>
@@ -353,15 +334,15 @@ export default function MusicPlayer({
 
 const styles = StyleSheet.create({
   wrapper: {
-    position: "absolute",
+    position: 'absolute',
     left: 12,
     right: 12,
     bottom: 12,
     borderRadius: 24,
-    overflow: "hidden",
+    overflow: 'hidden',
     elevation: 12,
 
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 5,
@@ -374,18 +355,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: 14,
     paddingBottom: 14,
-    backgroundColor: "rgba(255,255,255,0.85)",
+    backgroundColor: 'rgba(255,255,255,0.85)',
   },
 
   topRow: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 
   trackInfo: {
     flex: 1,
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 
   cover: {
@@ -398,9 +379,9 @@ const styles = StyleSheet.create({
     width: 52,
     height: 52,
     borderRadius: 12,
-    backgroundColor: "#FFF1E3",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: '#FFF1E3',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 
   textContainer: {
@@ -411,26 +392,26 @@ const styles = StyleSheet.create({
 
   title: {
     fontSize: 15,
-    color: "#222",
-    fontWeight: "700",
+    color: '#222',
+    fontWeight: '700',
   },
 
   artist: {
     marginTop: 3,
     fontSize: 12,
-    color: "#777",
+    color: '#777',
   },
 
   closeButton: {
     width: 38,
     height: 38,
     borderRadius: 19,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 
   error: {
-    color: "#C62828",
+    color: '#C62828',
     fontSize: 12,
     marginTop: 8,
   },
@@ -442,32 +423,32 @@ const styles = StyleSheet.create({
 
   progressBackground: {
     height: 4,
-    backgroundColor: "#E3E3E3",
+    backgroundColor: '#E3E3E3',
     borderRadius: 50,
-    overflow: "hidden",
+    overflow: 'hidden',
   },
 
   progressFill: {
-    height: "100%",
-    backgroundColor: "#FF7A00",
+    height: '100%',
+    backgroundColor: '#5a3816',
     borderRadius: 50,
   },
 
   timeRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     marginTop: -4,
   },
 
   time: {
     fontSize: 10,
-    color: "#888",
+    color: '#888',
   },
 
   controls: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     gap: 26,
     marginTop: 1,
   },
@@ -475,8 +456,8 @@ const styles = StyleSheet.create({
   controlButton: {
     width: 44,
     height: 44,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 
   disabledControl: {
@@ -487,9 +468,9 @@ const styles = StyleSheet.create({
     width: 55,
     height: 55,
     borderRadius: 28,
-    backgroundColor: "#FF7A00",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: '#5a3816',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 
   playIcon: {

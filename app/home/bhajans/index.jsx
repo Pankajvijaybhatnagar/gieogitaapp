@@ -1,24 +1,11 @@
-import { Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
-import { StatusBar } from "expo-status-bar";
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import {
-  Pressable,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { Ionicons } from '@expo/vector-icons';
+import { StatusBar } from 'expo-status-bar';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Pressable, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 
-import BhajanList from "@/components/bhajans/BhajanList";
-import MusicPlayer from "@/components/bhajans/MusicPlayer";
-import bhajanServices from "@/lib/services/bhajanServices";
+import BhajanList from '@/components/bhajans/BhajanList';
+import MusicPlayer from '@/components/bhajans/MusicPlayer';
+import bhajanServices from '@/lib/services/bhajanServices';
 
 function normalizeBhajan(item) {
   return {
@@ -26,18 +13,9 @@ function normalizeBhajan(item) {
 
     id: item.id,
 
-    title:
-      item.title ||
-      item.name ||
-      item.bhajan_name ||
-      "Untitled Bhajan",
+    title: item.title || item.name || item.bhajan_name || 'Untitled Bhajan',
 
-    artist:
-      item.artist ||
-      item.singer ||
-      item.author ||
-      item.artist_name ||
-      "",
+    artist: item.artist || item.singer || item.author || item.artist_name || '',
 
     audioUrl:
       item.audio_full_url ||
@@ -45,7 +23,7 @@ function normalizeBhajan(item) {
       item.file_full_url ||
       item.file_url ||
       item.audio ||
-      "",
+      '',
 
     cover:
       item.cover_image_full_url ||
@@ -54,18 +32,11 @@ function normalizeBhajan(item) {
       item.thumbnail_url ||
       item.image_full_url ||
       item.image_url ||
-      "",
+      '',
 
-    plays:
-      item.play_count ||
-      item.plays ||
-      item.views ||
-      0,
+    plays: item.play_count || item.plays || item.views || 0,
 
-    durationText:
-      item.duration_formatted ||
-      item.duration_text ||
-      "",
+    durationText: item.duration_formatted || item.duration_text || '',
   };
 }
 
@@ -76,7 +47,7 @@ export default function BhajansPage() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   const countedTracks = useRef(new Set());
 
@@ -96,7 +67,7 @@ export default function BhajansPage() {
         setLoading(true);
       }
 
-      setError("");
+      setError('');
 
       const response = await bhajanServices.getPublicBhajans({
         page: 1,
@@ -104,23 +75,15 @@ export default function BhajansPage() {
       });
 
       const rawData =
-        response?.data?.data ||
-        response?.data ||
-        response?.bhajans ||
-        [];
+        response?.data?.data || response?.data || response?.bhajans || [];
 
-      const list = Array.isArray(rawData)
-        ? rawData.map(normalizeBhajan)
-        : [];
+      const list = Array.isArray(rawData) ? rawData.map(normalizeBhajan) : [];
 
       setBhajans(list);
     } catch (err) {
-      console.log("Fetch bhajans error:", err);
+      console.log('Fetch bhajans error:', err);
 
-      setError(
-        err?.message ||
-          "Unable to load bhajans. Please try again."
-      );
+      setError(err?.message || 'Unable to load bhajans. Please try again.');
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -132,9 +95,9 @@ export default function BhajansPage() {
   }, [fetchBhajans]);
 
   const handleSelectTrack = useCallback(
-    (track) => {
+    track => {
       const index = bhajans.findIndex(
-        (item) => String(item.id) === String(track.id)
+        item => String(item.id) === String(track.id),
       );
 
       if (index === -1) {
@@ -143,11 +106,11 @@ export default function BhajansPage() {
 
       setSelectedIndex(index);
     },
-    [bhajans]
+    [bhajans],
   );
 
   const handlePrevious = useCallback(() => {
-    setSelectedIndex((current) => {
+    setSelectedIndex(current => {
       if (current <= 0) {
         return current;
       }
@@ -157,7 +120,7 @@ export default function BhajansPage() {
   }, []);
 
   const handleNext = useCallback(() => {
-    setSelectedIndex((current) => {
+    setSelectedIndex(current => {
       if (current < 0 || current >= bhajans.length - 1) {
         return current;
       }
@@ -166,7 +129,7 @@ export default function BhajansPage() {
     });
   }, [bhajans.length]);
 
-  const handleTrackStarted = useCallback(async (track) => {
+  const handleTrackStarted = useCallback(async track => {
     if (!track?.id) {
       return;
     }
@@ -182,18 +145,18 @@ export default function BhajansPage() {
     try {
       await bhajanServices.playBhajan(track.id);
 
-      setBhajans((current) =>
-        current.map((item) =>
+      setBhajans(current =>
+        current.map(item =>
           String(item.id) === key
             ? {
                 ...item,
                 plays: Number(item.plays || 0) + 1,
               }
-            : item
-        )
+            : item,
+        ),
       );
     } catch (err) {
-      console.log("Play count error:", err);
+      console.log('Play count error:', err);
 
       countedTracks.current.delete(key);
     }
@@ -208,36 +171,9 @@ export default function BhajansPage() {
     <SafeAreaView style={styles.screen}>
       <StatusBar style="dark" />
 
-      <View style={styles.header}>
-        <Pressable
-          onPress={() => router.back()}
-          style={styles.headerButton}
-        >
-          <Ionicons name="chevron-back" size={25} color="#222" />
-        </Pressable>
-
-        <View style={styles.headerText}>
-          <Text style={styles.heading}>Bhajans</Text>
-          <Text style={styles.subheading}>
-            Listen. Remember. Connect.
-          </Text>
-        </View>
-
-        <Pressable
-          onPress={() => fetchBhajans(true)}
-          style={styles.headerButton}
-        >
-          <Ionicons name="refresh" size={22} color="#222" />
-        </Pressable>
-      </View>
-
       {error ? (
         <View style={styles.errorBox}>
-          <Ionicons
-            name="alert-circle-outline"
-            size={20}
-            color="#B42318"
-          />
+          <Ionicons name="alert-circle-outline" size={20} color="#B42318" />
 
           <Text style={styles.errorText}>{error}</Text>
 
@@ -248,12 +184,22 @@ export default function BhajansPage() {
       ) : null}
 
       <View style={styles.sectionHeader}>
-        <Text style={styles.sectionTitle}>All Bhajans</Text>
+        <View
+          style={{
+            flex: 1,
+            flexDirection: 'row',
+            alignContent:'center'
+          }}>
+          <Text style={styles.sectionTitle}>All Bhajans</Text>
+          <Pressable
+            onPress={() => fetchBhajans(true)}
+            style={styles.headerButton}>
+            <Ionicons name="refresh" size={20} color="#222" />
+          </Pressable>
+        </View>
 
         {!!bhajans.length && (
-          <Text style={styles.count}>
-            {bhajans.length} tracks
-          </Text>
+          <Text style={styles.count}>{bhajans.length} tracks</Text>
         )}
       </View>
 
@@ -288,40 +234,41 @@ export default function BhajansPage() {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: "#FFF",
+    backgroundColor: '#FFF',
   },
 
   header: {
     height: 72,
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     paddingHorizontal: 12,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: "#ECECEC",
+    borderBottomColor: '#ECECEC',
   },
 
   headerButton: {
-    width: 44,
-    height: 44,
+    width: 24,
+    height: 24,
     borderRadius: 22,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
+    // borderWidth:2,
   },
 
   headerText: {
     flex: 1,
-    alignItems: "center",
+    alignItems: 'center',
   },
 
   heading: {
     fontSize: 20,
-    fontWeight: "800",
-    color: "#1D1D1D",
+    fontWeight: '800',
+    color: '#1D1D1D',
   },
 
   subheading: {
     fontSize: 11,
-    color: "#888",
+    color: '#888',
     marginTop: 2,
   },
 
@@ -329,20 +276,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: 18,
     paddingTop: 18,
     paddingBottom: 7,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
 
   sectionTitle: {
     fontSize: 18,
-    fontWeight: "800",
-    color: "#222",
+    fontWeight: '800',
+    color: '#222',
   },
 
   count: {
     fontSize: 12,
-    color: "#888",
+    color: '#888',
   },
 
   listContainer: {
@@ -354,21 +301,21 @@ const styles = StyleSheet.create({
     marginTop: 12,
     padding: 12,
     borderRadius: 12,
-    backgroundColor: "#FEF3F2",
-    flexDirection: "row",
-    alignItems: "center",
+    backgroundColor: '#FEF3F2',
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 8,
   },
 
   errorText: {
     flex: 1,
-    color: "#B42318",
+    color: '#B42318',
     fontSize: 13,
   },
 
   retry: {
-    color: "#FF7A00",
-    fontWeight: "700",
+    color: '#FF7A00',
+    fontWeight: '700',
     fontSize: 13,
   },
 });

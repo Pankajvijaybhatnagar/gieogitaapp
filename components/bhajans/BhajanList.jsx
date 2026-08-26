@@ -1,6 +1,5 @@
-import { Ionicons } from "@expo/vector-icons";
-import { Image } from "expo-image";
-import React from "react";
+import { Ionicons } from '@expo/vector-icons';
+import { Image } from 'expo-image';
 import {
   ActivityIndicator,
   FlatList,
@@ -9,7 +8,7 @@ import {
   StyleSheet,
   Text,
   View,
-} from "react-native";
+} from 'react-native';
 
 function BhajanItem({ item, active, isPlaying, onPress }) {
   return (
@@ -19,8 +18,7 @@ function BhajanItem({ item, active, isPlaying, onPress }) {
         styles.item,
         active && styles.activeItem,
         pressed && styles.pressedItem,
-      ]}
-    >
+      ]}>
       <View style={styles.coverContainer}>
         {item.cover ? (
           <Image
@@ -31,14 +29,14 @@ function BhajanItem({ item, active, isPlaying, onPress }) {
           />
         ) : (
           <View style={styles.coverPlaceholder}>
-            <Ionicons name="musical-notes" size={24} color="#FF7A00" />
+            <Ionicons name="musical-notes" size={24} color="#5a3816" />
           </View>
         )}
 
         {active && (
           <View style={styles.playingOverlay}>
             <Ionicons
-              name={isPlaying ? "pause" : "play"}
+              name={isPlaying ? 'pause' : 'play'}
               size={18}
               color="#fff"
             />
@@ -49,13 +47,12 @@ function BhajanItem({ item, active, isPlaying, onPress }) {
       <View style={styles.details}>
         <Text
           style={[styles.title, active && styles.activeTitle]}
-          numberOfLines={1}
-        >
+          numberOfLines={1}>
           {item.title}
         </Text>
 
         <Text style={styles.subtitle} numberOfLines={1}>
-          {item.artist || "Gieogita Bhajan"}
+          {item.artist || 'Gieogita Bhajan'}
         </Text>
 
         {!!item.plays && (
@@ -74,9 +71,9 @@ function BhajanItem({ item, active, isPlaying, onPress }) {
         ) : null}
 
         <Ionicons
-          name={active ? "musical-notes" : "play-circle-outline"}
+          name={active ? 'musical-notes' : 'play-circle-outline'}
           size={26}
-          color={active ? "#FF7A00" : "#999"}
+          color={active ? '#5a3816' : '#999'}
         />
       </View>
     </Pressable>
@@ -95,7 +92,7 @@ export default function BhajanList({
   if (loading && !data.length) {
     return (
       <View style={styles.center}>
-        <ActivityIndicator size="large" color="#FF7A00" />
+        <ActivityIndicator size="large" color="#5a3816" />
         <Text style={styles.loadingText}>Loading bhajans...</Text>
       </View>
     );
@@ -118,7 +115,7 @@ export default function BhajanList({
   return (
     <FlatList
       data={data}
-      keyExtractor={(item) => String(item.id)}
+      keyExtractor={item => String(item.id)}
       renderItem={({ item }) => (
         <BhajanItem
           item={item}
@@ -144,8 +141,8 @@ const styles = StyleSheet.create({
   },
 
   item: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     paddingVertical: 10,
     paddingHorizontal: 10,
     borderRadius: 16,
@@ -153,7 +150,7 @@ const styles = StyleSheet.create({
   },
 
   activeItem: {
-    backgroundColor: "#FFF5EA",
+    backgroundColor: '#FFF5EA',
   },
 
   pressedItem: {
@@ -164,26 +161,26 @@ const styles = StyleSheet.create({
     width: 58,
     height: 58,
     borderRadius: 13,
-    overflow: "hidden",
+    overflow: 'hidden',
   },
 
   cover: {
-    width: "100%",
-    height: "100%",
+    width: '100%',
+    height: '100%',
   },
 
   coverPlaceholder: {
     flex: 1,
-    backgroundColor: "#FFF1E3",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: '#FFF1E3',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 
   playingOverlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(0,0,0,0.38)",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: 'rgba(0,0,0,0.38)',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 
   details: {
@@ -194,66 +191,66 @@ const styles = StyleSheet.create({
 
   title: {
     fontSize: 15,
-    fontWeight: "700",
-    color: "#222",
+    fontWeight: '700',
+    color: '#919090',
   },
 
   activeTitle: {
-    color: "#FF7A00",
+    color: '#5a3816',
   },
 
   subtitle: {
     fontSize: 13,
-    color: "#777",
+    color: '#777',
     marginTop: 3,
   },
 
   stats: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 4,
     marginTop: 4,
   },
 
   statsText: {
     fontSize: 11,
-    color: "#999",
+    color: '#999',
   },
 
   right: {
-    alignItems: "flex-end",
+    alignItems: 'flex-end',
     gap: 6,
     marginLeft: 8,
   },
 
   duration: {
     fontSize: 11,
-    color: "#888",
+    color: '#888',
   },
 
   center: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     padding: 30,
   },
 
   loadingText: {
     marginTop: 12,
-    color: "#777",
+    color: '#777',
   },
 
   emptyTitle: {
     fontSize: 18,
-    fontWeight: "700",
-    color: "#333",
+    fontWeight: '700',
+    color: '#333',
     marginTop: 14,
   },
 
   emptyText: {
     fontSize: 14,
-    color: "#888",
+    color: '#888',
     marginTop: 5,
-    textAlign: "center",
+    textAlign: 'center',
   },
 });
