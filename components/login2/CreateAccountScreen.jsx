@@ -1,7 +1,9 @@
-import { FontAwesome, Ionicons } from '@expo/vector-icons';
-
+import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect, useRef, useState } from 'react';
+import SocialLogin from './SocialLogin';
 
+import { Logos } from '@/assets/images';
+import { Image } from 'expo-image';
 import {
   ActivityIndicator,
   Animated,
@@ -33,7 +35,6 @@ export default function CreateAccountScreen({
   onSignIn,
   onAppleLogin,
   onGoogleLogin,
-  onFacebookLogin,
   loading = false,
   message = '',
   messageType = 'error',
@@ -168,11 +169,7 @@ export default function CreateAccountScreen({
                 },
               ]}>
               <View style={styles.logoCircle}>
-                <Ionicons
-                  name="person-add-outline"
-                  size={22}
-                  color={PRIMARY_BROWN}
-                />
+                <Image height={70} width={70} source={Logos.gieo} />
               </View>
 
               <Text style={styles.title}>Create Account</Text>
@@ -336,6 +333,33 @@ export default function CreateAccountScreen({
                 </Text>
               </TouchableOpacity>
 
+              {/* MESSAGE */}
+
+              {message ? (
+                <View style={styles.messageBox}>
+                  <Ionicons
+                    name={
+                      messageType === 'success'
+                        ? 'checkmark-circle-outline'
+                        : 'alert-circle-outline'
+                    }
+                    size={17}
+                    color={messageType === 'success' ? '#15803D' : '#DC2626'}
+                  />
+
+                  <Text
+                    style={[
+                      styles.message,
+                      {
+                        color:
+                          messageType === 'success' ? '#15803D' : '#DC2626',
+                      },
+                    ]}>
+                    {message}
+                  </Text>
+                </View>
+              ) : null}
+
               {/* BUTTON */}
 
               <Animated.View
@@ -370,33 +394,6 @@ export default function CreateAccountScreen({
                 </TouchableOpacity>
               </Animated.View>
 
-              {/* MESSAGE */}
-
-              {message ? (
-                <View style={styles.messageBox}>
-                  <Ionicons
-                    name={
-                      messageType === 'success'
-                        ? 'checkmark-circle-outline'
-                        : 'alert-circle-outline'
-                    }
-                    size={17}
-                    color={messageType === 'success' ? '#15803D' : '#DC2626'}
-                  />
-
-                  <Text
-                    style={[
-                      styles.message,
-                      {
-                        color:
-                          messageType === 'success' ? '#15803D' : '#DC2626',
-                      },
-                    ]}>
-                    {message}
-                  </Text>
-                </View>
-              ) : null}
-
               {/* DIVIDER */}
 
               <View style={styles.dividerContainer}>
@@ -416,26 +413,11 @@ export default function CreateAccountScreen({
                     opacity: bottomOpacity,
                   },
                 ]}>
-                <TouchableOpacity
-                  style={styles.socialButton}
-                  onPress={onAppleLogin}
-                  disabled={loading}>
-                  <FontAwesome name="apple" size={21} color="#000" />
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={styles.socialButton}
-                  onPress={onGoogleLogin}
-                  disabled={loading}>
-                  <Text style={styles.googleG}>G</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={styles.socialButton}
-                  onPress={onFacebookLogin}
-                  disabled={loading}>
-                  <FontAwesome name="facebook" size={20} color="#4267B2" />
-                </TouchableOpacity>
+                <SocialLogin
+                  onAppleLogin={onAppleLogin}
+                  onGoogleLogin={onGoogleLogin}
+                  disabled={loading}
+                />
               </Animated.View>
 
               {/* BOTTOM */}
@@ -494,13 +476,13 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    fontSize: 25,
+    fontSize: 22,
     fontWeight: '700',
     color: TEXT_COLOR,
   },
 
   subtitle: {
-    marginTop: 6,
+    marginTop: 1,
     fontSize: 10.8,
     color: MUTED_COLOR,
     textAlign: 'center',
@@ -513,7 +495,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 11.5,
     color: '#333333',
-    marginBottom: 8,
+    marginBottom: 1,
     fontWeight: '600',
   },
 
@@ -523,7 +505,7 @@ const styles = StyleSheet.create({
 
   inputWrapper: {
     width: '100%',
-    height: 47,
+    height: 40,
     borderRadius: 13,
     backgroundColor: INPUT_BG,
     flexDirection: 'row',
@@ -540,7 +522,7 @@ const styles = StyleSheet.create({
     flex: 1,
     height: '100%',
     paddingHorizontal: 12,
-    fontSize: 11.5,
+    fontSize: 12,
     color: '#333333',
   },
 
@@ -633,7 +615,7 @@ const styles = StyleSheet.create({
   dividerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 24,
+    marginTop: 20,
   },
 
   dividerLine: {
@@ -652,25 +634,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     gap: 14,
-    marginTop: 18,
-  },
-
-  socialButton: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    borderWidth: 1,
-    borderColor: BORDER_COLOR,
-    backgroundColor: '#FFFFFF',
-    alignItems: 'center',
-    justifyContent: 'center',
-    elevation: 2,
-  },
-
-  googleG: {
-    fontSize: 21,
-    fontWeight: '700',
-    color: '#4285F4',
+    marginTop: 10,
   },
 
   bottomAccount: {
@@ -678,10 +642,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 21,
+    marginBottom: 51,
   },
 
   bottomText: {
-    fontSize: 10.5,
+    fontSize: 12,
     color: '#444444',
   },
 

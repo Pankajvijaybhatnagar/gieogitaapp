@@ -1,7 +1,10 @@
-import { FontAwesome, Ionicons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
+import SocialLogin from './SocialLogin';
 
 import React, { useEffect, useRef, useState } from 'react';
 
+import { Logos } from '@/assets/images';
+import { Image } from 'expo-image';
 import {
   ActivityIndicator,
   Animated,
@@ -34,7 +37,6 @@ export default function LoginScreen({
   onCreateAccount,
   onAppleLogin,
   onGoogleLogin,
-  onFacebookLogin,
   loading = false,
   message = '',
   messageType = 'error',
@@ -232,9 +234,7 @@ export default function LoginScreen({
                   ],
                 },
               ]}>
-              <View style={styles.logoCircle}>
-                <Text style={styles.logoText}>ॐ</Text>
-              </View>
+              <Image height={70} width={70} source={Logos.gieo} />
 
               <Text style={styles.title}>Sign In</Text>
 
@@ -417,29 +417,11 @@ export default function LoginScreen({
                     ],
                   },
                 ]}>
-                <TouchableOpacity
-                  style={styles.socialButton}
-                  onPress={onAppleLogin}
+                <SocialLogin
+                  onAppleLogin={onAppleLogin}
+                  onGoogleLogin={onGoogleLogin}
                   disabled={loading}
-                  activeOpacity={0.8}>
-                  <FontAwesome name="apple" size={21} color="#000" />
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={styles.socialButton}
-                  onPress={onGoogleLogin}
-                  disabled={loading}
-                  activeOpacity={0.8}>
-                  <Text style={styles.googleG}>G</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={styles.socialButton}
-                  onPress={onFacebookLogin}
-                  disabled={loading}
-                  activeOpacity={0.8}>
-                  <FontAwesome name="facebook" size={20} color="#4267B2" />
-                </TouchableOpacity>
+                />
               </Animated.View>
 
               {/* REGISTER */}
@@ -656,31 +638,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 14,
     marginTop: 21,
-  },
-
-  socialButton: {
-    width: 52,
-    height: 52,
-    borderRadius: 26,
-    borderWidth: 1,
-    borderColor: BORDER_COLOR,
-    backgroundColor: '#FFFFFF',
-    alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
-    shadowOpacity: 0.05,
-    shadowRadius: 7,
-    elevation: 2,
-  },
-
-  googleG: {
-    fontSize: 21,
-    fontWeight: '700',
-    color: '#4285F4',
   },
 
   bottomAccount: {

@@ -1,18 +1,18 @@
 import { useEffect, useRef } from 'react';
 
 import {
-    Animated,
-    Dimensions,
-    Easing,
-    Image,
-    ImageBackground,
-    Platform,
-    Pressable,
-    SafeAreaView,
-    StatusBar,
-    StyleSheet,
-    Text,
-    View,
+  Animated,
+  Dimensions,
+  Easing,
+  Image,
+  ImageBackground,
+  Platform,
+  Pressable,
+  SafeAreaView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  View,
 } from 'react-native';
 
 import { BlurView } from 'expo-blur';
@@ -222,7 +222,7 @@ export default function GetStartedScreen() {
         <LinearGradient
           colors={[
             'rgba(23,11,7,0.70)',
-            'rgba(45,24,14,0.50)',
+            'rgba(45,24,14,0.00)',
             'rgba(27,13,8,0.74)',
             'rgba(15,7,5,0.96)',
           ]}
@@ -709,14 +709,14 @@ const styles = StyleSheet.create({
   maharajPrefix: {
     fontSize: 15,
     letterSpacing: 2,
-    color: COLORS.gold,
+    color: COLORS.cream,
     fontWeight: '700',
   },
 
   maharajName: {
     marginTop: 3,
     color: COLORS.cream,
-    fontSize: 18,
+    fontSize: 15,
     fontWeight: '600',
     textAlign: 'center',
   },
