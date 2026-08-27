@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#919090',
+    color: '#666666',
   },
 
   activeTitle: {

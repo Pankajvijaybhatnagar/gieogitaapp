@@ -3,9 +3,11 @@ import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
 import { Link, usePathname, useRouter } from 'expo-router';
 import { Drawer } from 'expo-router/drawer';
+
 import {
   Alert,
   ScrollView,
+  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -336,6 +338,10 @@ export default function HomeLayout() {
           Row 1 — Drawer (flex:1, takes all remaining space)
           Row 2 — SharedTabBar (fixed height, always visible)
       */}
+      <StatusBar
+        barStyle={isProfile ? 'dark-content' : 'light-content'}
+        backgroundColor={isProfile ? '#FFFFFF' : COLORS.deepBrown}
+      />
       <View style={{ flex: 1 }}>
         {/* ── Drawer fills everything above the tab bar ── */}
         <View style={{ flex: 1 }}>
