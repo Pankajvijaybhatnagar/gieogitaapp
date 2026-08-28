@@ -1,9 +1,12 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+// app/join-gieo-gita/index.jsx
+
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import {
   ActivityIndicator,
   Alert,
   Animated,
+  Dimensions,
   Easing,
   KeyboardAvoidingView,
   Modal,
@@ -23,37 +26,48 @@ import { Stack, useRouter } from 'expo-router';
 import joinGieoGitaServices from '@/lib/services/joinGieoGitaServices';
 
 /* ============================================================
+   SCREEN
+============================================================ */
+
+const { height: SCREEN_HEIGHT } = Dimensions.get('window');
+
+const SHEET_MIN_HEIGHT = SCREEN_HEIGHT * 0.4;
+
+const SHEET_MAX_HEIGHT = SCREEN_HEIGHT * 0.75;
+
+/* ============================================================
    COLORS
 ============================================================ */
 
 const COLORS = {
-  bg: '#F6F0E8',
+  background: '#F5EEE6',
   card: '#FFFDF9',
-  brown: '#5B321F',
+  input: '#FFFBF6',
+
+  brown: '#5A321F',
   darkBrown: '#3B2115',
-  brown2: '#75482F',
-  gold: '#B88A48',
+  mediumBrown: '#795039',
+
+  gold: '#B68A4A',
   goldLight: '#E9D5B7',
 
-  text: '#3B2A21',
+  text: '#3D2B21',
   muted: '#8D7A6E',
 
-  border: '#DCC8B4',
-  borderLight: '#EAE0D6',
+  border: '#DCC9B7',
+  lightBorder: '#EAE0D7',
 
   white: '#FFFFFF',
 
-  success: '#3F7D50',
-  successBg: '#EDF7EF',
+  green: '#3F7C4D',
+  greenBg: '#EDF7EF',
 
-  danger: '#B53B3B',
-  dangerBg: '#FCEEEE',
-
-  disabled: '#F0EBE5',
+  red: '#B63D3D',
+  redBg: '#FCEEEE',
 };
 
 /* ============================================================
-   CONSTANTS
+   STATIC OPTIONS
 ============================================================ */
 
 const MARITAL_OPTIONS = ['Single', 'Married'];
@@ -68,11 +82,19 @@ const WING_OPTIONS = [
 ];
 
 /* ============================================================
+   DEBUG
+============================================================ */
+
+const DEBUG_LOCATION = true;
+
+const locationLog = (label, data) => {
+  if (!DEBUG_LOCATION) return;
+
+  console.log(`[JOIN-GIEO-GITA][LOCATION] ${label}`, data);
+};
+
+/* ============================================================
    TIMEZONE → COUNTRY
-   ------------------------------------------------------------
-   The web version uses countries-and-timezones.
-   We keep a lightweight mapping here so we don't need another
-   dependency just for country detection.
 ============================================================ */
 
 const TIMEZONE_COUNTRY_MAP = {
@@ -89,7 +111,6 @@ const TIMEZONE_COUNTRY_MAP = {
 
   'Asia/Colombo': 'Sri Lanka',
 
-  'Asia/Karachi': 'Pakistan',
 
   'Asia/Singapore': 'Singapore',
 
@@ -137,35 +158,168 @@ const TIMEZONE_COUNTRY_MAP = {
 };
 
 /* ============================================================
-   HELPERS
+   COUNTRY DETECTION
 ============================================================ */
 
-const getAutomaticCountry = () => {
+function detectCountryFromTimezone() {
   try {
     const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-    return TIMEZONE_COUNTRY_MAP[timezone] || '';
+    const country = TIMEZONE_COUNTRY_MAP[timezone] || '';
+
+    locationLog('Device timezone', timezone);
+
+    locationLog('Detected country', country);
+
+    return country;
   } catch (error) {
-    console.log('Timezone country detection failed:', error);
+    console.log('[JOIN-GIEO-GITA] Country detection failed:', error);
+
     return '';
   }
-};
+}
 
-const normalizeOptions = data => {
-  if (!Array.isArray(data)) return [];
+/* ============================================================
+   GENERIC ARRAY NORMALIZER
+============================================================ */
 
-  return data
+function normalizeArray(value) {
+  if (!value) {
+    return [];
+  }
+
+  if (Array.isArray(value)) {
+    return value;
+  }
+
+  if (typeof value === 'object') {
+    return Object.values(value);
+  }
+
+  return [];
+}
+
+/* ============================================================
+   EXTRACT LOCATION ARRAY
+   ------------------------------------------------------------
+   Supports multiple API response structures.
+============================================================ */
+
+function extractLocationList(response, level) {
+  locationLog(`Raw ${level} response`, response);
+
+  if (!response) {
+    return [];
+  }
+
+  /*
+   * If apiRequest returns:
+   *
+   * {
+   *   success: true,
+   *   data: [...]
+   * }
+   */
+
+  let root = response;
+
+  if (response.data !== undefined && response.data !== null) {
+    root = response.data;
+  }
+
+  /*
+   * Some APIs return:
+   *
+   * {
+   *   data: {
+   *      countries: [...]
+   *   }
+   * }
+   */
+
+  if (root && typeof root === 'object' && !Array.isArray(root)) {
+    const possibleKeys = [
+      level,
+      `${level}s`,
+      'data',
+      'results',
+      'items',
+      'options',
+      'locations',
+    ];
+
+    for (const key of possibleKeys) {
+      if (root[key] !== undefined) {
+        const result = normalizeArray(root[key]);
+
+        if (result.length) {
+          root = result;
+          break;
+        }
+      }
+    }
+  }
+
+  const array = normalizeArray(root);
+
+  const normalized = array
     .map(item => {
+      /*
+       * String:
+       *
+       * "India"
+       */
       if (typeof item === 'string') {
-        return item;
+        return item.trim();
       }
 
-      return item?.name || item?.label || item?.value || item?.country || '';
+      /*
+       * Object:
+       *
+       * {
+       *   name: "India"
+       * }
+       *
+       * or
+       *
+       * {
+       *   label: "India"
+       * }
+       */
+
+      if (item && typeof item === 'object') {
+        return (
+          item.name ??
+          item.label ??
+          item.value ??
+          item.title ??
+          item.country ??
+          item.state ??
+          item.district ??
+          item.city ??
+          item.tehsil ??
+          ''
+        )
+          .toString()
+          .trim();
+      }
+
+      return '';
     })
     .filter(Boolean);
-};
 
-const formatDate = date => {
+  /*
+   * Remove duplicates.
+   */
+
+  return [...new Set(normalized)];
+}
+
+/* ============================================================
+   DATE
+============================================================ */
+
+function formatDate(date) {
   const year = date.getFullYear();
 
   const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -173,10 +327,12 @@ const formatDate = date => {
   const day = String(date.getDate()).padStart(2, '0');
 
   return `${year}-${month}-${day}`;
-};
+}
 
-const parseDate = value => {
-  if (!value) return new Date();
+function parseDate(value) {
+  if (!value) {
+    return new Date();
+  }
 
   const parts = value.split('-');
 
@@ -184,20 +340,20 @@ const parseDate = value => {
     return new Date();
   }
 
-  const year = Number(parts[0]);
-  const month = Number(parts[1]) - 1;
-  const day = Number(parts[2]);
-
-  const result = new Date(year, month, day);
+  const result = new Date(
+    Number(parts[0]),
+    Number(parts[1]) - 1,
+    Number(parts[2]),
+  );
 
   return Number.isNaN(result.getTime()) ? new Date() : result;
-};
+}
 
 /* ============================================================
-   ANIMATED SECTION
+   SECTION
 ============================================================ */
 
-function AnimatedSection({ title, icon, children, delay = 0 }) {
+function Section({ title, icon, children, delay = 0 }) {
   const opacity = useRef(new Animated.Value(0)).current;
 
   const translateY = useRef(new Animated.Value(12)).current;
@@ -207,14 +363,13 @@ function AnimatedSection({ title, icon, children, delay = 0 }) {
       Animated.parallel([
         Animated.timing(opacity, {
           toValue: 1,
-          duration: 420,
+          duration: 400,
           easing: Easing.out(Easing.cubic),
           useNativeDriver: true,
         }),
-
         Animated.timing(translateY, {
           toValue: 0,
-          duration: 420,
+          duration: 400,
           easing: Easing.out(Easing.cubic),
           useNativeDriver: true,
         }),
@@ -227,7 +382,7 @@ function AnimatedSection({ title, icon, children, delay = 0 }) {
   return (
     <Animated.View
       style={[
-        styles.card,
+        styles.sectionCard,
         {
           opacity,
           transform: [
@@ -239,7 +394,7 @@ function AnimatedSection({ title, icon, children, delay = 0 }) {
       ]}>
       <View style={styles.sectionHeader}>
         <View style={styles.sectionIcon}>
-          <Ionicons name={icon} size={17} color={COLORS.gold} />
+          <Ionicons name={icon} size={16} color={COLORS.gold} />
         </View>
 
         <Text style={styles.sectionTitle}>{title}</Text>
@@ -251,13 +406,13 @@ function AnimatedSection({ title, icon, children, delay = 0 }) {
 }
 
 /* ============================================================
-   FIELD LABEL
+   LABEL
 ============================================================ */
 
-function FieldLabel({ label, required = true }) {
+function Label({ children, required = true }) {
   return (
     <Text style={styles.label}>
-      {label}
+      {children}
 
       {required && <Text style={styles.required}> *</Text>}
     </Text>
@@ -265,7 +420,7 @@ function FieldLabel({ label, required = true }) {
 }
 
 /* ============================================================
-   TEXT FIELD
+   TEXT INPUT
 ============================================================ */
 
 function TextField({
@@ -275,38 +430,263 @@ function TextField({
   placeholder,
   keyboardType,
   autoCapitalize = 'sentences',
-  editable = true,
-  multiline = false,
-  maxLength,
   required = true,
-  rightElement,
+  multiline = false,
+  right,
+  maxLength,
 }) {
   return (
     <View style={styles.field}>
-      <FieldLabel label={label} required={required} />
+      <Label required={required}>{label}</Label>
 
       <View
-        style={[
-          styles.inputBox,
-          multiline && styles.inputBoxMultiline,
-          !editable && styles.inputDisabled,
-        ]}>
+        style={[styles.inputContainer, multiline && styles.multilineContainer]}>
         <TextInput
           value={value}
           onChangeText={onChangeText}
-          placeholder={placeholder || label}
+          placeholder={placeholder || `Enter ${label.toLowerCase()}`}
           placeholderTextColor={COLORS.muted}
           keyboardType={keyboardType}
           autoCapitalize={autoCapitalize}
-          editable={editable}
           multiline={multiline}
           maxLength={maxLength}
-          style={[styles.input, multiline && styles.multilineInput]}
+          style={[styles.textInput, multiline && styles.multilineInput]}
         />
 
-        {rightElement}
+        {right}
       </View>
     </View>
+  );
+}
+
+/* ============================================================
+   BOTTOM OPTION SHEET
+   ------------------------------------------------------------
+   MINIMUM = 40%
+   MAXIMUM = 75%
+============================================================ */
+
+function OptionSheet({
+  visible,
+  title,
+  options,
+  value,
+  onSelect,
+  onClose,
+  loading = false,
+}) {
+  const translateY = useRef(new Animated.Value(SCREEN_HEIGHT)).current;
+
+  const opacity = useRef(new Animated.Value(0)).current;
+
+  const [search, setSearch] = useState('');
+
+  useEffect(() => {
+    if (visible) {
+      setSearch('');
+
+      Animated.parallel([
+        Animated.timing(translateY, {
+          toValue: 0,
+          duration: 300,
+          easing: Easing.out(Easing.cubic),
+          useNativeDriver: true,
+        }),
+
+        Animated.timing(opacity, {
+          toValue: 1,
+          duration: 220,
+          useNativeDriver: true,
+        }),
+      ]).start();
+    } else {
+      Animated.parallel([
+        Animated.timing(translateY, {
+          toValue: SCREEN_HEIGHT,
+          duration: 220,
+          easing: Easing.in(Easing.cubic),
+          useNativeDriver: true,
+        }),
+
+        Animated.timing(opacity, {
+          toValue: 0,
+          duration: 180,
+          useNativeDriver: true,
+        }),
+      ]).start();
+    }
+  }, [visible]);
+
+  const filteredOptions = useMemo(() => {
+    if (!search.trim()) {
+      return options || [];
+    }
+
+    const q = search.trim().toLowerCase();
+
+    return (options || []).filter(item => item.toLowerCase().includes(q));
+  }, [options, search]);
+
+  const close = () => {
+    Animated.parallel([
+      Animated.timing(translateY, {
+        toValue: SCREEN_HEIGHT,
+        duration: 220,
+        easing: Easing.in(Easing.cubic),
+        useNativeDriver: true,
+      }),
+
+      Animated.timing(opacity, {
+        toValue: 0,
+        duration: 180,
+        useNativeDriver: true,
+      }),
+    ]).start(() => {
+      onClose?.();
+    });
+  };
+
+  return (
+    <Modal
+      visible={visible}
+      transparent
+      animationType="none"
+      statusBarTranslucent
+      onRequestClose={close}>
+      <View style={styles.sheetRoot}>
+        <Animated.View
+          style={[
+            styles.sheetBackdrop,
+            {
+              opacity,
+            },
+          ]}
+        />
+
+        <Pressable style={styles.sheetCloseArea} onPress={close} />
+
+        <Animated.View
+          style={[
+            styles.bottomSheet,
+            {
+              height: Math.min(
+                Math.max(SHEET_MIN_HEIGHT, SCREEN_HEIGHT * 0.55),
+                SHEET_MAX_HEIGHT,
+              ),
+
+              transform: [
+                {
+                  translateY,
+                },
+              ],
+            },
+          ]}>
+          {/* HANDLE */}
+
+          <View style={styles.sheetHandle} />
+
+          {/* HEADER */}
+
+          <View style={styles.sheetHeader}>
+            <View
+              style={{
+                flex: 1,
+              }}>
+              <Text style={styles.sheetTitle}>{title}</Text>
+
+              <Text style={styles.sheetCount}>
+                {loading ? 'Loading...' : `${filteredOptions.length} options`}
+              </Text>
+            </View>
+
+            <Pressable onPress={close} hitSlop={12} style={styles.closeButton}>
+              <Ionicons name="close" size={19} color={COLORS.brown} />
+            </Pressable>
+          </View>
+
+          {/* SEARCH */}
+
+          <View style={styles.searchContainer}>
+            <Ionicons name="search-outline" size={17} color={COLORS.muted} />
+
+            <TextInput
+              value={search}
+              onChangeText={setSearch}
+              placeholder={`Search ${title.toLowerCase()}`}
+              placeholderTextColor={COLORS.muted}
+              style={styles.searchInput}
+            />
+
+            {search.length > 0 && (
+              <Pressable onPress={() => setSearch('')}>
+                <Ionicons name="close-circle" size={17} color={COLORS.muted} />
+              </Pressable>
+            )}
+          </View>
+
+          {/* OPTIONS */}
+
+          {loading ? (
+            <View style={styles.loadingView}>
+              <ActivityIndicator size="small" color={COLORS.gold} />
+
+              <Text style={styles.loadingText}>Loading options...</Text>
+            </View>
+          ) : (
+            <ScrollView
+              style={styles.sheetList}
+              contentContainerStyle={styles.sheetListContent}
+              showsVerticalScrollIndicator={false}
+              keyboardShouldPersistTaps="handled">
+              {filteredOptions.length === 0 ? (
+                <View style={styles.noOptions}>
+                  <Ionicons
+                    name="search-outline"
+                    size={27}
+                    color={COLORS.muted}
+                  />
+
+                  <Text style={styles.noOptionsText}>No options found</Text>
+                </View>
+              ) : (
+                filteredOptions.map((item, index) => {
+                  const selected = item === value;
+
+                  return (
+                    <Pressable
+                      key={`${item}-${index}`}
+                      onPress={() => onSelect(item)}
+                      style={({ pressed }) => [
+                        styles.optionRow,
+
+                        selected && styles.selectedOption,
+
+                        pressed && styles.optionPressed,
+                      ]}>
+                      <Text
+                        style={[
+                          styles.optionText,
+                          selected && styles.selectedOptionText,
+                        ]}>
+                        {item}
+                      </Text>
+
+                      {selected && (
+                        <Ionicons
+                          name="checkmark-circle"
+                          size={19}
+                          color={COLORS.gold}
+                        />
+                      )}
+                    </Pressable>
+                  );
+                })
+              )}
+            </ScrollView>
+          )}
+        </Animated.View>
+      </View>
+    </Modal>
   );
 }
 
@@ -326,43 +706,19 @@ function SelectField({
 }) {
   const [visible, setVisible] = useState(false);
 
-  const arrowRotation = useRef(new Animated.Value(0)).current;
-
-  useEffect(() => {
-    Animated.timing(arrowRotation, {
-      toValue: visible ? 1 : 0,
-      duration: 180,
-      useNativeDriver: true,
-    }).start();
-  }, [visible]);
-
-  const rotate = arrowRotation.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['0deg', '180deg'],
-  });
-
-  const open = () => {
-    if (disabled || loading) return;
-
-    setVisible(true);
-  };
-
-  const close = () => {
-    setVisible(false);
-  };
-
   return (
     <>
       <View style={styles.field}>
-        <FieldLabel label={label} required={required} />
+        <Label required={required}>{label}</Label>
 
         <Pressable
-          onPress={open}
           disabled={disabled || loading}
+          onPress={() => setVisible(true)}
           style={({ pressed }) => [
-            styles.inputBox,
-            styles.selectBox,
-            disabled && styles.inputDisabled,
+            styles.inputContainer,
+            styles.selectContainer,
+
+            disabled && styles.disabledInput,
 
             pressed && !disabled && styles.pressedInput,
           ]}>
@@ -375,90 +731,27 @@ function SelectField({
           {loading ? (
             <ActivityIndicator size="small" color={COLORS.gold} />
           ) : (
-            <Animated.View
-              style={{
-                transform: [
-                  {
-                    rotate,
-                  },
-                ],
-              }}>
-              <Ionicons name="chevron-down" size={17} color={COLORS.brown} />
-            </Animated.View>
+            <Ionicons
+              name="chevron-down"
+              size={17}
+              color={disabled ? COLORS.muted : COLORS.brown}
+            />
           )}
         </Pressable>
       </View>
 
-      <Modal
+      <OptionSheet
         visible={visible}
-        transparent
-        animationType="fade"
-        onRequestClose={close}>
-        <Pressable style={styles.modalOverlay} onPress={close}>
-          <Pressable
-            style={styles.selectModal}
-            onPress={event => event.stopPropagation()}>
-            <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>{label}</Text>
-
-              <Pressable onPress={close} hitSlop={10}>
-                <Ionicons name="close" size={21} color={COLORS.brown} />
-              </Pressable>
-            </View>
-
-            <ScrollView
-              showsVerticalScrollIndicator={false}
-              keyboardShouldPersistTaps="handled"
-              style={styles.optionsList}>
-              {options?.length ? (
-                options.map((option, index) => {
-                  const selected = option === value;
-
-                  return (
-                    <Pressable
-                      key={`${option}-${index}`}
-                      onPress={() => {
-                        onSelect(option);
-                        close();
-                      }}
-                      style={({ pressed }) => [
-                        styles.option,
-                        selected && styles.optionSelected,
-                        pressed && styles.optionPressed,
-                      ]}>
-                      <Text
-                        style={[
-                          styles.optionText,
-                          selected && styles.optionSelectedText,
-                        ]}>
-                        {option}
-                      </Text>
-
-                      {selected && (
-                        <Ionicons
-                          name="checkmark-circle"
-                          size={19}
-                          color={COLORS.gold}
-                        />
-                      )}
-                    </Pressable>
-                  );
-                })
-              ) : (
-                <View style={styles.emptyOptions}>
-                  <Ionicons
-                    name="list-outline"
-                    size={25}
-                    color={COLORS.muted}
-                  />
-
-                  <Text style={styles.emptyText}>No options available</Text>
-                </View>
-              )}
-            </ScrollView>
-          </Pressable>
-        </Pressable>
-      </Modal>
+        title={label}
+        options={options || []}
+        value={value}
+        loading={loading}
+        onClose={() => setVisible(false)}
+        onSelect={item => {
+          onSelect(item);
+          setVisible(false);
+        }}
+      />
     </>
   );
 }
@@ -470,29 +763,16 @@ function SelectField({
 function DateField({ label, value, onChange, maximumDate }) {
   const [showPicker, setShowPicker] = useState(false);
 
-  const selectedDate = parseDate(value);
-
-  const handleChange = (event, date) => {
-    setShowPicker(false);
-
-    if (Platform.OS === 'android' && event?.type === 'dismissed') {
-      return;
-    }
-
-    if (date) {
-      onChange(formatDate(date));
-    }
-  };
-
   return (
     <View style={styles.field}>
-      <FieldLabel label={label} />
+      <Label>{label}</Label>
 
       <Pressable
         onPress={() => setShowPicker(true)}
         style={({ pressed }) => [
-          styles.inputBox,
-          styles.dateBox,
+          styles.inputContainer,
+          styles.dateContainer,
+
           pressed && styles.pressedInput,
         ]}>
         <Text style={[styles.dateText, !value && styles.placeholder]}>
@@ -504,12 +784,21 @@ function DateField({ label, value, onChange, maximumDate }) {
 
       {showPicker && (
         <DateTimePicker
-          value={selectedDate}
+          value={parseDate(value)}
           mode="date"
           display={Platform.OS === 'ios' ? 'spinner' : 'default'}
           maximumDate={maximumDate}
-          onChange={handleChange}
-          themeVariant="light"
+          onChange={(event, selectedDate) => {
+            setShowPicker(false);
+
+            if (event?.type === 'dismissed') {
+              return;
+            }
+
+            if (selectedDate) {
+              onChange(formatDate(selectedDate));
+            }
+          }}
         />
       )}
     </View>
@@ -517,17 +806,17 @@ function DateField({ label, value, onChange, maximumDate }) {
 }
 
 /* ============================================================
-   TERMS
+   CHECKBOX
 ============================================================ */
 
-function TermsCheckbox({ checked, onPress }) {
+function Checkbox({ checked, onPress }) {
   const scale = useRef(new Animated.Value(checked ? 1 : 0.85)).current;
 
   useEffect(() => {
     Animated.spring(scale, {
       toValue: checked ? 1 : 0.85,
       friction: 5,
-      tension: 130,
+      tension: 150,
       useNativeDriver: true,
     }).start();
   }, [checked]);
@@ -560,7 +849,7 @@ function TermsCheckbox({ checked, onPress }) {
 }
 
 /* ============================================================
-   MAIN SCREEN
+   MAIN
 ============================================================ */
 
 export default function JoinGieoGitaScreen() {
@@ -621,27 +910,19 @@ export default function JoinGieoGitaScreen() {
 
   const [loadingTehsils, setLoadingTehsils] = useState(false);
 
-  const [loadingOptions, setLoadingOptions] = useState(false);
+  const [loadingOtherOptions, setLoadingOtherOptions] = useState(false);
 
   const [submitting, setSubmitting] = useState(false);
 
   const [checkingPhone, setCheckingPhone] = useState(false);
 
-  /* ----------------------------------------------------------
-     PROFILE
-  ---------------------------------------------------------- */
-
-  const [profileFound, setProfileFound] = useState(null);
-
-  /* ----------------------------------------------------------
-     ERROR
-  ---------------------------------------------------------- */
+  const [existingProfile, setExistingProfile] = useState(null);
 
   const [error, setError] = useState('');
 
-  /* ----------------------------------------------------------
-     FIELD UPDATE
-  ---------------------------------------------------------- */
+  /* ==========================================================
+     UPDATE FIELD
+  ========================================================== */
 
   const updateField = useCallback((key, value) => {
     setError('');
@@ -653,39 +934,31 @@ export default function JoinGieoGitaScreen() {
   }, []);
 
   /* ==========================================================
-     LOAD LOCATION OPTIONS
+     COUNTRY
   ========================================================== */
 
   const loadCountries = useCallback(async () => {
     try {
       setLoadingCountries(true);
 
-      const response = await joinGieoGitaServices.getLocationOptions();
-
-      if (response?.success === false) {
-        throw new Error(response?.error || 'Unable to load countries');
-      }
+      locationLog('Loading countries...');
 
       /*
-       * Support both:
-       *
-       * {
-       *   level: "country",
-       *   data: [...]
-       * }
-       *
-       * and apiRequest wrapped responses.
+       * IMPORTANT:
+       * This uses the service method.
        */
 
-      const data = response?.data || response;
+      const response = await joinGieoGitaServices.getLocationOptions();
 
-      const list = normalizeOptions(data?.data || data);
+      const list = extractLocationList(response, 'country');
+
+      locationLog('Countries extracted', list);
 
       setCountries(list);
 
       return list;
-    } catch (err) {
-      console.log('Countries error:', err);
+    } catch (error) {
+      console.log('[JOIN-GIEO-GITA] Countries API ERROR:', error);
 
       setCountries([]);
 
@@ -696,27 +969,28 @@ export default function JoinGieoGitaScreen() {
   }, []);
 
   /* ==========================================================
-     LOAD STATES
-  ========================================================== */
+     STATES
+========================================================== */
 
   const loadStates = useCallback(async country => {
     if (!country) {
-      setStates([]);
       return;
     }
 
     try {
       setLoadingStates(true);
 
+      locationLog('Loading states for country', country);
+
       const response = await joinGieoGitaServices.getLocationOptions(country);
 
-      const data = response?.data || response;
+      const list = extractLocationList(response, 'state');
 
-      const list = normalizeOptions(data?.data || data);
+      locationLog(`States for ${country}`, list);
 
       setStates(list);
-    } catch (err) {
-      console.log('States error:', err);
+    } catch (error) {
+      console.log('[JOIN-GIEO-GITA] States API ERROR:', error);
 
       setStates([]);
     } finally {
@@ -725,30 +999,34 @@ export default function JoinGieoGitaScreen() {
   }, []);
 
   /* ==========================================================
-     LOAD DISTRICTS
-  ========================================================== */
+     DISTRICTS
+========================================================== */
 
   const loadDistricts = useCallback(async (country, state) => {
     if (!country || !state) {
-      setDistricts([]);
       return;
     }
 
     try {
       setLoadingDistricts(true);
 
+      locationLog('Loading districts', {
+        country,
+        state,
+      });
+
       const response = await joinGieoGitaServices.getLocationOptions(
         country,
         state,
       );
 
-      const data = response?.data || response;
+      const list = extractLocationList(response, 'district');
 
-      const list = normalizeOptions(data?.data || data);
+      locationLog('Districts extracted', list);
 
       setDistricts(list);
-    } catch (err) {
-      console.log('District error:', err);
+    } catch (error) {
+      console.log('[JOIN-GIEO-GITA] District API ERROR:', error);
 
       setDistricts([]);
     } finally {
@@ -757,17 +1035,22 @@ export default function JoinGieoGitaScreen() {
   }, []);
 
   /* ==========================================================
-     LOAD TEHSILS
-  ========================================================== */
+     TEHSIL / CITY
+========================================================== */
 
   const loadTehsils = useCallback(async (country, state, district) => {
     if (!country || !state || !district) {
-      setTehsils([]);
       return;
     }
 
     try {
       setLoadingTehsils(true);
+
+      locationLog('Loading tehsil/city', {
+        country,
+        state,
+        district,
+      });
 
       const response = await joinGieoGitaServices.getLocationOptions(
         country,
@@ -775,13 +1058,13 @@ export default function JoinGieoGitaScreen() {
         district,
       );
 
-      const data = response?.data || response;
+      const list = extractLocationList(response, 'tehsil');
 
-      const list = normalizeOptions(data?.data || data);
+      locationLog('Tehsil/city extracted', list);
 
       setTehsils(list);
-    } catch (err) {
-      console.log('Tehsil error:', err);
+    } catch (error) {
+      console.log('[JOIN-GIEO-GITA] Tehsil API ERROR:', error);
 
       setTehsils([]);
     } finally {
@@ -791,58 +1074,58 @@ export default function JoinGieoGitaScreen() {
 
   /* ==========================================================
      INITIAL LOCATION
-     ----------------------------------------------------------
-     This follows the web behavior:
-     1. Get country list
-     2. Detect device timezone
-     3. Convert timezone → country
-     4. Automatically select country
-     5. Load states
-  ========================================================== */
+========================================================== */
 
   useEffect(() => {
     let mounted = true;
 
-    const initializeLocation = async () => {
-      const countryList = await loadCountries();
+    const initialize = async () => {
+      locationLog('========== LOCATION INITIALIZATION ==========');
 
-      if (!mounted) return;
+      const list = await loadCountries();
 
-      const detectedCountry = getAutomaticCountry();
+      if (!mounted) {
+        return;
+      }
 
-      if (detectedCountry && countryList.includes(detectedCountry)) {
+      locationLog('Country list received', list);
+
+      /*
+       * Don't depend on automatic detection.
+       *
+       * First show country list.
+       */
+
+      const detected = detectCountryFromTimezone();
+
+      if (!detected) {
+        locationLog('No country detected automatically');
+
+        return;
+      }
+
+      const matching = list.find(
+        item => item.toLowerCase() === detected.toLowerCase(),
+      );
+
+      if (matching) {
+        locationLog('Automatic country selected', matching);
+
         setFormData(previous => ({
           ...previous,
-          country: detectedCountry,
+          country: matching,
         }));
 
-        await loadStates(detectedCountry);
+        await loadStates(matching);
       } else {
-        /*
-         * Sometimes API returns:
-         *
-         * "India"
-         *
-         * but timezone mapping returns
-         * another spelling/case.
-         */
-
-        const matchingCountry = countryList.find(
-          country => country.toLowerCase() === detectedCountry.toLowerCase(),
-        );
-
-        if (matchingCountry) {
-          setFormData(previous => ({
-            ...previous,
-            country: matchingCountry,
-          }));
-
-          await loadStates(matchingCountry);
-        }
+        locationLog('Detected country not found in API list', {
+          detected,
+          availableCountries: list,
+        });
       }
     };
 
-    initializeLocation();
+    initialize();
 
     return () => {
       mounted = false;
@@ -850,37 +1133,43 @@ export default function JoinGieoGitaScreen() {
   }, [loadCountries, loadStates]);
 
   /* ==========================================================
-     OCCUPATION + EDUCATION
-  ========================================================== */
+     OTHER OPTIONS
+========================================================== */
 
   useEffect(() => {
     let mounted = true;
 
     const loadOptions = async () => {
       try {
-        setLoadingOptions(true);
+        setLoadingOtherOptions(true);
 
         const [occupationResponse, educationResponse] = await Promise.all([
           joinGieoGitaServices.getOccupationOptions(),
           joinGieoGitaServices.getEducationOptions(),
         ]);
 
-        if (!mounted) return;
+        if (!mounted) {
+          return;
+        }
 
-        const occupationData = occupationResponse?.data || occupationResponse;
-
-        const educationData = educationResponse?.data || educationResponse;
-
-        setOccupations(
-          normalizeOptions(occupationData?.data || occupationData),
+        const occupationList = extractLocationList(
+          occupationResponse,
+          'occupation',
         );
 
-        setEducations(normalizeOptions(educationData?.data || educationData));
-      } catch (err) {
-        console.log('Options error:', err);
+        const educationList = extractLocationList(
+          educationResponse,
+          'education',
+        );
+
+        setOccupations(occupationList);
+
+        setEducations(educationList);
+      } catch (error) {
+        console.log('[JOIN-GIEO-GITA] Occupation/Education ERROR:', error);
       } finally {
         if (mounted) {
-          setLoadingOptions(false);
+          setLoadingOtherOptions(false);
         }
       }
     };
@@ -894,9 +1183,11 @@ export default function JoinGieoGitaScreen() {
 
   /* ==========================================================
      COUNTRY CHANGE
-  ========================================================== */
+========================================================== */
 
   const handleCountryChange = async country => {
+    locationLog('USER SELECTED COUNTRY', country);
+
     setFormData(previous => ({
       ...previous,
       country,
@@ -914,9 +1205,13 @@ export default function JoinGieoGitaScreen() {
 
   /* ==========================================================
      STATE CHANGE
-  ========================================================== */
+========================================================== */
 
   const handleStateChange = async state => {
+    locationLog('USER SELECTED STATE', state);
+
+    const country = formData.country;
+
     setFormData(previous => ({
       ...previous,
       state,
@@ -927,14 +1222,20 @@ export default function JoinGieoGitaScreen() {
     setDistricts([]);
     setTehsils([]);
 
-    await loadDistricts(formData.country, state);
+    await loadDistricts(country, state);
   };
 
   /* ==========================================================
      DISTRICT CHANGE
-  ========================================================== */
+========================================================== */
 
   const handleDistrictChange = async district => {
+    locationLog('USER SELECTED DISTRICT', district);
+
+    const country = formData.country;
+
+    const state = formData.state;
+
     setFormData(previous => ({
       ...previous,
       district,
@@ -943,23 +1244,19 @@ export default function JoinGieoGitaScreen() {
 
     setTehsils([]);
 
-    await loadTehsils(formData.country, formData.state, district);
+    await loadTehsils(country, state, district);
   };
 
   /* ==========================================================
-     PHONE CHECK
-  ========================================================== */
+     PHONE
+========================================================== */
 
   const handlePhoneChange = async value => {
     const digits = value.replace(/\D/g, '');
 
-    if (digits.length > 11) {
-      return;
-    }
-
     updateField('whatsapp', digits);
 
-    setProfileFound(null);
+    setExistingProfile(null);
 
     if (digits.length < 10) {
       return;
@@ -970,42 +1267,30 @@ export default function JoinGieoGitaScreen() {
 
       const response = await joinGieoGitaServices.getProfileByPhone(digits);
 
-      if (response?.success && response?.data?.data) {
-        setProfileFound(response.data.data);
-      } else {
-        setProfileFound(null);
-      }
-    } catch (err) {
-      console.log('Phone check error:', err);
+      console.log('[JOIN-GIEO-GITA] Phone check:', response);
 
-      setProfileFound(null);
+      const profile = response?.data?.data || response?.data || null;
+
+      if (profile && typeof profile === 'object') {
+        setExistingProfile(profile);
+      }
+    } catch (error) {
+      console.log('[JOIN-GIEO-GITA] Phone check error:', error);
     } finally {
       setCheckingPhone(false);
     }
   };
 
   /* ==========================================================
-     MARITAL STATUS
-  ========================================================== */
-
-  const handleMaritalChange = value => {
-    setFormData(previous => ({
-      ...previous,
-      maritalStatus: value,
-      anniver_date: value === 'Married' ? previous.anniver_date : '',
-    }));
-  };
-
-  /* ==========================================================
-     VALIDATION
-  ========================================================== */
+     VALIDATE
+========================================================== */
 
   const validate = () => {
-    const requiredFields = [
-      ['country', 'Country'],
+    const required = [
       ['name', 'Full Name'],
       ['whatsapp', 'WhatsApp Number'],
       ['dikshit', 'Dikshit'],
+      ['country', 'Country'],
       ['state', 'State'],
       ['district', 'District'],
       ['tehsil', 'Tehsil'],
@@ -1017,7 +1302,7 @@ export default function JoinGieoGitaScreen() {
       ['interest', 'Wing'],
     ];
 
-    for (const [key, label] of requiredFields) {
+    for (const [key, label] of required) {
       if (!String(formData[key] || '').trim()) {
         setError(`${label} is required.`);
 
@@ -1042,10 +1327,12 @@ export default function JoinGieoGitaScreen() {
 
   /* ==========================================================
      SUBMIT
-  ========================================================== */
+========================================================== */
 
   const handleSubmit = async () => {
-    if (submitting) return;
+    if (submitting) {
+      return;
+    }
 
     setError('');
 
@@ -1055,10 +1342,6 @@ export default function JoinGieoGitaScreen() {
 
     try {
       setSubmitting(true);
-
-      /*
-       * SAME PAYLOAD AS WEB VERSION
-       */
 
       const payload = {
         country: formData.country,
@@ -1092,30 +1375,34 @@ export default function JoinGieoGitaScreen() {
         interest: formData.interest || '',
       };
 
-      console.log('Join GIEO Gita payload:', payload);
+      console.log('================================');
+
+      console.log('[JOIN-GIEO-GITA] SUBMIT PAYLOAD:', payload);
+
+      console.log('================================');
 
       const response = await joinGieoGitaServices.createProfile(payload);
 
+      console.log('[JOIN-GIEO-GITA] CREATE RESPONSE:', response);
+
       if (!response?.success) {
-        throw new Error(response?.error || 'Failed to submit form.');
+        throw new Error(response?.error || 'Unable to create profile.');
       }
 
       const hashId = response?.data?.hash_id;
 
-      if (!hashId) {
+      if (hashId) {
+        router.push(`/join-gieo-gita/${hashId}`);
+      } else {
         Alert.alert(
           'Success',
           'Your GIEO Gita profile has been created successfully.',
         );
-
-        return;
       }
+    } catch (error) {
+      console.log('[JOIN-GIEO-GITA] SUBMIT ERROR:', error);
 
-      router.push(`/join-gieo-gita/${hashId}`);
-    } catch (err) {
-      console.log('Create profile error:', err);
-
-      setError(err?.message || 'Something went wrong. Please try again.');
+      setError(error?.message || 'Something went wrong. Please try again.');
     } finally {
       setSubmitting(false);
     }
@@ -1123,14 +1410,13 @@ export default function JoinGieoGitaScreen() {
 
   /* ==========================================================
      RENDER
-  ========================================================== */
+========================================================== */
 
   return (
     <>
       <Stack.Screen
         options={{
           title: 'Join GIEO Gita',
-
           headerShown: true,
 
           headerStyle: {
@@ -1152,49 +1438,42 @@ export default function JoinGieoGitaScreen() {
         style={styles.container}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
         <ScrollView
-          keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.scrollContent}>
-          {/* =================================================
-              HERO
-          ================================================= */}
+          keyboardShouldPersistTaps="handled"
+          contentContainerStyle={styles.content}>
+          {/* HERO */}
 
-          <Animated.View style={styles.hero}>
-            <View style={styles.heroCircle}>
-              <Ionicons name="people-outline" size={26} color={COLORS.gold} />
+          <View style={styles.hero}>
+            <View style={styles.heroIcon}>
+              <Ionicons name="people-outline" size={25} color={COLORS.gold} />
             </View>
 
             <Text style={styles.heroTitle}>Join GIEO Gita</Text>
 
-            <Text style={styles.heroText}>
+            <Text style={styles.heroSubtitle}>
               Become a part of the GIEO Gita family
             </Text>
-          </Animated.View>
+          </View>
 
-          {/* =================================================
-              ERROR
-          ================================================= */}
+          {/* ERROR */}
 
           {error ? (
-            <Animated.View style={styles.errorBox}>
+            <View style={styles.errorBox}>
               <Ionicons
                 name="alert-circle-outline"
-                size={19}
-                color={COLORS.danger}
+                size={18}
+                color={COLORS.red}
               />
 
               <Text style={styles.errorText}>{error}</Text>
-            </Animated.View>
+            </View>
           ) : null}
 
           {/* =================================================
-              PERSONAL DETAILS
+              PERSONAL
           ================================================= */}
 
-          <AnimatedSection
-            title="Personal Details"
-            icon="person-outline"
-            delay={50}>
+          <Section title="Personal Details" icon="person-outline" delay={40}>
             <TextField
               label="Full Name"
               value={formData.name}
@@ -1218,46 +1497,31 @@ export default function JoinGieoGitaScreen() {
               onChangeText={handlePhoneChange}
               placeholder="Enter WhatsApp number"
               keyboardType="phone-pad"
+              maxLength={15}
               autoCapitalize="none"
-              maxLength={11}
-              rightElement={
+              right={
                 checkingPhone ? (
                   <ActivityIndicator size="small" color={COLORS.gold} />
                 ) : null
               }
             />
 
-            {profileFound ? (
-              <View style={styles.profileBox}>
-                <View style={styles.profileIcon}>
-                  <Ionicons name="checkmark" size={17} color={COLORS.success} />
-                </View>
+            {existingProfile ? (
+              <View style={styles.profileExists}>
+                <Ionicons
+                  name="checkmark-circle"
+                  size={19}
+                  color={COLORS.green}
+                />
 
-                <View
-                  style={{
-                    flex: 1,
-                  }}>
-                  <Text style={styles.profileTitle}>
-                    Profile already exists
-                  </Text>
-
-                  <Text style={styles.profileText}>
-                    This WhatsApp number is already registered.
-                  </Text>
-                </View>
-
-                <Pressable
-                  onPress={() =>
-                    router.push(`/join-gieo-gita/${profileFound.hash_id}`)
-                  }
-                  style={styles.smallButton}>
-                  <Text style={styles.smallButtonText}>View</Text>
-                </Pressable>
+                <Text style={styles.profileExistsText}>
+                  Profile already exists for this number.
+                </Text>
               </View>
             ) : null}
 
             <SelectField
-              label="Dikshit (दीक्षित परिवार)"
+              label="Dikshit"
               value={formData.dikshit}
               options={DIKSHIT_OPTIONS}
               onSelect={value => updateField('dikshit', value)}
@@ -1267,7 +1531,13 @@ export default function JoinGieoGitaScreen() {
               label="Marital Status"
               value={formData.maritalStatus}
               options={MARITAL_OPTIONS}
-              onSelect={handleMaritalChange}
+              onSelect={value => {
+                updateField('maritalStatus', value);
+
+                if (value !== 'Married') {
+                  updateField('anniver_date', '');
+                }
+              }}
             />
 
             <DateField
@@ -1285,46 +1555,46 @@ export default function JoinGieoGitaScreen() {
                 maximumDate={new Date()}
               />
             ) : null}
-          </AnimatedSection>
+          </Section>
 
           {/* =================================================
               LOCATION
           ================================================= */}
 
-          <AnimatedSection title="Location" icon="location-outline" delay={110}>
+          <Section title="Location" icon="location-outline" delay={100}>
             <SelectField
               label="Country"
               value={formData.country}
               options={countries}
-              onSelect={handleCountryChange}
               loading={loadingCountries}
+              onSelect={handleCountryChange}
             />
 
             <SelectField
               label="State"
               value={formData.state}
               options={states}
-              onSelect={handleStateChange}
-              disabled={!formData.country}
               loading={loadingStates}
+              disabled={!formData.country}
+              onSelect={handleStateChange}
             />
 
             <SelectField
               label="District"
               value={formData.district}
               options={districts}
-              onSelect={handleDistrictChange}
-              disabled={!formData.state}
               loading={loadingDistricts}
+              disabled={!formData.state}
+              onSelect={handleDistrictChange}
             />
 
             <SelectField
-              label="Tehsil"
+              label="City / Tehsil"
               value={formData.tehsil}
               options={tehsils}
-              onSelect={value => updateField('tehsil', value)}
-              disabled={!formData.district}
               loading={loadingTehsils}
+              disabled={!formData.district}
+              onSelect={value => updateField('tehsil', value)}
             />
 
             <TextField
@@ -1334,62 +1604,58 @@ export default function JoinGieoGitaScreen() {
               placeholder="Enter address"
               multiline
             />
-          </AnimatedSection>
+          </Section>
 
           {/* =================================================
               PROFESSIONAL
           ================================================= */}
 
-          <AnimatedSection
+          <Section
             title="Professional Details"
             icon="briefcase-outline"
-            delay={170}>
+            delay={160}>
             <SelectField
               label="Occupation"
               value={formData.occupation}
               options={occupations}
+              loading={loadingOtherOptions}
               onSelect={value => updateField('occupation', value)}
-              loading={loadingOptions}
             />
 
             <SelectField
               label="Education"
               value={formData.education}
               options={educations}
+              loading={loadingOtherOptions}
               onSelect={value => updateField('education', value)}
-              loading={loadingOptions}
             />
-          </AnimatedSection>
+          </Section>
 
           {/* =================================================
               GIEO GITA
           ================================================= */}
 
-          <AnimatedSection title="GIEO Gita" icon="heart-outline" delay={230}>
+          <Section title="GIEO Gita" icon="heart-outline" delay={220}>
             <SelectField
               label="Wing"
               value={formData.interest}
               options={WING_OPTIONS}
               onSelect={value => updateField('interest', value)}
             />
-          </AnimatedSection>
+          </Section>
 
-          {/* =================================================
-              TERMS
-          ================================================= */}
+          {/* TERMS */}
 
-          <TermsCheckbox
+          <Checkbox
             checked={formData.terms}
             onPress={() => updateField('terms', !formData.terms)}
           />
 
-          {/* =================================================
-              SUBMIT
-          ================================================= */}
+          {/* SUBMIT */}
 
           <Pressable
-            disabled={submitting}
             onPress={handleSubmit}
+            disabled={submitting}
             style={({ pressed }) => [
               styles.submitButton,
 
@@ -1428,63 +1694,57 @@ export default function JoinGieoGitaScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.bg,
+    backgroundColor: COLORS.background,
   },
 
-  scrollContent: {
+  content: {
     paddingHorizontal: 13,
-    paddingTop: 8,
+    paddingTop: 7,
     paddingBottom: 35,
   },
 
-  /* --------------------------------------------------------
-       HERO
-    -------------------------------------------------------- */
+  /* HERO */
 
   hero: {
     alignItems: 'center',
-    paddingTop: 7,
+    paddingTop: 3,
     paddingBottom: 10,
   },
 
-  heroCircle: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
+  heroIcon: {
+    width: 45,
+    height: 45,
+    borderRadius: 23,
     backgroundColor: COLORS.darkBrown,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 6,
     borderWidth: 1,
     borderColor: COLORS.gold,
+    marginBottom: 5,
   },
 
   heroTitle: {
-    fontSize: 21,
+    fontSize: 20,
     fontWeight: '800',
     color: COLORS.darkBrown,
-    letterSpacing: 0.15,
   },
 
-  heroText: {
-    fontSize: 11.5,
+  heroSubtitle: {
+    fontSize: 10.5,
     color: COLORS.muted,
     marginTop: 2,
-    textAlign: 'center',
   },
 
-  /* --------------------------------------------------------
-       CARD
-    -------------------------------------------------------- */
+  /* SECTION */
 
-  card: {
+  sectionCard: {
     backgroundColor: COLORS.card,
-    borderRadius: 16,
+    borderRadius: 15,
     borderWidth: 1,
     borderColor: COLORS.border,
-    paddingHorizontal: 12,
-    paddingTop: 11,
-    paddingBottom: 5,
+    paddingHorizontal: 11,
+    paddingTop: 10,
+    paddingBottom: 3,
     marginBottom: 8,
 
     shadowColor: '#000',
@@ -1497,104 +1757,85 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
 
-  /* --------------------------------------------------------
-       SECTION
-    -------------------------------------------------------- */
-
   sectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: 7,
   },
 
   sectionIcon: {
-    width: 29,
-    height: 29,
-    borderRadius: 9,
-    backgroundColor: '#F3E8DA',
+    width: 28,
+    height: 28,
+    borderRadius: 8,
+    backgroundColor: '#F3E7D9',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 8,
   },
 
   sectionTitle: {
-    fontSize: 15,
+    fontSize: 14.5,
     fontWeight: '800',
     color: COLORS.darkBrown,
   },
 
-  /* --------------------------------------------------------
-       FIELD
-    -------------------------------------------------------- */
+  /* FIELDS */
 
   field: {
     marginBottom: 6,
   },
 
   label: {
-    fontSize: 10.8,
+    fontSize: 10.5,
     fontWeight: '700',
     color: COLORS.text,
     marginBottom: 3,
-    paddingLeft: 2,
+    paddingLeft: 1,
   },
 
   required: {
-    color: COLORS.danger,
+    color: COLORS.red,
   },
 
-  inputBox: {
-    minHeight: 40,
+  inputContainer: {
+    minHeight: 39,
     borderWidth: 1,
     borderColor: COLORS.border,
-    borderRadius: 10,
-    backgroundColor: '#FFFCF8',
+    borderRadius: 9,
+    backgroundColor: COLORS.input,
     paddingHorizontal: 10,
     flexDirection: 'row',
     alignItems: 'center',
   },
 
-  input: {
+  textInput: {
     flex: 1,
-    minHeight: 38,
-    fontSize: 13,
+    minHeight: 37,
+    fontSize: 12.5,
     color: COLORS.text,
-    paddingVertical: 5,
-    paddingHorizontal: 0,
+    paddingVertical: 4,
   },
 
-  inputDisabled: {
-    backgroundColor: COLORS.disabled,
-    opacity: 0.65,
-  },
-
-  pressedInput: {
-    borderColor: COLORS.gold,
-    backgroundColor: '#FFF9F1',
-  },
-
-  inputBoxMultiline: {
-    minHeight: 68,
+  multilineContainer: {
+    minHeight: 67,
     alignItems: 'flex-start',
   },
 
   multilineInput: {
-    minHeight: 62,
+    minHeight: 60,
     textAlignVertical: 'top',
     paddingTop: 7,
   },
 
-  /* --------------------------------------------------------
-       SELECT
-    -------------------------------------------------------- */
+  /* SELECT */
 
-  selectBox: {
+  selectContainer: {
     justifyContent: 'space-between',
   },
 
   selectText: {
     flex: 1,
-    fontSize: 13,
+    fontSize: 12.5,
     color: COLORS.text,
     paddingVertical: 5,
   },
@@ -1603,166 +1844,59 @@ const styles = StyleSheet.create({
     color: COLORS.muted,
   },
 
-  /* --------------------------------------------------------
-       MODAL
-    -------------------------------------------------------- */
-
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(42, 24, 15, 0.48)',
-    justifyContent: 'flex-end',
+  disabledInput: {
+    backgroundColor: '#F0EBE6',
+    opacity: 0.62,
   },
 
-  selectModal: {
-    backgroundColor: COLORS.card,
-    borderTopLeftRadius: 22,
-    borderTopRightRadius: 22,
-    paddingTop: 14,
-    paddingBottom: Platform.OS === 'ios' ? 28 : 18,
-    maxHeight: '72%',
+  pressedInput: {
+    borderColor: COLORS.gold,
+    backgroundColor: '#FFF8EE',
   },
 
-  modalHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingBottom: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: COLORS.borderLight,
-  },
+  /* DATE */
 
-  modalTitle: {
-    fontSize: 15,
-    fontWeight: '800',
-    color: COLORS.darkBrown,
-  },
-
-  optionsList: {
-    paddingHorizontal: 10,
-  },
-
-  option: {
-    minHeight: 43,
-    paddingHorizontal: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    borderBottomWidth: 1,
-    borderBottomColor: COLORS.borderLight,
-  },
-
-  optionSelected: {
-    backgroundColor: '#F7EEE3',
-    borderRadius: 9,
-    marginVertical: 2,
-    borderBottomWidth: 0,
-  },
-
-  optionPressed: {
-    backgroundColor: '#F4E9DC',
-  },
-
-  optionText: {
-    flex: 1,
-    fontSize: 13,
-    color: COLORS.text,
-    paddingRight: 8,
-  },
-
-  optionSelectedText: {
-    color: COLORS.brown,
-    fontWeight: '700',
-  },
-
-  emptyOptions: {
-    alignItems: 'center',
-    paddingVertical: 30,
-  },
-
-  emptyText: {
-    fontSize: 12,
-    color: COLORS.muted,
-    marginTop: 6,
-  },
-
-  /* --------------------------------------------------------
-       PROFILE
-    -------------------------------------------------------- */
-
-  profileBox: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: COLORS.successBg,
-    borderWidth: 1,
-    borderColor: '#CFE4D3',
-    borderRadius: 10,
-    padding: 8,
-    marginBottom: 6,
-  },
-
-  profileIcon: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    backgroundColor: '#DDF0E1',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 8,
-  },
-
-  profileTitle: {
-    fontSize: 11.5,
-    fontWeight: '800',
-    color: COLORS.success,
-  },
-
-  profileText: {
-    fontSize: 10,
-    color: COLORS.muted,
-    marginTop: 1,
-  },
-
-  smallButton: {
-    backgroundColor: COLORS.brown,
-    borderRadius: 7,
-    paddingHorizontal: 11,
-    paddingVertical: 6,
-    marginLeft: 6,
-  },
-
-  smallButtonText: {
-    color: COLORS.white,
-    fontSize: 10.5,
-    fontWeight: '800',
-  },
-
-  /* --------------------------------------------------------
-       DATE
-    -------------------------------------------------------- */
-
-  dateBox: {
+  dateContainer: {
     justifyContent: 'space-between',
   },
 
   dateText: {
     flex: 1,
-    fontSize: 13,
+    fontSize: 12.5,
     color: COLORS.text,
     paddingVertical: 5,
   },
 
-  /* --------------------------------------------------------
-       ERROR
-    -------------------------------------------------------- */
+  /* PROFILE */
+
+  profileExists: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: COLORS.greenBg,
+    borderWidth: 1,
+    borderColor: '#CDE1D1',
+    borderRadius: 9,
+    paddingHorizontal: 8,
+    paddingVertical: 6,
+    marginBottom: 6,
+  },
+
+  profileExistsText: {
+    marginLeft: 6,
+    fontSize: 10.5,
+    color: COLORS.green,
+    fontWeight: '700',
+  },
+
+  /* ERROR */
 
   errorBox: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: COLORS.dangerBg,
+    backgroundColor: COLORS.redBg,
     borderWidth: 1,
-    borderColor: '#E8C1C1',
-    borderRadius: 10,
+    borderColor: '#E7C1C1',
+    borderRadius: 9,
     paddingHorizontal: 9,
     paddingVertical: 8,
     marginBottom: 8,
@@ -1770,20 +1904,180 @@ const styles = StyleSheet.create({
 
   errorText: {
     flex: 1,
-    fontSize: 11,
-    color: COLORS.danger,
     marginLeft: 6,
+    color: COLORS.red,
+    fontSize: 10.5,
     lineHeight: 15,
   },
 
-  /* --------------------------------------------------------
-       TERMS
-    -------------------------------------------------------- */
+  /* ========================================================
+       BOTTOM SHEET
+    ======================================================== */
+
+  sheetRoot: {
+    flex: 1,
+    justifyContent: 'flex-end',
+  },
+
+  sheetBackdrop: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(37, 20, 12, 0.58)',
+  },
+
+  sheetCloseArea: {
+    ...StyleSheet.absoluteFillObject,
+  },
+
+  bottomSheet: {
+    width: '100%',
+    minHeight: SHEET_MIN_HEIGHT,
+    maxHeight: SHEET_MAX_HEIGHT,
+    backgroundColor: COLORS.card,
+    borderTopLeftRadius: 23,
+    borderTopRightRadius: 23,
+    paddingTop: 8,
+    paddingBottom: Platform.OS === 'ios' ? 27 : 12,
+
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: -4,
+    },
+    shadowOpacity: 0.18,
+    shadowRadius: 12,
+    elevation: 18,
+  },
+
+  sheetHandle: {
+    width: 42,
+    height: 4,
+    borderRadius: 3,
+    backgroundColor: '#CDB9A8',
+    alignSelf: 'center',
+    marginBottom: 9,
+  },
+
+  sheetHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 15,
+    paddingBottom: 9,
+  },
+
+  sheetTitle: {
+    fontSize: 16,
+    fontWeight: '800',
+    color: COLORS.darkBrown,
+  },
+
+  sheetCount: {
+    fontSize: 9.5,
+    color: COLORS.muted,
+    marginTop: 1,
+  },
+
+  closeButton: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: '#F1E8DF',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  searchContainer: {
+    height: 39,
+    marginHorizontal: 13,
+    marginBottom: 7,
+    borderRadius: 9,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    backgroundColor: '#FFFBF6',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 9,
+  },
+
+  searchInput: {
+    flex: 1,
+    fontSize: 12,
+    color: COLORS.text,
+    marginLeft: 6,
+    paddingVertical: 0,
+  },
+
+  sheetList: {
+    flex: 1,
+  },
+
+  sheetListContent: {
+    paddingHorizontal: 10,
+    paddingBottom: 10,
+  },
+
+  optionRow: {
+    minHeight: 43,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.lightBorder,
+    borderRadius: 8,
+  },
+
+  selectedOption: {
+    backgroundColor: '#F5EBDD',
+    borderBottomWidth: 0,
+    marginVertical: 2,
+  },
+
+  optionPressed: {
+    backgroundColor: '#F1E3D4',
+  },
+
+  optionText: {
+    flex: 1,
+    fontSize: 12.5,
+    color: COLORS.text,
+    paddingRight: 8,
+  },
+
+  selectedOptionText: {
+    color: COLORS.brown,
+    fontWeight: '800',
+  },
+
+  loadingView: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  loadingText: {
+    fontSize: 11,
+    color: COLORS.muted,
+    marginTop: 7,
+  },
+
+  noOptions: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: 45,
+  },
+
+  noOptionsText: {
+    fontSize: 12,
+    color: COLORS.muted,
+    marginTop: 7,
+  },
+
+  /* TERMS */
 
   termsRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 2,
+    marginTop: 1,
     marginBottom: 10,
     paddingHorizontal: 2,
   },
@@ -1794,9 +2088,9 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderWidth: 1.5,
     borderColor: COLORS.brown,
-    backgroundColor: COLORS.white,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: COLORS.white,
   },
 
   checkboxChecked: {
@@ -1806,10 +2100,10 @@ const styles = StyleSheet.create({
 
   termsText: {
     flex: 1,
-    fontSize: 10.5,
+    fontSize: 10,
     color: COLORS.text,
     marginLeft: 7,
-    lineHeight: 15,
+    lineHeight: 14,
   },
 
   termsLink: {
@@ -1817,13 +2111,11 @@ const styles = StyleSheet.create({
     fontWeight: '800',
   },
 
-  /* --------------------------------------------------------
-       SUBMIT
-    -------------------------------------------------------- */
+  /* SUBMIT */
 
   submitButton: {
-    height: 46,
-    borderRadius: 12,
+    height: 45,
+    borderRadius: 11,
     backgroundColor: COLORS.darkBrown,
     flexDirection: 'row',
     alignItems: 'center',
@@ -1835,7 +2127,7 @@ const styles = StyleSheet.create({
       width: 0,
       height: 3,
     },
-    shadowOpacity: 0.13,
+    shadowOpacity: 0.14,
     shadowRadius: 5,
     elevation: 3,
   },
@@ -1846,24 +2138,23 @@ const styles = StyleSheet.create({
         scale: 0.985,
       },
     ],
-    opacity: 0.92,
+    opacity: 0.9,
   },
 
   submitDisabled: {
-    opacity: 0.65,
+    opacity: 0.6,
   },
 
   submitText: {
     color: COLORS.white,
-    fontSize: 14,
+    fontSize: 13.5,
     fontWeight: '800',
   },
 
   footer: {
     textAlign: 'center',
-    fontSize: 9.5,
+    fontSize: 9,
     color: COLORS.muted,
-    marginTop: 13,
-    paddingHorizontal: 15,
+    marginTop: 12,
   },
 });

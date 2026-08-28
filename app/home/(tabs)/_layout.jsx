@@ -47,7 +47,7 @@ export default function TabLayout() {
         options={{ title: 'Chants', headerShown: false }}
       />
       <Tabs.Screen name="seva" options={{ title: 'Seva' }} />
-      <Tabs.Screen name="reading" options={{ title: 'Reading' }} />
+      <Tabs.Screen name="reading" options={{ title: 'Reading2' }} />
       <Tabs.Screen
         name="profile"
         options={{
