@@ -1,4 +1,10 @@
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { COLORS, exclusiveContent } from './constant';
 import { SectionHeader } from './Sharedui';
 
@@ -6,7 +12,7 @@ function ExclusiveCard({ item }) {
   return (
     <TouchableOpacity style={styles.excCard} activeOpacity={0.85}>
       <View style={styles.excCardImg}>
-        <Text style={styles.excCardIcon}>{item.icon}</Text>
+        {/* <Text style={styles.excCardIcon}>{item.icon}</Text> */}
         {item.badge && (
           <View style={styles.excBadge}>
             <Text style={styles.excBadgeText}>{item.badge}</Text>
@@ -15,7 +21,9 @@ function ExclusiveCard({ item }) {
         <View style={styles.excImgOverlay} />
       </View>
       <View style={styles.excCardBody}>
-        <Text style={styles.excCardTitle} numberOfLines={2}>{item.title}</Text>
+        <Text style={styles.excCardTitle} numberOfLines={2}>
+          {item.title}
+        </Text>
         <Text style={styles.excCardMeta}>{item.meta}</Text>
       </View>
     </TouchableOpacity>
@@ -29,9 +37,8 @@ export default function ExclusiveContent() {
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.hScrollContent}
-      >
-        {exclusiveContent.map((item) => (
+        contentContainerStyle={styles.hScrollContent}>
+        {exclusiveContent.map(item => (
           <ExclusiveCard key={item.id} item={item} />
         ))}
       </ScrollView>
@@ -89,13 +96,13 @@ const styles = StyleSheet.create({
   excCardBody: { padding: 10 },
   excCardTitle: {
     color: COLORS.cream,
-    fontSize: 11,
+    fontSize: 17,
     fontWeight: '700',
     lineHeight: 15,
   },
   excCardMeta: {
     color: 'rgba(232,197,90,0.6)',
-    fontSize: 9,
+    fontSize: 12,
     marginTop: 4,
     fontStyle: 'italic',
   },

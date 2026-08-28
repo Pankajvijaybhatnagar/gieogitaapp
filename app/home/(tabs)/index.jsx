@@ -1,5 +1,6 @@
 import { ScrollView, StatusBar, StyleSheet, View } from 'react-native';
 import AdhyaySection from '../../../components/home/Adhyaysection';
+import { COLORS } from '../../../components/home/constant';
 import EventsSection from '../../../components/home/Eventsection';
 import ExclusiveContent from '../../../components/home/Exclusivecontent';
 import HeroBanner from '../../../components/home/Herobanner';
@@ -7,22 +8,22 @@ import InitiativesSection from '../../../components/home/Initiativessection';
 import LiveDarshan from '../../../components/home/Livedarshan';
 import SevaSection from '../../../components/home/Sevasection';
 import { GoldDivider } from '../../../components/home/Sharedui';
-import { COLORS } from '../../../components/home/constant';
 
 export default function GieoGitaHome() {
   return (
     <View style={styles.root}>
       <StatusBar barStyle="light-content" backgroundColor={COLORS.deepBrown} />
 
-      <ScrollView style={styles.container} showsVerticalScrollIndicator={false} bounces>
-
+      <ScrollView
+        style={styles.container}
+        showsVerticalScrollIndicator={false}
+        bounces>
         <HeroBanner />
 
         <ExclusiveContent />
-
         <GoldDivider />
 
-        <LiveDarshan />
+        <EventsSection />
 
         <GoldDivider />
 
@@ -30,11 +31,10 @@ export default function GieoGitaHome() {
 
         <GoldDivider />
 
-        <EventsSection />
-
+        <SevaSection />
         <GoldDivider />
 
-        <SevaSection />
+        <LiveDarshan />
 
         <GoldDivider />
 

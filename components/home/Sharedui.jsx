@@ -13,7 +13,12 @@ export function GoldDivider() {
 }
 
 // ─── SECTION HEADER ───────────────────────────────────────────────────────────
-export function SectionHeader({ title, accent, onSeeAll, seeAllLabel = 'See all »' }) {
+export function SectionHeader({
+  title,
+  accent,
+  onSeeAll,
+  seeAllLabel = 'See all »',
+}) {
   return (
     <View style={styles.sectionHeader}>
       <Text style={styles.sectionTitle}>
@@ -22,7 +27,7 @@ export function SectionHeader({ title, accent, onSeeAll, seeAllLabel = 'See all 
       </Text>
       {onSeeAll && (
         <TouchableOpacity onPress={onSeeAll}>
-          <Text style={styles.seeAll}>{seeAllLabel}</Text>
+          {/* <Text style={styles.seeAll}>{seeAllLabel}</Text> */}
         </TouchableOpacity>
       )}
     </View>
