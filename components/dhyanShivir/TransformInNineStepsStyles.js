@@ -30,19 +30,28 @@ export const styles = StyleSheet.create({
 
   headerTitle: {
     color: '#FFF2D8',
-    fontSize: 27,
+    fontSize: 22,
     lineHeight: 33,
     fontWeight: '800',
     textAlign: 'center',
   },
+  headerTitleName: {
+    color: '#FFF2D8',
+    fontSize: 35,
+    lineHeight: 33,
+    fontWeight: '300',
+    textAlign: 'center',
+    textTransform: 'uppercase',
+  },
 
   headerSubtitle: {
     color: '#E6D1AD',
-    fontSize: 15,
+    fontSize: 18,
     lineHeight: 22,
-    fontWeight: '500',
+    fontWeight: '00',
     textAlign: 'center',
-    marginTop: 2,
+    marginTop: 0,
+    marginBottom: 5,
   },
 
   headerHighlight: {

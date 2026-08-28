@@ -90,9 +90,9 @@ export default function TransformInNineSteps() {
         <Text style={styles.headerTitle}>Transform Your Life</Text>
 
         <Text style={styles.headerSubtitle}>
-          with <Text style={styles.headerHighlight}>9 Steps</Text> with Gita
-          Manishi
+          in <Text style={styles.headerHighlight}>9 Steps</Text> with
         </Text>
+        <Text style={styles.headerTitleName}>Gita Manishi</Text>
       </View>
 
       {loading ? (
