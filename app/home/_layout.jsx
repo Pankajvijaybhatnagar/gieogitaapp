@@ -71,7 +71,7 @@ const TABS = [
     route: '/home/(tabs)/seva',
   },
   {
-    label: 'join gieo gita',
+    label: 'join',
     icon: 'book-open-outline',
     iconFocused: 'book-open',
     route: '/home/(tabs)/join-gieo-gita',
