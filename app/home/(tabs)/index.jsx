@@ -1,3 +1,4 @@
+import TransformInNineSteps from '@/components/dhyanShivir/TransformInNineSteps';
 import { ScrollView, StatusBar, StyleSheet, View } from 'react-native';
 import AdhyaySection from '../../../components/home/Adhyaysection';
 import { COLORS } from '../../../components/home/constant';
@@ -24,6 +25,8 @@ export default function GieoGitaHome() {
         <GoldDivider />
 
         <EventsSection />
+
+        <TransformInNineSteps />
 
         <GoldDivider />
 
