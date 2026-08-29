@@ -1,8 +1,10 @@
 import { Ionicons } from '@expo/vector-icons';
-import { StyleSheet, Text, View } from 'react-native';
+import { useRouter } from 'expo-router';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import DonationReceiptButton from './DonationReceiptButton';
 
 const DonationCard = ({ donation }) => {
+  const router = useRouter();
   const formatAmount = value => {
     const amount = Number(value || 0);
 
@@ -137,17 +139,54 @@ const DonationCard = ({ donation }) => {
       </View>
       <View
         style={{
-          flex: 1,
           flexDirection: 'row',
           justifyContent: 'space-between',
+          alignItems: 'center',
         }}>
         <View style={styles.amountContainer}>
           <Text style={styles.currency}>₹</Text>
 
           <Text style={styles.amount}>{formatAmount(donation?.amount)}</Text>
         </View>
+
         {donation?.status?.toLowerCase() === 'completed' && (
           <DonationReceiptButton donation={donation} />
+        )}
+
+        {donation?.status?.toLowerCase() === 'pending' && (
+          <TouchableOpacity
+            style={{
+              height: 32,
+              paddingHorizontal: 13,
+              borderRadius: 16,
+              backgroundColor: '#6A3C25',
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 5,
+            }}
+            activeOpacity={0.85}
+            onPress={() =>
+              router.push({
+                pathname: '/home/(tabs)/donations/payment/[tranCtx]',
+                params: {
+                  tranCtx: donation?.tranCtx,
+                  merchantTxnNo:
+                    donation?.merchantTxnNo || donation?.transaction_id || '',
+                },
+              })
+            }>
+            <Ionicons name="card-outline" size={14} color="#FFFFFF" />
+
+            <Text
+              style={{
+                fontSize: 10,
+                fontWeight: '700',
+                color: '#FFFFFF',
+              }}>
+              Pay Now
+            </Text>
+          </TouchableOpacity>
         )}
       </View>
 

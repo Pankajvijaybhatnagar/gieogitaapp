@@ -6,13 +6,13 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
 import {
-    ActivityIndicator,
-    Alert,
-    SafeAreaView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  ActivityIndicator,
+  Alert,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 
 export default function NewDonationScreen() {
@@ -171,15 +171,19 @@ export default function NewDonationScreen() {
       setError('');
 
       /*
-       * STEP 1
-       * Save missing profile information.
-       */
+    |--------------------------------------------------------------------------
+    | 1. UPDATE MISSING PROFILE FIELDS
+    |--------------------------------------------------------------------------
+    */
+
       await updateProfileIfRequired(form);
 
       /*
-       * STEP 2
-       * Build donation payload.
-       */
+    |--------------------------------------------------------------------------
+    | 2. BUILD DONATION PAYLOAD
+    |--------------------------------------------------------------------------
+    */
+
       const payload = {
         name: form.name.trim(),
         email: form.email.trim(),
@@ -201,31 +205,27 @@ export default function NewDonationScreen() {
 
         payment_method: 'other',
 
-        whatsapp_opt_in: form.whatsappOptIn,
+        whatsapp_opt_in: Boolean(form.whatsappOptIn),
 
-        /*
-         * Your existing API has pan_number.
-         */
         pan_number:
           form.identityType === 'pan'
             ? form.identityNumber.trim().toUpperCase()
             : '',
 
-        /*
-         * Keep only if your backend supports it.
-         */
         aadhaar_number:
           form.identityType === 'aadhaar'
-            ? form.identityNumber.replace(/\s/g, '')
+            ? form.identityNumber.replace(/\D/g, '')
             : '',
       };
 
       console.log('[Donation] Creating donation:', payload);
 
       /*
-       * STEP 3
-       * Create donation.
-       */
+    |--------------------------------------------------------------------------
+    | 3. CREATE DONATION
+    |--------------------------------------------------------------------------
+    */
+
       const response = await donationServices.createDonation(
         payload,
         access_token,
@@ -233,83 +233,119 @@ export default function NewDonationScreen() {
 
       console.log('[Donation] Create response:', response);
 
+      /*
+       * apiRequest transport/network level failure
+       */
       if (response?.success === false) {
         throw new Error(
-          response?.error || response?.message || 'Unable to create donation.',
+          response?.error ||
+            response?.message ||
+            response?.data?.message ||
+            'Unable to create donation.',
         );
       }
 
+      /*
+    |--------------------------------------------------------------------------
+    | 4. NORMALIZE RESPONSE
+    |--------------------------------------------------------------------------
+    */
+
       const result = normalizeDonationResponse(response);
+
+      if (!result) {
+        throw new Error('Invalid donation response received.');
+      }
 
       if (result?.status === false) {
         throw new Error(result?.message || 'Unable to create donation.');
       }
 
       /*
-       * ICICI flow hook.
-       *
-       * Your earlier donation API returns transaction/
-       * redirect information.
-       *
-       * Adapt these property names to your exact response.
-       */
-      const paymentUrl =
-        result?.payment_url ||
-        result?.redirect_url ||
-        result?.redirectURI ||
-        result?.url;
+    |--------------------------------------------------------------------------
+    | 5. EXTRACT PAYMENT DATA
+    |--------------------------------------------------------------------------
+    |
+    | Expected values from your backend:
+    |
+    | tranCtx
+    | merchantTxnNo
+    | redirectURI
+    |
+    */
+
+      const tranCtx =
+        result?.tranCtx || result?.data?.tranCtx || response?.data?.tranCtx;
 
       const merchantTxnNo =
         result?.merchantTxnNo ||
         result?.merchant_txn_no ||
-        result?.transaction_id;
+        result?.transaction_id ||
+        result?.data?.merchantTxnNo ||
+        response?.data?.merchantTxnNo;
 
-      if (paymentUrl) {
-        /*
-         * You can replace this later with your
-         * ICICI WebView/payment route.
-         */
-        Alert.alert(
-          'Donation Created',
-          'Your donation request has been created successfully.',
-          [
-            {
-              text: 'Continue',
-              onPress: () => {
-                router.push({
-                  pathname: '/home/donations/payment',
-                  params: {
-                    url: paymentUrl,
-                    merchantTxnNo: merchantTxnNo || '',
-                  },
-                });
-              },
-            },
-          ],
+      /*
+       * Optional only for debugging.
+       * Payment screen does not actually need this
+       * because it builds ICICI URL from tranCtx.
+       */
+      const redirectURI =
+        result?.redirectURI ||
+        result?.redirect_url ||
+        result?.payment_url ||
+        result?.url ||
+        result?.data?.redirectURI;
+
+      console.log('[Donation] Payment information:', {
+        tranCtx,
+        merchantTxnNo,
+        redirectURI,
+      });
+
+      /*
+    |--------------------------------------------------------------------------
+    | 6. VALIDATE PAYMENT SESSION
+    |--------------------------------------------------------------------------
+    */
+
+      if (!tranCtx) {
+        throw new Error(
+          'Payment gateway transaction context was not returned.',
         );
-
-        return;
       }
 
-      Alert.alert(
-        'Donation Created',
-        'Your donation has been created successfully.',
-        [
-          {
-            text: 'View Donations',
-            onPress: () => router.replace('/home/(tabs)/donations'),
-          },
-        ],
-      );
+      if (!merchantTxnNo) {
+        throw new Error('Merchant transaction number was not returned.');
+      }
+
+      /*
+    |--------------------------------------------------------------------------
+    | 7. OPEN PAYMENT WEBVIEW
+    |--------------------------------------------------------------------------
+    |
+    | WebView will create:
+    |
+    | https://pgpay.icici.bank.in/pg/api/v2/authRedirect
+    | ?tranCtx=xxxx
+    |
+    */
+
+      router.push({
+        pathname: '/home/(tabs)/donations/payment/[tranCtx]',
+        params: {
+          tranCtx,
+          merchantTxnNo,
+        },
+      });
     } catch (err) {
       console.log('[Donation] Submit error:', err);
 
-      setError(err?.message || 'Unable to create donation.');
+      const message =
+        err?.message || 'Unable to create donation. Please try again.';
 
-      Alert.alert(
-        'Donation Failed',
-        err?.message || 'Unable to create donation. Please try again.',
-      );
+      setError(message);
+
+      Alert.alert('Donation Failed', message);
     } finally {
       setSubmitting(false);
     }

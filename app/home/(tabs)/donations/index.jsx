@@ -412,30 +412,23 @@ const DonationHistoryScreen = () => {
                 <Text style={styles.title}>My Donations</Text>
               </View>
 
-              {/* <View style={styles.headerIcon}>
-                <Ionicons name="heart-outline" size={24} color="#FFF7EC" />
-              </View> */}
-            </View>
+              <TouchableOpacity
+                style={styles.addDonationButton}
+                activeOpacity={0.8}
+                onPress={() => router.push('/home/(tabs)/donations/new')}>
+                <Ionicons name="add" size={17} color="#ffffff" />
 
-            <Text style={styles.description}>
-              Your contribution history and donation receipts.
-            </Text>
+                <Text style={styles.addDonationText}>New Donation</Text>
+              </TouchableOpacity>
+            </View>
 
             {totalDonations > 0 && (
               <View style={styles.summaryCard}>
-                <View style={styles.summaryIcon}>
-                  <Ionicons name="receipt-outline" size={20} color="#7A4527" />
-                </View>
-
-                <View style={styles.summaryTextContainer}>
-                  <Text style={styles.summaryLabel}>Total Donations</Text>
-
+                {/* <Ionicons name="receipt-outline" size={12} color="#7A4527" /> */}
+                <Text style={styles.summaryLabel}>
+                  Total Donations :{' '}
                   <Text style={styles.summaryValue}>{totalDonations}</Text>
-                </View>
-
-                <View style={styles.summaryHeart}>
-                  <Ionicons name="heart" size={18} color="#A86B46" />
-                </View>
+                </Text>
               </View>
             )}
 
@@ -568,7 +561,7 @@ const styles = StyleSheet.create({
     // lineHeight: 21,
     color: '#82644F',
     marginTop: 0,
-    maxWidth: '85%',
+    maxWidth: '55%',
   },
 
   headerIcon: {
@@ -588,12 +581,9 @@ const styles = StyleSheet.create({
 
   summaryCard: {
     marginTop: 15,
-    backgroundColor: '#F2E2D2',
-    borderWidth: 1,
-    borderColor: '#E8D0BA',
+
     borderRadius: 18,
-    paddingHorizontal: 16,
-    paddingVertical: 4,
+    paddingVertical: 1,
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -605,6 +595,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF9F2',
     alignItems: 'center',
     justifyContent: 'center',
+    marginRight: 10,
   },
 
   summaryTextContainer: {
@@ -620,7 +611,7 @@ const styles = StyleSheet.create({
 
   summaryValue: {
     color: '#4D2D1A',
-    fontSize: 20,
+    fontSize: 12,
     fontWeight: '700',
     marginTop: 2,
   },
@@ -880,5 +871,28 @@ const styles = StyleSheet.create({
     fontSize: 12,
     flex: 1,
     lineHeight: 17,
+  },
+
+  addDonationButton: {
+    height: 34,
+    paddingHorizontal: 11,
+    borderRadius: 17,
+
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 4,
+
+    backgroundColor: '#5B321D',
+    // backgroundColor: '#FFF3E5',
+
+    borderWidth: 1,
+    borderColor: 'rgb(255, 255, 255)',
+  },
+
+  addDonationText: {
+    fontSize: 10.5,
+    fontWeight: '700',
+    color: '#FFF3E5',
   },
 });
