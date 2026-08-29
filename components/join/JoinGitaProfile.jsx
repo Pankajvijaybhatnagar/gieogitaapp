@@ -6,7 +6,7 @@ import {
   StatusBar,
   StyleSheet,
   Text,
-  View
+  View,
 } from 'react-native';
 
 import AshtaDashShalokiGita from './AshtaDashShalokiGita';
@@ -60,8 +60,6 @@ const JoinGitaProfile = ({ profile, onRefresh }) => {
         <LatestMasikParwas />
 
         <View style={styles.footer}>
-          <Text style={styles.footerSymbol}>ॐ</Text>
-
           <Text style={styles.footerText}>GIEO GITA</Text>
 
           <Text style={styles.footerSubtext}>
