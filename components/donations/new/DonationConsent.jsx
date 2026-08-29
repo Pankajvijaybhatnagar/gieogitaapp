@@ -1,33 +1,15 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-const Checkbox = ({
-  checked,
-  onPress,
-}) => {
+const Checkbox = ({ checked, onPress }) => {
   return (
     <TouchableOpacity
-      style={[
-        styles.checkbox,
-        checked && styles.checkboxActive,
-      ]}
+      style={[styles.checkbox, checked && styles.checkboxActive]}
       onPress={onPress}
-      activeOpacity={0.8}
-    >
-      {checked && (
-        <Ionicons
-          name="checkmark"
-          size={13}
-          color="#FFFFFF"
-        />
-      )}
+      activeOpacity={0.8}>
+      {checked && <Ionicons name="checkmark" size={13} color="#FFFFFF" />}
     </TouchableOpacity>
   );
 };
@@ -47,91 +29,38 @@ const DonationConsent = ({
       <View style={styles.infoCard}>
         <View style={styles.infoHeader}>
           <View style={styles.infoIcon}>
-            <Ionicons
-              name="receipt-outline"
-              size={17}
-              color="#704025"
-            />
+            <Ionicons name="receipt-outline" size={17} color="#704025" />
           </View>
 
-          <Text style={styles.infoTitle}>
-            Donation & 80G Information
-          </Text>
+          <Text style={styles.infoTitle}>Donation & 80G Information</Text>
         </View>
 
         <Text style={styles.infoText}>
-          Eligible donations may qualify for
-          tax benefits under Section 80G,
-          subject to applicable laws and GIEO
-          GITA's eligibility for the relevant
-          donation.
+          Eligible donations may qualify for tax benefits under Section 80G,
+          subject to applicable laws and GIEO GITA's eligibility for the
+          relevant donation.
         </Text>
 
         <Text style={styles.infoText}>
-          Please provide accurate name,
-          contact and identity information if
-          you require a compliant donation
-          receipt.
+          Please provide accurate name, contact and identity information if you
+          require a compliant donation receipt.
         </Text>
 
         <Text style={styles.infoText}>
-          Tax benefits, where applicable, are
-          subject to prevailing Income Tax
-          rules. Please consult your tax
-          advisor for individual eligibility.
+          Tax benefits, where applicable, are subject to prevailing Income Tax
+          rules. Please consult your tax advisor for individual eligibility.
         </Text>
       </View>
-
-      <TouchableOpacity
-        style={styles.consentRow}
-        onPress={() =>
-          setWhatsappOptIn(
-            !whatsappOptIn,
-          )
-        }
-        activeOpacity={0.85}
-      >
-        <Checkbox
-          checked={whatsappOptIn}
-          onPress={() =>
-            setWhatsappOptIn(
-              !whatsappOptIn,
-            )
-          }
-        />
-
-        <View style={styles.consentContent}>
-          <Text style={styles.consentTitle}>
-            WhatsApp Updates
-          </Text>
-
-          <Text style={styles.consentText}>
-            I would like to receive donation
-            confirmation and GIEO GITA updates
-            on WhatsApp.
-          </Text>
-        </View>
-      </TouchableOpacity>
 
       <View style={styles.consentRow}>
         <Checkbox
           checked={termsAccepted}
-          onPress={() =>
-            setTermsAccepted(
-              !termsAccepted,
-            )
-          }
+          onPress={() => setTermsAccepted(!termsAccepted)}
         />
 
         <Text style={styles.legalText}>
           I agree to the{' '}
-
-          <Text
-            style={styles.link}
-            onPress={() =>
-              router.push('/terms')
-            }
-          >
+          <Text style={styles.link} onPress={() => router.push('/terms')}>
             Terms & Conditions
           </Text>
           .
@@ -141,24 +70,14 @@ const DonationConsent = ({
       <View style={styles.consentRow}>
         <Checkbox
           checked={privacyAccepted}
-          onPress={() =>
-            setPrivacyAccepted(
-              !privacyAccepted,
-            )
-          }
+          onPress={() => setPrivacyAccepted(!privacyAccepted)}
         />
 
         <Text style={styles.legalText}>
           I have read and accept the{' '}
-
           <Text
             style={styles.link}
-            onPress={() =>
-              router.push(
-                '/privacy-policy',
-              )
-            }
-          >
+            onPress={() => router.push('/privacy-policy')}>
             Privacy Policy
           </Text>
           .

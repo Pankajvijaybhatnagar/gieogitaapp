@@ -891,7 +891,7 @@ const styles = StyleSheet.create({
   },
 
   addDonationText: {
-    fontSize: 10.5,
+    fontSize: 12,
     fontWeight: '700',
     color: '#FFF3E5',
   },
