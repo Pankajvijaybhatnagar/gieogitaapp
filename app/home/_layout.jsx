@@ -38,6 +38,7 @@ const COLORS = {
 const DRAWER_ITEMS = [
   { label: 'Home', icon: 'home', route: '/home/(tabs)' },
   { label: 'Chants', icon: 'music', route: '/home/(tabs)/chants' },
+  { label: 'My Donations', icon: 'music', route: '/home/(tabs)/donations' },
   { label: 'Reading', icon: 'book', route: '/home/(tabs)/reading' },
   { label: 'Profile', icon: 'user-circle', route: '/home/(tabs)/profile' },
   { label: 'Events', icon: 'calendar', route: '/home/eventgroup' },
