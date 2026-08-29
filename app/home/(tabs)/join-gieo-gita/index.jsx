@@ -1391,7 +1391,7 @@ export default function JoinGieoGitaScreen() {
       const hashId = response?.data?.hash_id;
 
       if (hashId) {
-        router.push(`/join-gieo-gita/${hashId}`);
+        router.push(`/home/(tabs)/join-gieo-gita/${hashId}`);
       } else {
         Alert.alert(
           'Success',
@@ -1515,7 +1515,10 @@ export default function JoinGieoGitaScreen() {
 
                 <Text style={styles.profileExistsText}>
                   Profile already exists for this number.{' '}
-                  <Link href={`/join-gieo-gita/`}>View</Link>
+                  <Link
+                    href={`/home/(tabs)/join-gieo-gita/${existingProfile?.hash_id}`}>
+                    View
+                  </Link>
                 </Text>
               </View>
             ) : null}
