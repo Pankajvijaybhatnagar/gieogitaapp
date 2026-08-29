@@ -1,14 +1,12 @@
-import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import {
-  Pressable,
   RefreshControl,
   SafeAreaView,
   ScrollView,
   StatusBar,
   StyleSheet,
   Text,
-  View,
+  View
 } from 'react-native';
 
 import AshtaDashShalokiGita from './AshtaDashShalokiGita';
@@ -38,19 +36,6 @@ const JoinGitaProfile = ({ profile, onRefresh }) => {
   return (
     <SafeAreaView style={styles.safe}>
       <StatusBar barStyle="light-content" backgroundColor={COLORS.primary} />
-
-      <View style={styles.header}>
-        <Pressable onPress={() => router.back()} style={styles.headerButton}>
-          <Ionicons name="arrow-back" size={23} color="#FFF" />
-        </Pressable>
-
-        <View style={styles.headerContent}>
-          <Text style={styles.headerSmall}>GIEO GITA</Text>
-          <Text style={styles.headerTitle}>Member Profile</Text>
-        </View>
-
-        <View style={styles.headerButtonPlaceholder} />
-      </View>
 
       <ScrollView
         style={styles.scroll}

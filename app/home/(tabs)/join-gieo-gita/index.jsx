@@ -916,6 +916,7 @@ export default function JoinGieoGitaScreen() {
   const [checkingPhone, setCheckingPhone] = useState(false);
 
   const [existingProfile, setExistingProfile] = useState(null);
+  const [existingProfileData, setExistingProfileData] = useState({});
 
   const [error, setError] = useState('');
 
@@ -1272,6 +1273,7 @@ export default function JoinGieoGitaScreen() {
 
       if (profile && typeof profile === 'object') {
         setExistingProfile(response.success);
+        setExistingProfileData(profile);
       }
     } catch (error) {
       console.log('[JOIN-GIEO-GITA] Phone check error:', error);
@@ -1516,7 +1518,7 @@ export default function JoinGieoGitaScreen() {
                 <Text style={styles.profileExistsText}>
                   Profile already exists for this number.{' '}
                   <Link
-                    href={`/home/(tabs)/join-gieo-gita/${existingProfile?.hash_id}`}>
+                    href={`/home/join-gieo-gita/${existingProfileData?.hash_id}`}>
                     View
                   </Link>
                 </Text>

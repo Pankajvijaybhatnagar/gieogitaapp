@@ -1,3 +1,4 @@
+import JoinGitaProfile from '@/components/join/JoinGitaProfile';
 import joinGieoGitaServices from '@/lib/services/joinGieoGitaServices';
 import { Ionicons } from '@expo/vector-icons';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
