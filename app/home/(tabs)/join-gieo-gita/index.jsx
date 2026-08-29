@@ -21,7 +21,7 @@ import {
 
 import { Ionicons } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { Stack, useRouter } from 'expo-router';
+import { Link, Stack, useRouter } from 'expo-router';
 
 import joinGieoGitaServices from '@/lib/services/joinGieoGitaServices';
 
@@ -110,7 +110,6 @@ const TIMEZONE_COUNTRY_MAP = {
   'Asia/Kathmandu': 'Nepal',
 
   'Asia/Colombo': 'Sri Lanka',
-
 
   'Asia/Singapore': 'Singapore',
 
@@ -1272,7 +1271,7 @@ export default function JoinGieoGitaScreen() {
       const profile = response?.data?.data || response?.data || null;
 
       if (profile && typeof profile === 'object') {
-        setExistingProfile(profile);
+        setExistingProfile(response.success);
       }
     } catch (error) {
       console.log('[JOIN-GIEO-GITA] Phone check error:', error);
@@ -1515,7 +1514,8 @@ export default function JoinGieoGitaScreen() {
                 />
 
                 <Text style={styles.profileExistsText}>
-                  Profile already exists for this number.
+                  Profile already exists for this number.{' '}
+                  <Link href={`/join-gieo-gita/`}>View</Link>
                 </Text>
               </View>
             ) : null}
