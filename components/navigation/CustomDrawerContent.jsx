@@ -33,15 +33,17 @@ const DRAWER_ITEMS = [
   { label: 'Home', icon: 'home', route: '/home/(tabs)' },
   { label: 'Chants', icon: 'music', route: '/home/(tabs)/chants' },
   { label: 'My Donations', icon: 'music', route: '/home/(tabs)/donations' },
+  { label: 'Patrika', icon: 'book', route: '/home/(tabs)/patrika' },
   { label: 'Reading', icon: 'book', route: '/home/(tabs)/reading' },
-  { label: 'Profile', icon: 'user-circle', route: '/home/(tabs)/profile' },
   { label: 'Events', icon: 'calendar', route: '/home/eventgroup' },
+  { label: 'Bhajans', icon: 'music', route: '/home/bhajans' },
   { label: 'Live Darshan', icon: 'video-camera', route: '/home/livedarshan' },
   { label: 'Bal Sanskar', icon: 'child', route: '/home/balSanskar' },
   { label: 'Gaushala', icon: 'leaf', route: '/home/GieoGaushala' },
-  { label: 'Join Gieo', icon: 'users', route: '/home/JoinGieoGita' },
+  { label: 'Join Gieo Gita', icon: 'users', route: '/home/join-gieo-gita' },
   { label: 'Health', icon: 'medkit', route: '/home/health' },
   { label: 'Promotional', icon: 'bullhorn', route: '/home/promotional' },
+  { label: 'Profile', icon: 'user-circle', route: '/home/(tabs)/profile' },
   { label: 'Help', icon: 'question-circle', route: '/home/help' },
 ];
 
@@ -97,7 +99,6 @@ export default function CustomDrawerContent({ navigation }) {
         style={drawerStyles.itemsScroll}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 10 }}>
-
         {DRAWER_ITEMS.map((item, index) => (
           <TouchableOpacity
             key={index}
@@ -145,8 +146,6 @@ export default function CustomDrawerContent({ navigation }) {
           />
         </TouchableOpacity>
       </View>
-
-      
     </View>
   );
 }
