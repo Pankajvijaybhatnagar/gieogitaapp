@@ -1456,20 +1456,6 @@ export default function JoinGieoGitaScreen() {
             </Text>
           </View>
 
-          {/* ERROR */}
-
-          {error ? (
-            <View style={styles.errorBox}>
-              <Ionicons
-                name="alert-circle-outline"
-                size={18}
-                color={COLORS.red}
-              />
-
-              <Text style={styles.errorText}>{error}</Text>
-            </View>
-          ) : null}
-
           {/* =================================================
               PERSONAL
           ================================================= */}
@@ -1656,11 +1642,25 @@ export default function JoinGieoGitaScreen() {
             onPress={() => updateField('terms', !formData.terms)}
           />
 
+          {/* ERROR */}
+
+          {error ? (
+            <View style={styles.errorBox}>
+              <Ionicons
+                name="alert-circle-outline"
+                size={18}
+                color={COLORS.red}
+              />
+
+              <Text style={styles.errorText}>{error}</Text>
+            </View>
+          ) : null}
+
           {/* SUBMIT */}
 
           <Pressable
             onPress={handleSubmit}
-            disabled={submitting}
+            disabled={submitting || existingProfile}
             style={({ pressed }) => [
               styles.submitButton,
 
