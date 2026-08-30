@@ -1,9 +1,10 @@
 import { useAuth } from '@/context/AuthContext';
-import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
 import { Link, usePathname, useRouter } from 'expo-router';
 import { Drawer } from 'expo-router/drawer';
 
+import SharedTabBar from '@/components/navigation/SharedTabBar';
 import {
   Alert,
   ScrollView,
@@ -16,6 +17,9 @@ import {
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useDispatch } from 'react-redux';
+
+const TAB_BAR_HEIGHT = 58;
+const TAB_BAR_GAP = 10;
 
 // ─── COLOR PALETTE ────────────────────────────────────────────────────────────
 const COLORS = {
@@ -84,93 +88,6 @@ const TABS = [
     route: '/home/(tabs)/profile',
   },
 ];
-
-// ─────────────────────────────────────────────────────────────────────────────
-// SHARED BOTTOM TAB BAR
-// ─────────────────────────────────────────────────────────────────────────────
-function SharedTabBar() {
-  const router = useRouter();
-  const pathname = usePathname();
-  const insets = useSafeAreaInsets();
-
-  const isTabActive = route => {
-    // strip /home and /(tabs) to get the clean segment e.g. '/chants'
-    const segment = route.replace('/home', '').replace('/(tabs)', '') || '/';
-
-    if (segment === '/') {
-      // Home tab is active when on the root tabs screen
-      return (
-        pathname === '/' ||
-        pathname === '/index' ||
-        pathname === '/home' ||
-        pathname.endsWith('/(tabs)') ||
-        pathname.endsWith('/index')
-      );
-    }
-    // e.g. segment = '/chants', pathname = '/chants' or '/home/chants'
-    return pathname.endsWith(segment.replace('/', ''));
-  };
-
-  return (
-    <View style={[tabStyles.tabBar, { paddingBottom: insets.bottom + 8 }]}>
-      {/* Gold top line */}
-      <View style={tabStyles.topGoldLine} />
-
-      <View style={tabStyles.tabBarInner}>
-        {TABS.map((tab, index) => {
-          const isSeva = tab.label === 'Seva';
-          const isActive = isTabActive(tab.route);
-
-          return (
-            <TouchableOpacity
-              key={index}
-              onPress={() => router.push(tab.route)}
-              activeOpacity={0.75}
-              style={[tabStyles.tabItem, isSeva && tabStyles.tabItemSeva]}>
-              {/* Active pill highlight — regular tabs only */}
-              {isActive && !isSeva && <View style={tabStyles.activePill} />}
-
-              {isSeva ? (
-                /* ── Elevated Seva centre button ── */
-                <View
-                  style={[
-                    tabStyles.sevaButton,
-                    isActive && tabStyles.sevaButtonActive,
-                  ]}>
-                  <MaterialCommunityIcons
-                    name={isActive ? tab.iconFocused : tab.icon}
-                    size={26}
-                    color={isActive ? COLORS.deepBrown : COLORS.goldLight}
-                  />
-                </View>
-              ) : (
-                /* ── Regular tab icon ── */
-                <View style={tabStyles.iconWrap}>
-                  <MaterialCommunityIcons
-                    name={isActive ? tab.iconFocused : tab.icon}
-                    size={22}
-                    color={isActive ? COLORS.goldLight : COLORS.goldDark}
-                  />
-                  {isActive && <View style={tabStyles.activeDot} />}
-                </View>
-              )}
-
-              <Text
-                style={[
-                  tabStyles.tabLabel,
-                  isActive && tabStyles.tabLabelActive,
-                  isSeva && tabStyles.tabLabelSeva,
-                  isSeva && isActive && tabStyles.tabLabelSevaActive,
-                ]}>
-                {tab.label}
-              </Text>
-            </TouchableOpacity>
-          );
-        })}
-      </View>
-    </View>
-  );
-}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // CUSTOM DRAWER CONTENT
@@ -332,34 +249,36 @@ function HeaderTitle() {
 export default function HomeLayout() {
   const pathname = usePathname();
   const isProfile = pathname.includes('/profile');
+  const insets = useSafeAreaInsets();
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      {/*
-        Outer View is a column:
-          Row 1 — Drawer (flex:1, takes all remaining space)
-          Row 2 — SharedTabBar (fixed height, always visible)
-      */}
       <StatusBar
         barStyle={isProfile ? 'dark-content' : 'light-content'}
         backgroundColor={isProfile ? '#FFFFFF' : COLORS.deepBrown}
       />
+
       <View style={{ flex: 1 }}>
-        {/* ── Drawer fills everything above the tab bar ── */}
-        <View style={{ flex: 1 }}>
+        <View
+          style={{
+            flex: 1,
+
+            // Space reserved for floating tab bar
+            paddingBottom: TAB_BAR_HEIGHT + TAB_BAR_GAP + insets.bottom,
+          }}>
           <Drawer
             drawerContent={props => <CustomDrawerContent {...props} />}
             screenOptions={({ navigation }) => ({
               headerShown: !isProfile,
-              // ── Header ──────────────────────────────────────────
+
               headerStyle: {
-                // backgroundColor: `${COLORS.deepBrown}`,
-                backgroundColor: 'transperent',
+                backgroundColor: 'transparent',
                 borderBottomWidth: 1.5,
                 borderBottomColor: COLORS.gold,
                 elevation: 0,
                 shadowOpacity: 0,
               },
-              // ── Glass / Blur background ─────────────────────────
+
               headerBackground: () => (
                 <BlurView
                   intensity={35}
@@ -370,11 +289,11 @@ export default function HomeLayout() {
                   }}
                 />
               ),
+
               headerTintColor: COLORS.goldLight,
               headerTitleAlign: 'center',
               headerTitle: () => <HeaderTitle />,
 
-              // ── Menu button (left) ───────────────────────────────
               headerLeft: () => (
                 <TouchableOpacity
                   style={headerStyles.menuBtn}
@@ -383,11 +302,10 @@ export default function HomeLayout() {
                 </TouchableOpacity>
               ),
 
-              // ── Right icons ──────────────────────────────────────
               headerRight: () => (
                 <View style={headerStyles.rightRow}>
                   {__DEV__ && (
-                    <Link color={'white'} href={'/_sitemap'}>
+                    <Link color="white" href="/_sitemap">
                       S
                     </Link>
                   )}
@@ -398,8 +316,10 @@ export default function HomeLayout() {
                       size={15}
                       color={COLORS.goldLight}
                     />
+
                     <View style={headerStyles.notifDot} />
                   </TouchableOpacity>
+
                   <TouchableOpacity style={headerStyles.iconBtn}>
                     <FontAwesome
                       name="search"
@@ -410,56 +330,90 @@ export default function HomeLayout() {
                 </View>
               ),
 
-              // ── Drawer panel ─────────────────────────────────────
               drawerStyle: {
                 backgroundColor: COLORS.cream,
                 width: 300,
               },
+
               drawerActiveTintColor: COLORS.goldLight,
               drawerInactiveTintColor: COLORS.warmBrown,
+
               drawerActiveBackgroundColor: 'rgba(201,162,39,0.1)',
             })}>
-            {/* ── All screens registered ── */}
             <Drawer.Screen
               name="(tabs)"
-              options={{ drawerLabel: 'Home', title: 'Home' }}
+              options={{
+                drawerLabel: 'Home',
+                title: 'Home',
+              }}
             />
+
             <Drawer.Screen
               name="eventgroup"
-              options={{ drawerLabel: 'Events', title: 'Events' }}
+              options={{
+                drawerLabel: 'Events',
+                title: 'Events',
+              }}
             />
+
             <Drawer.Screen
               name="livedarshan"
-              options={{ drawerLabel: 'Live Darshan', title: 'Live Darshan' }}
+              options={{
+                drawerLabel: 'Live Darshan',
+                title: 'Live Darshan',
+              }}
             />
+
             <Drawer.Screen
               name="balSanskar"
-              options={{ drawerLabel: 'Bal Sanskar', title: 'Bal Sanskar' }}
+              options={{
+                drawerLabel: 'Bal Sanskar',
+                title: 'Bal Sanskar',
+              }}
             />
+
             <Drawer.Screen
               name="GieoGaushala"
-              options={{ drawerLabel: 'Gaushala', title: 'Gaushala' }}
+              options={{
+                drawerLabel: 'Gaushala',
+                title: 'Gaushala',
+              }}
             />
+
             <Drawer.Screen
               name="JoinGieoGita"
-              options={{ drawerLabel: 'Join Gieo', title: 'Join Gieo' }}
+              options={{
+                drawerLabel: 'Join Gieo',
+                title: 'Join Gieo',
+              }}
             />
+
             <Drawer.Screen
               name="health"
-              options={{ drawerLabel: 'Health', title: 'Health' }}
+              options={{
+                drawerLabel: 'Health',
+                title: 'Health',
+              }}
             />
+
             <Drawer.Screen
               name="promotional"
-              options={{ drawerLabel: 'Promotional', title: 'Promotional' }}
+              options={{
+                drawerLabel: 'Promotional',
+                title: 'Promotional',
+              }}
             />
+
             <Drawer.Screen
               name="help"
-              options={{ drawerLabel: 'Help', title: 'Help' }}
+              options={{
+                drawerLabel: 'Help',
+                title: 'Help',
+              }}
             />
           </Drawer>
         </View>
 
-        {/* ── Tab bar always visible at the bottom on ALL screens ── */}
         <SharedTabBar />
       </View>
     </GestureHandlerRootView>
@@ -527,99 +481,229 @@ const headerStyles = StyleSheet.create({
 
 // ─── BOTTOM TAB STYLES ────────────────────────────────────────────────────────
 const tabStyles = StyleSheet.create({
+  /* ==========================================
+     OUTER TAB BAR WRAPPER
+  ========================================== */
+
+  tabBarWrapper: {
+    backgroundColor: 'transparent',
+    paddingHorizontal: 0,
+    paddingTop: 8,
+  },
+
+  /* ==========================================
+     MAIN FLOATING TAB BAR
+  ========================================== */
+
   tabBar: {
-    backgroundColor: COLORS.deepBrown,
-  },
-  topGoldLine: {
-    height: 1,
-    backgroundColor: COLORS.gold,
-    opacity: 0.35,
-  },
-  tabBarInner: {
+    height: 58,
+
+    // COLORS.deepBrown (#2C1A0A) with transparency
+    backgroundColor: 'rgba(44, 26, 10, 0.90)',
+
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'flex-end',
-    paddingTop: 6,
-    paddingHorizontal: 4,
+    alignItems: 'center',
+
+    borderRadius: 29,
+
+    marginHorizontal: 5,
+
+    paddingHorizontal: 8,
+
+    // Very subtle border gives glass/floating appearance
+    borderWidth: 1,
+    borderColor: 'rgba(201, 162, 39, 0.20)',
+
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: -2,
+    },
+    shadowOpacity: 0.18,
+    shadowRadius: 8,
+
+    elevation: 10,
+
+    overflow: 'visible',
   },
+
+  /* ==========================================
+     NORMAL TAB
+  ========================================== */
+
   tabItem: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    paddingVertical: 4,
-    position: 'relative',
-    minHeight: 54,
-  },
-  activePill: {
-    position: 'absolute',
-    top: 0,
-    left: '12%',
-    right: '12%',
+
     height: '100%',
-    backgroundColor: 'rgba(201,162,39,0.1)',
-    borderRadius: 14,
-    borderWidth: 1,
-    borderColor: 'rgba(201,162,39,0.22)',
-  },
-  iconWrap: {
+
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 4,
+
+    gap: 3,
+
+    position: 'relative',
   },
-  activeDot: {
-    width: 4,
-    height: 4,
-    borderRadius: 2,
-    backgroundColor: COLORS.gold,
-    marginTop: 3,
-  },
+
   tabLabel: {
     fontSize: 9,
+
     color: COLORS.goldDark,
-    letterSpacing: 0.5,
+
     fontWeight: '600',
-    textTransform: 'uppercase',
+
+    letterSpacing: 0.2,
   },
+
   tabLabelActive: {
     color: COLORS.goldLight,
+
+    fontWeight: '700',
   },
-  tabItemSeva: {
+
+  /* ==========================================
+     CENTER SEVA TAB
+  ========================================== */
+
+  centerTab: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    paddingVertical: 4,
-    minHeight: 54,
-    marginTop: -20,
-  },
-  sevaButton: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    backgroundColor: COLORS.warmBrown,
-    borderWidth: 2,
-    borderColor: COLORS.gold,
+
+    height: 58,
+
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 4,
-    shadowColor: COLORS.gold,
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.4,
-    shadowRadius: 8,
-    elevation: 10,
+
+    position: 'relative',
+
+    overflow: 'visible',
+
+    zIndex: 20,
   },
-  sevaButtonActive: {
-    backgroundColor: COLORS.goldLight,
-    borderColor: COLORS.goldDark,
+
+  /* ==========================================
+     TRANSPARENT CENTER NOTCH AREA
+  ========================================== */
+
+  notchWrap: {
+    position: 'absolute',
+
+    top: -28,
+
+    width: 78,
+    height: 78,
+
+    alignItems: 'center',
+    justifyContent: 'center',
+
+    // IMPORTANT:
+    // Nothing behind the Seva circle
+    backgroundColor: 'transparent',
+
+    zIndex: 50,
   },
-  tabLabelSeva: {
-    fontSize: 9,
-    color: COLORS.goldDark,
+
+  /* ==========================================
+     LEFT CURVED SHOULDER
+  ========================================== */
+
+  leftShoulder: {
+    position: 'absolute',
+
+    width: 26,
+    height: 26,
+
+    left: -15,
+    bottom: 9,
+
+    backgroundColor: 'rgba(44, 26, 10, 0.90)',
+
+    borderTopRightRadius: 26,
+
+    zIndex: 1,
+  },
+
+  /* ==========================================
+     RIGHT CURVED SHOULDER
+  ========================================== */
+
+  rightShoulder: {
+    position: 'absolute',
+
+    width: 26,
+    height: 26,
+
+    right: -15,
+    bottom: 9,
+
+    backgroundColor: 'rgba(44, 26, 10, 0.90)',
+
+    borderTopLeftRadius: 26,
+
+    zIndex: 1,
+  },
+
+  /* ==========================================
+     SEVA CIRCULAR BUTTON
+  ========================================== */
+
+  centerButton: {
+    width: 60,
+    height: 60,
+
+    borderRadius: 30,
+
+    // Slightly transparent gold
+    backgroundColor: 'rgba(201, 162, 39, 0.94)',
+
+    borderWidth: 2,
+
+    borderColor: 'rgba(232, 197, 90, 0.75)',
+
+    alignItems: 'center',
+    justifyContent: 'center',
+
+    zIndex: 100,
+
+    shadowColor: '#000',
+
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+
+    shadowOpacity: 0.22,
+
+    shadowRadius: 7,
+
+    elevation: 12,
+  },
+
+  centerButtonActive: {
+    // COLORS.goldLight with slight transparency
+    backgroundColor: 'rgba(232, 197, 90, 0.96)',
+
+    borderColor: COLORS.gold,
+  },
+
+  /* ==========================================
+     SEVA LABEL
+  ========================================== */
+
+  centerLabel: {
+    fontSize: 8,
+
+    marginTop: 1,
+
+    color: COLORS.deepBrown,
+
     fontWeight: '700',
-    letterSpacing: 0.5,
-    textTransform: 'uppercase',
+
+    letterSpacing: 0.1,
   },
-  tabLabelSevaActive: {
-    color: COLORS.goldLight,
+
+  centerLabelActive: {
+    color: COLORS.deepBrown,
+
+    fontWeight: '800',
   },
 });
 
