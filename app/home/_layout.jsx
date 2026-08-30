@@ -15,11 +15,7 @@ import {
   View,
 } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useDispatch } from 'react-redux';
-
-const TAB_BAR_HEIGHT = 58;
-const TAB_BAR_GAP = 10;
 
 // ─── COLOR PALETTE ────────────────────────────────────────────────────────────
 const COLORS = {
@@ -249,36 +245,34 @@ function HeaderTitle() {
 export default function HomeLayout() {
   const pathname = usePathname();
   const isProfile = pathname.includes('/profile');
-  const insets = useSafeAreaInsets();
-
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
+      {/*
+        Outer View is a column:
+          Row 1 — Drawer (flex:1, takes all remaining space)
+          Row 2 — SharedTabBar (fixed height, always visible)
+      */}
       <StatusBar
         barStyle={isProfile ? 'dark-content' : 'light-content'}
         backgroundColor={isProfile ? '#FFFFFF' : COLORS.deepBrown}
       />
-
       <View style={{ flex: 1 }}>
-        <View
-          style={{
-            flex: 1,
-
-            // Space reserved for floating tab bar
-            paddingBottom: TAB_BAR_HEIGHT + TAB_BAR_GAP + insets.bottom,
-          }}>
+        {/* ── Drawer fills everything above the tab bar ── */}
+        <View style={{ flex: 1 }}>
           <Drawer
             drawerContent={props => <CustomDrawerContent {...props} />}
             screenOptions={({ navigation }) => ({
               headerShown: !isProfile,
-
+              // ── Header ──────────────────────────────────────────
               headerStyle: {
-                backgroundColor: 'transparent',
+                // backgroundColor: `${COLORS.deepBrown}`,
+                backgroundColor: 'transperent',
                 borderBottomWidth: 1.5,
                 borderBottomColor: COLORS.gold,
                 elevation: 0,
                 shadowOpacity: 0,
               },
-
+              // ── Glass / Blur background ─────────────────────────
               headerBackground: () => (
                 <BlurView
                   intensity={35}
@@ -289,11 +283,11 @@ export default function HomeLayout() {
                   }}
                 />
               ),
-
               headerTintColor: COLORS.goldLight,
               headerTitleAlign: 'center',
               headerTitle: () => <HeaderTitle />,
 
+              // ── Menu button (left) ───────────────────────────────
               headerLeft: () => (
                 <TouchableOpacity
                   style={headerStyles.menuBtn}
@@ -302,10 +296,11 @@ export default function HomeLayout() {
                 </TouchableOpacity>
               ),
 
+              // ── Right icons ──────────────────────────────────────
               headerRight: () => (
                 <View style={headerStyles.rightRow}>
                   {__DEV__ && (
-                    <Link color="white" href="/_sitemap">
+                    <Link color={'white'} href={'/_sitemap'}>
                       S
                     </Link>
                   )}
@@ -316,10 +311,8 @@ export default function HomeLayout() {
                       size={15}
                       color={COLORS.goldLight}
                     />
-
                     <View style={headerStyles.notifDot} />
                   </TouchableOpacity>
-
                   <TouchableOpacity style={headerStyles.iconBtn}>
                     <FontAwesome
                       name="search"
@@ -330,90 +323,56 @@ export default function HomeLayout() {
                 </View>
               ),
 
+              // ── Drawer panel ─────────────────────────────────────
               drawerStyle: {
                 backgroundColor: COLORS.cream,
                 width: 300,
               },
-
               drawerActiveTintColor: COLORS.goldLight,
               drawerInactiveTintColor: COLORS.warmBrown,
-
               drawerActiveBackgroundColor: 'rgba(201,162,39,0.1)',
             })}>
+            {/* ── All screens registered ── */}
             <Drawer.Screen
               name="(tabs)"
-              options={{
-                drawerLabel: 'Home',
-                title: 'Home',
-              }}
+              options={{ drawerLabel: 'Home', title: 'Home' }}
             />
-
             <Drawer.Screen
               name="eventgroup"
-              options={{
-                drawerLabel: 'Events',
-                title: 'Events',
-              }}
+              options={{ drawerLabel: 'Events', title: 'Events' }}
             />
-
             <Drawer.Screen
               name="livedarshan"
-              options={{
-                drawerLabel: 'Live Darshan',
-                title: 'Live Darshan',
-              }}
+              options={{ drawerLabel: 'Live Darshan', title: 'Live Darshan' }}
             />
-
             <Drawer.Screen
               name="balSanskar"
-              options={{
-                drawerLabel: 'Bal Sanskar',
-                title: 'Bal Sanskar',
-              }}
+              options={{ drawerLabel: 'Bal Sanskar', title: 'Bal Sanskar' }}
             />
-
             <Drawer.Screen
               name="GieoGaushala"
-              options={{
-                drawerLabel: 'Gaushala',
-                title: 'Gaushala',
-              }}
+              options={{ drawerLabel: 'Gaushala', title: 'Gaushala' }}
             />
-
             <Drawer.Screen
               name="JoinGieoGita"
-              options={{
-                drawerLabel: 'Join Gieo',
-                title: 'Join Gieo',
-              }}
+              options={{ drawerLabel: 'Join Gieo', title: 'Join Gieo' }}
             />
-
             <Drawer.Screen
               name="health"
-              options={{
-                drawerLabel: 'Health',
-                title: 'Health',
-              }}
+              options={{ drawerLabel: 'Health', title: 'Health' }}
             />
-
             <Drawer.Screen
               name="promotional"
-              options={{
-                drawerLabel: 'Promotional',
-                title: 'Promotional',
-              }}
+              options={{ drawerLabel: 'Promotional', title: 'Promotional' }}
             />
-
             <Drawer.Screen
               name="help"
-              options={{
-                drawerLabel: 'Help',
-                title: 'Help',
-              }}
+              options={{ drawerLabel: 'Help', title: 'Help' }}
             />
           </Drawer>
         </View>
 
+        {/* ── Tab bar always visible at the bottom on ALL screens ── */}
         <SharedTabBar />
       </View>
     </GestureHandlerRootView>
