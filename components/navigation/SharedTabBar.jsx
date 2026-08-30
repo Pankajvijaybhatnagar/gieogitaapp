@@ -73,7 +73,6 @@ export default function SharedTabBar() {
 
   return (
     <View
-      pointerEvents="box-none"
       style={[
         styles.tabBarWrapper,
         {
@@ -85,6 +84,9 @@ export default function SharedTabBar() {
           const isSeva = tab.label === 'Seva';
           const isActive = isTabActive(tab.route);
 
+          // ─────────────────────────────────────────
+          // CENTER SEVA BUTTON
+          // ─────────────────────────────────────────
           if (isSeva) {
             return (
               <TouchableOpacity
@@ -120,6 +122,9 @@ export default function SharedTabBar() {
             );
           }
 
+          // ─────────────────────────────────────────
+          // NORMAL TAB
+          // ─────────────────────────────────────────
           return (
             <TouchableOpacity
               key={index}
@@ -146,44 +151,53 @@ export default function SharedTabBar() {
 }
 
 const styles = StyleSheet.create({
+  // =====================================================
+  // WRAPPER
+  // =====================================================
+  //
+  // NOT ABSOLUTE
+  //
+  // This takes real space in the parent layout.
+  // The wrapper itself is completely transparent.
+  //
   tabBarWrapper: {
-    position: 'absolute',
-
-    left: 0,
-    right: 0,
-    bottom: 0,
+    width: '100%',
 
     backgroundColor: 'transparent',
 
-    paddingTop: 12,
+    
 
     zIndex: 999,
 
     elevation: 20,
   },
 
+  // =====================================================
+  // ACTUAL TAB BAR
+  // =====================================================
+
   tabBar: {
     height: 58,
 
-    backgroundColor: 'rgba(44, 26, 10, 0.90)',
+    width: '100%',
+
+    backgroundColor: COLORS.deepBrown,
 
     flexDirection: 'row',
+
     alignItems: 'center',
-
-    borderRadius: 54,
-
-    marginHorizontal: 10,
 
     paddingHorizontal: 8,
 
-    borderWidth: 1,
+    borderTopWidth: 1,
+
     borderColor: 'rgba(201, 162, 39, 0.22)',
 
     shadowColor: '#000',
 
     shadowOffset: {
       width: 0,
-      height: 4,
+      height: -4,
     },
 
     shadowOpacity: 0.22,
@@ -195,12 +209,17 @@ const styles = StyleSheet.create({
     overflow: 'visible',
   },
 
+  // =====================================================
+  // NORMAL TAB
+  // =====================================================
+
   tabItem: {
     flex: 1,
 
     height: '100%',
 
     alignItems: 'center',
+
     justifyContent: 'center',
 
     gap: 3,
@@ -224,12 +243,17 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
 
+  // =====================================================
+  // CENTER SEVA TAB
+  // =====================================================
+
   centerTab: {
     flex: 1,
 
     height: 58,
 
     alignItems: 'center',
+
     justifyContent: 'center',
 
     position: 'relative',
@@ -239,15 +263,21 @@ const styles = StyleSheet.create({
     zIndex: 20,
   },
 
+  // =====================================================
+  // CENTER NOTCH
+  // =====================================================
+
   notchWrap: {
     position: 'absolute',
 
     top: -29,
 
     width: 78,
+
     height: 78,
 
     alignItems: 'center',
+
     justifyContent: 'center',
 
     backgroundColor: 'transparent',
@@ -255,40 +285,57 @@ const styles = StyleSheet.create({
     zIndex: 50,
   },
 
+  // =====================================================
+  // LEFT SHOULDER
+  // =====================================================
+
   leftShoulder: {
     position: 'absolute',
 
     width: 28,
+
     height: 28,
 
     left: -17,
+
     bottom: 10,
 
-    backgroundColor: 'rgba(44, 26, 10, 0.90)',
+    backgroundColor: COLORS.deepBrown,
 
     borderTopRightRadius: 28,
 
     zIndex: 1,
   },
 
+  // =====================================================
+  // RIGHT SHOULDER
+  // =====================================================
+
   rightShoulder: {
     position: 'absolute',
 
     width: 28,
+
     height: 28,
 
     right: -17,
+
     bottom: 10,
 
-    backgroundColor: 'rgba(44, 26, 10, 0.90)',
+    backgroundColor: COLORS.deepBrown,
 
     borderTopLeftRadius: 28,
 
     zIndex: 1,
   },
 
+  // =====================================================
+  // CENTER BUTTON
+  // =====================================================
+
   centerButton: {
     width: 62,
+
     height: 62,
 
     borderRadius: 31,
@@ -300,6 +347,7 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(232, 197, 90, 0.8)',
 
     alignItems: 'center',
+
     justifyContent: 'center',
 
     zIndex: 100,
@@ -323,6 +371,10 @@ const styles = StyleSheet.create({
 
     borderColor: COLORS.gold,
   },
+
+  // =====================================================
+  // CENTER LABEL
+  // =====================================================
 
   centerLabel: {
     fontSize: 8,

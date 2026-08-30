@@ -19,6 +19,7 @@ import DonationConsent from './DonationConsent';
 import FormField from './FormField';
 import IdentityFields from './IdentityFields';
 import SevaTypeSelector from './SevaTypeSelector';
+import AppOverlay from '../../common/AppOverlay';
 
 const DonationForm = ({ profile, submitting, serverError, onSubmit }) => {
   const [name, setName] = useState('');
@@ -27,7 +28,7 @@ const DonationForm = ({ profile, submitting, serverError, onSubmit }) => {
 
   const [phone, setPhone] = useState('');
 
-  const [amount, setAmount] = useState('501');
+  const [amount, setAmount] = useState('');
 
   const [sevaType, setSevaType] = useState('other');
 
@@ -54,6 +55,8 @@ const DonationForm = ({ profile, submitting, serverError, onSubmit }) => {
   const [termsAccepted, setTermsAccepted] = useState(false);
 
   const [privacyAccepted, setPrivacyAccepted] = useState(false);
+
+  const [isCustomAlertShow, setIsCustomAlertShow] = useState(false);
 
   /*
   |--------------------------------------------------------------------------
@@ -140,6 +143,7 @@ const DonationForm = ({ profile, submitting, serverError, onSubmit }) => {
 
     if (!numericAmount || numericAmount <= 0) {
       Alert.alert('Amount Required', 'Please enter a valid donation amount.');
+      
 
       return false;
     }

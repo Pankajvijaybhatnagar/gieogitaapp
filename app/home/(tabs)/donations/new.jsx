@@ -3,8 +3,9 @@ import { useAuth } from '@/context/AuthContext';
 import donationServices from '@/lib/services/donationServices';
 import userServices from '@/lib/services/userServices';
 import { Ionicons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
+
 import {
   ActivityIndicator,
   Alert,
@@ -18,6 +19,33 @@ import {
 export default function NewDonationScreen() {
   const router = useRouter();
 
+  // =========================================================
+  // URL PARAMS
+  // /home/donations/new?sevaType=anna%20seva&amount=500
+  // =========================================================
+
+  const params = useLocalSearchParams();
+
+  const sevaTypeParam = Array.isArray(params.sevaType)
+    ? params.sevaType[0]
+    : params.sevaType;
+
+  const amountParam = Array.isArray(params.amount)
+    ? params.amount[0]
+    : params.amount;
+
+  // Keep undefined when params are not supplied.
+  // This means normal donation flow remains unchanged.
+  const initialSevaType =
+    typeof sevaTypeParam === 'string' && sevaTypeParam.trim()
+      ? sevaTypeParam.trim()
+      : undefined;
+
+  const initialAmount =
+    typeof amountParam === 'string' && amountParam.trim()
+      ? amountParam.trim()
+      : undefined;
+
   const {
     user,
     access_token,
@@ -29,6 +57,10 @@ export default function NewDonationScreen() {
   const [profileLoading, setProfileLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
+
+  // =========================================================
+  // NORMALIZE PROFILE RESPONSE
+  // =========================================================
 
   const normalizeProfileResponse = result => {
     if (result?.data?.data && typeof result.data.data === 'object') {
@@ -46,6 +78,10 @@ export default function NewDonationScreen() {
     return null;
   };
 
+  // =========================================================
+  // NORMALIZE DONATION RESPONSE
+  // =========================================================
+
   const normalizeDonationResponse = result => {
     if (result?.data && typeof result.data === 'object') {
       return result.data;
@@ -53,6 +89,10 @@ export default function NewDonationScreen() {
 
     return result;
   };
+
+  // =========================================================
+  // FETCH PROFILE
+  // =========================================================
 
   const fetchProfile = useCallback(async () => {
     if (!access_token) {
@@ -92,6 +132,10 @@ export default function NewDonationScreen() {
     }
   }, [access_token, user]);
 
+  // =========================================================
+  // LOAD PROFILE AFTER AUTH
+  // =========================================================
+
   useEffect(() => {
     if (authLoading) {
       return;
@@ -104,6 +148,10 @@ export default function NewDonationScreen() {
 
     fetchProfile();
   }, [authLoading, isAuthenticated, access_token, fetchProfile]);
+
+  // =========================================================
+  // UPDATE MISSING PROFILE FIELDS
+  // =========================================================
 
   const updateProfileIfRequired = async form => {
     const current = profile || {};
@@ -160,6 +208,10 @@ export default function NewDonationScreen() {
     return true;
   };
 
+  // =========================================================
+  // CREATE DONATION
+  // =========================================================
+
   const handleCreateDonation = async form => {
     if (!access_token) {
       router.push('/login2');
@@ -170,19 +222,15 @@ export default function NewDonationScreen() {
       setSubmitting(true);
       setError('');
 
-      /*
-    |--------------------------------------------------------------------------
-    | 1. UPDATE MISSING PROFILE FIELDS
-    |--------------------------------------------------------------------------
-    */
+      // =====================================================
+      // 1. UPDATE MISSING PROFILE FIELDS
+      // =====================================================
 
       await updateProfileIfRequired(form);
 
-      /*
-    |--------------------------------------------------------------------------
-    | 2. BUILD DONATION PAYLOAD
-    |--------------------------------------------------------------------------
-    */
+      // =====================================================
+      // 2. BUILD DONATION PAYLOAD
+      // =====================================================
 
       const payload = {
         name: form.name.trim(),
@@ -220,11 +268,9 @@ export default function NewDonationScreen() {
 
       console.log('[Donation] Creating donation:', payload);
 
-      /*
-    |--------------------------------------------------------------------------
-    | 3. CREATE DONATION
-    |--------------------------------------------------------------------------
-    */
+      // =====================================================
+      // 3. CREATE DONATION
+      // =====================================================
 
       const response = await donationServices.createDonation(
         payload,
@@ -233,9 +279,6 @@ export default function NewDonationScreen() {
 
       console.log('[Donation] Create response:', response);
 
-      /*
-       * apiRequest transport/network level failure
-       */
       if (response?.success === false) {
         throw new Error(
           response?.error ||
@@ -245,11 +288,9 @@ export default function NewDonationScreen() {
         );
       }
 
-      /*
-    |--------------------------------------------------------------------------
-    | 4. NORMALIZE RESPONSE
-    |--------------------------------------------------------------------------
-    */
+      // =====================================================
+      // 4. NORMALIZE RESPONSE
+      // =====================================================
 
       const result = normalizeDonationResponse(response);
 
@@ -261,18 +302,9 @@ export default function NewDonationScreen() {
         throw new Error(result?.message || 'Unable to create donation.');
       }
 
-      /*
-    |--------------------------------------------------------------------------
-    | 5. EXTRACT PAYMENT DATA
-    |--------------------------------------------------------------------------
-    |
-    | Expected values from your backend:
-    |
-    | tranCtx
-    | merchantTxnNo
-    | redirectURI
-    |
-    */
+      // =====================================================
+      // 5. EXTRACT PAYMENT DATA
+      // =====================================================
 
       const tranCtx =
         result?.tranCtx || result?.data?.tranCtx || response?.data?.tranCtx;
@@ -284,11 +316,6 @@ export default function NewDonationScreen() {
         result?.data?.merchantTxnNo ||
         response?.data?.merchantTxnNo;
 
-      /*
-       * Optional only for debugging.
-       * Payment screen does not actually need this
-       * because it builds ICICI URL from tranCtx.
-       */
       const redirectURI =
         result?.redirectURI ||
         result?.redirect_url ||
@@ -302,11 +329,9 @@ export default function NewDonationScreen() {
         redirectURI,
       });
 
-      /*
-    |--------------------------------------------------------------------------
-    | 6. VALIDATE PAYMENT SESSION
-    |--------------------------------------------------------------------------
-    */
+      // =====================================================
+      // 6. VALIDATE PAYMENT SESSION
+      // =====================================================
 
       if (!tranCtx) {
         throw new Error(
@@ -318,17 +343,9 @@ export default function NewDonationScreen() {
         throw new Error('Merchant transaction number was not returned.');
       }
 
-      /*
-    |--------------------------------------------------------------------------
-    | 7. OPEN PAYMENT WEBVIEW
-    |--------------------------------------------------------------------------
-    |
-    | WebView will create:
-    |
-    | https://pgpay.icici.bank.in/pg/api/v2/authRedirect
-    | ?tranCtx=xxxx
-    |
-    */
+      // =====================================================
+      // 7. OPEN PAYMENT WEBVIEW
+      // =====================================================
 
       router.push({
         pathname: '/home/(tabs)/donations/payment/[tranCtx]',
@@ -351,11 +368,9 @@ export default function NewDonationScreen() {
     }
   };
 
-  /*
-  |--------------------------------------------------------------------------
-  | AUTH LOADING
-  |--------------------------------------------------------------------------
-  */
+  // =========================================================
+  // AUTH LOADING
+  // =========================================================
 
   if (authLoading) {
     return (
@@ -369,11 +384,9 @@ export default function NewDonationScreen() {
     );
   }
 
-  /*
-  |--------------------------------------------------------------------------
-  | NOT LOGGED IN
-  |--------------------------------------------------------------------------
-  */
+  // =========================================================
+  // NOT LOGGED IN
+  // =========================================================
 
   if (!isAuthenticated || !access_token || !user) {
     return (
@@ -405,11 +418,9 @@ export default function NewDonationScreen() {
     );
   }
 
-  /*
-  |--------------------------------------------------------------------------
-  | PROFILE LOADING
-  |--------------------------------------------------------------------------
-  */
+  // =========================================================
+  // PROFILE LOADING
+  // =========================================================
 
   if (profileLoading) {
     return (
@@ -423,6 +434,10 @@ export default function NewDonationScreen() {
     );
   }
 
+  // =========================================================
+  // DONATION FORM
+  // =========================================================
+
   return (
     <SafeAreaView style={styles.screen}>
       <DonationForm
@@ -430,10 +445,30 @@ export default function NewDonationScreen() {
         submitting={submitting}
         serverError={error}
         onSubmit={handleCreateDonation}
+
+        // ===================================================
+        // OPTIONAL URL VALUES
+        //
+        // If URL contains:
+        //
+        // ?sevaType=Anna%20Seva&amount=500
+        //
+        // these will be available inside DonationForm.
+        //
+        // If URL does NOT contain them, they are undefined
+        // and the normal donation form flow remains unchanged.
+        // ===================================================
+
+        initialSevaType={initialSevaType}
+        initialAmount={initialAmount}
       />
     </SafeAreaView>
   );
 }
+
+// ===========================================================
+// STYLES
+// ===========================================================
 
 const styles = StyleSheet.create({
   screen: {

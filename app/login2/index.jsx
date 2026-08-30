@@ -105,13 +105,13 @@ const Login2 = () => {
   |--------------------------------------------------------------------------
   */
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      console.log('LOGIN2: AUTHENTICATED USER', user);
+  // useEffect(() => {
+  //   if (isAuthenticated) {
+  //     console.log('LOGIN2: AUTHENTICATED USER', user);
 
-      router.back();
-    }
-  }, [isAuthenticated, user, router]);
+  //     router.back();
+  //   }
+  // }, [isAuthenticated, user, router]);
 
   /*
   |--------------------------------------------------------------------------

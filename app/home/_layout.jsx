@@ -256,7 +256,7 @@ export default function HomeLayout() {
         barStyle={isProfile ? 'dark-content' : 'light-content'}
         backgroundColor={isProfile ? '#FFFFFF' : COLORS.deepBrown}
       />
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, backgroundColor: 'transparent' }}>
         {/* ── Drawer fills everything above the tab bar ── */}
         <View style={{ flex: 1 }}>
           <Drawer
@@ -561,7 +561,7 @@ const tabStyles = StyleSheet.create({
   },
 
   /* ==========================================
-     LEFT CURVED SHOULDER
+     LEFT CURVED s
   ========================================== */
 
   leftShoulder: {
