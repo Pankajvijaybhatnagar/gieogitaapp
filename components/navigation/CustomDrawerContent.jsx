@@ -33,7 +33,7 @@ const DRAWER_ITEMS = [
   { label: 'Home', icon: 'home', route: '/home/(tabs)' },
   { label: 'Chants', icon: 'music', route: '/home/(tabs)/chants' },
   { label: 'My Donations', icon: 'music', route: '/home/(tabs)/donations' },
-  { label: 'Patrika', icon: 'book', route: '/home/(tabs)/patrika' },
+  { label: 'Patrika', icon: 'book', route: '/home/patrika' },
   { label: 'Reading', icon: 'book', route: '/home/(tabs)/reading' },
   { label: 'Events', icon: 'calendar', route: '/home/eventgroup' },
   { label: 'Bhajans', icon: 'music', route: '/home/bhajans' },
