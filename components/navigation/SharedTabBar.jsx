@@ -165,8 +165,6 @@ const styles = StyleSheet.create({
 
     backgroundColor: 'transparent',
 
-    
-
     zIndex: 999,
 
     elevation: 20,
