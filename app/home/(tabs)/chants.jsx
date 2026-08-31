@@ -1,3 +1,6 @@
+import { PaathCounter } from '@/components/chants/PaathCounter';
+import { TotalPaath } from '@/components/chants/TotalPaath';
+import { YourPaath } from '@/components/chants/YourPaath';
 import { FontAwesome } from '@expo/vector-icons';
 import { useEffect, useRef, useState } from 'react';
 import {
@@ -5,7 +8,6 @@ import {
   Animated,
   Dimensions,
   Image,
-  PanResponder,
   ScrollView,
   StyleSheet,
   Text,
@@ -68,256 +70,12 @@ function GoldDivider() {
 }
 
 // ─── REUSABLE: SECTION LABEL ─────────────────────────────────────────────────
-function SectionLabel({ text }) {
+export function SectionLabel({ text }) {
   return (
     <View style={sharedStyles.sectionLabelRow}>
       <View style={sharedStyles.sectionLabelLine} />
       <Text style={sharedStyles.sectionLabelText}>{text}</Text>
       <View style={sharedStyles.sectionLabelLine} />
-    </View>
-  );
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// 1. GLOBAL PAATH COUNT  — animated count-up
-// ─────────────────────────────────────────────────────────────────────────────
-function TotalPaath() {
-  const GLOBAL_TOTAL = 23562558;
-  const [displayed, setDisplayed] = useState(0);
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const scaleAnim = useRef(new Animated.Value(0.85)).current;
-
-  useEffect(() => {
-    Animated.parallel([
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 900,
-        useNativeDriver: true,
-      }),
-      Animated.spring(scaleAnim, {
-        toValue: 1,
-        friction: 6,
-        useNativeDriver: true,
-      }),
-    ]).start();
-
-    let current = 0;
-    const stepTime = 40;
-    const totalSteps = Math.ceil(2200 / stepTime);
-    const increment = Math.ceil(GLOBAL_TOTAL / totalSteps);
-
-    const timer = setInterval(() => {
-      current += increment;
-      if (current >= GLOBAL_TOTAL) {
-        current = GLOBAL_TOTAL;
-        clearInterval(timer);
-      }
-      setDisplayed(current);
-    }, stepTime);
-
-    return () => clearInterval(timer);
-  }, []);
-
-  return (
-    <Animated.View
-      style={[
-        tcStyles.wrapper,
-        { opacity: fadeAnim, transform: [{ scale: scaleAnim }] },
-      ]}>
-      <View style={tcStyles.bgCircle1} />
-      <View style={tcStyles.bgCircle2} />
-      <Text style={tcStyles.eyebrow}>🕉️ EK MIN EK SAATH — GLOBAL COUNT</Text>
-      <Text style={tcStyles.label}>Total Gita Paath</Text>
-      {/* <Link href={'/home/chanting'}>chanting</Link> */}
-      <View style={tcStyles.countBox}>
-        <Text style={tcStyles.countText}>{displayed.toLocaleString()}</Text>
-      </View>
-      <Text style={tcStyles.subText}>Verses recited together worldwide 🙏</Text>
-    </Animated.View>
-  );
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// 2. YOUR PAATH PROGRESS  — personal stats
-// ─────────────────────────────────────────────────────────────────────────────
-function YourPaath({ totalPaath, monthProgress, weekProgress }) {
-  return (
-    <View style={ycStyles.wrapper}>
-      <SectionLabel text="YOUR PAATH PROGRESS" />
-      <View style={ycStyles.row}>
-        {/* Total */}
-        <View style={ycStyles.totalBox}>
-          <Text style={ycStyles.totalLabel}>Total{'\n'}Paath</Text>
-          <View style={ycStyles.totalDivider} />
-          <Text style={ycStyles.totalNumber}>{totalPaath}</Text>
-          <Text style={ycStyles.totalIcon}>📖</Text>
-        </View>
-
-        {/* Month + Week */}
-        <View style={ycStyles.progressCol}>
-          <View style={ycStyles.progressCard}>
-            <View style={ycStyles.progressIconBox}>
-              <Text style={ycStyles.progressIcon}>📅</Text>
-            </View>
-            <View style={ycStyles.progressTextCol}>
-              <Text style={ycStyles.progressLabel}>Month Paath</Text>
-              <Text style={ycStyles.progressNumber}>{monthProgress}</Text>
-            </View>
-          </View>
-
-          <View style={ycStyles.progressCard}>
-            <View style={ycStyles.progressIconBox}>
-              <Text style={ycStyles.progressIcon}>🗓️</Text>
-            </View>
-            <View style={ycStyles.progressTextCol}>
-              <Text style={ycStyles.progressLabel}>Week Paath</Text>
-              <Text style={ycStyles.progressNumber}>{weekProgress}</Text>
-            </View>
-          </View>
-        </View>
-      </View>
-    </View>
-  );
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// 3. PAATH COUNTER  — submit today's recitations
-// ─────────────────────────────────────────────────────────────────────────────
-function PaathCounter({ todayPaath, onSubmit }) {
-  const [count, setCount] = useState(0);
-  const bounceAnim = useRef(new Animated.Value(1)).current;
-  const submitScaleAnim = useRef(new Animated.Value(1)).current;
-
-  const bounce = () => {
-    Animated.sequence([
-      Animated.spring(bounceAnim, {
-        toValue: 1.18,
-        useNativeDriver: true,
-        friction: 3,
-      }),
-      Animated.spring(bounceAnim, {
-        toValue: 1,
-        useNativeDriver: true,
-        friction: 5,
-      }),
-    ]).start();
-  };
-
-  const panResponder = useRef(
-    PanResponder.create({
-      onMoveShouldSetPanResponder: () => true,
-      onPanResponderMove: (_, g) => {
-        if (g.dy > 10) decrementCount();
-        else if (g.dy < -10) incrementCount();
-      },
-    }),
-  ).current;
-
-  const incrementCount = () => {
-    setCount(p => p + 1);
-    bounce();
-  };
-  const decrementCount = () => {
-    if (count > 0) {
-      setCount(p => p - 1);
-      bounce();
-    }
-  };
-
-  const handleSubmit = () => {
-    if (count === 0) {
-      Alert.alert(
-        '🕉️ No Paath',
-        'Please add at least 1 paath before submitting.',
-      );
-      return;
-    }
-    Animated.sequence([
-      Animated.spring(submitScaleAnim, {
-        toValue: 0.93,
-        useNativeDriver: true,
-        friction: 4,
-      }),
-      Animated.spring(submitScaleAnim, {
-        toValue: 1,
-        useNativeDriver: true,
-        friction: 4,
-      }),
-    ]).start();
-    onSubmit(count);
-    setCount(0);
-  };
-
-  return (
-    <View style={ccStyles.wrapper}>
-      <SectionLabel text="SUBMIT TODAY'S PAATH" />
-
-      <View style={ccStyles.todayBadge}>
-        <Text style={ccStyles.todayBadgeText}>Today's submitted: </Text>
-        <Text style={ccStyles.todayBadgeNumber}>{todayPaath}</Text>
-      </View>
-
-      <View style={ccStyles.mainRow}>
-        {/* ── COUNTER ── */}
-        <View style={ccStyles.counterCol}>
-          <TouchableOpacity
-            style={ccStyles.arrowBtn}
-            onPress={incrementCount}
-            activeOpacity={0.8}>
-            <Text style={ccStyles.arrowText}>▲</Text>
-          </TouchableOpacity>
-
-          <Animated.View
-            style={[
-              ccStyles.counterBox,
-              { transform: [{ scale: bounceAnim }] },
-            ]}
-            {...panResponder.panHandlers}>
-            <Text style={ccStyles.omSymbol}>📖</Text>
-            <Text style={ccStyles.counterText}>{count}</Text>
-            <Text style={ccStyles.swipeHint}>swipe ↕</Text>
-          </Animated.View>
-
-          <TouchableOpacity
-            style={ccStyles.arrowBtn}
-            onPress={decrementCount}
-            activeOpacity={0.8}>
-            <Text style={ccStyles.arrowText}>▼</Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* ── INSTRUCTIONS + SUBMIT ── */}
-        <View style={ccStyles.rightCol}>
-          <View style={ccStyles.instructionsBox}>
-            <Text style={ccStyles.instrTitle}>How to Submit Paath</Text>
-            {[
-              'Set number of verses recited today.',
-              'Drag counter or use ▲ ▼ buttons.',
-              'Press Submit to record your paath.',
-            ].map((t, i) => (
-              <View key={i} style={ccStyles.instrRow}>
-                <View style={ccStyles.instrDot} />
-                <Text style={ccStyles.instrText}>{t}</Text>
-              </View>
-            ))}
-          </View>
-
-          <Animated.View style={{ transform: [{ scale: submitScaleAnim }] }}>
-            <TouchableOpacity
-              style={ccStyles.submitBtn}
-              onPress={handleSubmit}
-              activeOpacity={0.85}>
-              <FontAwesome
-                name="check-circle"
-                size={16}
-                color={COLORS.deepBrown}
-                style={{ marginRight: 6 }}
-              />
-              <Text style={ccStyles.submitBtnText}>Submit Paath</Text>
-            </TouchableOpacity>
-          </Animated.View>
-        </View>
-      </View>
     </View>
   );
 }
@@ -621,36 +379,18 @@ export default function EkMinEkSaathScreen() {
     <ScrollView
       style={mainStyles.container}
       showsVerticalScrollIndicator={false}>
-      {/* ── HEADER ── */}
-      {/* <Animated.View style={[mainStyles.header, { opacity: fadeAnim }]}>
-        <View>
-          <Text style={mainStyles.greetingSmall}>🕉️ Jai Shri Krishna</Text>
-          <Text style={mainStyles.greeting}>Gita Paath 📖</Text>
-        </View>
-        <TouchableOpacity style={mainStyles.notifBtn}>
-          <MaterialIcons
-            name="notifications"
-            size={20}
-            color={COLORS.goldLight}
-          />
-          <View style={mainStyles.notifDot} />
-        </TouchableOpacity>
-      </Animated.View> */}
-
       {/* ── CAMPAIGN BANNER CARD ── */}
       <View style={mainStyles.quoteCard}>
         <View style={mainStyles.quoteCardInner}>
-          <View style={mainStyles.quoteTopStrip}>
-            <Text style={mainStyles.quoteTopLabel}>
-              ✦ EK MIN EK SAATH GITA PAATH ✦
-            </Text>
-          </View>
           <Image
             source={{ uri: 'https://your-image-url.com' }}
             style={mainStyles.quoteImage}
           />
           <View style={mainStyles.quoteOverlay} />
           <View style={mainStyles.quoteBody}>
+            <Text style={mainStyles.quoteTopLabel}>
+              ✦ EK MIN EK SAATH GITA PAATH ✦
+            </Text>
             <Text style={mainStyles.quoteIconText}>❝</Text>
             <Text style={mainStyles.quoteText}>
               Let us all recite the Bhagavad Gita together — one minute, one
@@ -828,7 +568,7 @@ const sharedStyles = StyleSheet.create({
 // ─────────────────────────────────────────────────────────────────────────────
 // TOTAL PAATH STYLES
 // ─────────────────────────────────────────────────────────────────────────────
-const tcStyles = StyleSheet.create({
+export const tcStyles = StyleSheet.create({
   wrapper: {
     backgroundColor: COLORS.deepBrown,
     marginHorizontal: 16,
@@ -899,7 +639,7 @@ const tcStyles = StyleSheet.create({
 // ─────────────────────────────────────────────────────────────────────────────
 // YOUR PAATH STYLES
 // ─────────────────────────────────────────────────────────────────────────────
-const ycStyles = StyleSheet.create({
+export const ycStyles = StyleSheet.create({
   wrapper: {
     marginHorizontal: 16,
     backgroundColor: COLORS.creamDark,
@@ -964,114 +704,7 @@ const ycStyles = StyleSheet.create({
   progressNumber: { fontSize: 20, fontWeight: '800', color: COLORS.goldLight },
 });
 
-// ─────────────────────────────────────────────────────────────────────────────
-// PAATH COUNTER STYLES
-// ─────────────────────────────────────────────────────────────────────────────
-const ccStyles = StyleSheet.create({
-  wrapper: {
-    marginHorizontal: 16,
-    backgroundColor: COLORS.warmBrown,
-    borderRadius: 20,
-    padding: 18,
-    borderWidth: 1,
-    borderColor: 'rgba(201,162,39,0.35)',
-  },
-  todayBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    alignSelf: 'center',
-    backgroundColor: 'rgba(201,162,39,0.12)',
-    borderWidth: 1,
-    borderColor: 'rgba(201,162,39,0.3)',
-    borderRadius: 20,
-    paddingHorizontal: 16,
-    paddingVertical: 5,
-    marginBottom: 16,
-  },
-  todayBadgeText: { fontSize: 12, color: COLORS.creamDark },
-  todayBadgeNumber: {
-    fontSize: 14,
-    fontWeight: '800',
-    color: COLORS.goldLight,
-    marginLeft: 4,
-  },
-  mainRow: { flexDirection: 'row', gap: 16, alignItems: 'center' },
-  counterCol: { alignItems: 'center', gap: 8 },
-  arrowBtn: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: 'rgba(201,162,39,0.15)',
-    borderWidth: 1.5,
-    borderColor: COLORS.gold,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  arrowText: { fontSize: 16, color: COLORS.goldLight, fontWeight: '800' },
-  counterBox: {
-    width: 90,
-    height: 130,
-    backgroundColor: COLORS.deepBrown,
-    borderRadius: 16,
-    borderWidth: 2.5,
-    borderColor: COLORS.gold,
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 4,
-  },
-  omSymbol: { fontSize: 22 },
-  counterText: {
-    fontSize: 44,
-    fontWeight: '800',
-    color: COLORS.goldLight,
-    lineHeight: 50,
-  },
-  swipeHint: { fontSize: 9, color: COLORS.goldDark, letterSpacing: 0.5 },
-  rightCol: { flex: 1, gap: 14 },
-  instructionsBox: {
-    backgroundColor: 'rgba(201,162,39,0.08)',
-    borderRadius: 14,
-    padding: 14,
-    borderWidth: 1,
-    borderColor: 'rgba(201,162,39,0.2)',
-  },
-  instrTitle: {
-    fontSize: 12,
-    fontWeight: '800',
-    color: COLORS.goldLight,
-    marginBottom: 8,
-    letterSpacing: 0.3,
-  },
-  instrRow: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    gap: 7,
-    marginBottom: 5,
-  },
-  instrDot: {
-    width: 5,
-    height: 5,
-    borderRadius: 3,
-    backgroundColor: COLORS.saffron,
-    marginTop: 5,
-    flexShrink: 0,
-  },
-  instrText: { fontSize: 11, color: COLORS.creamDark, lineHeight: 16, flex: 1 },
-  submitBtn: {
-    backgroundColor: COLORS.gold,
-    borderRadius: 22,
-    paddingVertical: 13,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  submitBtnText: {
-    color: COLORS.deepBrown,
-    fontSize: 15,
-    fontWeight: '800',
-    letterSpacing: 0.3,
-  },
-});
+
 
 // ─────────────────────────────────────────────────────────────────────────────
 // EK MIN EK SAATH SECTION STYLES
@@ -1329,7 +962,7 @@ const mainStyles = StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.cream },
   header: {
     backgroundColor: COLORS.deepBrown,
-    paddingHorizontal: 20,
+    // paddingHorizontal: 20,
     paddingTop: 20,
     paddingBottom: 18,
     flexDirection: 'row',
@@ -1369,13 +1002,12 @@ const mainStyles = StyleSheet.create({
     borderWidth: 1,
     borderColor: COLORS.deepBrown,
   },
-  quoteCard: { margin: 16 },
+  quoteCard: { margin: 0 },
   quoteCardInner: {
     backgroundColor: COLORS.warmBrown,
-    borderRadius: 18,
+    // borderRadius: 18,
+    borderEndEndRadius: 70,
     overflow: 'hidden',
-    borderWidth: 1,
-    borderColor: 'rgba(201,162,39,0.35)',
   },
   quoteTopStrip: {
     backgroundColor: 'rgba(201,162,39,0.15)',
