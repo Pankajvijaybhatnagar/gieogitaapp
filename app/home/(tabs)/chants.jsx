@@ -1,6 +1,6 @@
 import { PaathCounter } from '@/components/chants/PaathCounter';
 import { TotalPaath } from '@/components/chants/TotalPaath';
-import { YourPaath } from '@/components/chants/YourPaath';
+import YourChants from '@/components/chants/YourChants';
 import { FontAwesome } from '@expo/vector-icons';
 import { useEffect, useRef, useState } from 'react';
 import {
@@ -301,12 +301,7 @@ function PaathDetailScreen({ setShowPaath, stats, onSubmit }) {
 
       <View style={{ height: 16 }} />
       <TotalPaath />
-      <GoldDivider />
-      <YourPaath
-        totalPaath={stats.totalChants}
-        monthProgress={stats.monthProgress}
-        weekProgress={stats.weekProgress}
-      />
+
       <GoldDivider />
       <PaathCounter todayPaath={stats.todayChants} onSubmit={onSubmit} />
       <View style={{ height: 30 }} />
@@ -411,14 +406,7 @@ export default function EkMinEkSaathScreen() {
       {/* ── GLOBAL PAATH COUNT ── */}
       <TotalPaath />
 
-      <GoldDivider />
-
-      {/* ── YOUR PAATH PROGRESS ── */}
-      <YourPaath
-        totalPaath={stats.totalChants}
-        monthProgress={stats.monthProgress}
-        weekProgress={stats.weekProgress}
-      />
+      <YourChants />
 
       <GoldDivider />
 
@@ -703,8 +691,6 @@ export const ycStyles = StyleSheet.create({
   progressLabel: { fontSize: 10, color: COLORS.goldDark, marginBottom: 2 },
   progressNumber: { fontSize: 20, fontWeight: '800', color: COLORS.goldLight },
 });
-
-
 
 // ─────────────────────────────────────────────────────────────────────────────
 // EK MIN EK SAATH SECTION STYLES
