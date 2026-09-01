@@ -1,41 +1,40 @@
-import {
-    createContext,
-    useCallback,
-    useContext,
-    useMemo,
-    useState,
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
 } from 'react';
 
 import AppOverlay from '@/components/common/AppOverlay';
 
-/*
-|--------------------------------------------------------------------------
-| Context
-|--------------------------------------------------------------------------
-*/
-
 const AppAlertContext = createContext(null);
-
-/*
-|--------------------------------------------------------------------------
-| Provider
-|--------------------------------------------------------------------------
-*/
 
 export function AppAlertProvider({ children }) {
   const [overlay, setOverlay] = useState({
     visible: false,
+
     type: 'loading',
+
     title: '',
     message: '',
+
     buttonText: 'OK',
+    secondaryButtonText: null,
+
     showButton: true,
+
     icon: null,
+
+    destructive: false,
+
+    onConfirm: null,
+    onCancel: null,
   });
 
   /*
   |--------------------------------------------------------------------------
-  | Hide overlay
+  | Hide
   |--------------------------------------------------------------------------
   */
 
@@ -48,19 +47,8 @@ export function AppAlertProvider({ children }) {
 
   /*
   |--------------------------------------------------------------------------
-  | Generic show function
+  | Generic show
   |--------------------------------------------------------------------------
-  |
-  | This is the main function.
-  |
-  | Example:
-  |
-  | show({
-  |   type: 'success',
-  |   title: 'Success',
-  |   message: 'Saved successfully',
-  | });
-  |
   */
 
   const show = useCallback(
@@ -69,17 +57,32 @@ export function AppAlertProvider({ children }) {
       title = '',
       message = '',
       buttonText = 'OK',
+      secondaryButtonText = null,
       showButton = true,
       icon = null,
+      destructive = false,
+      onConfirm = null,
+      onCancel = null,
     } = {}) => {
       setOverlay({
         visible: true,
+
         type,
+
         title,
         message,
+
         buttonText,
+        secondaryButtonText,
+
         showButton,
+
         icon,
+
+        destructive,
+
+        onConfirm,
+        onCancel,
       });
     },
     [],
@@ -87,7 +90,7 @@ export function AppAlertProvider({ children }) {
 
   /*
   |--------------------------------------------------------------------------
-  | Alert
+  | Normal Alert
   |--------------------------------------------------------------------------
   */
 
@@ -159,19 +162,61 @@ export function AppAlertProvider({ children }) {
 
   /*
   |--------------------------------------------------------------------------
-  | Loading
+  | Confirm
   |--------------------------------------------------------------------------
   |
-  | Loading does not show the OK button by default.
+  | Example:
   |
+  | confirm(
+  |   'Logout',
+  |   'Are you sure you want to logout?',
+  |   async () => {
+  |     ...
+  |   }
+  | );
+  |
+  */
+
+  const confirm = useCallback(
+    (title = 'Are you sure?', message = '', onConfirm = null, options = {}) => {
+      show({
+        type: 'confirm',
+
+        title,
+        message,
+
+        buttonText: options?.buttonText || 'Confirm',
+
+        secondaryButtonText: options?.secondaryButtonText || 'Cancel',
+
+        destructive: options?.destructive || false,
+
+        icon: options?.icon || 'help-circle',
+
+        showButton: true,
+
+        onConfirm,
+
+        onCancel: options?.onCancel || null,
+      });
+    },
+    [show],
+  );
+
+  /*
+  |--------------------------------------------------------------------------
+  | Loading
+  |--------------------------------------------------------------------------
   */
 
   const loading = useCallback(
     (title = 'Please wait...', message = '') => {
       show({
         type: 'loading',
+
         title,
         message,
+
         showButton: false,
       });
     },
@@ -180,19 +225,18 @@ export function AppAlertProvider({ children }) {
 
   /*
   |--------------------------------------------------------------------------
-  | Custom loading
+  | Show Loading
   |--------------------------------------------------------------------------
-  |
-  | Useful if you want to control the button manually.
-  |
   */
 
   const showLoading = useCallback(
     (title = 'Please wait...', message = '') => {
       show({
         type: 'loading',
+
         title,
         message,
+
         showButton: false,
       });
     },
@@ -201,31 +245,67 @@ export function AppAlertProvider({ children }) {
 
   /*
   |--------------------------------------------------------------------------
-  | Generic close
+  | Overlay button handlers
   |--------------------------------------------------------------------------
   */
 
-  const close = hide;
+  const handleConfirm = useCallback(async () => {
+    const callback = overlay?.onConfirm;
+
+    hide();
+
+    if (typeof callback === 'function') {
+      try {
+        await callback();
+      } catch (callbackError) {
+        console.error('[AppAlert] Confirm callback error:', callbackError);
+      }
+    }
+  }, [overlay?.onConfirm, hide]);
+
+  const handleCancel = useCallback(async () => {
+    const callback = overlay?.onCancel;
+
+    hide();
+
+    if (typeof callback === 'function') {
+      try {
+        await callback();
+      } catch (callbackError) {
+        console.error('[AppAlert] Cancel callback error:', callbackError);
+      }
+    }
+  }, [overlay?.onCancel, hide]);
 
   /*
   |--------------------------------------------------------------------------
-  | Context value
+  | Context
   |--------------------------------------------------------------------------
   */
 
   const value = useMemo(
     () => ({
       show,
+
       alert,
+
       success,
+
       error,
+
       warning,
+
+      confirm,
+
       loading,
+
       showLoading,
+
       hide,
-      close,
+
+      close: hide,
     }),
-    [show, alert, success, error, warning, loading, showLoading, hide, close],
+    [show, alert, success, error, warning, confirm, loading, showLoading, hide],
   );
 
   return (
@@ -238,9 +318,12 @@ export function AppAlertProvider({ children }) {
         title={overlay.title}
         message={overlay.message}
         buttonText={overlay.buttonText}
+        secondaryButtonText={overlay.secondaryButtonText}
         showButton={overlay.showButton}
         icon={overlay.icon}
-        onClose={hide}
+        destructive={overlay.destructive}
+        onClose={overlay.type === 'confirm' ? handleConfirm : hide}
+        onSecondaryPress={overlay.type === 'confirm' ? handleCancel : hide}
       />
     </AppAlertContext.Provider>
   );

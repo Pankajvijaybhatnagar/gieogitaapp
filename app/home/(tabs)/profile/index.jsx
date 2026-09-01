@@ -21,6 +21,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 
 import { useRouter } from 'expo-router';
 
+import { useAppAlert } from '@/context/AppAlertContext';
 import { useAuth } from '@/context/AuthContext';
 
 import userServices from '@/lib/services/userServices';
@@ -49,6 +50,7 @@ const COLORS = {
 
 export default function ProfileScreen() {
   const router = useRouter();
+  const { alert, success, error, warning, loading, hide, confirm } = useAppAlert();
 
   const {
     user,
@@ -389,7 +391,7 @@ export default function ProfileScreen() {
     }
 
     if (!name.trim()) {
-      Alert.alert('Required', 'Please enter your name.');
+      alert('Required', 'Please enter your name.');
 
       return;
     }
@@ -451,17 +453,11 @@ export default function ProfileScreen() {
 
       setEditing(false);
 
-      Alert.alert(
-        'Profile Updated',
-        'Your profile has been updated successfully.',
-      );
+      success('Profile Updated', 'Your profile has been updated successfully.');
     } catch (error) {
       console.error('[Profile] Update profile error:', error);
 
-      Alert.alert(
-        'Update Failed',
-        error?.message || 'Unable to update profile.',
-      );
+      alert('Update Failed', error?.message || 'Unable to update profile.');
     } finally {
       setSaving(false);
     }
@@ -474,45 +470,40 @@ export default function ProfileScreen() {
   */
 
   const handleLogout = () => {
-    Alert.alert(
+    confirm(
       'Logout',
       'Are you sure you want to logout?',
-      [
-        {
-          text: 'Cancel',
-          style: 'cancel',
-        },
-        {
-          text: 'Logout',
-          style: 'destructive',
-          onPress: async () => {
-            try {
-              const result = await logout();
+      async () => {
+        try {
+          loading(
+            'Logging out...',
+            'Please wait while we securely logout your account.',
+          );
 
-              console.log('[Profile] Logout result:', result);
+          const result = await logout();
 
-              if (!result?.success) {
-                Alert.alert(
-                  'Logout Failed',
-                  result?.error || 'Unable to logout.',
-                );
-                return;
-              }
+          console.log('[Profile] Logout result:', result);
 
-              // Give AuthContext time to update
-              setTimeout(() => {
-                router.push('/login2');
-              }, 100);
-            } catch (error) {
-              console.error('[Profile] Logout error:', error);
+          if (!result?.success) {
+            error('Logout Failed', result?.error || 'Unable to logout.');
 
-              Alert.alert('Logout Failed', 'Unable to logout.');
-            }
-          },
-        },
-      ],
+            return;
+          }
+
+          setTimeout(() => {
+            router.push('/login2');
+          }, 100);
+        } catch (logoutError) {
+          console.error('[Profile] Logout error:', logoutError);
+
+          error('Logout Failed', 'Unable to logout. Please try again.');
+        }
+      },
       {
-        cancelable: true,
+        buttonText: 'Logout',
+        secondaryButtonText: 'Cancel',
+        destructive: true,
+        icon: 'log-out-outline',
       },
     );
   };

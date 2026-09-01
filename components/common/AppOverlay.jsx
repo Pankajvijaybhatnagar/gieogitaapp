@@ -1,5 +1,3 @@
-//  /common/AppOverlay.jsx
-
 import { Ionicons } from '@expo/vector-icons';
 import {
   ActivityIndicator,
@@ -17,31 +15,47 @@ const COLORS = {
   goldLight: '#E8C55A',
   cream: '#FDF6E3',
   white: '#FFFFFF',
+
+  danger: '#B42318',
+  dangerLight: '#FDECEC',
+
+  muted: '#7A6A58',
+  border: 'rgba(201, 162, 39, 0.30)',
 };
 
 export default function AppOverlay({
   visible = false,
 
-  // loading | alert | success | error | warning
+  // loading | alert | success | error | warning | confirm
   type = 'loading',
 
   title,
   message,
 
+  // Primary button
   buttonText = 'OK',
   onClose,
 
-  // Optional: hide button for loading
+  // Secondary button
+  secondaryButtonText,
+  onSecondaryPress,
+
+  // Optional: hide buttons
   showButton = true,
 
   // Optional custom icon
   icon,
+
+  // Optional destructive primary button
+  destructive = false,
 }) {
   if (!visible) {
     return null;
   }
 
   const isLoading = type === 'loading';
+
+  const isConfirm = type === 'confirm' || Boolean(secondaryButtonText);
 
   const getIcon = () => {
     if (icon) {
@@ -61,6 +75,9 @@ export default function AppOverlay({
       case 'alert':
         return 'information-circle';
 
+      case 'confirm':
+        return 'help-circle';
+
       default:
         return null;
     }
@@ -77,9 +94,9 @@ export default function AppOverlay({
       onRequestClose={onClose}>
       <View style={styles.overlay}>
         <View style={styles.alertBox}>
-          {/* ================================
+          {/* ============================================================
               LOADING
-          ================================= */}
+          ============================================================ */}
 
           {isLoading ? (
             <View style={styles.loadingContainer}>
@@ -91,39 +108,89 @@ export default function AppOverlay({
             </View>
           ) : (
             <>
-              {/* ================================
+              {/* ========================================================
                   ICON
-              ================================= */}
+              ======================================================== */}
 
               {iconName ? (
-                <View style={styles.iconContainer}>
-                  <Ionicons name={iconName} size={34} color={COLORS.gold} />
+                <View
+                  style={[
+                    styles.iconContainer,
+                    destructive && styles.destructiveIconContainer,
+                  ]}>
+                  <Ionicons
+                    name={iconName}
+                    size={34}
+                    color={destructive ? COLORS.danger : COLORS.gold}
+                  />
                 </View>
               ) : null}
 
-              {/* ================================
+              {/* ========================================================
                   TITLE
-              ================================= */}
+              ======================================================== */}
 
               {title ? <Text style={styles.title}>{title}</Text> : null}
 
-              {/* ================================
+              {/* ========================================================
                   MESSAGE
-              ================================= */}
+              ======================================================== */}
 
               {message ? <Text style={styles.message}>{message}</Text> : null}
 
-              {/* ================================
-                  BUTTON
-              ================================= */}
+              {/* ========================================================
+                  BUTTONS
+              ======================================================== */}
 
               {showButton ? (
-                <TouchableOpacity
-                  style={styles.button}
-                  activeOpacity={0.85}
-                  onPress={onClose}>
-                  <Text style={styles.buttonText}>{buttonText}</Text>
-                </TouchableOpacity>
+                <View
+                  style={[
+                    styles.buttonContainer,
+                    isConfirm && styles.confirmButtonContainer,
+                  ]}>
+                  {/* ======================================================
+                      SECONDARY BUTTON
+                  ====================================================== */}
+
+                  {isConfirm && secondaryButtonText ? (
+                    <TouchableOpacity
+                      style={[
+                        styles.secondaryButton,
+                        destructive && styles.secondaryDangerButton,
+                      ]}
+                      activeOpacity={0.8}
+                      onPress={onSecondaryPress || onClose}>
+                      <Text
+                        style={[
+                          styles.secondaryButtonText,
+                          destructive && styles.secondaryDangerText,
+                        ]}>
+                        {secondaryButtonText}
+                      </Text>
+                    </TouchableOpacity>
+                  ) : null}
+
+                  {/* ======================================================
+                      PRIMARY BUTTON
+                  ====================================================== */}
+
+                  <TouchableOpacity
+                    style={[
+                      styles.button,
+                      isConfirm && styles.confirmPrimaryButton,
+                      destructive && styles.dangerButton,
+                    ]}
+                    activeOpacity={0.85}
+                    onPress={onClose}>
+                    <Text
+                      style={[
+                        styles.buttonText,
+                        destructive && styles.dangerButtonText,
+                      ]}>
+                      {buttonText}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
               ) : null}
             </>
           )}
@@ -134,6 +201,12 @@ export default function AppOverlay({
 }
 
 const styles = StyleSheet.create({
+  /*
+  |--------------------------------------------------------------------------
+  | Overlay
+  |--------------------------------------------------------------------------
+  */
+
   overlay: {
     flex: 1,
 
@@ -144,6 +217,12 @@ const styles = StyleSheet.create({
 
     paddingHorizontal: 24,
   },
+
+  /*
+  |--------------------------------------------------------------------------
+  | Main box
+  |--------------------------------------------------------------------------
+  */
 
   alertBox: {
     width: '100%',
@@ -159,7 +238,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
 
     borderWidth: 1,
-    borderColor: 'rgba(201, 162, 39, 0.35)',
+    borderColor: COLORS.border,
 
     shadowColor: '#000',
 
@@ -173,6 +252,12 @@ const styles = StyleSheet.create({
 
     elevation: 12,
   },
+
+  /*
+  |--------------------------------------------------------------------------
+  | Icon
+  |--------------------------------------------------------------------------
+  */
 
   iconContainer: {
     width: 64,
@@ -188,12 +273,28 @@ const styles = StyleSheet.create({
     marginBottom: 14,
   },
 
+  destructiveIconContainer: {
+    backgroundColor: COLORS.dangerLight,
+  },
+
+  /*
+  |--------------------------------------------------------------------------
+  | Loading
+  |--------------------------------------------------------------------------
+  */
+
   loadingContainer: {
     width: '100%',
 
     alignItems: 'center',
     justifyContent: 'center',
   },
+
+  /*
+  |--------------------------------------------------------------------------
+  | Text
+  |--------------------------------------------------------------------------
+  */
 
   title: {
     marginTop: 4,
@@ -219,6 +320,34 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 
+  /*
+  |--------------------------------------------------------------------------
+  | Buttons
+  |--------------------------------------------------------------------------
+  */
+
+  buttonContainer: {
+    width: '100%',
+
+    alignItems: 'center',
+  },
+
+  confirmButtonContainer: {
+    flexDirection: 'row',
+
+    alignItems: 'center',
+
+    justifyContent: 'center',
+
+    gap: 10,
+  },
+
+  /*
+  |--------------------------------------------------------------------------
+  | Primary button
+  |--------------------------------------------------------------------------
+  */
+
   button: {
     marginTop: 20,
 
@@ -236,11 +365,80 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
+  confirmPrimaryButton: {
+    flex: 1,
+
+    minWidth: 0,
+
+    marginTop: 20,
+
+    paddingHorizontal: 14,
+  },
+
   buttonText: {
     color: COLORS.deepBrown,
 
     fontSize: 13,
 
     fontWeight: '700',
+  },
+
+  /*
+  |--------------------------------------------------------------------------
+  | Secondary button
+  |--------------------------------------------------------------------------
+  */
+
+  secondaryButton: {
+    flex: 1,
+
+    height: 44,
+
+    marginTop: 20,
+
+    paddingHorizontal: 14,
+
+    borderRadius: 22,
+
+    backgroundColor: '#F2EBDD',
+
+    borderWidth: 1,
+
+    borderColor: 'rgba(74, 44, 13, 0.12)',
+
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  secondaryButtonText: {
+    color: COLORS.warmBrown,
+
+    fontSize: 13,
+
+    fontWeight: '700',
+  },
+
+  /*
+  |--------------------------------------------------------------------------
+  | Destructive
+  |--------------------------------------------------------------------------
+  */
+
+  dangerButton: {
+    backgroundColor: COLORS.danger,
+  },
+
+  dangerButtonText: {
+    color: COLORS.white,
+  },
+
+  secondaryDangerButton: {
+    backgroundColor: '#F7E7E5',
+
+    borderColor: 'rgba(180, 35, 24, 0.15)',
+  },
+
+  secondaryDangerText: {
+    color: COLORS.danger,
   },
 });
