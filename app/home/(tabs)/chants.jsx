@@ -386,34 +386,23 @@ export default function EkMinEkSaathScreen() {
             <Text style={mainStyles.quoteTopLabel}>
               ✦ EK MIN EK SAATH GITA PAATH ✦
             </Text>
-            <Text style={mainStyles.quoteIconText}>❝</Text>
+            {/* <Text style={mainStyles.quoteIconText}>❝</Text> */}
             <Text style={mainStyles.quoteText}>
               Let us all recite the Bhagavad Gita together — one minute, one
               world, one Krishna. Join millions in this divine movement of
               collective consciousness.
             </Text>
-            <TouchableOpacity
-              style={mainStyles.startDayBtn}
-              activeOpacity={0.85}>
-              <Text style={mainStyles.startDayBtnText}>Start Paath Now ›</Text>
-            </TouchableOpacity>
           </View>
         </View>
       </View>
-
-      <GoldDivider />
 
       {/* ── GLOBAL PAATH COUNT ── */}
       <TotalPaath />
 
       <YourChants />
 
-      <GoldDivider />
-
       {/* ── PAATH COUNTER ── */}
       <PaathCounter todayPaath={stats.todayChants} onSubmit={handleSubmit} />
-
-      <GoldDivider />
 
       {/* ── LIVE SESSION ── */}
       <View style={mainStyles.liveSection}>

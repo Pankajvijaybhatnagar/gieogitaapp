@@ -33,7 +33,7 @@ const COLORS = {
   green: '#62835A',
 };
 
- const YourChants = () => {
+const YourChants = () => {
   /*
   |--------------------------------------------------------------------------
   | AUTH CONTEXT
@@ -292,10 +292,6 @@ const COLORS = {
 
       <View style={styles.header}>
         <View style={styles.headerLeft}>
-          <View style={styles.headerIcon}>
-            <Text style={styles.headerOm}>ॐ</Text>
-          </View>
-
           <View style={styles.headerText}>
             <Text style={styles.title}>Your Chants</Text>
 
@@ -330,10 +326,6 @@ const COLORS = {
             />
 
             <Text style={styles.heroLabel}>YOUR TOTAL CHANTS</Text>
-          </View>
-
-          <View style={styles.heroOm}>
-            <Text style={styles.heroOmText}>ॐ</Text>
           </View>
         </View>
 
@@ -666,6 +658,7 @@ const styles = StyleSheet.create({
     shadowRadius: 12,
 
     elevation: 6,
+    alignItems: 'center',
   },
 
   heroCircleOne: {
