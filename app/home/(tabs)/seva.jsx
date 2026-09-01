@@ -31,15 +31,15 @@ export default function SevaScreen() {
 
         <HowItWorks />
 
-        <GoldDivider />
+        {/* <GoldDivider /> */}
 
         <SevaList onDonate={handleDonate} />
 
-        <GoldDivider />
+        {/* <GoldDivider /> */}
 
         {/* <BirthdayBanner onDonate={handleDonate} /> */}
 
-        <GoldDivider />
+        {/* <GoldDivider /> */}
 
         <TrustSection />
 

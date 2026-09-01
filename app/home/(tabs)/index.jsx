@@ -1,6 +1,5 @@
 import TransformInNineSteps from '@/components/dhyanShivir/TransformInNineSteps';
 import { ScrollView, StatusBar, StyleSheet, View } from 'react-native';
-import AdhyaySection from '../../../components/home/Adhyaysection';
 import { COLORS } from '../../../components/home/constant';
 import EventsSection from '../../../components/home/Eventsection';
 import ExclusiveContent from '../../../components/home/Exclusivecontent';
@@ -9,6 +8,7 @@ import InitiativesSection from '../../../components/home/Initiativessection';
 import LiveDarshan from '../../../components/home/Livedarshan';
 import SevaSection from '../../../components/home/Sevasection';
 import { GoldDivider } from '../../../components/home/Sharedui';
+import Questionseva from '../../../components/questionseva/QuestionSevaForm.jsx';
 
 export default function GieoGitaHome() {
   return (
@@ -30,7 +30,8 @@ export default function GieoGitaHome() {
 
         <GoldDivider />
 
-        <AdhyaySection />
+        {/* <AdhyaySection /> */}
+        <Questionseva />
 
         <GoldDivider />
 

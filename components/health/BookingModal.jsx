@@ -1,8 +1,11 @@
 import { FontAwesome } from '@expo/vector-icons';
 import { useState } from 'react';
+
 import {
   Alert,
+  KeyboardAvoidingView,
   Modal,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -10,293 +13,1817 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { C, getDates, TIME_SLOTS } from './constants';
+
+import { getDates, TIME_SLOTS } from './constants';
+
+// ============================================================
+// BRAND THEME
+// ============================================================
+
+const COLORS = {
+  // Your exact brand colors
+  darkBrown: '#3a2c16',
+  brown: '#5a3816',
+
+  // Supporting browns
+  mediumBrown: '#72502C',
+  softBrown: '#987953',
+  mutedBrown: '#A08A70',
+
+  // Biscuit / cream
+  background: '#F4E9D8',
+  biscuit: '#EEDFC9',
+  biscuitLight: '#F8F1E7',
+  cream: '#FFFDF8',
+  white: '#FFFFFF',
+
+  // Borders
+  border: '#DDC8AA',
+  borderSoft: '#E9DCC8',
+
+  // Success
+  green: '#667747',
+  greenLight: '#EEF3E5',
+  greenBorder: '#CAD6B3',
+
+  // Error
+  error: '#A34F39',
+
+  // Overlay
+  overlay: 'rgba(30, 18, 7, 0.66)',
+};
+
+// ============================================================
+// COMPONENT
+// ============================================================
 
 export default function BookingModal({ visible, onClose, specialty }) {
-  const [step,         setStep]         = useState(1);
+  // ==========================================================
+  // STATES
+  // ==========================================================
+
+  const [step, setStep] = useState(1);
+
   const [selectedDate, setSelectedDate] = useState(null);
+
   const [selectedSlot, setSelectedSlot] = useState(null);
-  const [name,         setName]         = useState('');
-  const [phone,        setPhone]        = useState('');
-  const [age,          setAge]          = useState('');
-  const [gender,       setGender]       = useState('');
+
+  const [name, setName] = useState('');
+
+  const [phone, setPhone] = useState('');
+
+  const [age, setAge] = useState('');
+
+  const [gender, setGender] = useState('');
+
   const dates = getDates();
 
+  // ==========================================================
+  // RESET
+  // ==========================================================
+
   const resetAndClose = () => {
-    setStep(1); setSelectedDate(null); setSelectedSlot(null);
-    setName(''); setPhone(''); setAge(''); setGender('');
+    setStep(1);
+
+    setSelectedDate(null);
+    setSelectedSlot(null);
+
+    setName('');
+    setPhone('');
+    setAge('');
+    setGender('');
+
     onClose();
   };
 
+  // ==========================================================
+  // PHONE
+  // ==========================================================
+
+  const handlePhoneChange = value => {
+    const cleanValue = value.replace(/[^0-9]/g, '');
+
+    setPhone(cleanValue.slice(0, 10));
+  };
+
+  // ==========================================================
+  // AGE
+  // ==========================================================
+
+  const handleAgeChange = value => {
+    const cleanValue = value.replace(/[^0-9]/g, '');
+
+    setAge(cleanValue.slice(0, 3));
+  };
+
+  // ==========================================================
+  // VALIDATION
+  // ==========================================================
+
   const handleConfirm = () => {
-    if (!name.trim() || !phone.trim() || !age.trim() || !gender) {
-      Alert.alert('⚠️ Missing Details', 'Please fill all fields before confirming.');
+    if (!name.trim()) {
+      Alert.alert('Name Required', 'Please enter the patient name.');
+
       return;
     }
+
+    if (!phone.trim()) {
+      Alert.alert('Phone Required', 'Please enter the mobile number.');
+
+      return;
+    }
+
+    if (phone.length !== 10) {
+      Alert.alert(
+        'Invalid Mobile Number',
+        'Please enter a valid 10-digit mobile number.',
+      );
+
+      return;
+    }
+
+    if (!age.trim()) {
+      Alert.alert('Age Required', 'Please enter the patient age.');
+
+      return;
+    }
+
+    const patientAge = Number(age);
+
+    if (patientAge <= 0 || patientAge > 120) {
+      Alert.alert('Invalid Age', 'Please enter a valid age.');
+
+      return;
+    }
+
+    if (!gender) {
+      Alert.alert('Gender Required', 'Please select gender.');
+
+      return;
+    }
+
     setStep(3);
   };
 
+  // ==========================================================
+  // FINAL BOOKING
+  // ==========================================================
+
   const handleDone = () => {
     Alert.alert(
-      '✅ Appointment Booked!',
-      `Your free Medanta health check-up has been booked at Gita Gyan Sansthanam, Kurukshetra.\n\nDate: ${selectedDate?.date}\nTime: ${selectedSlot}\nSpecialty: ${specialty?.name}\n\nOur team will contact you on ${phone} for confirmation.`,
-      [{ text: 'OK 🙏', onPress: resetAndClose }]
+      'Appointment Booked!',
+      `Your free Medanta health check-up has been booked at Gita Gyan Sansthanam, Kurukshetra.\n\nDate: ${
+        selectedDate?.date || ''
+      }\nTime: ${selectedSlot || ''}\nSpecialty: ${
+        specialty?.name || ''
+      }\n\nOur team will contact you on ${phone} for confirmation.`,
+      [
+        {
+          text: 'OK',
+          onPress: resetAndClose,
+        },
+      ],
     );
   };
 
-  if (!specialty) return null;
+  // ==========================================================
+  // NO SPECIALTY
+  // ==========================================================
+
+  if (!specialty) {
+    return null;
+  }
+
+  // ==========================================================
+  // UI
+  // ==========================================================
 
   return (
-    <Modal visible={visible} transparent animationType="slide" onRequestClose={resetAndClose}>
-      <View style={BM.overlay}>
-        <TouchableOpacity style={StyleSheet.absoluteFill} onPress={resetAndClose} />
+    <Modal
+      visible={visible}
+      transparent
+      animationType="slide"
+      statusBarTranslucent
+      onRequestClose={resetAndClose}>
+      <KeyboardAvoidingView
+        style={BM.overlay}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+        {/* BACKDROP */}
+
+        <TouchableOpacity
+          activeOpacity={1}
+          style={StyleSheet.absoluteFill}
+          onPress={resetAndClose}
+        />
+
+        {/* ===================================================
+            BOTTOM SHEET
+        =================================================== */}
+
         <View style={BM.sheet}>
+          {/* DRAG HANDLE */}
+
           <View style={BM.handle} />
 
-          {/* Header */}
+          {/* =================================================
+              HEADER
+          ================================================= */}
+
           <View style={BM.header}>
-            <View style={BM.headerBlob} />
-            <Text style={BM.headerIcon}>{specialty.icon}</Text>
+            {/* DECORATIVE BACKGROUND */}
+
+            <View style={BM.headerCircleOne} />
+
+            <View style={BM.headerCircleTwo} />
+
+            {/* SPECIALTY ICON */}
+
+            <View style={BM.headerIconContainer}>
+              <Text style={BM.headerIcon}>{specialty.icon}</Text>
+            </View>
+
+            {/* TEXT */}
+
             <View style={BM.headerTextCol}>
-              <Text style={BM.headerTitle}>{specialty.name}</Text>
-              <Text style={BM.headerDesc}>{specialty.desc}</Text>
+              <Text style={BM.headerTitle} numberOfLines={1}>
+                {specialty.name}
+              </Text>
+
+              <Text style={BM.headerDesc} numberOfLines={2}>
+                {specialty.desc}
+              </Text>
+
               <View style={BM.freeBadge}>
-                <Text style={BM.freeBadgeText}>✅  FREE Service by Medanta</Text>
+                <View style={BM.freeBadgeDot} />
+
+                <Text style={BM.freeBadgeText}>FREE HEALTH SERVICE</Text>
               </View>
             </View>
-            <TouchableOpacity style={BM.closeBtn} onPress={resetAndClose}>
-              <FontAwesome name="times" size={14} color={C.goldLight} />
+
+            {/* CLOSE */}
+
+            <TouchableOpacity
+              style={BM.closeBtn}
+              activeOpacity={0.8}
+              onPress={resetAndClose}>
+              <FontAwesome name="times" size={14} color={COLORS.white} />
             </TouchableOpacity>
           </View>
 
-          {/* Step indicator */}
-          <View style={BM.stepRow}>
-            {['Select Date & Time', 'Your Details', 'Confirm'].map((s, i) => (
-              <View key={i} style={BM.stepItem}>
-                <View style={[BM.stepCircle, step > i + 1 && BM.stepDone, step === i + 1 && BM.stepActive]}>
-                  {step > i + 1
-                    ? <FontAwesome name="check" size={10} color={C.white} />
-                    : <Text style={[BM.stepNum, step === i + 1 && { color: C.white }]}>{i + 1}</Text>
-                  }
-                </View>
-                <Text style={[BM.stepLabel, step === i + 1 && BM.stepLabelActive]}>{s}</Text>
-              </View>
-            ))}
+          {/* =================================================
+              STEP INDICATOR
+          ================================================= */}
+
+          <View style={BM.stepContainer}>
+            <View style={BM.stepRow}>
+              {['Date & Time', 'Your Details', 'Confirm'].map(
+                (label, index) => {
+                  const stepNumber = index + 1;
+
+                  const completed = step > stepNumber;
+
+                  const active = step === stepNumber;
+
+                  return (
+                    <View key={label} style={BM.stepItem}>
+                      {/* TOP */}
+
+                      <View style={BM.stepCircleRow}>
+                        {index > 0 && (
+                          <View
+                            style={[
+                              BM.stepConnector,
+
+                              step > index && BM.stepConnectorActive,
+                            ]}
+                          />
+                        )}
+
+                        <View
+                          style={[
+                            BM.stepCircle,
+
+                            active && BM.stepActive,
+
+                            completed && BM.stepDone,
+                          ]}>
+                          {completed ? (
+                            <FontAwesome
+                              name="check"
+                              size={10}
+                              color={COLORS.white}
+                            />
+                          ) : (
+                            <Text
+                              style={[BM.stepNum, active && BM.stepNumActive]}>
+                              {stepNumber}
+                            </Text>
+                          )}
+                        </View>
+
+                        {index < 2 && (
+                          <View
+                            style={[
+                              BM.stepConnector,
+
+                              step > stepNumber && BM.stepConnectorActive,
+                            ]}
+                          />
+                        )}
+                      </View>
+
+                      {/* LABEL */}
+
+                      <Text
+                        numberOfLines={1}
+                        style={[
+                          BM.stepLabel,
+
+                          active && BM.stepLabelActive,
+
+                          completed && BM.stepLabelDone,
+                        ]}>
+                        {label}
+                      </Text>
+                    </View>
+                  );
+                },
+              )}
+            </View>
           </View>
 
-          <ScrollView style={BM.body} showsVerticalScrollIndicator={false}>
+          {/* =================================================
+              BODY
+          ================================================= */}
 
-            {/* STEP 1 */}
+          <ScrollView
+            style={BM.body}
+            contentContainerStyle={BM.bodyContent}
+            showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="handled">
+            {/* =================================================
+                STEP 1
+            ================================================= */}
+
             {step === 1 && (
               <View>
-                <Text style={BM.fieldLabel}>Select Date</Text>
-                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                  {dates.map((d, i) => (
-                    <TouchableOpacity
-                      key={i}
-                      style={[BM.dateChip, selectedDate?.full === d.full && BM.dateChipActive]}
-                      onPress={() => setSelectedDate(d)}
-                      activeOpacity={0.8}
-                    >
-                      <Text style={[BM.dateDayText, selectedDate?.full === d.full && BM.dateActiveText]}>{d.label}</Text>
-                      <Text style={[BM.dateDateText, selectedDate?.full === d.full && BM.dateActiveText]}>{d.date}</Text>
-                    </TouchableOpacity>
-                  ))}
-                </ScrollView>
+                {/* HEADER */}
 
-                <Text style={[BM.fieldLabel, { marginTop: 18 }]}>Select Time Slot</Text>
-                <View style={BM.slotsGrid}>
-                  {TIME_SLOTS.map((slot) => (
-                    <TouchableOpacity
-                      key={slot}
-                      style={[BM.slotChip, selectedSlot === slot && BM.slotChipActive]}
-                      onPress={() => setSelectedSlot(slot)}
-                      activeOpacity={0.8}
-                    >
-                      <Text style={[BM.slotText, selectedSlot === slot && BM.slotTextActive]}>{slot}</Text>
-                    </TouchableOpacity>
-                  ))}
+                <View style={BM.contentHeading}>
+                  <Text style={BM.contentTitle}>Choose Appointment</Text>
+
+                  <Text style={BM.contentSubtitle}>
+                    Select your preferred date and time.
+                  </Text>
                 </View>
 
+                {/* DATE */}
+
+                <Text style={BM.fieldLabel}>Select Date</Text>
+
+                <ScrollView
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  contentContainerStyle={BM.dateScrollContent}>
+                  {dates.map((dateItem, index) => {
+                    const active = selectedDate?.full === dateItem.full;
+
+                    return (
+                      <TouchableOpacity
+                        key={index}
+                        activeOpacity={0.82}
+                        onPress={() => setSelectedDate(dateItem)}
+                        style={[BM.dateChip, active && BM.dateChipActive]}>
+                        <Text
+                          style={[BM.dateDayText, active && BM.dateActiveText]}>
+                          {dateItem.label}
+                        </Text>
+
+                        <Text
+                          style={[
+                            BM.dateDateText,
+
+                            active && BM.dateActiveSubText,
+                          ]}>
+                          {dateItem.date}
+                        </Text>
+
+                        {active && <View style={BM.selectedMiniDot} />}
+                      </TouchableOpacity>
+                    );
+                  })}
+                </ScrollView>
+
+                {/* TIME */}
+
+                <Text style={[BM.fieldLabel, BM.timeLabel]}>
+                  Select Time Slot
+                </Text>
+
+                <View style={BM.slotsGrid}>
+                  {TIME_SLOTS.map(slot => {
+                    const active = selectedSlot === slot;
+
+                    return (
+                      <TouchableOpacity
+                        key={slot}
+                        activeOpacity={0.82}
+                        onPress={() => setSelectedSlot(slot)}
+                        style={[BM.slotChip, active && BM.slotChipActive]}>
+                        <FontAwesome
+                          name="clock-o"
+                          size={11}
+                          color={active ? COLORS.white : COLORS.brown}
+                        />
+
+                        <Text
+                          style={[BM.slotText, active && BM.slotTextActive]}>
+                          {slot}
+                        </Text>
+                      </TouchableOpacity>
+                    );
+                  })}
+                </View>
+
+                {/* NEXT */}
+
                 <TouchableOpacity
-                  style={[BM.nextBtn, (!selectedDate || !selectedSlot) && BM.nextBtnDisabled]}
-                  onPress={() => { if (selectedDate && selectedSlot) setStep(2); }}
+                  activeOpacity={0.86}
                   disabled={!selectedDate || !selectedSlot}
-                  activeOpacity={0.85}
-                >
-                  <Text style={BM.nextBtnText}>Next  ›</Text>
+                  onPress={() => {
+                    if (selectedDate && selectedSlot) {
+                      setStep(2);
+                    }
+                  }}
+                  style={[
+                    BM.nextBtn,
+
+                    (!selectedDate || !selectedSlot) && BM.nextBtnDisabled,
+                  ]}>
+                  <Text style={BM.nextBtnText}>Continue</Text>
+
+                  <View style={BM.buttonArrowBox}>
+                    <FontAwesome
+                      name="angle-right"
+                      size={18}
+                      color={COLORS.white}
+                    />
+                  </View>
                 </TouchableOpacity>
               </View>
             )}
 
-            {/* STEP 2 */}
+            {/* =================================================
+                STEP 2
+            ================================================= */}
+
             {step === 2 && (
               <View>
-                <Text style={BM.bookingSummary}>📅 {selectedDate?.date}  •  ⏰ {selectedSlot}</Text>
+                {/* SUMMARY */}
 
-                <Text style={BM.fieldLabel}>Full Name *</Text>
-                <TextInput style={BM.textInput} placeholder="Enter your full name" placeholderTextColor={C.goldDark} value={name} onChangeText={setName} />
+                <View style={BM.bookingSummary}>
+                  <View style={BM.summaryIconBox}>
+                    <FontAwesome
+                      name="calendar"
+                      size={14}
+                      color={COLORS.brown}
+                    />
+                  </View>
 
-                <Text style={BM.fieldLabel}>Phone Number *</Text>
-                <TextInput style={BM.textInput} placeholder="Enter phone number" placeholderTextColor={C.goldDark} value={phone} onChangeText={setPhone} keyboardType="phone-pad" />
+                  <View style={BM.summaryTextArea}>
+                    <Text style={BM.summarySmallText}>
+                      SELECTED APPOINTMENT
+                    </Text>
 
-                <Text style={BM.fieldLabel}>Age *</Text>
-                <TextInput style={BM.textInput} placeholder="Enter your age" placeholderTextColor={C.goldDark} value={age} onChangeText={setAge} keyboardType="numeric" />
-
-                <Text style={BM.fieldLabel}>Gender *</Text>
-                <View style={BM.genderRow}>
-                  {['Male', 'Female', 'Other'].map((g) => (
-                    <TouchableOpacity key={g} style={[BM.genderChip, gender === g && BM.genderChipActive]} onPress={() => setGender(g)} activeOpacity={0.8}>
-                      <Text style={[BM.genderText, gender === g && BM.genderTextActive]}>{g}</Text>
-                    </TouchableOpacity>
-                  ))}
+                    <Text style={BM.summaryMainText}>
+                      {selectedDate?.date}
+                      {'  •  '}
+                      {selectedSlot}
+                    </Text>
+                  </View>
                 </View>
 
+                <View style={BM.contentHeading}>
+                  <Text style={BM.contentTitle}>Patient Details</Text>
+
+                  <Text style={BM.contentSubtitle}>
+                    Enter basic information for the appointment.
+                  </Text>
+                </View>
+
+                {/* NAME */}
+
+                <Text style={BM.fieldLabel}>Full Name *</Text>
+
+                <TextInput
+                  style={BM.textInput}
+                  placeholder="Enter your full name"
+                  placeholderTextColor={COLORS.mutedBrown}
+                  value={name}
+                  onChangeText={setName}
+                  autoCapitalize="words"
+                  returnKeyType="next"
+                />
+
+                {/* PHONE */}
+
+                <Text style={BM.fieldLabel}>Mobile Number *</Text>
+
+                <View style={BM.phoneInputContainer}>
+                  <View style={BM.countryCodeBox}>
+                    <Text style={BM.countryCode}>+91</Text>
+                  </View>
+
+                  <TextInput
+                    style={BM.phoneInput}
+                    placeholder="Enter mobile number"
+                    placeholderTextColor={COLORS.mutedBrown}
+                    value={phone}
+                    onChangeText={handlePhoneChange}
+                    keyboardType="number-pad"
+                    maxLength={10}
+                    returnKeyType="next"
+                  />
+                </View>
+
+                {/* AGE */}
+
+                <Text style={BM.fieldLabel}>Age *</Text>
+
+                <TextInput
+                  style={BM.textInput}
+                  placeholder="Enter your age"
+                  placeholderTextColor={COLORS.mutedBrown}
+                  value={age}
+                  onChangeText={handleAgeChange}
+                  keyboardType="number-pad"
+                  maxLength={3}
+                />
+
+                {/* GENDER */}
+
+                <Text style={BM.fieldLabel}>Gender *</Text>
+
+                <View style={BM.genderRow}>
+                  {['Male', 'Female', 'Other'].map(item => {
+                    const active = gender === item;
+
+                    return (
+                      <TouchableOpacity
+                        key={item}
+                        activeOpacity={0.82}
+                        onPress={() => setGender(item)}
+                        style={[BM.genderChip, active && BM.genderChipActive]}>
+                        <Text
+                          style={[
+                            BM.genderText,
+
+                            active && BM.genderTextActive,
+                          ]}>
+                          {item}
+                        </Text>
+                      </TouchableOpacity>
+                    );
+                  })}
+                </View>
+
+                {/* BUTTONS */}
+
                 <View style={BM.btnRow}>
-                  <TouchableOpacity style={BM.backBtn} onPress={() => setStep(1)} activeOpacity={0.8}>
-                    <Text style={BM.backBtnText}>‹  Back</Text>
+                  <TouchableOpacity
+                    activeOpacity={0.82}
+                    onPress={() => setStep(1)}
+                    style={BM.backBtn}>
+                    <FontAwesome
+                      name="angle-left"
+                      size={17}
+                      color={COLORS.brown}
+                    />
+
+                    <Text style={BM.backBtnText}>Back</Text>
                   </TouchableOpacity>
-                  <TouchableOpacity style={BM.nextBtn} onPress={handleConfirm} activeOpacity={0.85}>
-                    <Text style={BM.nextBtnText}>Confirm  ›</Text>
+
+                  <TouchableOpacity
+                    activeOpacity={0.86}
+                    onPress={handleConfirm}
+                    style={BM.confirmBtn}>
+                    <Text style={BM.nextBtnText}>Review</Text>
+
+                    <FontAwesome
+                      name="angle-right"
+                      size={17}
+                      color={COLORS.white}
+                    />
                   </TouchableOpacity>
                 </View>
               </View>
             )}
 
-            {/* STEP 3 */}
+            {/* =================================================
+                STEP 3
+            ================================================= */}
+
             {step === 3 && (
               <View style={BM.confirmWrap}>
-                <Text style={BM.confirmTick}>✅</Text>
-                <Text style={BM.confirmTitle}>Appointment Ready!</Text>
-                <Text style={BM.confirmSubtitle}>Please review your booking details below</Text>
+                {/* SUCCESS ICON */}
+
+                <View style={BM.confirmIconOuter}>
+                  <View style={BM.confirmIconInner}>
+                    <FontAwesome name="check" size={25} color={COLORS.white} />
+                  </View>
+                </View>
+
+                <Text style={BM.confirmTitle}>Ready to Book</Text>
+
+                <Text style={BM.confirmSubtitle}>
+                  Please review your appointment details.
+                </Text>
+
+                {/* CONFIRM CARD */}
 
                 <View style={BM.confirmCard}>
                   {[
-                    { icon: '🏥', label: 'Hospital',  value: 'Medanta at Gita Gyan Sansthanam' },
-                    { icon: '📍', label: 'Location',  value: 'Kurukshetra, Haryana'            },
-                    { icon: '🩺', label: 'Specialty', value: specialty.name                    },
-                    { icon: '👤', label: 'Patient',   value: name                              },
-                    { icon: '📞', label: 'Phone',     value: phone                             },
-                    { icon: '📅', label: 'Date',      value: selectedDate?.date                },
-                    { icon: '⏰', label: 'Time',      value: selectedSlot                      },
-                    { icon: '💰', label: 'Charges',   value: 'FREE  (Complimentary by Medanta)'},
-                  ].map((row, i) => (
-                    <View key={i} style={BM.confirmRow}>
-                      <Text style={BM.confirmRowIcon}>{row.icon}</Text>
-                      <Text style={BM.confirmRowLabel}>{row.label}</Text>
-                      <Text style={BM.confirmRowValue}>{row.value}</Text>
+                    {
+                      icon: 'hospital-o',
+                      label: 'Hospital',
+                      value: 'Medanta at Gita Gyan Sansthanam',
+                    },
+                    {
+                      icon: 'map-marker',
+                      label: 'Location',
+                      value: 'Kurukshetra, Haryana',
+                    },
+                    {
+                      icon: 'stethoscope',
+                      label: 'Specialty',
+                      value: specialty.name,
+                    },
+                    {
+                      icon: 'user',
+                      label: 'Patient',
+                      value: name,
+                    },
+                    {
+                      icon: 'phone',
+                      label: 'Phone',
+                      value: `+91 ${phone}`,
+                    },
+                    {
+                      icon: 'calendar',
+                      label: 'Date',
+                      value: selectedDate?.date,
+                    },
+                    {
+                      icon: 'clock-o',
+                      label: 'Time',
+                      value: selectedSlot,
+                    },
+                    {
+                      icon: 'inr',
+                      label: 'Charges',
+                      value: 'FREE',
+                    },
+                  ].map((row, index) => (
+                    <View
+                      key={row.label}
+                      style={[BM.confirmRow, index === 7 && BM.confirmRowLast]}>
+                      <View style={BM.confirmRowIconBox}>
+                        <FontAwesome
+                          name={row.icon}
+                          size={13}
+                          color={COLORS.brown}
+                        />
+                      </View>
+
+                      <View style={BM.confirmRowContent}>
+                        <Text style={BM.confirmRowLabel}>{row.label}</Text>
+
+                        <Text
+                          style={
+                            row.label === 'Charges'
+                              ? BM.freeValue
+                              : BM.confirmRowValue
+                          }>
+                          {row.value}
+                        </Text>
+                      </View>
                     </View>
                   ))}
                 </View>
 
-                <TouchableOpacity style={BM.doneBtn} onPress={handleDone} activeOpacity={0.85}>
-                  <FontAwesome name="check-circle" size={16} color={C.white} style={{ marginRight: 8 }} />
+                {/* BOOK */}
+
+                <TouchableOpacity
+                  style={BM.doneBtn}
+                  onPress={handleDone}
+                  activeOpacity={0.86}>
+                  <FontAwesome
+                    name="check-circle"
+                    size={16}
+                    color={COLORS.white}
+                  />
+
                   <Text style={BM.doneBtnText}>Book Appointment</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={BM.editBtn} onPress={() => setStep(2)} activeOpacity={0.8}>
-                  <Text style={BM.editBtnText}>✏️  Edit Details</Text>
+                {/* EDIT */}
+
+                <TouchableOpacity
+                  style={BM.editBtn}
+                  activeOpacity={0.82}
+                  onPress={() => setStep(2)}>
+                  <FontAwesome name="pencil" size={12} color={COLORS.brown} />
+
+                  <Text style={BM.editBtnText}>Edit Details</Text>
                 </TouchableOpacity>
               </View>
             )}
 
-            <View style={{ height: 30 }} />
+            <View style={BM.bottomSpace} />
           </ScrollView>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     </Modal>
   );
 }
 
+// ============================================================
+// STYLES
+// ============================================================
+
 const BM = StyleSheet.create({
-  overlay: { flex: 1, justifyContent: 'flex-end', backgroundColor: 'rgba(0,0,0,0.6)' },
-  sheet: {
-    backgroundColor: C.cream, borderTopLeftRadius: 28, borderTopRightRadius: 28,
-    borderTopWidth: 2, borderTopColor: C.medantaBlue, maxHeight: '92%',
+  // ==========================================================
+  // OVERLAY
+  // ==========================================================
+
+  overlay: {
+    flex: 1,
+
+    justifyContent: 'flex-end',
+
+    backgroundColor: COLORS.overlay,
   },
-  handle: { width: 40, height: 4, borderRadius: 2, backgroundColor: C.goldDark, alignSelf: 'center', marginTop: 10, marginBottom: 4 },
+
+  // ==========================================================
+  // SHEET
+  // ==========================================================
+
+  sheet: {
+    maxHeight: '92%',
+
+    backgroundColor: COLORS.background,
+
+    borderTopLeftRadius: 28,
+    borderTopRightRadius: 28,
+
+    overflow: 'hidden',
+
+    borderTopWidth: 1,
+
+    borderTopColor: COLORS.border,
+  },
+
+  handle: {
+    position: 'absolute',
+
+    zIndex: 20,
+
+    top: 8,
+
+    alignSelf: 'center',
+
+    width: 42,
+    height: 4,
+
+    borderRadius: 2,
+
+    backgroundColor: 'rgba(255,255,255,0.42)',
+  },
+
+  // ==========================================================
+  // HEADER
+  // ==========================================================
 
   header: {
-    backgroundColor: C.medantaBlue, padding: 16,
-    flexDirection: 'row', alignItems: 'center', gap: 12,
-    borderBottomWidth: 1, borderBottomColor: 'rgba(0,63,125,0.3)',
-    position: 'relative', overflow: 'hidden',
+    minHeight: 112,
+
+    flexDirection: 'row',
+
+    alignItems: 'center',
+
+    paddingHorizontal: 17,
+
+    paddingTop: 25,
+    paddingBottom: 15,
+
+    backgroundColor: COLORS.darkBrown,
+
+    position: 'relative',
+
+    overflow: 'hidden',
   },
-  headerBlob:    { position: 'absolute', width: 150, height: 150, borderRadius: 75, backgroundColor: 'rgba(255,255,255,0.05)', top: -50, right: -40 },
-  headerIcon:    { fontSize: 34 },
-  headerTextCol: { flex: 1 },
-  headerTitle:   { fontSize: 16, fontWeight: '800', color: C.white },
-  headerDesc:    { fontSize: 11, color: 'rgba(255,255,255,0.7)', fontStyle: 'italic', marginTop: 2 },
+
+  headerCircleOne: {
+    position: 'absolute',
+
+    width: 160,
+    height: 160,
+
+    borderRadius: 80,
+
+    right: -55,
+    top: -85,
+
+    backgroundColor: 'rgba(255,255,255,0.04)',
+  },
+
+  headerCircleTwo: {
+    position: 'absolute',
+
+    width: 90,
+    height: 90,
+
+    borderRadius: 45,
+
+    right: 35,
+    bottom: -65,
+
+    backgroundColor: 'rgba(238,223,201,0.06)',
+  },
+
+  headerIconContainer: {
+    width: 52,
+    height: 52,
+
+    borderRadius: 16,
+
+    alignItems: 'center',
+
+    justifyContent: 'center',
+
+    marginRight: 12,
+
+    backgroundColor: COLORS.brown,
+
+    borderWidth: 1,
+
+    borderColor: 'rgba(255,255,255,0.13)',
+  },
+
+  headerIcon: {
+    fontSize: 27,
+  },
+
+  headerTextCol: {
+    flex: 1,
+
+    paddingRight: 8,
+  },
+
+  headerTitle: {
+    color: COLORS.white,
+
+    fontSize: 17,
+
+    fontWeight: '800',
+
+    marginBottom: 2,
+  },
+
+  headerDesc: {
+    color: 'rgba(255,255,255,0.65)',
+
+    fontSize: 10.5,
+
+    lineHeight: 14,
+  },
+
+  // ==========================================================
+  // FREE BADGE
+  // ==========================================================
+
   freeBadge: {
-    backgroundColor: 'rgba(39,174,96,0.2)', borderWidth: 1, borderColor: 'rgba(39,174,96,0.4)',
-    borderRadius: 10, paddingHorizontal: 8, paddingVertical: 3, marginTop: 6, alignSelf: 'flex-start',
+    alignSelf: 'flex-start',
+
+    flexDirection: 'row',
+
+    alignItems: 'center',
+
+    marginTop: 7,
+
+    paddingHorizontal: 8,
+
+    paddingVertical: 4,
+
+    borderRadius: 20,
+
+    backgroundColor: 'rgba(238,243,229,0.12)',
+
+    borderWidth: 1,
+
+    borderColor: 'rgba(202,214,179,0.25)',
   },
-  freeBadgeText: { fontSize: 9, color: '#27AE60', fontWeight: '800' },
-  closeBtn:      { width: 32, height: 32, borderRadius: 16, backgroundColor: 'rgba(255,255,255,0.1)', alignItems: 'center', justifyContent: 'center' },
+
+  freeBadgeDot: {
+    width: 6,
+    height: 6,
+
+    borderRadius: 3,
+
+    marginRight: 5,
+
+    backgroundColor: '#9EB277',
+  },
+
+  freeBadgeText: {
+    color: '#CFDDB5',
+
+    fontSize: 7.5,
+
+    fontWeight: '800',
+
+    letterSpacing: 0.5,
+  },
+
+  closeBtn: {
+    width: 34,
+    height: 34,
+
+    borderRadius: 17,
+
+    alignItems: 'center',
+
+    justifyContent: 'center',
+
+    backgroundColor: 'rgba(255,255,255,0.09)',
+
+    borderWidth: 1,
+
+    borderColor: 'rgba(255,255,255,0.10)',
+  },
+
+  // ==========================================================
+  // STEPS
+  // ==========================================================
+
+  stepContainer: {
+    backgroundColor: COLORS.cream,
+
+    borderBottomWidth: 1,
+
+    borderBottomColor: COLORS.borderSoft,
+  },
 
   stepRow: {
-    flexDirection: 'row', paddingHorizontal: 16, paddingVertical: 12,
-    backgroundColor: C.creamDark, borderBottomWidth: 1, borderBottomColor: C.goldBorder, gap: 4,
+    flexDirection: 'row',
+
+    paddingHorizontal: 8,
+
+    paddingTop: 12,
+    paddingBottom: 10,
   },
-  stepItem:   { flex: 1, alignItems: 'center', gap: 4 },
+
+  stepItem: {
+    flex: 1,
+
+    alignItems: 'center',
+  },
+
+  stepCircleRow: {
+    width: '100%',
+
+    flexDirection: 'row',
+
+    alignItems: 'center',
+
+    justifyContent: 'center',
+  },
+
   stepCircle: {
-    width: 26, height: 26, borderRadius: 13,
-    backgroundColor: C.creamDark, borderWidth: 1.5, borderColor: C.goldBorder,
-    alignItems: 'center', justifyContent: 'center',
+    width: 28,
+    height: 28,
+
+    borderRadius: 14,
+
+    alignItems: 'center',
+
+    justifyContent: 'center',
+
+    backgroundColor: COLORS.biscuitLight,
+
+    borderWidth: 1.5,
+
+    borderColor: COLORS.border,
   },
-  stepActive:      { backgroundColor: C.medantaBlue, borderColor: C.medantaBlue },
-  stepDone:        { backgroundColor: C.green, borderColor: C.green },
-  stepNum:         { fontSize: 11, fontWeight: '800', color: C.goldDark },
-  stepLabel:       { fontSize: 8, color: C.goldDark, textAlign: 'center', fontWeight: '600' },
-  stepLabelActive: { color: C.medantaBlue },
 
-  body:       { paddingHorizontal: 18, paddingTop: 14 },
-  fieldLabel: { fontSize: 11, fontWeight: '800', color: C.goldDark, letterSpacing: 0.5, marginBottom: 8 },
+  stepActive: {
+    backgroundColor: COLORS.brown,
 
-  dateChip:       { alignItems: 'center', backgroundColor: C.white, borderWidth: 1.5, borderColor: C.goldBorder, borderRadius: 14, paddingHorizontal: 16, paddingVertical: 10, marginRight: 8, minWidth: 76 },
-  dateChipActive: { backgroundColor: C.medantaBlue, borderColor: C.medantaBlue },
-  dateDayText:    { fontSize: 11, fontWeight: '800', color: C.warmBrown, marginBottom: 2 },
-  dateDateText:   { fontSize: 9, color: C.goldDark },
-  dateActiveText: { color: C.white },
+    borderColor: COLORS.brown,
+  },
 
-  slotsGrid:      { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
-  slotChip:       { backgroundColor: C.white, borderWidth: 1.5, borderColor: C.goldBorder, borderRadius: 10, paddingHorizontal: 12, paddingVertical: 8 },
-  slotChipActive: { backgroundColor: C.medantaBlue, borderColor: C.medantaBlue },
-  slotText:       { fontSize: 11, fontWeight: '700', color: C.warmBrown },
-  slotTextActive: { color: C.white },
+  stepDone: {
+    backgroundColor: COLORS.green,
+
+    borderColor: COLORS.green,
+  },
+
+  stepNum: {
+    color: COLORS.softBrown,
+
+    fontSize: 10.5,
+
+    fontWeight: '800',
+  },
+
+  stepNumActive: {
+    color: COLORS.white,
+  },
+
+  stepConnector: {
+    flex: 1,
+
+    height: 1.5,
+
+    backgroundColor: COLORS.border,
+  },
+
+  stepConnectorActive: {
+    backgroundColor: COLORS.green,
+  },
+
+  stepLabel: {
+    marginTop: 5,
+
+    color: COLORS.mutedBrown,
+
+    fontSize: 8,
+
+    fontWeight: '600',
+
+    textAlign: 'center',
+  },
+
+  stepLabelActive: {
+    color: COLORS.brown,
+
+    fontWeight: '800',
+  },
+
+  stepLabelDone: {
+    color: COLORS.green,
+  },
+
+  // ==========================================================
+  // BODY
+  // ==========================================================
+
+  body: {
+    paddingHorizontal: 18,
+
+    paddingTop: 15,
+  },
+
+  bodyContent: {
+    paddingBottom: 5,
+  },
+
+  contentHeading: {
+    marginBottom: 16,
+  },
+
+  contentTitle: {
+    color: COLORS.darkBrown,
+
+    fontSize: 18,
+
+    fontWeight: '800',
+  },
+
+  contentSubtitle: {
+    marginTop: 3,
+
+    color: COLORS.softBrown,
+
+    fontSize: 10.5,
+
+    lineHeight: 15,
+  },
+
+  // ==========================================================
+  // LABEL
+  // ==========================================================
+
+  fieldLabel: {
+    marginBottom: 7,
+
+    color: COLORS.darkBrown,
+
+    fontSize: 11,
+
+    fontWeight: '800',
+  },
+
+  // ==========================================================
+  // DATES
+  // ==========================================================
+
+  dateScrollContent: {
+    paddingRight: 8,
+  },
+
+  dateChip: {
+    minWidth: 78,
+
+    alignItems: 'center',
+
+    paddingHorizontal: 14,
+
+    paddingVertical: 11,
+
+    marginRight: 8,
+
+    borderRadius: 14,
+
+    backgroundColor: COLORS.cream,
+
+    borderWidth: 1.5,
+
+    borderColor: COLORS.border,
+
+    position: 'relative',
+  },
+
+  dateChipActive: {
+    backgroundColor: COLORS.brown,
+
+    borderColor: COLORS.darkBrown,
+
+    elevation: 3,
+
+    shadowColor: COLORS.darkBrown,
+
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+
+    shadowOpacity: 0.15,
+
+    shadowRadius: 5,
+  },
+
+  dateDayText: {
+    color: COLORS.darkBrown,
+
+    fontSize: 11,
+
+    fontWeight: '800',
+
+    marginBottom: 3,
+  },
+
+  dateDateText: {
+    color: COLORS.softBrown,
+
+    fontSize: 9,
+  },
+
+  dateActiveText: {
+    color: COLORS.white,
+  },
+
+  dateActiveSubText: {
+    color: 'rgba(255,255,255,0.72)',
+  },
+
+  selectedMiniDot: {
+    position: 'absolute',
+
+    top: 6,
+    right: 6,
+
+    width: 5,
+    height: 5,
+
+    borderRadius: 3,
+
+    backgroundColor: COLORS.biscuit,
+  },
+
+  // ==========================================================
+  // TIME
+  // ==========================================================
+
+  timeLabel: {
+    marginTop: 19,
+  },
+
+  slotsGrid: {
+    flexDirection: 'row',
+
+    flexWrap: 'wrap',
+
+    marginHorizontal: -4,
+  },
+
+  slotChip: {
+    flexDirection: 'row',
+
+    alignItems: 'center',
+
+    marginHorizontal: 4,
+
+    marginBottom: 8,
+
+    paddingHorizontal: 11,
+
+    paddingVertical: 9,
+
+    borderRadius: 10,
+
+    backgroundColor: COLORS.cream,
+
+    borderWidth: 1,
+
+    borderColor: COLORS.border,
+  },
+
+  slotChipActive: {
+    backgroundColor: COLORS.brown,
+
+    borderColor: COLORS.darkBrown,
+  },
+
+  slotText: {
+    color: COLORS.darkBrown,
+
+    marginLeft: 5,
+
+    fontSize: 10.5,
+
+    fontWeight: '700',
+  },
+
+  slotTextActive: {
+    color: COLORS.white,
+  },
+
+  // ==========================================================
+  // INPUTS
+  // ==========================================================
 
   textInput: {
-    backgroundColor: C.white, borderWidth: 1.5, borderColor: C.goldBorder,
-    borderRadius: 12, paddingHorizontal: 14, paddingVertical: 12,
-    fontSize: 14, color: C.deepBrown, marginBottom: 12,
+    minHeight: 48,
+
+    marginBottom: 13,
+
+    paddingHorizontal: 13,
+
+    borderRadius: 11,
+
+    backgroundColor: COLORS.cream,
+
+    borderWidth: 1,
+
+    borderColor: COLORS.border,
+
+    color: COLORS.darkBrown,
+
+    fontSize: 13,
   },
 
-  genderRow:        { flexDirection: 'row', gap: 10, marginBottom: 16 },
-  genderChip:       { flex: 1, backgroundColor: C.white, borderWidth: 1.5, borderColor: C.goldBorder, borderRadius: 10, paddingVertical: 10, alignItems: 'center' },
-  genderChipActive: { backgroundColor: C.medantaBlue, borderColor: C.medantaBlue },
-  genderText:       { fontSize: 12, fontWeight: '700', color: C.warmBrown },
-  genderTextActive: { color: C.white },
+  // ==========================================================
+  // PHONE INPUT
+  // ==========================================================
 
-  btnRow:          { flexDirection: 'row', gap: 10, marginTop: 4 },
-  nextBtn:         { flex: 1, backgroundColor: C.medantaBlue, borderRadius: 14, paddingVertical: 14, alignItems: 'center' },
-  nextBtnDisabled: { opacity: 0.5 },
-  nextBtnText:     { fontSize: 14, fontWeight: '800', color: C.white },
-  backBtn:         { flex: 0.6, backgroundColor: C.creamDark, borderRadius: 14, paddingVertical: 14, alignItems: 'center', borderWidth: 1, borderColor: C.goldBorder },
-  backBtnText:     { fontSize: 14, fontWeight: '700', color: C.warmBrown },
-  bookingSummary:  { backgroundColor: C.medantaPale, borderWidth: 1, borderColor: C.medantaBorder, borderRadius: 10, paddingHorizontal: 14, paddingVertical: 8, fontSize: 11, color: C.medantaBlue, fontWeight: '700', marginBottom: 16 },
+  phoneInputContainer: {
+    minHeight: 48,
 
-  confirmWrap:     { alignItems: 'center', paddingTop: 8 },
-  confirmTick:     { fontSize: 52, marginBottom: 10 },
-  confirmTitle:    { fontSize: 20, fontWeight: '800', color: C.deepBrown, marginBottom: 4 },
-  confirmSubtitle: { fontSize: 12, color: C.warmBrown, fontStyle: 'italic', marginBottom: 16 },
-  confirmCard:     { width: '100%', backgroundColor: C.white, borderRadius: 16, borderWidth: 1, borderColor: C.goldBorder, overflow: 'hidden', marginBottom: 16 },
-  confirmRow:      { flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: 14, paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: 'rgba(201,162,39,0.15)' },
-  confirmRowIcon:  { fontSize: 16, width: 24, textAlign: 'center' },
-  confirmRowLabel: { fontSize: 11, color: C.goldDark, fontWeight: '700', width: 70 },
-  confirmRowValue: { flex: 1, fontSize: 12, color: C.deepBrown, fontWeight: '600' },
+    flexDirection: 'row',
 
-  doneBtn:     { width: '100%', backgroundColor: C.green, borderRadius: 14, paddingVertical: 14, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginBottom: 10 },
-  doneBtnText: { fontSize: 15, fontWeight: '800', color: C.white },
-  editBtn:     { backgroundColor: C.creamDark, borderRadius: 12, paddingVertical: 10, paddingHorizontal: 24, borderWidth: 1, borderColor: C.goldBorder },
-  editBtnText: { fontSize: 12, fontWeight: '700', color: C.warmBrown },
+    overflow: 'hidden',
+
+    marginBottom: 13,
+
+    borderRadius: 11,
+
+    backgroundColor: COLORS.cream,
+
+    borderWidth: 1,
+
+    borderColor: COLORS.border,
+  },
+
+  countryCodeBox: {
+    width: 57,
+
+    alignItems: 'center',
+
+    justifyContent: 'center',
+
+    backgroundColor: COLORS.biscuitLight,
+
+    borderRightWidth: 1,
+
+    borderRightColor: COLORS.border,
+  },
+
+  countryCode: {
+    color: COLORS.brown,
+
+    fontSize: 12,
+
+    fontWeight: '800',
+  },
+
+  phoneInput: {
+    flex: 1,
+
+    paddingHorizontal: 12,
+
+    color: COLORS.darkBrown,
+
+    fontSize: 13,
+  },
+
+  // ==========================================================
+  // GENDER
+  // ==========================================================
+
+  genderRow: {
+    flexDirection: 'row',
+
+    marginHorizontal: -4,
+
+    marginBottom: 16,
+  },
+
+  genderChip: {
+    flex: 1,
+
+    alignItems: 'center',
+
+    marginHorizontal: 4,
+
+    paddingVertical: 11,
+
+    borderRadius: 10,
+
+    backgroundColor: COLORS.cream,
+
+    borderWidth: 1,
+
+    borderColor: COLORS.border,
+  },
+
+  genderChipActive: {
+    backgroundColor: COLORS.brown,
+
+    borderColor: COLORS.darkBrown,
+  },
+
+  genderText: {
+    color: COLORS.darkBrown,
+
+    fontSize: 11,
+
+    fontWeight: '700',
+  },
+
+  genderTextActive: {
+    color: COLORS.white,
+  },
+
+  // ==========================================================
+  // BUTTONS
+  // ==========================================================
+
+  nextBtn: {
+    minHeight: 50,
+
+    flexDirection: 'row',
+
+    alignItems: 'center',
+
+    justifyContent: 'center',
+
+    marginTop: 16,
+
+    borderRadius: 12,
+
+    backgroundColor: COLORS.brown,
+
+    borderWidth: 1,
+
+    borderColor: COLORS.darkBrown,
+
+    elevation: 3,
+
+    shadowColor: COLORS.darkBrown,
+
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+
+    shadowOpacity: 0.16,
+
+    shadowRadius: 5,
+  },
+
+  nextBtnDisabled: {
+    opacity: 0.42,
+  },
+
+  nextBtnText: {
+    color: COLORS.white,
+
+    fontSize: 13,
+
+    fontWeight: '800',
+  },
+
+  buttonArrowBox: {
+    width: 24,
+    height: 24,
+
+    alignItems: 'center',
+
+    justifyContent: 'center',
+
+    marginLeft: 8,
+
+    borderRadius: 12,
+
+    backgroundColor: COLORS.darkBrown,
+  },
+
+  btnRow: {
+    flexDirection: 'row',
+
+    marginHorizontal: -4,
+
+    marginTop: 4,
+  },
+
+  backBtn: {
+    flex: 0.65,
+
+    minHeight: 48,
+
+    flexDirection: 'row',
+
+    alignItems: 'center',
+
+    justifyContent: 'center',
+
+    marginHorizontal: 4,
+
+    borderRadius: 11,
+
+    backgroundColor: COLORS.biscuitLight,
+
+    borderWidth: 1,
+
+    borderColor: COLORS.border,
+  },
+
+  backBtnText: {
+    color: COLORS.brown,
+
+    marginLeft: 6,
+
+    fontSize: 12,
+
+    fontWeight: '800',
+  },
+
+  confirmBtn: {
+    flex: 1,
+
+    minHeight: 48,
+
+    flexDirection: 'row',
+
+    alignItems: 'center',
+
+    justifyContent: 'center',
+
+    marginHorizontal: 4,
+
+    borderRadius: 11,
+
+    backgroundColor: COLORS.brown,
+
+    borderWidth: 1,
+
+    borderColor: COLORS.darkBrown,
+  },
+
+  // ==========================================================
+  // APPOINTMENT SUMMARY
+  // ==========================================================
+
+  bookingSummary: {
+    flexDirection: 'row',
+
+    alignItems: 'center',
+
+    marginBottom: 17,
+
+    paddingHorizontal: 11,
+
+    paddingVertical: 10,
+
+    borderRadius: 12,
+
+    backgroundColor: COLORS.biscuitLight,
+
+    borderWidth: 1,
+
+    borderColor: COLORS.border,
+  },
+
+  summaryIconBox: {
+    width: 34,
+    height: 34,
+
+    borderRadius: 10,
+
+    alignItems: 'center',
+
+    justifyContent: 'center',
+
+    marginRight: 9,
+
+    backgroundColor: COLORS.biscuit,
+  },
+
+  summaryTextArea: {
+    flex: 1,
+  },
+
+  summarySmallText: {
+    color: COLORS.mutedBrown,
+
+    fontSize: 7.5,
+
+    fontWeight: '800',
+
+    letterSpacing: 0.7,
+
+    marginBottom: 2,
+  },
+
+  summaryMainText: {
+    color: COLORS.darkBrown,
+
+    fontSize: 11,
+
+    fontWeight: '800',
+  },
+
+  // ==========================================================
+  // CONFIRM
+  // ==========================================================
+
+  confirmWrap: {
+    alignItems: 'center',
+
+    paddingTop: 5,
+  },
+
+  confirmIconOuter: {
+    width: 76,
+    height: 76,
+
+    borderRadius: 38,
+
+    alignItems: 'center',
+
+    justifyContent: 'center',
+
+    marginBottom: 12,
+
+    backgroundColor: COLORS.greenLight,
+
+    borderWidth: 1,
+
+    borderColor: COLORS.greenBorder,
+  },
+
+  confirmIconInner: {
+    width: 50,
+    height: 50,
+
+    borderRadius: 25,
+
+    alignItems: 'center',
+
+    justifyContent: 'center',
+
+    backgroundColor: COLORS.green,
+  },
+
+  confirmTitle: {
+    color: COLORS.darkBrown,
+
+    fontSize: 20,
+
+    fontWeight: '800',
+
+    marginBottom: 4,
+  },
+
+  confirmSubtitle: {
+    color: COLORS.softBrown,
+
+    fontSize: 10.5,
+
+    textAlign: 'center',
+
+    marginBottom: 17,
+  },
+
+  // ==========================================================
+  // CONFIRM CARD
+  // ==========================================================
+
+  confirmCard: {
+    width: '100%',
+
+    overflow: 'hidden',
+
+    marginBottom: 16,
+
+    borderRadius: 15,
+
+    backgroundColor: COLORS.cream,
+
+    borderWidth: 1,
+
+    borderColor: COLORS.border,
+
+    elevation: 2,
+
+    shadowColor: COLORS.darkBrown,
+
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+
+    shadowOpacity: 0.06,
+
+    shadowRadius: 5,
+  },
+
+  confirmRow: {
+    flexDirection: 'row',
+
+    alignItems: 'center',
+
+    paddingHorizontal: 12,
+
+    paddingVertical: 10,
+
+    borderBottomWidth: 1,
+
+    borderBottomColor: COLORS.borderSoft,
+  },
+
+  confirmRowLast: {
+    borderBottomWidth: 0,
+  },
+
+  confirmRowIconBox: {
+    width: 32,
+    height: 32,
+
+    borderRadius: 9,
+
+    alignItems: 'center',
+
+    justifyContent: 'center',
+
+    marginRight: 10,
+
+    backgroundColor: COLORS.biscuitLight,
+  },
+
+  confirmRowContent: {
+    flex: 1,
+  },
+
+  confirmRowLabel: {
+    color: COLORS.mutedBrown,
+
+    fontSize: 8.5,
+
+    fontWeight: '600',
+
+    marginBottom: 2,
+  },
+
+  confirmRowValue: {
+    color: COLORS.darkBrown,
+
+    fontSize: 11.5,
+
+    fontWeight: '700',
+
+    lineHeight: 15,
+  },
+
+  freeValue: {
+    color: COLORS.green,
+
+    fontSize: 12,
+
+    fontWeight: '900',
+  },
+
+  // ==========================================================
+  // FINAL BUTTONS
+  // ==========================================================
+
+  doneBtn: {
+    width: '100%',
+
+    minHeight: 50,
+
+    flexDirection: 'row',
+
+    alignItems: 'center',
+
+    justifyContent: 'center',
+
+    marginBottom: 9,
+
+    borderRadius: 12,
+
+    backgroundColor: COLORS.brown,
+
+    borderWidth: 1,
+
+    borderColor: COLORS.darkBrown,
+
+    elevation: 3,
+
+    shadowColor: COLORS.darkBrown,
+
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+
+    shadowOpacity: 0.16,
+
+    shadowRadius: 5,
+  },
+
+  doneBtnText: {
+    color: COLORS.white,
+
+    marginLeft: 8,
+
+    fontSize: 13.5,
+
+    fontWeight: '800',
+  },
+
+  editBtn: {
+    flexDirection: 'row',
+
+    alignItems: 'center',
+
+    justifyContent: 'center',
+
+    paddingHorizontal: 20,
+
+    paddingVertical: 10,
+
+    borderRadius: 10,
+
+    backgroundColor: COLORS.biscuitLight,
+
+    borderWidth: 1,
+
+    borderColor: COLORS.border,
+  },
+
+  editBtnText: {
+    color: COLORS.brown,
+
+    marginLeft: 7,
+
+    fontSize: 11,
+
+    fontWeight: '800',
+  },
+
+  bottomSpace: {
+    height: 30,
+  },
 });

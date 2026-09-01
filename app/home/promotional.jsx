@@ -1,5 +1,7 @@
 import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
-import { useEffect, useRef, useState } from 'react';
+
+import { useEffect, useRef } from 'react';
+
 import {
   Animated,
   Dimensions,
@@ -11,73 +13,211 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+
 import { WebView } from 'react-native-webview';
 
 const { width } = Dimensions.get('window');
 
+// ============================================================
+// BRAND COLOR SYSTEM
+// ============================================================
+
 const COLORS = {
-  deepBrown: '#2C1A0A',
-  warmBrown: '#4A2C0D',
-  richBrown: '#3D2010',
-  gold:      '#C9A227',
-  goldLight: '#E8C55A',
-  goldDark:  '#8B6914',
-  cream:     '#FDF6E3',
-  saffron:   '#E8721C',
-  ytRed:     '#FF0000',
+  // Your main colors
+  deepBrown: '#3a2c16',
+  primaryBrown: '#5a3816',
+
+  // Supporting browns
+  mediumBrown: '#72502C',
+  lightBrown: '#9A7953',
+
+  // Biscuit / cream
+  background: '#F4E9D8',
+  biscuit: '#EADAC3',
+  biscuitLight: '#F8F1E7',
+  cream: '#FFFDF8',
+  warmWhite: '#FFFBF4',
+
+  // Borders
+  border: '#DCC8AA',
+  borderSoft: '#E8D9C5',
+
+  // Text
+  textPrimary: '#3a2c16',
+  textSecondary: '#725F48',
+  textMuted: '#9A8872',
+
+  // Soft accent
+  accent: '#B89462',
+  accentLight: '#D7BE97',
+
+  // Keep YouTube red only for YouTube identity
+  youtube: '#FF0033',
+
+  white: '#FFFFFF',
 };
 
-const YT_CHANNEL_ID  = 'UCI0jiDrENDlgGcpe8T61efg';
+// ============================================================
+// YOUTUBE SETTINGS
+// ============================================================
+
+const YT_CHANNEL_ID = 'UCI0jiDrENDlgGcpe8T61efg';
+
 const YT_PLAYLIST_ID = 'PLisrlFmbmaulMKK7cqY8V0Rk4BJiCJvzm';
-const YT_HANDLE      = '@GitaManishi';
 
-// ── Add your real video IDs here — thumbnails load automatically ──────────────
-// To get video ID: open any video → copy the part after ?v= in the URL
+const YT_HANDLE = '@GitaManishi';
+
+// ============================================================
+// VIDEOS
+// Replace these IDs with your actual videos
+// ============================================================
+
 const YT_VIDEOS = [
-  { id: 'v1', videoId: 'CO0ZTOnzSv8', title: 'Guru Shishya Samvad — गुरु शिष्य संवाद',           views: '4.9K',  duration: '18:42' },
-  { id: 'v2', videoId: 'CO0ZTOnzSv8', title: 'Bhagwad Gita Pravachan by Maharaj Ji',              views: '12K',   duration: '45:10' },
-  { id: 'v3', videoId: 'CO0ZTOnzSv8', title: 'Karma Yoga — The Path of Action | Satsang',        views: '8.7K',  duration: '32:18' },
-  { id: 'v4', videoId: 'CO0ZTOnzSv8', title: 'Gita Saar — Essence of Life | Special Discourse',  views: '21K',   duration: '1:10:44' },
+  {
+    id: 'v1',
+    videoId: 'CO0ZTOnzSv8',
+    title: 'Guru Shishya Samvad — गुरु शिष्य संवाद',
+    views: '4.9K',
+    duration: '18:42',
+  },
+
+  {
+    id: 'v2',
+    videoId: 'CO0ZTOnzSv8',
+    title: 'Bhagwad Gita Pravachan by Maharaj Ji',
+    views: '12K',
+    duration: '45:10',
+  },
+
+  {
+    id: 'v3',
+    videoId: 'CO0ZTOnzSv8',
+    title: 'Karma Yoga — The Path of Action | Satsang',
+    views: '8.7K',
+    duration: '32:18',
+  },
+
+  {
+    id: 'v4',
+    videoId: 'CO0ZTOnzSv8',
+    title: 'Gita Saar — Essence of Life | Special Discourse',
+    views: '21K',
+    duration: '1:10:44',
+  },
 ];
 
-// ── Shorts — use real short video IDs from your channel ──────────────────────
+// ============================================================
+// SHORTS
+// ============================================================
+
 const YT_SHORTS = [
-  { id: 's1', videoId: 'CO0ZTOnzSv8', title: 'Morning Kirtan',          duration: '0:58' },
-  { id: 's2', videoId: 'CO0ZTOnzSv8', title: 'Gita Shloka Ch 4 V7',    duration: '0:42' },
-  { id: 's3', videoId: 'CO0ZTOnzSv8', title: 'Gaushala Blessings',      duration: '0:55' },
-  { id: 's4', videoId: 'CO0ZTOnzSv8', title: 'Bal Sanskar Recitation',  duration: '0:47' },
-  { id: 's5', videoId: 'CO0ZTOnzSv8', title: 'Ganga Aarti Haridwar',    duration: '0:50' },
+  {
+    id: 's1',
+    videoId: 'CO0ZTOnzSv8',
+    title: 'Morning Kirtan',
+    duration: '0:58',
+  },
+
+  {
+    id: 's2',
+    videoId: 'CO0ZTOnzSv8',
+    title: 'Gita Shloka Ch 4 V7',
+    duration: '0:42',
+  },
+
+  {
+    id: 's3',
+    videoId: 'CO0ZTOnzSv8',
+    title: 'Gaushala Blessings',
+    duration: '0:55',
+  },
+
+  {
+    id: 's4',
+    videoId: 'CO0ZTOnzSv8',
+    title: 'Bal Sanskar Recitation',
+    duration: '0:47',
+  },
+
+  {
+    id: 's5',
+    videoId: 'CO0ZTOnzSv8',
+    title: 'Ganga Aarti Haridwar',
+    duration: '0:50',
+  },
 ];
 
-// ── YouTube thumbnail URL helper — works for ANY video ID, no API needed ─────
-const thumb    = (id) => `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
-const thumbMax = (id) => `https://img.youtube.com/vi/${id}/maxresdefault.jpg`;
+// ============================================================
+// THUMBNAIL
+// ============================================================
 
-// ── Open video in YouTube app/browser ────────────────────────────────────────
-const openVideo = (videoId) =>
+const thumb = id => `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
+
+const thumbMax = id => `https://img.youtube.com/vi/${id}/maxresdefault.jpg`;
+
+// ============================================================
+// YOUTUBE ACTIONS
+// ============================================================
+
+const openVideo = videoId =>
   Linking.openURL(`https://www.youtube.com/watch?v=${videoId}`);
-const openShort = (videoId) =>
+
+const openShort = videoId =>
   Linking.openURL(`https://www.youtube.com/shorts/${videoId}`);
+
 const openChannel = () =>
-  Linking.openURL(`https://www.youtube.com/@${YT_HANDLE.replace('@','')}`);
+  Linking.openURL(`https://www.youtube.com/@${YT_HANDLE.replace('@', '')}`);
+
 const openPlaylist = () =>
   Linking.openURL(`https://www.youtube.com/playlist?list=${YT_PLAYLIST_ID}`);
 
-// ── Pulse dot ─────────────────────────────────────────────────────────────────
+// ============================================================
+// PULSE DOT
+// ============================================================
+
 function PulseDot() {
   const anim = useRef(new Animated.Value(1)).current;
+
   useEffect(() => {
-    Animated.loop(
+    const animation = Animated.loop(
       Animated.sequence([
-        Animated.timing(anim, { toValue: 0.1, duration: 600, useNativeDriver: true }),
-        Animated.timing(anim, { toValue: 1,   duration: 600, useNativeDriver: true }),
-      ])
-    ).start();
-  }, []);
-  return <Animated.View style={[styles.pulseDot, { opacity: anim }]} />;
+        Animated.timing(anim, {
+          toValue: 0.25,
+          duration: 650,
+          useNativeDriver: true,
+        }),
+
+        Animated.timing(anim, {
+          toValue: 1,
+          duration: 650,
+          useNativeDriver: true,
+        }),
+      ]),
+    );
+
+    animation.start();
+
+    return () => {
+      animation.stop();
+    };
+  }, [anim]);
+
+  return (
+    <Animated.View
+      style={[
+        styles.pulseDot,
+        {
+          opacity: anim,
+        },
+      ]}
+    />
+  );
 }
 
-// ── Section header ────────────────────────────────────────────────────────────
+// ============================================================
+// SECTION HEADER
+// ============================================================
+
 function SectionHead({ icon, title, accent, onAction, actionLabel }) {
   return (
     <View style={styles.sectionHead}>
@@ -85,45 +225,94 @@ function SectionHead({ icon, title, accent, onAction, actionLabel }) {
         <View style={styles.sectionIconBox}>
           <Text style={styles.sectionIcon}>{icon}</Text>
         </View>
-        <View>
+
+        <View style={styles.sectionHeadingText}>
           <Text style={styles.sectionTitle}>{title}</Text>
+
           <Text style={styles.sectionAccent}>{accent}</Text>
         </View>
       </View>
+
       {onAction && (
-        <TouchableOpacity style={styles.sectionActionBtn} onPress={onAction} activeOpacity={0.8}>
+        <TouchableOpacity
+          style={styles.sectionActionBtn}
+          onPress={onAction}
+          activeOpacity={0.8}>
           <Text style={styles.sectionActionText}>{actionLabel || 'Open'}</Text>
-          <MaterialCommunityIcons name="open-in-new" size={11} color={COLORS.ytRed} />
+
+          <MaterialCommunityIcons
+            name="chevron-right"
+            size={15}
+            color={COLORS.primaryBrown}
+          />
         </TouchableOpacity>
       )}
     </View>
   );
 }
 
-// ── Playlist WebView embed (uses playlist ID — no per-video embedding needed) ─
+// ============================================================
+// PLAYLIST WEBVIEW
+// ============================================================
+
 function YTPlaylistEmbed() {
-  // Playlist embed works even when individual video embedding is disabled
-  const html = `<!DOCTYPE html><html>
-    <head>
-      <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
-      <style>
-        *{margin:0;padding:0;box-sizing:border-box;background:#000;}
-        body{overflow:hidden;}
-        .c{position:relative;width:100%;padding-bottom:56.25%;height:0;}
-        iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none;}
-      </style>
-    </head>
-    <body><div class="c">
-      <iframe
-        src="https://www.youtube-nocookie.com/embed/videoseries?list=${YT_PLAYLIST_ID}&rel=0&modestbranding=1&playsinline=1"
-        allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture"
-        allowfullscreen>
-      </iframe>
-    </div></body></html>`;
+  const html = `
+    <!DOCTYPE html>
+
+    <html>
+      <head>
+        <meta
+          name="viewport"
+          content="width=device-width,initial-scale=1.0,maximum-scale=1.0"
+        />
+
+        <style>
+          * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background: #000;
+          }
+
+          body {
+            overflow: hidden;
+          }
+
+          .container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            height: 0;
+          }
+
+          iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+          }
+        </style>
+      </head>
+
+      <body>
+        <div class="container">
+          <iframe
+            src="https://www.youtube-nocookie.com/embed/videoseries?list=${YT_PLAYLIST_ID}&rel=0&modestbranding=1&playsinline=1"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          >
+          </iframe>
+        </div>
+      </body>
+    </html>
+  `;
+
   return (
     <WebView
       source={{ html }}
-      style={{ width: '100%', height: 212 }}
+      style={styles.webView}
       scrollEnabled={false}
       allowsInlineMediaPlayback
       mediaPlaybackRequiresUserAction={false}
@@ -135,386 +324,1425 @@ function YTPlaylistEmbed() {
   );
 }
 
-// ── Video Card — real thumbnail via img.youtube.com, opens in YT app on tap ──
+// ============================================================
+// VIDEO CARD
+// ============================================================
+
 function YTVideoCard({ item }) {
   return (
-    <TouchableOpacity style={styles.videoCard} activeOpacity={0.88} onPress={() => openVideo(item.videoId)}>
-      {/* Real thumbnail from YouTube CDN */}
+    <TouchableOpacity
+      style={styles.videoCard}
+      activeOpacity={0.9}
+      onPress={() => openVideo(item.videoId)}>
       <View style={styles.videoThumbWrap}>
         <Image
-          source={{ uri: thumb(item.videoId) }}
+          source={{
+            uri: thumb(item.videoId),
+          }}
           style={styles.videoThumbImg}
           resizeMode="cover"
         />
-        {/* Dark overlay */}
+
         <View style={styles.videoThumbOverlay} />
-        {/* Play button */}
+
+        {/* PLAY */}
+
         <View style={styles.videoPlayBtn}>
-          <FontAwesome name="play" size={20} color="#fff" />
+          <FontAwesome name="play" size={17} color={COLORS.white} />
         </View>
-        {/* Duration */}
+
+        {/* YOUTUBE */}
+
+        <View style={styles.videoYTBadge}>
+          <FontAwesome name="youtube-play" size={13} color={COLORS.youtube} />
+
+          <Text style={styles.videoYTBadgeText}>YouTube</Text>
+        </View>
+
+        {/* DURATION */}
+
         <View style={styles.videoDurationBadge}>
           <Text style={styles.videoDurationText}>{item.duration}</Text>
         </View>
-        {/* YT badge */}
-        <View style={styles.videoYTBadge}>
-          <FontAwesome name="youtube-play" size={14} color={COLORS.ytRed} />
-        </View>
       </View>
+
       <View style={styles.videoMeta}>
-        <Text style={styles.videoTitle} numberOfLines={2}>{item.title}</Text>
+        <Text style={styles.videoTitle} numberOfLines={2}>
+          {item.title}
+        </Text>
+
         <View style={styles.videoMetaRow}>
-          <FontAwesome name="youtube-play" size={10} color={COLORS.ytRed} />
+          <MaterialCommunityIcons
+            name="eye-outline"
+            size={13}
+            color={COLORS.lightBrown}
+          />
+
           <Text style={styles.videoViews}>{item.views} views</Text>
-          <Text style={styles.videoDot}>·</Text>
-          <MaterialCommunityIcons name="clock-outline" size={10} color={COLORS.goldDark} />
+
+          <View style={styles.metaDot} />
+
+          <MaterialCommunityIcons
+            name="clock-outline"
+            size={12}
+            color={COLORS.lightBrown}
+          />
+
           <Text style={styles.videoDurationMeta}>{item.duration}</Text>
         </View>
+
         <View style={styles.videoOpenRow}>
-          <Text style={styles.videoOpenText}>Opens in YouTube</Text>
-          <MaterialCommunityIcons name="open-in-new" size={10} color="rgba(253,246,227,0.3)" />
+          <Text style={styles.videoOpenText}>Watch on YouTube</Text>
+
+          <MaterialCommunityIcons
+            name="open-in-new"
+            size={11}
+            color={COLORS.primaryBrown}
+          />
         </View>
       </View>
     </TouchableOpacity>
   );
 }
 
-// ── Short Card — real thumbnail, opens YouTube Shorts on tap ─────────────────
+// ============================================================
+// SHORT CARD
+// ============================================================
+
 function YTShortCard({ item }) {
   return (
-    <TouchableOpacity style={styles.shortCard} activeOpacity={0.85} onPress={() => openShort(item.videoId)}>
+    <TouchableOpacity
+      style={styles.shortCard}
+      activeOpacity={0.88}
+      onPress={() => openShort(item.videoId)}>
       <View style={styles.shortThumbWrap}>
         <Image
-          source={{ uri: thumb(item.videoId) }}
+          source={{
+            uri: thumb(item.videoId),
+          }}
           style={styles.shortThumbImg}
           resizeMode="cover"
         />
+
         <View style={styles.shortThumbOverlay} />
-        <View style={styles.shortPlayBtn}>
-          <FontAwesome name="play" size={14} color="#fff" />
+
+        <View style={styles.shortTopBadge}>
+          <FontAwesome name="youtube-play" size={11} color={COLORS.youtube} />
+
+          <Text style={styles.shortTopBadgeText}>SHORTS</Text>
         </View>
+
+        <View style={styles.shortPlayBtn}>
+          <FontAwesome name="play" size={13} color={COLORS.white} />
+        </View>
+
         <View style={styles.shortDurationBadge}>
           <Text style={styles.shortDurationText}>{item.duration}</Text>
         </View>
-        <View style={styles.shortTagBadge}>
-          <Text style={styles.shortTagText}>#Shorts</Text>
-        </View>
       </View>
-      <Text style={styles.shortTitle} numberOfLines={2}>{item.title}</Text>
+
+      <View style={styles.shortBottom}>
+        <Text style={styles.shortTitle} numberOfLines={2}>
+          {item.title}
+        </Text>
+
+        <MaterialCommunityIcons
+          name="chevron-right"
+          size={16}
+          color={COLORS.primaryBrown}
+        />
+      </View>
     </TouchableOpacity>
   );
 }
 
-// ── MAIN SCREEN ───────────────────────────────────────────────────────────────
+// ============================================================
+// MAIN SCREEN
+// ============================================================
+
 export default function PromotionalScreen() {
   return (
     <View style={styles.root}>
-      <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false} nestedScrollEnabled>
+      <ScrollView
+        style={styles.scroll}
+        showsVerticalScrollIndicator={false}
+        nestedScrollEnabled
+        contentContainerStyle={styles.scrollContent}>
+        {/* ===================================================
+            HERO
+        =================================================== */}
 
-        {/* ── Hero ── */}
         <View style={styles.hero}>
-          <View style={styles.heroBadge}>
-            <FontAwesome name="youtube-play" size={12} color={COLORS.ytRed} />
-            <Text style={styles.heroBadgeText}>Swami Giananand • {YT_HANDLE}</Text>
+          <View style={styles.heroTopRow}>
+            <View style={styles.heroBadge}>
+              <FontAwesome
+                name="youtube-play"
+                size={13}
+                color={COLORS.youtube}
+              />
+
+              <Text style={styles.heroBadgeText}>{YT_HANDLE}</Text>
+            </View>
+
+            <View style={styles.officialBadge}>
+              <View style={styles.officialDot} />
+
+              <Text style={styles.officialBadgeText}>OFFICIAL</Text>
+            </View>
           </View>
-          <Text style={styles.heroHeading}>
-            Watch Maharaj Ji{'\n'}
-            <Text style={styles.heroAccent}>Live & On Demand</Text>
-          </Text>
+
+          <Text style={styles.heroSmallTitle}>SWAMI GIANANAND</Text>
+
+          <Text style={styles.heroHeading}>Watch Maharaj Ji</Text>
+
+          <Text style={styles.heroAccent}>Live & On Demand</Text>
+
           <Text style={styles.heroDesc}>
-            Pravachans, live aartis, satsangs and Bhagwad Gita discourses —
-            tap any video to watch directly in YouTube.
+            Pravachans, satsangs, aartis and Bhagwad Gita discourses, available
+            directly from the official channel.
           </Text>
+
+          {/* STATS */}
+
           <View style={styles.heroStats}>
-            {[
-              { icon: 'users',       val: '34.2K', label: 'Subscribers' },
-              { icon: 'play-circle', val: '1.6K+', label: 'Videos'      },
-              { icon: 'eye',         val: '5M+',   label: 'Total Views' },
-            ].map((s, i) => (
-              <View key={s.label} style={[styles.heroStat, i < 2 && styles.heroStatBorder]}>
-                <FontAwesome name={s.icon} size={13} color={COLORS.ytRed} style={{ marginBottom: 4 }} />
-                <Text style={styles.heroStatVal}>{s.val}</Text>
-                <Text style={styles.heroStatLabel}>{s.label}</Text>
-              </View>
-            ))}
+            <View style={styles.heroStat}>
+              <Text style={styles.heroStatVal}>34.2K</Text>
+
+              <Text style={styles.heroStatLabel}>Subscribers</Text>
+            </View>
+
+            <View style={[styles.heroStat, styles.heroStatMiddle]}>
+              <Text style={styles.heroStatVal}>1.6K+</Text>
+
+              <Text style={styles.heroStatLabel}>Videos</Text>
+            </View>
+
+            <View style={styles.heroStat}>
+              <Text style={styles.heroStatVal}>5M+</Text>
+
+              <Text style={styles.heroStatLabel}>Views</Text>
+            </View>
           </View>
-          <TouchableOpacity style={styles.heroBtn} onPress={openChannel} activeOpacity={0.85}>
-            <FontAwesome name="youtube-play" size={15} color="#fff" />
-            <Text style={styles.heroBtnText}>Subscribe on YouTube</Text>
+
+          <TouchableOpacity
+            style={styles.heroBtn}
+            activeOpacity={0.86}
+            onPress={openChannel}>
+            <FontAwesome name="youtube-play" size={17} color={COLORS.white} />
+
+            <Text style={styles.heroBtnText}>Visit YouTube Channel</Text>
+
+            <MaterialCommunityIcons
+              name="arrow-top-right"
+              size={15}
+              color={COLORS.white}
+            />
           </TouchableOpacity>
         </View>
 
-        {/* ── Playlist Embed — works without per-video embedding ── */}
+        {/* ===================================================
+            PLAYLIST HEADER
+        =================================================== */}
+
         <SectionHead
-          icon="🔴"
+          icon="▶"
           title="Channel Playlist"
-          accent="All Videos — Embedded"
+          accent="Featured collection"
           onAction={openPlaylist}
-          actionLabel="Open Playlist"
+          actionLabel="View All"
         />
+
+        {/* ===================================================
+            PLAYLIST
+        =================================================== */}
+
         <View style={styles.embedCard}>
           <View style={styles.embedCardHeader}>
             <View style={styles.embedLivePill}>
               <PulseDot />
-              <Text style={styles.embedLivePillText}>PLAYING</Text>
+
+              <Text style={styles.embedLivePillText}>NOW PLAYING</Text>
             </View>
-            <FontAwesome name="youtube-play" size={15} color={COLORS.ytRed} />
-            <Text style={styles.embedCardTitle}>Swami Giananand — Full Playlist</Text>
-          </View>
-          <YTPlaylistEmbed />
-          <View style={styles.embedCardFooter}>
-            <MaterialCommunityIcons name="gesture-tap" size={13} color="rgba(253,246,227,0.4)" />
-            <Text style={styles.embedCardFooterText}>
-              Tap the player · swipe to browse · all {YT_HANDLE} videos
+
+            <Text style={styles.embedCardTitle} numberOfLines={1}>
+              Swami Giananand
             </Text>
+
+            <FontAwesome name="youtube-play" size={17} color={COLORS.youtube} />
           </View>
+
+          <YTPlaylistEmbed />
+
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={openPlaylist}
+            style={styles.embedCardFooter}>
+            <MaterialCommunityIcons
+              name="playlist-play"
+              size={18}
+              color={COLORS.primaryBrown}
+            />
+
+            <Text style={styles.embedCardFooterText}>
+              Browse the complete playlist
+            </Text>
+
+            <MaterialCommunityIcons
+              name="chevron-right"
+              size={18}
+              color={COLORS.primaryBrown}
+            />
+          </TouchableOpacity>
         </View>
 
-        {/* ── Pravachan Videos ── */}
+        {/* ===================================================
+            PRAVACHAN
+        =================================================== */}
+
         <SectionHead
-          icon="▶️"
+          icon="▶"
           title="Pravachan"
-          accent="Latest Videos"
+          accent="Latest videos"
           onAction={openChannel}
           actionLabel="View All"
         />
+
         <View style={styles.videosList}>
-          {YT_VIDEOS.map((item) => (
+          {YT_VIDEOS.map(item => (
             <YTVideoCard key={item.id} item={item} />
           ))}
         </View>
 
-        {/* ── YouTube Shorts ── */}
+        {/* ===================================================
+            SHORTS
+        =================================================== */}
+
         <SectionHead
-          icon="⚡"
-          title="YouTube"
-          accent="Shorts"
-          onAction={() => Linking.openURL(`https://www.youtube.com/${YT_HANDLE}/shorts`)}
+          icon="◆"
+          title="YouTube Shorts"
+          accent="Short spiritual moments"
+          onAction={() =>
+            Linking.openURL(`https://www.youtube.com/${YT_HANDLE}/shorts`)
+          }
           actionLabel="All Shorts"
         />
+
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.shortsRow}
-          nestedScrollEnabled
-        >
-          {YT_SHORTS.map((item) => (
+          nestedScrollEnabled>
+          {YT_SHORTS.map(item => (
             <YTShortCard key={item.id} item={item} />
           ))}
         </ScrollView>
 
-        {/* ── Note about embedding ── */}
+        {/* ===================================================
+            INFO
+        =================================================== */}
+
         <View style={styles.noteCard}>
-          <MaterialCommunityIcons name="information-outline" size={16} color={COLORS.goldLight} />
-          <Text style={styles.noteText}>
-            Videos open in the YouTube app for the best experience.
-            The playlist above plays directly in-app.
-          </Text>
-        </View>
-
-        {/* ── Subscribe CTA ── */}
-        <View style={styles.ctaCard}>
-          <FontAwesome name="youtube-play" size={40} color={COLORS.ytRed} style={{ marginBottom: 12 }} />
-          <Text style={styles.ctaHeading}>Never Miss a Pravachan</Text>
-          <Text style={styles.ctaDesc}>
-            Subscribe to {YT_HANDLE} on YouTube and hit the bell icon
-            to receive notifications for every live aarti, satsang,
-            and Gita discourse by Maharaj Ji.
-          </Text>
-          <TouchableOpacity style={styles.ctaBtn} onPress={openChannel} activeOpacity={0.85}>
-            <FontAwesome name="youtube-play" size={15} color="#fff" />
-            <Text style={styles.ctaBtnText}>Subscribe Now — It's Free</Text>
-          </TouchableOpacity>
-          <View style={styles.ctaBellRow}>
-            <MaterialCommunityIcons name="bell-ring-outline" size={13} color={COLORS.goldLight} />
-            <Text style={styles.ctaBellText}>Tap the 🔔 bell to get notified</Text>
+          <View style={styles.noteIconBox}>
+            <MaterialCommunityIcons
+              name="information-outline"
+              size={17}
+              color={COLORS.primaryBrown}
+            />
           </View>
-          <Text style={styles.ctaNote}>🕉️  Jai Shri Krishna • GIEO Gita</Text>
+
+          <Text style={styles.noteText}>
+            Videos open in YouTube for the best viewing experience. The featured
+            playlist can also be watched inside the app.
+          </Text>
         </View>
 
-        <View style={{ height: 30 }} />
+        {/* ===================================================
+            CTA
+        =================================================== */}
+
+        <View style={styles.ctaCard}>
+          <View style={styles.ctaIcon}>
+            <FontAwesome name="youtube-play" size={28} color={COLORS.youtube} />
+          </View>
+
+          <Text style={styles.ctaHeading}>Never Miss a Pravachan</Text>
+
+          <Text style={styles.ctaDesc}>
+            Follow the official channel for Maharaj Ji&apos;s latest pravachans,
+            satsangs and Bhagwad Gita discourses.
+          </Text>
+
+          <TouchableOpacity
+            style={styles.ctaBtn}
+            onPress={openChannel}
+            activeOpacity={0.86}>
+            <FontAwesome name="youtube-play" size={15} color={COLORS.white} />
+
+            <Text style={styles.ctaBtnText}>Subscribe on YouTube</Text>
+          </TouchableOpacity>
+
+          <View style={styles.ctaBellRow}>
+            <MaterialCommunityIcons
+              name="bell-outline"
+              size={14}
+              color={COLORS.primaryBrown}
+            />
+
+            <Text style={styles.ctaBellText}>
+              Turn on notifications for new videos
+            </Text>
+          </View>
+
+          <View style={styles.ctaDivider} />
+
+          <Text style={styles.ctaBrand}>GIEO GITA</Text>
+        </View>
+
+        <View style={styles.bottomSpace} />
       </ScrollView>
     </View>
   );
 }
 
-// ── STYLES ────────────────────────────────────────────────────────────────────
+// ============================================================
+// STYLES
+// ============================================================
+
 const styles = StyleSheet.create({
-  root:   { flex: 1, backgroundColor: COLORS.cream },
-  scroll: { flex: 1 },
-  pulseDot: { width: 7, height: 7, borderRadius: 4, backgroundColor: COLORS.ytRed },
+  // =========================================================
+  // ROOT
+  // =========================================================
+
+  root: {
+    flex: 1,
+    backgroundColor: COLORS.background,
+  },
+
+  scroll: {
+    flex: 1,
+  },
+
+  scrollContent: {
+    paddingBottom: 10,
+  },
+
+  pulseDot: {
+    width: 7,
+    height: 7,
+    borderRadius: 4,
+    backgroundColor: COLORS.youtube,
+  },
+
+  // =========================================================
+  // SECTION HEADER
+  // =========================================================
 
   sectionHead: {
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
-    marginHorizontal: 20, marginTop: 22, marginBottom: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+
+    marginHorizontal: 18,
+    marginTop: 24,
+    marginBottom: 11,
   },
-  sectionHeadLeft: { flexDirection: 'row', alignItems: 'center', gap: 10 },
+
+  sectionHeadLeft: {
+    flex: 1,
+
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+
   sectionIconBox: {
-    width: 40, height: 40, borderRadius: 12,
-    backgroundColor: 'rgba(255,0,0,0.1)', alignItems: 'center', justifyContent: 'center',
-    borderWidth: 1, borderColor: 'rgba(255,0,0,0.2)',
+    width: 38,
+    height: 38,
+
+    borderRadius: 11,
+
+    alignItems: 'center',
+    justifyContent: 'center',
+
+    marginRight: 10,
+
+    backgroundColor: COLORS.biscuitLight,
+
+    borderWidth: 1,
+    borderColor: COLORS.border,
   },
-  sectionIcon:   { fontSize: 18 },
-  sectionTitle:  { color: COLORS.richBrown, fontSize: 15, fontWeight: '800' },
-  sectionAccent: { color: COLORS.ytRed, fontSize: 10, fontWeight: '700', marginTop: 1 },
+
+  sectionIcon: {
+    color: COLORS.primaryBrown,
+
+    fontSize: 16,
+    fontWeight: '800',
+  },
+
+  sectionHeadingText: {
+    flex: 1,
+  },
+
+  sectionTitle: {
+    color: COLORS.textPrimary,
+
+    fontSize: 15,
+    fontWeight: '800',
+  },
+
+  sectionAccent: {
+    color: COLORS.textMuted,
+
+    fontSize: 9.5,
+    fontWeight: '600',
+
+    marginTop: 1,
+  },
+
   sectionActionBtn: {
-    flexDirection: 'row', alignItems: 'center', gap: 5,
-    borderRadius: 20, borderWidth: 1,
-    borderColor: 'rgba(255,0,0,0.3)', backgroundColor: 'rgba(255,0,0,0.08)',
-    paddingHorizontal: 10, paddingVertical: 5,
+    flexDirection: 'row',
+
+    alignItems: 'center',
+
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+
+    borderRadius: 20,
+
+    backgroundColor: COLORS.biscuitLight,
+
+    borderWidth: 1,
+    borderColor: COLORS.border,
   },
-  sectionActionText: { color: COLORS.ytRed, fontSize: 10, fontWeight: '700' },
+
+  sectionActionText: {
+    color: COLORS.primaryBrown,
+
+    fontSize: 9.5,
+    fontWeight: '800',
+
+    marginRight: 2,
+  },
+
+  // =========================================================
+  // HERO
+  // =========================================================
 
   hero: {
-    backgroundColor: COLORS.richBrown, margin: 20, borderRadius: 18, padding: 18,
-    borderWidth: 1, borderColor: 'rgba(201,162,39,0.35)',
+    marginHorizontal: 18,
+    marginTop: 18,
+
+    paddingHorizontal: 18,
+    paddingTop: 17,
+    paddingBottom: 18,
+
+    borderRadius: 22,
+
+    backgroundColor: COLORS.deepBrown,
+
+    borderWidth: 1,
+    borderColor: COLORS.primaryBrown,
+
+    shadowColor: COLORS.deepBrown,
+
+    shadowOffset: {
+      width: 0,
+      height: 8,
+    },
+
+    shadowOpacity: 0.18,
+    shadowRadius: 14,
+
+    elevation: 7,
   },
+
+  heroTopRow: {
+    flexDirection: 'row',
+
+    justifyContent: 'space-between',
+
+    alignItems: 'center',
+
+    marginBottom: 18,
+  },
+
   heroBadge: {
-    alignSelf: 'flex-start', flexDirection: 'row', alignItems: 'center', gap: 6,
-    backgroundColor: 'rgba(255,0,0,0.15)', borderRadius: 20,
-    paddingHorizontal: 12, paddingVertical: 5,
-    borderWidth: 1, borderColor: 'rgba(255,0,0,0.3)', marginBottom: 14,
+    flexDirection: 'row',
+
+    alignItems: 'center',
+
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+
+    borderRadius: 20,
+
+    backgroundColor: 'rgba(255,255,255,0.08)',
+
+    borderWidth: 1,
+
+    borderColor: 'rgba(255,255,255,0.12)',
   },
-  heroBadgeText: { color: '#fff', fontSize: 10, fontWeight: '700' },
-  heroHeading:   { color: COLORS.cream, fontSize: 22, fontWeight: '800', lineHeight: 30, marginBottom: 10 },
-  heroAccent:    { color: COLORS.goldLight },
-  heroDesc:      { color: 'rgba(253,246,227,0.65)', fontSize: 12, lineHeight: 18, fontStyle: 'italic', marginBottom: 16 },
+
+  heroBadgeText: {
+    color: COLORS.warmWhite,
+
+    marginLeft: 6,
+
+    fontSize: 9.5,
+    fontWeight: '700',
+  },
+
+  officialBadge: {
+    flexDirection: 'row',
+
+    alignItems: 'center',
+
+    paddingHorizontal: 9,
+    paddingVertical: 5,
+
+    borderRadius: 20,
+
+    backgroundColor: 'rgba(234,218,195,0.10)',
+  },
+
+  officialDot: {
+    width: 5,
+    height: 5,
+
+    borderRadius: 3,
+
+    marginRight: 5,
+
+    backgroundColor: COLORS.accentLight,
+  },
+
+  officialBadgeText: {
+    color: COLORS.accentLight,
+
+    fontSize: 8,
+    fontWeight: '800',
+
+    letterSpacing: 1,
+  },
+
+  heroSmallTitle: {
+    color: COLORS.accentLight,
+
+    fontSize: 9,
+
+    fontWeight: '800',
+
+    letterSpacing: 1.8,
+
+    marginBottom: 7,
+  },
+
+  heroHeading: {
+    color: COLORS.white,
+
+    fontSize: 25,
+
+    fontWeight: '800',
+
+    lineHeight: 31,
+  },
+
+  heroAccent: {
+    color: COLORS.accentLight,
+
+    fontSize: 23,
+
+    lineHeight: 30,
+
+    fontWeight: '700',
+
+    marginBottom: 11,
+  },
+
+  heroDesc: {
+    maxWidth: 360,
+
+    color: 'rgba(255,253,248,0.68)',
+
+    fontSize: 11.5,
+
+    lineHeight: 18,
+
+    marginBottom: 17,
+  },
+
   heroStats: {
-    flexDirection: 'row', backgroundColor: 'rgba(201,162,39,0.1)',
-    borderRadius: 12, paddingVertical: 12, marginBottom: 16,
-    borderWidth: 1, borderColor: 'rgba(201,162,39,0.2)',
+    flexDirection: 'row',
+
+    marginBottom: 16,
+
+    borderRadius: 13,
+
+    overflow: 'hidden',
+
+    backgroundColor: 'rgba(255,255,255,0.06)',
+
+    borderWidth: 1,
+
+    borderColor: 'rgba(255,255,255,0.09)',
   },
-  heroStat:       { flex: 1, alignItems: 'center' },
-  heroStatBorder: { borderRightWidth: 1, borderRightColor: 'rgba(201,162,39,0.25)' },
-  heroStatVal:    { color: COLORS.goldLight, fontSize: 15, fontWeight: '800' },
-  heroStatLabel:  { color: 'rgba(253,246,227,0.5)', fontSize: 9, marginTop: 2, fontStyle: 'italic' },
+
+  heroStat: {
+    flex: 1,
+
+    alignItems: 'center',
+
+    paddingVertical: 12,
+  },
+
+  heroStatMiddle: {
+    borderLeftWidth: 1,
+    borderRightWidth: 1,
+
+    borderColor: 'rgba(255,255,255,0.10)',
+  },
+
+  heroStatVal: {
+    color: COLORS.accentLight,
+
+    fontSize: 15,
+
+    fontWeight: '800',
+  },
+
+  heroStatLabel: {
+    color: 'rgba(255,253,248,0.50)',
+
+    fontSize: 8.5,
+
+    marginTop: 3,
+  },
+
   heroBtn: {
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8,
-    backgroundColor: COLORS.ytRed, borderRadius: 10, paddingVertical: 13,
+    minHeight: 48,
+
+    flexDirection: 'row',
+
+    alignItems: 'center',
+
+    justifyContent: 'center',
+
+    borderRadius: 12,
+
+    backgroundColor: COLORS.primaryBrown,
+
+    borderWidth: 1,
+
+    borderColor: 'rgba(255,255,255,0.12)',
   },
-  heroBtnText: { color: '#fff', fontSize: 13, fontWeight: '800' },
+
+  heroBtnText: {
+    color: COLORS.white,
+
+    marginHorizontal: 8,
+
+    fontSize: 12.5,
+
+    fontWeight: '800',
+  },
+
+  // =========================================================
+  // WEBVIEW / PLAYLIST
+  // =========================================================
+
+  webView: {
+    width: '100%',
+    height: 212,
+
+    backgroundColor: '#000',
+  },
 
   embedCard: {
-    backgroundColor: COLORS.richBrown, marginHorizontal: 20, borderRadius: 16,
-    borderWidth: 1, borderColor: 'rgba(201,162,39,0.3)', overflow: 'hidden',
-  },
-  embedCardHeader: {
-    flexDirection: 'row', alignItems: 'center', gap: 8,
-    paddingHorizontal: 14, paddingVertical: 10,
-    borderBottomWidth: 1, borderBottomColor: 'rgba(255,0,0,0.15)',
-  },
-  embedLivePill: {
-    flexDirection: 'row', alignItems: 'center', gap: 5,
-    backgroundColor: 'rgba(255,0,0,0.15)', borderRadius: 20,
-    paddingHorizontal: 8, paddingVertical: 3,
-    borderWidth: 1, borderColor: 'rgba(255,0,0,0.35)',
-  },
-  embedLivePillText: { color: COLORS.ytRed, fontSize: 8, fontWeight: '800', letterSpacing: 1 },
-  embedCardTitle:    { flex: 1, color: COLORS.cream, fontSize: 12, fontWeight: '700' },
-  embedCardFooter: {
-    flexDirection: 'row', alignItems: 'center', gap: 6,
-    paddingHorizontal: 14, paddingVertical: 9,
-    borderTopWidth: 1, borderTopColor: 'rgba(201,162,39,0.12)',
-  },
-  embedCardFooterText: { color: 'rgba(253,246,227,0.4)', fontSize: 10, fontStyle: 'italic' },
+    marginHorizontal: 18,
 
-  videosList: { marginHorizontal: 20, gap: 12 },
-  videoCard: {
-    backgroundColor: COLORS.richBrown, borderRadius: 14, overflow: 'hidden',
-    borderWidth: 1, borderColor: 'rgba(201,162,39,0.25)',
+    overflow: 'hidden',
+
+    borderRadius: 17,
+
+    backgroundColor: COLORS.cream,
+
+    borderWidth: 1,
+
+    borderColor: COLORS.border,
+
+    elevation: 4,
+
+    shadowColor: COLORS.deepBrown,
+
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+
+    shadowOpacity: 0.1,
+
+    shadowRadius: 9,
   },
-  videoThumbWrap: { width: '100%', height: 196, position: 'relative' },
-  videoThumbImg:  { width: '100%', height: '100%' },
+
+  embedCardHeader: {
+    minHeight: 49,
+
+    flexDirection: 'row',
+
+    alignItems: 'center',
+
+    paddingHorizontal: 13,
+
+    borderBottomWidth: 1,
+
+    borderBottomColor: COLORS.borderSoft,
+  },
+
+  embedLivePill: {
+    flexDirection: 'row',
+
+    alignItems: 'center',
+
+    marginRight: 9,
+
+    paddingHorizontal: 8,
+
+    paddingVertical: 4,
+
+    borderRadius: 20,
+
+    backgroundColor: '#FFF0F2',
+  },
+
+  embedLivePillText: {
+    color: COLORS.youtube,
+
+    marginLeft: 5,
+
+    fontSize: 7.5,
+
+    fontWeight: '800',
+
+    letterSpacing: 0.5,
+  },
+
+  embedCardTitle: {
+    flex: 1,
+
+    color: COLORS.textPrimary,
+
+    fontSize: 11,
+
+    fontWeight: '700',
+
+    marginRight: 7,
+  },
+
+  embedCardFooter: {
+    minHeight: 44,
+
+    flexDirection: 'row',
+
+    alignItems: 'center',
+
+    paddingHorizontal: 13,
+
+    backgroundColor: COLORS.biscuitLight,
+
+    borderTopWidth: 1,
+
+    borderTopColor: COLORS.borderSoft,
+  },
+
+  embedCardFooterText: {
+    flex: 1,
+
+    color: COLORS.textSecondary,
+
+    fontSize: 10,
+
+    marginLeft: 7,
+  },
+
+  // =========================================================
+  // VIDEOS
+  // =========================================================
+
+  videosList: {
+    marginHorizontal: 18,
+  },
+
+  videoCard: {
+    marginBottom: 13,
+
+    overflow: 'hidden',
+
+    borderRadius: 16,
+
+    backgroundColor: COLORS.cream,
+
+    borderWidth: 1,
+
+    borderColor: COLORS.borderSoft,
+
+    elevation: 3,
+
+    shadowColor: COLORS.deepBrown,
+
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+
+    shadowOpacity: 0.08,
+
+    shadowRadius: 7,
+  },
+
+  videoThumbWrap: {
+    width: '100%',
+
+    height: width > 500 ? 240 : 188,
+
+    position: 'relative',
+
+    backgroundColor: '#000',
+  },
+
+  videoThumbImg: {
+    width: '100%',
+    height: '100%',
+  },
+
   videoThumbOverlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0,0,0,0.28)',
-  },
-  videoPlayBtn: {
-    position: 'absolute', alignSelf: 'center', top: '35%',
-    width: 56, height: 56, borderRadius: 28,
-    backgroundColor: 'rgba(255,0,0,0.9)',
-    alignItems: 'center', justifyContent: 'center',
-  },
-  videoDurationBadge: {
-    position: 'absolute', bottom: 8, right: 8,
-    backgroundColor: 'rgba(0,0,0,0.85)',
-    borderRadius: 4, paddingHorizontal: 7, paddingVertical: 3,
-  },
-  videoDurationText: { color: '#fff', fontSize: 10, fontWeight: '700' },
-  videoYTBadge: {
-    position: 'absolute', top: 8, left: 8,
-    backgroundColor: 'rgba(0,0,0,0.6)',
-    borderRadius: 6, padding: 5,
-  },
-  videoMeta: { padding: 12 },
-  videoTitle: { color: COLORS.cream, fontSize: 13, fontWeight: '700', marginBottom: 7, lineHeight: 18 },
-  videoMetaRow:     { flexDirection: 'row', alignItems: 'center', gap: 5, marginBottom: 4 },
-  videoViews:       { color: 'rgba(253,246,227,0.5)', fontSize: 10 },
-  videoDot:         { color: 'rgba(253,246,227,0.3)', fontSize: 12 },
-  videoDurationMeta:{ color: COLORS.goldLight, fontSize: 10, fontWeight: '600' },
-  videoOpenRow:     { flexDirection: 'row', alignItems: 'center', gap: 4 },
-  videoOpenText:    { color: 'rgba(253,246,227,0.3)', fontSize: 9, fontStyle: 'italic' },
 
-  shortsRow: { paddingHorizontal: 20, gap: 12, paddingBottom: 4 },
-  shortCard: {
-    width: 148, backgroundColor: COLORS.richBrown, borderRadius: 14,
-    overflow: 'hidden', borderWidth: 1, borderColor: 'rgba(201,162,39,0.25)',
+    backgroundColor: 'rgba(20,12,5,0.24)',
   },
-  shortThumbWrap: { width: 148, height: 263, position: 'relative' },
-  shortThumbImg:  { width: '100%', height: '100%' },
+
+  videoPlayBtn: {
+    position: 'absolute',
+
+    alignSelf: 'center',
+
+    top: '36%',
+
+    width: 52,
+    height: 52,
+
+    borderRadius: 26,
+
+    alignItems: 'center',
+
+    justifyContent: 'center',
+
+    backgroundColor: COLORS.primaryBrown,
+
+    borderWidth: 2,
+
+    borderColor: 'rgba(255,255,255,0.80)',
+  },
+
+  videoDurationBadge: {
+    position: 'absolute',
+
+    bottom: 8,
+    right: 8,
+
+    paddingHorizontal: 7,
+    paddingVertical: 4,
+
+    borderRadius: 5,
+
+    backgroundColor: 'rgba(20,12,5,0.86)',
+  },
+
+  videoDurationText: {
+    color: COLORS.white,
+
+    fontSize: 9.5,
+
+    fontWeight: '700',
+  },
+
+  videoYTBadge: {
+    position: 'absolute',
+
+    top: 9,
+    left: 9,
+
+    flexDirection: 'row',
+
+    alignItems: 'center',
+
+    paddingHorizontal: 8,
+    paddingVertical: 5,
+
+    borderRadius: 20,
+
+    backgroundColor: 'rgba(255,255,255,0.94)',
+  },
+
+  videoYTBadgeText: {
+    color: COLORS.deepBrown,
+
+    fontSize: 8.5,
+
+    fontWeight: '800',
+
+    marginLeft: 4,
+  },
+
+  videoMeta: {
+    paddingHorizontal: 13,
+    paddingVertical: 12,
+  },
+
+  videoTitle: {
+    color: COLORS.textPrimary,
+
+    fontSize: 13,
+
+    fontWeight: '800',
+
+    lineHeight: 18,
+
+    marginBottom: 8,
+  },
+
+  videoMetaRow: {
+    flexDirection: 'row',
+
+    alignItems: 'center',
+
+    marginBottom: 8,
+  },
+
+  videoViews: {
+    color: COLORS.textMuted,
+
+    marginLeft: 4,
+
+    fontSize: 9.5,
+  },
+
+  metaDot: {
+    width: 3,
+    height: 3,
+
+    borderRadius: 2,
+
+    marginHorizontal: 7,
+
+    backgroundColor: COLORS.border,
+  },
+
+  videoDurationMeta: {
+    color: COLORS.textMuted,
+
+    marginLeft: 4,
+
+    fontSize: 9.5,
+  },
+
+  videoOpenRow: {
+    flexDirection: 'row',
+
+    alignItems: 'center',
+  },
+
+  videoOpenText: {
+    color: COLORS.primaryBrown,
+
+    marginRight: 4,
+
+    fontSize: 9,
+
+    fontWeight: '700',
+  },
+
+  // =========================================================
+  // SHORTS
+  // =========================================================
+
+  shortsRow: {
+    paddingHorizontal: 18,
+    paddingBottom: 3,
+  },
+
+  shortCard: {
+    width: 145,
+
+    marginRight: 11,
+
+    overflow: 'hidden',
+
+    borderRadius: 15,
+
+    backgroundColor: COLORS.cream,
+
+    borderWidth: 1,
+
+    borderColor: COLORS.borderSoft,
+
+    elevation: 3,
+
+    shadowColor: COLORS.deepBrown,
+
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+
+    shadowOpacity: 0.08,
+
+    shadowRadius: 6,
+  },
+
+  shortThumbWrap: {
+    width: '100%',
+
+    height: 228,
+
+    position: 'relative',
+
+    backgroundColor: '#000',
+  },
+
+  shortThumbImg: {
+    width: '100%',
+    height: '100%',
+  },
+
   shortThumbOverlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0,0,0,0.3)',
+
+    backgroundColor: 'rgba(24,14,6,0.20)',
   },
+
+  shortTopBadge: {
+    position: 'absolute',
+
+    top: 8,
+    left: 8,
+
+    flexDirection: 'row',
+
+    alignItems: 'center',
+
+    paddingHorizontal: 7,
+    paddingVertical: 4,
+
+    borderRadius: 20,
+
+    backgroundColor: 'rgba(255,255,255,0.94)',
+  },
+
+  shortTopBadgeText: {
+    color: COLORS.deepBrown,
+
+    marginLeft: 4,
+
+    fontSize: 7,
+
+    fontWeight: '800',
+  },
+
   shortPlayBtn: {
-    position: 'absolute', alignSelf: 'center', top: '40%',
-    width: 44, height: 44, borderRadius: 22,
-    backgroundColor: 'rgba(255,0,0,0.9)',
-    alignItems: 'center', justifyContent: 'center',
+    position: 'absolute',
+
+    alignSelf: 'center',
+
+    top: '42%',
+
+    width: 42,
+    height: 42,
+
+    borderRadius: 21,
+
+    alignItems: 'center',
+
+    justifyContent: 'center',
+
+    backgroundColor: 'rgba(90,56,22,0.92)',
+
+    borderWidth: 1.5,
+
+    borderColor: 'rgba(255,255,255,0.8)',
   },
+
   shortDurationBadge: {
-    position: 'absolute', bottom: 7, right: 7,
-    backgroundColor: 'rgba(0,0,0,0.82)',
-    borderRadius: 4, paddingHorizontal: 5, paddingVertical: 2,
+    position: 'absolute',
+
+    bottom: 8,
+    right: 8,
+
+    paddingHorizontal: 6,
+    paddingVertical: 3,
+
+    borderRadius: 4,
+
+    backgroundColor: 'rgba(20,12,5,0.84)',
   },
-  shortDurationText: { color: '#fff', fontSize: 9, fontWeight: '700' },
-  shortTagBadge: {
-    position: 'absolute', top: 7, left: 7,
-    backgroundColor: 'rgba(255,0,0,0.8)',
-    borderRadius: 4, paddingHorizontal: 6, paddingVertical: 2,
+
+  shortDurationText: {
+    color: COLORS.white,
+
+    fontSize: 8.5,
+
+    fontWeight: '700',
   },
-  shortTagText:  { color: '#fff', fontSize: 8, fontWeight: '800' },
-  shortTitle:    { color: COLORS.cream, fontSize: 10, fontWeight: '600', padding: 8, lineHeight: 14 },
+
+  shortBottom: {
+    minHeight: 50,
+
+    flexDirection: 'row',
+
+    alignItems: 'center',
+
+    paddingHorizontal: 9,
+
+    paddingVertical: 8,
+  },
+
+  shortTitle: {
+    flex: 1,
+
+    color: COLORS.textPrimary,
+
+    fontSize: 9.5,
+
+    fontWeight: '700',
+
+    lineHeight: 13,
+
+    marginRight: 3,
+  },
+
+  // =========================================================
+  // NOTE
+  // =========================================================
 
   noteCard: {
-    flexDirection: 'row', alignItems: 'flex-start', gap: 8,
-    backgroundColor: COLORS.richBrown, marginHorizontal: 20, marginTop: 16,
-    borderRadius: 12, padding: 12,
-    borderWidth: 1, borderColor: 'rgba(201,162,39,0.25)',
+    flexDirection: 'row',
+
+    alignItems: 'center',
+
+    marginHorizontal: 18,
+
+    marginTop: 18,
+
+    paddingHorizontal: 12,
+
+    paddingVertical: 11,
+
+    borderRadius: 13,
+
+    backgroundColor: COLORS.biscuitLight,
+
+    borderWidth: 1,
+
+    borderColor: COLORS.border,
   },
-  noteText: { flex: 1, color: 'rgba(253,246,227,0.55)', fontSize: 10, fontStyle: 'italic', lineHeight: 15 },
+
+  noteIconBox: {
+    width: 31,
+    height: 31,
+
+    borderRadius: 16,
+
+    alignItems: 'center',
+
+    justifyContent: 'center',
+
+    marginRight: 9,
+
+    backgroundColor: COLORS.biscuit,
+  },
+
+  noteText: {
+    flex: 1,
+
+    color: COLORS.textSecondary,
+
+    fontSize: 9.5,
+
+    lineHeight: 14,
+  },
+
+  // =========================================================
+  // CTA
+  // =========================================================
 
   ctaCard: {
-    backgroundColor: COLORS.richBrown, margin: 20, borderRadius: 18, padding: 20,
-    alignItems: 'center', borderWidth: 1, borderColor: 'rgba(255,0,0,0.25)',
+    marginHorizontal: 18,
+    marginTop: 20,
+
+    paddingHorizontal: 20,
+    paddingVertical: 22,
+
+    alignItems: 'center',
+
+    borderRadius: 20,
+
+    backgroundColor: COLORS.cream,
+
+    borderWidth: 1,
+
+    borderColor: COLORS.border,
+
+    elevation: 4,
+
+    shadowColor: COLORS.deepBrown,
+
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+
+    shadowOpacity: 0.1,
+
+    shadowRadius: 8,
   },
-  ctaHeading: { color: COLORS.cream, fontSize: 18, fontWeight: '800', textAlign: 'center', marginBottom: 8 },
+
+  ctaIcon: {
+    width: 58,
+    height: 58,
+
+    borderRadius: 29,
+
+    alignItems: 'center',
+
+    justifyContent: 'center',
+
+    marginBottom: 13,
+
+    backgroundColor: COLORS.biscuitLight,
+
+    borderWidth: 1,
+
+    borderColor: COLORS.border,
+  },
+
+  ctaHeading: {
+    color: COLORS.textPrimary,
+
+    fontSize: 18,
+
+    fontWeight: '800',
+
+    textAlign: 'center',
+
+    marginBottom: 7,
+  },
+
   ctaDesc: {
-    color: 'rgba(253,246,227,0.6)', fontSize: 11, fontStyle: 'italic',
-    textAlign: 'center', lineHeight: 17, marginBottom: 18,
+    maxWidth: 320,
+
+    color: COLORS.textSecondary,
+
+    fontSize: 10.5,
+
+    lineHeight: 16,
+
+    textAlign: 'center',
+
+    marginBottom: 17,
   },
+
   ctaBtn: {
-    flexDirection: 'row', alignItems: 'center', gap: 8,
-    backgroundColor: COLORS.ytRed, borderRadius: 10,
-    paddingVertical: 14, width: '100%', justifyContent: 'center', marginBottom: 12,
+    width: '100%',
+
+    minHeight: 48,
+
+    flexDirection: 'row',
+
+    alignItems: 'center',
+
+    justifyContent: 'center',
+
+    borderRadius: 12,
+
+    backgroundColor: COLORS.primaryBrown,
+
+    borderWidth: 1,
+
+    borderColor: COLORS.deepBrown,
+
+    elevation: 3,
+
+    shadowColor: COLORS.deepBrown,
+
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+
+    shadowOpacity: 0.16,
+
+    shadowRadius: 5,
   },
-  ctaBtnText: { color: '#fff', fontSize: 13, fontWeight: '800' },
+
+  ctaBtnText: {
+    color: COLORS.white,
+
+    marginLeft: 8,
+
+    fontSize: 12.5,
+
+    fontWeight: '800',
+  },
+
   ctaBellRow: {
-    flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 14,
-    backgroundColor: 'rgba(201,162,39,0.1)', borderRadius: 20,
-    paddingHorizontal: 14, paddingVertical: 7,
-    borderWidth: 1, borderColor: 'rgba(201,162,39,0.25)',
+    flexDirection: 'row',
+
+    alignItems: 'center',
+
+    marginTop: 12,
+
+    paddingHorizontal: 11,
+    paddingVertical: 7,
+
+    borderRadius: 20,
+
+    backgroundColor: COLORS.biscuitLight,
   },
-  ctaBellText: { color: COLORS.goldLight, fontSize: 11, fontWeight: '600' },
-  ctaNote:     { color: 'rgba(253,246,227,0.35)', fontSize: 10, fontStyle: 'italic' },
+
+  ctaBellText: {
+    color: COLORS.primaryBrown,
+
+    fontSize: 9,
+
+    fontWeight: '600',
+
+    marginLeft: 6,
+  },
+
+  ctaDivider: {
+    width: 40,
+
+    height: 1,
+
+    marginTop: 17,
+    marginBottom: 9,
+
+    backgroundColor: COLORS.border,
+  },
+
+  ctaBrand: {
+    color: COLORS.lightBrown,
+
+    fontSize: 8,
+
+    fontWeight: '800',
+
+    letterSpacing: 2,
+  },
+
+  // =========================================================
+  // END SPACE
+  // =========================================================
+
+  bottomSpace: {
+    height: 28,
+  },
 });

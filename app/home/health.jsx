@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import AboutMedanta from '../../components/health/AboutMedanta';
-import BookingModal from '../../components/health/BookingModal';
 import ContactSection from '../../components/health/ContactSection';
 import FreeServices from '../../components/health/FreeServices';
 import HeroSection from '../../components/health/HeroSection';
@@ -12,9 +11,9 @@ import { C } from '../../components/health/constants';
 
 export default function HealthScreen() {
   const [selectedSpecialty, setSelectedSpecialty] = useState(null);
-  const [modalVisible,      setModalVisible]      = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
 
-  const openBooking = (spec) => {
+  const openBooking = spec => {
     setSelectedSpecialty(spec);
     setModalVisible(true);
   };
@@ -22,7 +21,6 @@ export default function HealthScreen() {
   return (
     <View style={styles.root}>
       <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
-
         <HeroSection onBookPress={openBooking} />
 
         <AboutMedanta />
@@ -46,16 +44,16 @@ export default function HealthScreen() {
         <View style={{ height: 30 }} />
       </ScrollView>
 
-      <BookingModal
+      {/* <BookingModal
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
         specialty={selectedSpecialty}
-      />
+      /> */}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  root:   { flex: 1, backgroundColor: C.cream },
+  root: { flex: 1, backgroundColor: C.cream },
   scroll: { flex: 1 },
 });
