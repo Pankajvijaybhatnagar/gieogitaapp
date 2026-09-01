@@ -23,7 +23,7 @@ const COLORS = {
   border: '#EBDCCD',
 };
 
-const AUTO_REFRESH_INTERVAL = 30000;
+const AUTO_REFRESH_INTERVAL = 300; // 5 seconds
 
 export function TotalPaath() {
   const [stats, setStats] = useState(null);
@@ -86,7 +86,7 @@ export function TotalPaath() {
       try {
         if (initial) setLoading(true);
         setError('');
-        const response = await chantServices.getOneMinutePublicStats(5);
+        const response = await chantServices.getOneMinutePublicStats(1);
         console.log('[TotalPaath] Public stats:', response);
         const data = response?.data;
         if (data?.status) {
@@ -180,7 +180,7 @@ export function TotalPaath() {
       <View style={styles.bgCircle2} />
       <View style={styles.topRow}>
         <View>
-          <Text style={styles.eyebrow}>🕉️ EK MIN EK SAATH</Text>
+          <Text style={styles.eyebrow}> EK MIN EK SAATH</Text>
           <Text style={styles.label}>Global Gita Paath</Text>
         </View>
         <View style={styles.liveCapsule}>
@@ -211,7 +211,7 @@ export function TotalPaath() {
         <Text style={styles.peopleValue}>{overallUsers.toLocaleString()}</Text>
       </View>
 
-      <View style={styles.divider} />
+      {/* <View style={styles.divider} />
 
       <Text style={styles.sectionMiniTitle}>YEARLY JOURNEY</Text>
 
@@ -257,9 +257,9 @@ export function TotalPaath() {
             </Text>
           </View>
         </View>
-      </View>
+      </View> */}
 
-      {yearly.length > 0 && (
+      {/* {yearly.length > 0 && (
         <View style={styles.historyBox}>
           <View style={styles.historyTitleRow}>
             <Text style={styles.historyTitle}>
@@ -290,7 +290,7 @@ export function TotalPaath() {
             </View>
           ))}
         </View>
-      )}
+      )} */}
     </Animated.View>
   );
 }
@@ -350,7 +350,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   eyebrow: {
-    fontSize: 9,
+    fontSize: 11,
     fontWeight: '800',
     letterSpacing: 1.1,
     color: COLORS.goldLight,
@@ -377,7 +377,15 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
     color: COLORS.goldLight,
   },
-  countBox: { marginTop: 18 },
+  countBox: {
+    marginTop: 18,
+    textAlign: 'center',
+    alignItems: 'center',
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: 'rgba(255,255,255,0.12)',
+    paddingVertical: 12,
+  },
   countLabel: {
     fontSize: 9,
     fontWeight: '700',
