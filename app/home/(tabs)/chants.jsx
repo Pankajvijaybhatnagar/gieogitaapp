@@ -2,12 +2,12 @@ import { PaathCounter } from '@/components/chants/PaathCounter';
 import { TotalPaath } from '@/components/chants/TotalPaath';
 import YourChants from '@/components/chants/YourChants';
 import { FontAwesome } from '@expo/vector-icons';
+import { Image } from 'expo-image';
 import { useEffect, useRef, useState } from 'react';
 import {
   Alert,
   Animated,
   Dimensions,
-  Image,
   ScrollView,
   StyleSheet,
   Text,
@@ -378,7 +378,7 @@ export default function EkMinEkSaathScreen() {
       <View style={mainStyles.quoteCard}>
         <View style={mainStyles.quoteCardInner}>
           <Image
-            source={{ uri: 'https://your-image-url.com' }}
+            source={require('@/assets/images/ek.png')}
             style={mainStyles.quoteImage}
           />
           <View style={mainStyles.quoteOverlay} />
@@ -428,7 +428,7 @@ export default function EkMinEkSaathScreen() {
         </View>
         <TouchableOpacity style={mainStyles.liveCard} activeOpacity={0.88}>
           <Image
-            source={{ uri: 'https://your-livestream-image-url.com' }}
+            source={require('@/assets/images/ek.png')}
             style={mainStyles.liveImage}
           />
           <View style={mainStyles.livePlayOverlay}>
@@ -1008,7 +1008,7 @@ const mainStyles = StyleSheet.create({
     borderBottomColor: 'rgba(201,162,39,0.2)',
   },
   quoteTopLabel: {
-    fontSize: 9,
+    fontSize: 15,
     color: COLORS.goldLight,
     letterSpacing: 2,
     fontWeight: '700',
@@ -1016,13 +1016,13 @@ const mainStyles = StyleSheet.create({
   quoteImage: { width: '100%', height: 180, backgroundColor: COLORS.richBrown },
   quoteOverlay: {
     position: 'absolute',
-    top: 34,
+    top: 0,
     left: 0,
     right: 0,
     height: 180,
-    backgroundColor: 'rgba(44,26,10,0.3)',
+    backgroundColor: 'rgba(44,26,10,0)',
   },
-  quoteBody: { padding: 18 },
+  quoteBody: { padding: '-18', paddingHorizontal: 16, paddingBottom: 16 },
   quoteIconText: {
     fontSize: 32,
     color: COLORS.gold,
