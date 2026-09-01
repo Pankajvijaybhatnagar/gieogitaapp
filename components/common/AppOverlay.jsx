@@ -1,11 +1,13 @@
+//  /common/AppOverlay.jsx
+
 import { Ionicons } from '@expo/vector-icons';
 import {
-    ActivityIndicator,
-    Modal,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  ActivityIndicator,
+  Modal,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 
 const COLORS = {

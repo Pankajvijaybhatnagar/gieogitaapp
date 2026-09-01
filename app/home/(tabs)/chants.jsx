@@ -1,18 +1,18 @@
 import { PaathCounter } from '@/components/chants/PaathCounter';
 import { TotalPaath } from '@/components/chants/TotalPaath';
 import YourChants from '@/components/chants/YourChants';
+import { useAppAlert } from '@/context/AppAlertContext';
 import { FontAwesome } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { useEffect, useRef, useState } from 'react';
 import {
-  Alert,
   Animated,
   Dimensions,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
 
 const { width } = Dimensions.get('window');
@@ -314,6 +314,7 @@ function PaathDetailScreen({ setShowPaath, stats, onSubmit }) {
 // ─────────────────────────────────────────────────────────────────────────────
 export default function EkMinEkSaathScreen() {
   const [showPaath, setShowPaath] = useState(false);
+  const { alert, success, error, warning, loading, hide } = useAppAlert();
 
   const [stats, setStats] = useState({
     totalChants: 8556,
@@ -329,10 +330,6 @@ export default function EkMinEkSaathScreen() {
       weekProgress: prev.weekProgress + count,
       todayChants: prev.todayChants + count,
     }));
-    Alert.alert(
-      '🕉️ Jai Shri Krishna!',
-      `${count} paath submitted! Your devotion is recorded. 🙏`,
-    );
   };
 
   const fadeAnim = useRef(new Animated.Value(0)).current;

@@ -7,15 +7,16 @@ import { FontAwesome } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useRef, useState } from 'react';
 import {
-    Alert,
-    Animated,
-    PanResponder,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  Alert,
+  Animated,
+  PanResponder,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 
+import { useAppAlert } from '@/context/AppAlertContext';
 import { useAuth } from '@/context/AuthContext';
 import chantServices from '@/lib/services/chantServices';
 
@@ -66,6 +67,7 @@ function SectionLabel({ text }) {
 export function PaathCounter({ todayPaath = 0, onSubmit }) {
   const router = useRouter();
 
+  const { alert, success, error, warning, loading, hide } = useAppAlert();
   // ───────────────────────────────────────────────────────────────────────────
   // AUTH
   // ───────────────────────────────────────────────────────────────────────────
@@ -259,13 +261,12 @@ export function PaathCounter({ todayPaath = 0, onSubmit }) {
     // ─────────────────────────────────────────────────────────────────────────
 
     if (count <= 0) {
-      Alert.alert(
-        '🕉️ No Paath',
-        'Please add at least 1 paath before submitting.',
-      );
+      alert('No Paath', 'Please add at least 1 paath before submitting.');
 
       return;
     }
+
+    loading('Submitting Paath', 'Please wait while we submit your paath...');
 
     const submittedCount = count;
 
@@ -329,8 +330,8 @@ export function PaathCounter({ todayPaath = 0, onSubmit }) {
       // SUCCESS
       // ───────────────────────────────────────────────────────────────────────
 
-      Alert.alert(
-        '🙏 Paath Submitted',
+      success(
+        'Paath Submitted',
         `${submittedCount} paath submitted successfully.`,
       );
     } catch (error) {
@@ -354,9 +355,10 @@ export function PaathCounter({ todayPaath = 0, onSubmit }) {
         message = error.message;
       }
 
-      Alert.alert('❌ Submission Failed', message);
+      alert('❌ Submission Failed', message);
     } finally {
       setSubmitting(false);
+      hide();
     }
   };
 

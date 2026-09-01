@@ -13,6 +13,7 @@ import {
   View,
 } from 'react-native';
 
+import { useAppAlert } from '@/context/AppAlertContext';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 
 // ============================================================
@@ -147,7 +148,7 @@ function FAQItem({ item, expanded, onPress }) {
 
 export default function Help() {
   const [expandedFAQ, setExpandedFAQ] = useState(null);
-
+  const { alert, success, error, warning, loading, hide } = useAppAlert();
   // ==========================================================
   // OPEN WEBSITE
   // ==========================================================
@@ -240,7 +241,7 @@ export default function Help() {
 
         {/* ==================================================
             CONTENT
-        ================================================== */}
+        ========================  ========================== */}
 
         <ScrollView
           style={styles.scroll}
@@ -264,7 +265,7 @@ export default function Help() {
               title="Account Help"
               subtitle="Profile, login and account assistance"
               onPress={() =>
-                Alert.alert(
+                success(
                   'Account Help',
                   'You can manage your account from the Profile section of the app.',
                 )
@@ -276,7 +277,7 @@ export default function Help() {
               title="Question Seva"
               subtitle="Ask your question and get guidance"
               onPress={() =>
-                Alert.alert(
+                success(
                   'Question Seva',
                   'Please open Question Seva from the app to submit your question.',
                 )
@@ -288,7 +289,7 @@ export default function Help() {
               title="Videos & Pravachan"
               subtitle="Help with spiritual videos and content"
               onPress={() =>
-                Alert.alert(
+                success(
                   'Videos & Pravachan',
                   'Open the videos section to watch available pravachans and spiritual content.',
                 )
