@@ -5,7 +5,7 @@ import donationServices from '@/lib/services/donationServices';
 
 import { useLocalSearchParams, useRouter } from 'expo-router';
 
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import {
   ActivityIndicator,
@@ -15,14 +15,37 @@ import {
   View,
 } from 'react-native';
 
-const PAYMENT_BASE_URL = 'https://pgpay.icici.bank.in/pg/api/v2/authRedirect';
+const PAYMENT_BASE_URL =
+  'https://pgpay.icici.bank.in/pg/api/v2/authRedirect';
 
 export default function DonationPaymentScreen() {
   const router = useRouter();
 
+  /*
+  |--------------------------------------------------------------------------
+  | ROUTE PARAMS
+  |--------------------------------------------------------------------------
+  */
+
   const { tranCtx, merchantTxnNo } = useLocalSearchParams();
 
-  const { access_token, isAuthenticated, loading: authLoading } = useAuth();
+  /*
+  |--------------------------------------------------------------------------
+  | AUTH
+  |--------------------------------------------------------------------------
+  */
+
+  const {
+    access_token,
+    isAuthenticated,
+    loading: authLoading,
+  } = useAuth();
+
+  /*
+  |--------------------------------------------------------------------------
+  | PAYMENT STATE
+  |--------------------------------------------------------------------------
+  */
 
   const [verifying, setVerifying] = useState(false);
 
@@ -32,17 +55,103 @@ export default function DonationPaymentScreen() {
 
   const [verificationError, setVerificationError] = useState('');
 
+  /*
+  |--------------------------------------------------------------------------
+  | REFS
+  |--------------------------------------------------------------------------
+  */
+
   const verificationStartedRef = useRef(false);
 
-  const transactionContext = Array.isArray(tranCtx) ? tranCtx[0] : tranCtx;
+  /*
+  |--------------------------------------------------------------------------
+  | NORMALIZE ROUTE PARAMS
+  |--------------------------------------------------------------------------
+  */
+
+  const transactionContext = Array.isArray(tranCtx)
+    ? tranCtx[0]
+    : tranCtx;
 
   const merchantTransaction = Array.isArray(merchantTxnNo)
     ? merchantTxnNo[0]
     : merchantTxnNo;
 
+  /*
+  |--------------------------------------------------------------------------
+  | PAYMENT URL
+  |--------------------------------------------------------------------------
+  */
+
   const paymentUrl = transactionContext
-    ? `${PAYMENT_BASE_URL}?tranCtx=${encodeURIComponent(transactionContext)}`
+    ? `${PAYMENT_BASE_URL}?tranCtx=${encodeURIComponent(
+        transactionContext,
+      )}`
     : null;
+
+  /*
+  |--------------------------------------------------------------------------
+  | RESET PAYMENT WHEN NEW TRANSACTION ARRIVES
+  |--------------------------------------------------------------------------
+  |
+  | Very important:
+  |
+  | Expo Router may keep this screen mounted.
+  |
+  | Previous transaction could have:
+  |
+  | paymentFinished = true
+  | paymentResult = old donation
+  | verificationStartedRef = true
+  |
+  | So when a NEW transaction arrives we must completely reset
+  | the screen before showing the new payment gateway.
+  |--------------------------------------------------------------------------
+  */
+
+  useEffect(() => {
+    console.log('[Payment] Transaction changed:', {
+      transactionContext,
+      merchantTransaction,
+    });
+
+    setVerifying(false);
+
+    setPaymentFinished(false);
+
+    setPaymentResult(null);
+
+    setVerificationError('');
+
+    verificationStartedRef.current = false;
+  }, [transactionContext, merchantTransaction]);
+
+  /*
+  |--------------------------------------------------------------------------
+  | OPEN LOGIN MODAL
+  |--------------------------------------------------------------------------
+  |
+  | Login2 is a modal route.
+  |
+  | IMPORTANT:
+  | We use router.push(), NOT router.replace().
+  |--------------------------------------------------------------------------
+  */
+
+  useEffect(() => {
+    if (authLoading) {
+      return;
+    }
+
+    if (!isAuthenticated || !access_token) {
+      router.push('/login2');
+    }
+  }, [
+    authLoading,
+    isAuthenticated,
+    access_token,
+    router,
+  ]);
 
   /*
   |--------------------------------------------------------------------------
@@ -51,15 +160,42 @@ export default function DonationPaymentScreen() {
   */
 
   const verifyPayment = useCallback(async () => {
+    /*
+    |--------------------------------------------------------------------------
+    | VALIDATE REQUIRED DATA
+    |--------------------------------------------------------------------------
+    */
+
     if (!access_token || !merchantTransaction) {
-      setVerificationError('Transaction information is missing.');
+      console.log(
+        '[Payment] Cannot verify because transaction information is missing.',
+      );
+
+      setVerificationError(
+        'Transaction information is missing.',
+      );
 
       setPaymentFinished(true);
 
       return;
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | PREVENT DUPLICATE VERIFICATION
+    |--------------------------------------------------------------------------
+    |
+    | WebView can trigger navigation events multiple times.
+    |
+    | Without this check the API could be called multiple times.
+    |--------------------------------------------------------------------------
+    */
+
     if (verificationStartedRef.current) {
+      console.log(
+        '[Payment] Verification already started. Ignoring duplicate request.',
+      );
+
       return;
     }
 
@@ -67,76 +203,142 @@ export default function DonationPaymentScreen() {
 
     try {
       setVerifying(true);
+
       setVerificationError('');
 
-      /*
-       * STEP 1
-       *
-       * Ask backend to update payment status
-       * from ICICI.
-       */
-      await donationServices.updateMyDonationStaus(access_token);
+      console.log('[Payment] Starting verification:', {
+        merchantTransaction,
+      });
 
       /*
-       * STEP 2
-       *
-       * Fetch verified donation status
-       * from your backend.
-       */
-      const response = await donationServices.getDonationByMerchantTxn(
-        merchantTransaction,
+      |--------------------------------------------------------------------------
+      | STEP 1
+      |--------------------------------------------------------------------------
+      |
+      | Ask backend to update payment statuses from ICICI.
+      |--------------------------------------------------------------------------
+      */
+
+      await donationServices.updateMyDonationStaus(
         access_token,
       );
 
-      console.log('[Payment] Verified donation:', response);
+      console.log(
+        '[Payment] Donation statuses updated from gateway.',
+      );
+
+      /*
+      |--------------------------------------------------------------------------
+      | STEP 2
+      |--------------------------------------------------------------------------
+      |
+      | Fetch this specific donation from backend.
+      |--------------------------------------------------------------------------
+      */
+
+      const response =
+        await donationServices.getDonationByMerchantTxn(
+          merchantTransaction,
+          access_token,
+        );
+
+      console.log(
+        '[Payment] Verified donation response:',
+        response,
+      );
+
+      /*
+      |--------------------------------------------------------------------------
+      | NORMALIZE RESPONSE
+      |--------------------------------------------------------------------------
+      */
 
       let result = response;
 
-      if (response?.data && typeof response.data === 'object') {
+      if (
+        response?.data &&
+        typeof response.data === 'object'
+      ) {
         result = response.data;
       }
 
       /*
-       * Depending upon API structure:
-       *
-       * data could be donation itself
-       * or data[0]
-       */
+      |--------------------------------------------------------------------------
+      | FIND DONATION OBJECT
+      |--------------------------------------------------------------------------
+      |
+      | Supported structures:
+      |
+      | response.data.data[0]
+      |
+      | response.data.data
+      |
+      | response.data
+      |--------------------------------------------------------------------------
+      */
+
       let donation = null;
 
       if (Array.isArray(result?.data)) {
         donation = result.data[0] || null;
-      } else if (result?.data && typeof result.data === 'object') {
+      } else if (
+        result?.data &&
+        typeof result.data === 'object'
+      ) {
         donation = result.data;
-      } else if (result?.merchantTxnNo) {
+      } else if (
+        result?.merchantTxnNo ||
+        result?.merchant_txn_no
+      ) {
         donation = result;
       }
+
+      console.log(
+        '[Payment] Final normalized donation:',
+        donation,
+      );
+
+      /*
+      |--------------------------------------------------------------------------
+      | SAVE RESULT
+      |--------------------------------------------------------------------------
+      */
 
       setPaymentResult(donation);
 
       setPaymentFinished(true);
     } catch (error) {
-      console.log('[Payment] Verification error:', error);
+      console.log(
+        '[Payment] Verification error:',
+        error,
+      );
 
       setVerificationError(
-        error?.message || 'Unable to verify payment status.',
+        error?.message ||
+          'Unable to verify payment status.',
       );
 
       setPaymentFinished(true);
     } finally {
       setVerifying(false);
     }
-  }, [access_token, merchantTransaction]);
+  }, [
+    access_token,
+    merchantTransaction,
+  ]);
 
   /*
   |--------------------------------------------------------------------------
-  | RETURN URL DETECTED
+  | GATEWAY RETURN DETECTED
   |--------------------------------------------------------------------------
   */
 
   const handleGatewayReturn = useCallback(
     url => {
-      console.log('[Payment] Gateway returned:', url);
+      console.log(
+        '[Payment] Gateway returned:',
+        url,
+      );
 
       verifyPayment();
     },
@@ -145,7 +347,27 @@ export default function DonationPaymentScreen() {
 
   /*
   |--------------------------------------------------------------------------
-  | INVALID SESSION
+  | CLOSE PAYMENT
+  |--------------------------------------------------------------------------
+  */
+
+  const handleClose = useCallback(() => {
+    router.back();
+  }, [router]);
+
+  /*
+  |--------------------------------------------------------------------------
+  | PAYMENT RESULT DONE
+  |--------------------------------------------------------------------------
+  */
+
+  const handleResultDone = useCallback(() => {
+    router.replace('/home/(tabs)/donations');
+  }, [router]);
+
+  /*
+  |--------------------------------------------------------------------------
+  | AUTH LOADING
   |--------------------------------------------------------------------------
   */
 
@@ -153,51 +375,13 @@ export default function DonationPaymentScreen() {
     return (
       <SafeAreaView style={styles.screen}>
         <View style={styles.center}>
-          <ActivityIndicator size="small" color="#704025" />
+          <ActivityIndicator
+            size="small"
+            color="#704025"
+          />
 
-          <Text style={styles.loadingText}>Preparing payment...</Text>
-        </View>
-      </SafeAreaView>
-    );
-  }
-
-  if (!isAuthenticated || !access_token) {
-    router.replace('/login2');
-
-    return null;
-  }
-
-  if (!transactionContext) {
-    return (
-      <SafeAreaView style={styles.screen}>
-        <PaymentResult
-          status="failed"
-          title="Invalid Payment"
-          message="Payment transaction information is missing."
-          onDone={() => router.replace('/home/(tabs)/donations')}
-        />
-      </SafeAreaView>
-    );
-  }
-
-  /*
-  |--------------------------------------------------------------------------
-  | VERIFYING
-  |--------------------------------------------------------------------------
-  */
-
-  if (verifying) {
-    return (
-      <SafeAreaView style={styles.screen}>
-        <View style={styles.center}>
-          <View style={styles.verifyIcon}>
-            <ActivityIndicator size="small" color="#704025" />
-          </View>
-
-          <Text style={styles.verifyTitle}>Verifying Payment</Text>
-
-          <Text style={styles.verifyDescription}>
-            Please do not close the app while we confirm your payment.
+          <Text style={styles.loadingText}>
+            Preparing payment...
           </Text>
         </View>
       </SafeAreaView>
@@ -206,21 +390,44 @@ export default function DonationPaymentScreen() {
 
   /*
   |--------------------------------------------------------------------------
-  | RESULT
+  | NOT AUTHENTICATED
+  |--------------------------------------------------------------------------
+  |
+  | Login modal is opened from useEffect above.
   |--------------------------------------------------------------------------
   */
 
-  if (paymentFinished) {
-    const status = paymentResult?.status?.toLowerCase() || 'pending';
+  if (!isAuthenticated || !access_token) {
+    return (
+      <SafeAreaView style={styles.screen}>
+        <View style={styles.center}>
+          <ActivityIndicator
+            size="small"
+            color="#704025"
+          />
 
+          <Text style={styles.loadingText}>
+            Opening login...
+          </Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  /*
+  |--------------------------------------------------------------------------
+  | INVALID PAYMENT
+  |--------------------------------------------------------------------------
+  */
+
+  if (!transactionContext) {
     return (
       <SafeAreaView style={styles.screen}>
         <PaymentResult
-          status={verificationError ? 'pending' : status}
-          donation={paymentResult}
-          title={verificationError ? 'Payment Verification Pending' : undefined}
-          message={verificationError || undefined}
-          onDone={() => router.replace('/home/(tabs)/donations')}
+          status="failed"
+          title="Invalid Payment"
+          message="Payment transaction information is missing."
+          onDone={handleResultDone}
         />
       </SafeAreaView>
     );
@@ -228,7 +435,71 @@ export default function DonationPaymentScreen() {
 
   /*
   |--------------------------------------------------------------------------
-  | WEBVIEW
+  | VERIFYING PAYMENT
+  |--------------------------------------------------------------------------
+  */
+
+  if (verifying) {
+    return (
+      <SafeAreaView style={styles.screen}>
+        <View style={styles.center}>
+          <View style={styles.verifyIcon}>
+            <ActivityIndicator
+              size="small"
+              color="#704025"
+            />
+          </View>
+
+          <Text style={styles.verifyTitle}>
+            Verifying Payment
+          </Text>
+
+          <Text style={styles.verifyDescription}>
+            Please do not close the app while we
+            confirm your payment.
+          </Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  /*
+  |--------------------------------------------------------------------------
+  | PAYMENT RESULT
+  |--------------------------------------------------------------------------
+  */
+
+  if (paymentFinished) {
+    const status =
+      paymentResult?.status?.toLowerCase() ||
+      'pending';
+
+    return (
+      <SafeAreaView style={styles.screen}>
+        <PaymentResult
+          status={
+            verificationError
+              ? 'pending'
+              : status
+          }
+          donation={paymentResult}
+          title={
+            verificationError
+              ? 'Payment Verification Pending'
+              : undefined
+          }
+          message={
+            verificationError || undefined
+          }
+          onDone={handleResultDone}
+        />
+      </SafeAreaView>
+    );
+  }
+
+  /*
+  |--------------------------------------------------------------------------
+  | PAYMENT WEBVIEW
   |--------------------------------------------------------------------------
   */
 
@@ -237,12 +508,20 @@ export default function DonationPaymentScreen() {
       <PaymentWebView
         paymentUrl={paymentUrl}
         merchantTxnNo={merchantTransaction}
-        onGatewayReturn={handleGatewayReturn}
-        onClose={() => router.back()}
+        onGatewayReturn={
+          handleGatewayReturn
+        }
+        onClose={handleClose}
       />
     </SafeAreaView>
   );
 }
+
+/*
+|--------------------------------------------------------------------------
+| STYLES
+|--------------------------------------------------------------------------
+*/
 
 const styles = StyleSheet.create({
   screen: {
