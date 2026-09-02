@@ -23,7 +23,7 @@ const COLORS = {
   border: '#EBDCCD',
 };
 
-const AUTO_REFRESH_INTERVAL = 300; // 5 seconds
+const AUTO_REFRESH_INTERVAL = 30000; // 5 seconds
 
 export function TotalPaath() {
   const [stats, setStats] = useState(null);

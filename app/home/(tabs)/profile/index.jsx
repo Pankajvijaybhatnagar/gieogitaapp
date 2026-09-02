@@ -50,7 +50,8 @@ const COLORS = {
 
 export default function ProfileScreen() {
   const router = useRouter();
-  const { alert, success, error, warning, loading, hide, confirm } = useAppAlert();
+  const { alert, success, error, warning, loading, hide, confirm } =
+    useAppAlert();
 
   const {
     user,
@@ -492,6 +493,7 @@ export default function ProfileScreen() {
 
           setTimeout(() => {
             router.push('/login2');
+            hide();
           }, 100);
         } catch (logoutError) {
           console.error('[Profile] Logout error:', logoutError);

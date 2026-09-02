@@ -1,16 +1,16 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
 
+import { useAppAlert } from '@/context/AppAlertContext';
 import {
   ActivityIndicator,
-  Alert,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
 
 import AmountSelector from './AmountSelector';
@@ -19,9 +19,10 @@ import DonationConsent from './DonationConsent';
 import FormField from './FormField';
 import IdentityFields from './IdentityFields';
 import SevaTypeSelector from './SevaTypeSelector';
-import AppOverlay from '../../common/AppOverlay';
 
 const DonationForm = ({ profile, submitting, serverError, onSubmit }) => {
+  const { alert, success, error, warning, loading, hide, confirm } =
+    useAppAlert();
   const [name, setName] = useState('');
 
   const [email, setEmail] = useState('');
@@ -108,13 +109,13 @@ const DonationForm = ({ profile, submitting, serverError, onSubmit }) => {
 
   const validate = () => {
     if (!name.trim()) {
-      Alert.alert('Name Required', 'Please enter your name.');
+      alert('Name Required', 'Please enter your name.');
 
       return false;
     }
 
     if (!email.trim()) {
-      Alert.alert('Email Required', 'Please enter your email address.');
+      alert('Email Required', 'Please enter your email address.');
 
       return false;
     }
@@ -122,19 +123,19 @@ const DonationForm = ({ profile, submitting, serverError, onSubmit }) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!emailRegex.test(email.trim())) {
-      Alert.alert('Invalid Email', 'Please enter a valid email address.');
+      alert('Invalid Email', 'Please enter a valid email address.');
 
       return false;
     }
 
     if (!phone.trim()) {
-      Alert.alert('Phone Required', 'Please enter your phone number.');
+      alert('Phone Required', 'Please enter your phone number.');
 
       return false;
     }
 
     if (phone.replace(/\D/g, '').length < 10) {
-      Alert.alert('Invalid Phone', 'Please enter a valid phone number.');
+      alert('Invalid Phone', 'Please enter a valid phone number.');
 
       return false;
     }
@@ -142,20 +143,19 @@ const DonationForm = ({ profile, submitting, serverError, onSubmit }) => {
     const numericAmount = Number(amount);
 
     if (!numericAmount || numericAmount <= 0) {
-      Alert.alert('Amount Required', 'Please enter a valid donation amount.');
-      
+      alert('Amount Required', 'Please enter a valid donation amount.');
 
       return false;
     }
 
     if (!sevaType) {
-      Alert.alert('Seva Required', 'Please select a seva type.');
+      alert('Seva Required', 'Please select a seva type.');
 
       return false;
     }
 
     if (!city.trim()) {
-      Alert.alert('City Required', 'Please select your city.');
+      alert('City Required', 'Please select your city.');
 
       return false;
     }
@@ -165,7 +165,7 @@ const DonationForm = ({ profile, submitting, serverError, onSubmit }) => {
      */
     if (numericAmount >= 2000) {
       if (!identityNumber.trim()) {
-        Alert.alert(
+        alert(
           'Identity Required',
           `Please enter your ${
             identityType === 'pan' ? 'PAN' : 'Aadhaar'
@@ -179,7 +179,7 @@ const DonationForm = ({ profile, submitting, serverError, onSubmit }) => {
         identityType === 'pan' &&
         identityNumber.replace(/\s/g, '').length !== 10
       ) {
-        Alert.alert('Invalid PAN', 'Please enter a valid 10-character PAN.');
+        alert('Invalid PAN', 'Please enter a valid 10-character PAN.');
 
         return false;
       }
@@ -188,7 +188,7 @@ const DonationForm = ({ profile, submitting, serverError, onSubmit }) => {
         identityType === 'aadhaar' &&
         identityNumber.replace(/\D/g, '').length !== 12
       ) {
-        Alert.alert(
+        alert(
           'Invalid Aadhaar',
           'Please enter a valid 12-digit Aadhaar number.',
         );
@@ -198,13 +198,13 @@ const DonationForm = ({ profile, submitting, serverError, onSubmit }) => {
     }
 
     if (!termsAccepted) {
-      Alert.alert('Terms Required', 'Please accept the Terms & Conditions.');
+      alert('Terms Required', 'Please accept the Terms & Conditions.');
 
       return false;
     }
 
     if (!privacyAccepted) {
-      Alert.alert('Privacy Policy', 'Please accept the Privacy Policy.');
+      alert('Privacy Policy', 'Please accept the Privacy Policy.');
 
       return false;
     }

@@ -7,13 +7,12 @@ import { FontAwesome } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useRef, useState } from 'react';
 import {
-  Alert,
   Animated,
   PanResponder,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from 'react-native';
 
 import { useAppAlert } from '@/context/AppAlertContext';
@@ -358,7 +357,7 @@ export function PaathCounter({ todayPaath = 0, onSubmit }) {
       alert('❌ Submission Failed', message);
     } finally {
       setSubmitting(false);
-      hide();
+      // hide();
     }
   };
 

@@ -6,6 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
 
+import { useAppAlert } from '@/context/AppAlertContext';
 import {
   ActivityIndicator,
   Alert,
@@ -18,6 +19,7 @@ import {
 
 export default function NewDonationScreen() {
   const router = useRouter();
+  const { alert, success, warning, loading, hide, confirm } = useAppAlert();
 
   // =========================================================
   // URL PARAMS
@@ -362,7 +364,7 @@ export default function NewDonationScreen() {
 
       setError(message);
 
-      Alert.alert('Donation Failed', message);
+      alert('Donation Failed', message);
     } finally {
       setSubmitting(false);
     }
