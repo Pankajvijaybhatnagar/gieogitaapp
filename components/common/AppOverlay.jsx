@@ -13,11 +13,11 @@ const COLORS = {
   warmBrown: '#4A2C0D',
   gold: '#C9A227',
   goldLight: '#E8C55A',
-  cream: '#FDF6E3',
+  cream: '#ffffff',
   white: '#FFFFFF',
 
   danger: '#B42318',
-  dangerLight: '#FDECEC',
+  dangerLight: '#fdfafa',
 
   muted: '#7A6A58',
   border: 'rgba(201, 162, 39, 0.30)',
