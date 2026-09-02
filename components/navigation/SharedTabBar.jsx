@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
   tabBarWrapper: {
     width: '100%',
 
-    backgroundColor: 'transparent',
+    backgroundColor: COLORS.deepBrown,
 
     zIndex: 999,
 
@@ -189,14 +189,7 @@ const styles = StyleSheet.create({
 
     borderTopWidth: 1,
 
-    borderColor: 'rgba(201, 162, 39, 0.22)',
-
-    shadowColor: '#000',
-
-    shadowOffset: {
-      width: 0,
-      height: -4,
-    },
+    // borderColor: 'rgba(201, 162, 39, 0.22)',
 
     shadowOpacity: 0.22,
 
