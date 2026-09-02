@@ -17,9 +17,9 @@ export const COLORS = {
 
 // ─── MOCK DATA ────────────────────────────────────────────────────────────────
 export const heroImages = [
-  { id: '1', source: require('../../assets/images/ab.png') },
-  { id: '2', source: require('../../assets/images/ab.png') },
-  { id: '3', source: require('../../assets/images/ab.png') },
+  { id: '1', source: require('../../assets/images/hero1.png') },
+  { id: '2', source: require('../../assets/images/hero2.png') },
+  { id: '3', source: require('../../assets/images/hero3.png') },
 ];
 
 export const exclusiveContent = [
