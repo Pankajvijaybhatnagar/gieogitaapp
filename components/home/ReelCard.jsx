@@ -12,7 +12,6 @@ import { WebView } from 'react-native-webview';
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 const CARD_WIDTH = Math.min(SCREEN_WIDTH * 0.48, 190);
-const CARD_HEIGHT = CARD_WIDTH * 1.65;
 const CARD_GAP = 12;
 const SIDE_PADDING = 16;
 
@@ -25,22 +24,27 @@ const INSTAGRAM_VIDEO_SCRIPT = `
 
       document.documentElement.style.margin = '0';
       document.documentElement.style.padding = '0';
+      document.documentElement.style.width = '100%';
+      document.documentElement.style.height = '100%';
       document.documentElement.style.overflow = 'hidden';
-      document.documentElement.style.background = '#000';
+      document.documentElement.style.backgroundColor = '#000';
 
       document.body.style.margin = '0';
       document.body.style.padding = '0';
+      document.body.style.width = '100%';
+      document.body.style.height = '100%';
       document.body.style.overflow = 'hidden';
-      document.body.style.background = '#000';
+      document.body.style.backgroundColor = '#000';
 
       video.style.position = 'fixed';
       video.style.top = '0';
       video.style.left = '0';
-      video.style.width = '100vw';
-      video.style.height = '100vh';
+      video.style.width = '100%';
+      video.style.height = '100%';
       video.style.margin = '0';
       video.style.padding = '0';
-      video.style.objectFit = 'cover';
+      video.style.objectFit = 'contain';
+      video.style.objectPosition = 'center';
       video.style.backgroundColor = '#000';
       video.style.zIndex = '2147483647';
 
@@ -51,7 +55,9 @@ const INSTAGRAM_VIDEO_SCRIPT = `
 
     showOnlyVideo();
 
-    const observer = new MutationObserver(showOnlyVideo);
+    const observer = new MutationObserver(function () {
+      showOnlyVideo();
+    });
 
     observer.observe(document.documentElement, {
       childList: true,
@@ -136,18 +142,6 @@ export default function InstagramReelsSection() {
       id: '3',
       instagramUrl: 'https://www.instagram.com/reel/DI9HBttzPSe/',
     },
-    {
-      id: '4',
-      instagramUrl: 'https://www.instagram.com/reel/Dcr1CGSyryx/',
-    },
-    {
-      id: '5',
-      instagramUrl: 'https://www.instagram.com/reel/DcmpIu5yywm/',
-    },
-    {
-      id: '6',
-      instagramUrl: 'https://www.instagram.com/reel/Db1sm7vS9TC/',
-    },
   ]);
 
   const handleViewableItemsChanged = useRef(({ viewableItems }) => {
@@ -215,7 +209,7 @@ const styles = StyleSheet.create({
 
   card: {
     width: CARD_WIDTH,
-    height: CARD_HEIGHT,
+    aspectRatio: 9 / 16,
     overflow: 'hidden',
     borderRadius: 14,
     backgroundColor: '#000',
