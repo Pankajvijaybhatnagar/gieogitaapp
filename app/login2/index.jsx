@@ -604,7 +604,7 @@ const Login2 = () => {
   |--------------------------------------------------------------------------
   */
 
-  const handleGoogleLogin = async () => {
+  const handleGoogleLogin = async (id_token) => {
     try {
       setIsSubmitting(true);
 
@@ -616,7 +616,7 @@ const Login2 = () => {
         return;
       }
 
-      const result = await loginWithGoogle();
+      const result = await loginWithGoogle(id_token);
 
       console.log('LOGIN2 GOOGLE RESULT:', result);
 

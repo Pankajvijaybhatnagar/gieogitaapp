@@ -38,7 +38,7 @@ GoogleSignin.configure({
   offlineAccess: false,
 });
 
-export default function SocialLogin({ disabled = false }) {
+export default function SocialLogin({ disabled = false, onGoogleLogin }) {
   const router = useRouter();
 
   const [loadingProvider, setLoadingProvider] = useState(null);
@@ -81,9 +81,9 @@ export default function SocialLogin({ disabled = false }) {
         throw new Error('Google did not return an ID token.');
       }
 
-      const result = await AuthServices.loginWithGoogle(idToken);
+      const result = await onGoogleLogin(idToken);
 
-      if (!result.success) {
+      if (!result.status) {
         throw new Error(result.error || 'Google login failed.');
       }
 
