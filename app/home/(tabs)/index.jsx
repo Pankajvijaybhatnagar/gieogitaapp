@@ -1,10 +1,10 @@
 import TransformInNineSteps from '@/components/dhyanShivir/TransformInNineSteps';
+import ReelCard from '@/components/home/ReelCard.jsx';
 import { ScrollView, StatusBar, StyleSheet, View } from 'react-native';
 import { COLORS } from '../../../components/home/constant';
 import EventsSection from '../../../components/home/Eventsection';
 import ExclusiveContent from '../../../components/home/Exclusivecontent';
 import HeroBanner from '../../../components/home/Herobanner';
-import InitiativesSection from '../../../components/home/Initiativessection';
 import LiveDarshan from '../../../components/home/Livedarshan';
 import SevaSection from '../../../components/home/Sevasection';
 import { GoldDivider } from '../../../components/home/Sharedui';
@@ -42,7 +42,8 @@ export default function GieoGitaHome() {
 
         <GoldDivider />
 
-        <InitiativesSection />
+        {/* <InitiativesSection /> */}
+        <ReelCard />
 
         <View style={{ height: 20 }} />
       </ScrollView>

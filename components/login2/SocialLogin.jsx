@@ -58,6 +58,9 @@ export default function SocialLogin({ disabled = false, onGoogleLogin }) {
     if (isLoading) {
       return;
     }
+    try {
+      GoogleSignin.signOut();
+    } catch (error) {}
 
     try {
       setLoadingProvider('google');
@@ -82,12 +85,6 @@ export default function SocialLogin({ disabled = false, onGoogleLogin }) {
       }
 
       const result = await onGoogleLogin(idToken);
-
-      if (!result.status) {
-        throw new Error(result.error || 'Google login failed.');
-      }
-
-      router.back();
     } catch (error) {
       if (error?.code === statusCodes.SIGN_IN_CANCELLED) {
         return;
