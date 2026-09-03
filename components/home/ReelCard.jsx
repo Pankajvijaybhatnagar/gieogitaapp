@@ -131,16 +131,28 @@ export default function InstagramReelsSection() {
 
   const [reels, setReels] = useState([
     {
-      id: '1',
-      instagramUrl: 'https://www.instagram.com/reel/DT2m-C8EpOV/',
-    },
-    {
       id: '2',
-      instagramUrl: 'https://www.instagram.com/reel/DUDj--HCNSA/',
+      instagramUrl: 'https://www.instagram.com/reel/Dcr1CGSyryx/',
     },
     {
       id: '3',
+      instagramUrl: 'https://www.instagram.com/reel/DcmpIu5yywm/',
+    },
+    {
+      id: '4',
+      instagramUrl: 'https://www.instagram.com/reel/DT2m-C8EpOV/',
+    },
+    {
+      id: '5',
+      instagramUrl: 'https://www.instagram.com/reel/DUDj--HCNSA/',
+    },
+    {
+      id: '6',
       instagramUrl: 'https://www.instagram.com/reel/DI9HBttzPSe/',
+    },
+    {
+      id: '1',
+      instagramUrl: 'https://www.instagram.com/reel/Db1sm7vS9TC/',
     },
   ]);
 
