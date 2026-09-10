@@ -2,18 +2,6 @@ import { Tabs, useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
-const COLORS = {
-  deepBrown: '#2C1A0A',
-  warmBrown: '#4A2C0D',
-  richBrown: '#3D2010',
-  gold: '#C9A227',
-  goldLight: '#E8C55A',
-  goldDark: '#8B6914',
-  cream: '#FDF6E3',
-  saffron: '#E8721C',
-  saffronLight: '#F4A44A',
-};
-
 // ─── TAB LAYOUT ───────────────────────────────────────────────────────────────
 export default function TabLayout() {
   const router = useRouter();

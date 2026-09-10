@@ -1,8 +1,8 @@
+import { DESIGN } from '@/constants/design';
 import { useEffect, useRef, useState } from 'react';
 
 import {
   ActivityIndicator,
-  Alert,
   Animated,
   Easing,
   KeyboardAvoidingView,
@@ -20,25 +20,29 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 
 import { useAuth } from '@/context/AuthContext';
+import { useAppAlert } from '@/context/AppAlertContext';
 
 import userServices from '@/lib/services/userServices';
 
+import { COLORS as BRAND } from '@/constants/brandColors';
+import { hairline } from '@/constants/theme';
+
 const COLORS = {
-  primary: '#A55A12',
-  primaryDark: '#713907',
-  primaryLight: '#FBF1E5',
+  primary: BRAND.saffron,
+  primaryDark: BRAND.richBrown,
+  primaryLight: BRAND.creamDark,
 
-  background: '#F8F7F5',
-  white: '#FFFFFF',
+  background: BRAND.cream,
+  white: BRAND.white,
 
-  text: '#181818',
-  secondary: '#737373',
+  text: BRAND.deepBrown,
+  secondary: BRAND.warmBrown,
 
-  border: '#EAE7E3',
+  border: hairline,
   success: '#188044',
   successLight: '#EAF7EF',
 
-  danger: '#C93434',
+  danger: BRAND.dangerRed,
 };
 
 export default function PasswordScreen() {
@@ -50,6 +54,7 @@ export default function PasswordScreen() {
     isAuthenticated,
     loading: authLoading,
   } = useAuth();
+  const { error, confirm } = useAppAlert();
 
   /*
   |--------------------------------------------------------------------------
@@ -221,24 +226,28 @@ export default function PasswordScreen() {
 
   const handleUpdate = async () => {
     if (!access_token) {
-      Alert.alert('Session Expired', 'Please login again.', [
+      confirm(
+        'Session Expired',
+        'Please login again.',
+        () => router.replace('/login2'),
         {
-          text: 'OK',
-          onPress: () => router.replace('/login2'),
+          buttonText: 'OK',
+          secondaryButtonText: null,
+          icon: 'log-in-outline',
         },
-      ]);
+      );
 
       return;
     }
 
     if (!currentPassword) {
-      Alert.alert('Required', 'Enter your current password.');
+      error('Required', 'Enter your current password.');
 
       return;
     }
 
     if (newPassword.length < 8) {
-      Alert.alert(
+      error(
         'Weak Password',
         'New password must contain at least 8 characters.',
       );
@@ -247,7 +256,7 @@ export default function PasswordScreen() {
     }
 
     if (newPassword !== confirmPassword) {
-      Alert.alert(
+      error(
         'Password Mismatch',
         'New password and confirmation do not match.',
       );
@@ -256,7 +265,7 @@ export default function PasswordScreen() {
     }
 
     if (currentPassword === newPassword) {
-      Alert.alert(
+      error(
         'Choose a New Password',
         'Your new password must be different from the current password.',
       );
@@ -306,22 +315,22 @@ export default function PasswordScreen() {
       setNewPassword('');
       setConfirmPassword('');
 
-      Alert.alert(
+      confirm(
         'Password Updated',
         'Your password has been changed successfully.',
-        [
-          {
-            text: 'Done',
-            onPress: () => router.back(),
-          },
-        ],
+        () => router.back(),
+        {
+          buttonText: 'Done',
+          secondaryButtonText: null,
+          icon: 'checkmark-circle',
+        },
       );
-    } catch (error) {
-      console.error('[Password] Update error:', error);
+    } catch (err) {
+      console.error('[Password] Update error:', err);
 
-      Alert.alert(
+      error(
         'Password Update Failed',
-        error?.message || 'Unable to update password.',
+        err?.message || 'Unable to update password.',
       );
     } finally {
       setSaving(false);
@@ -591,27 +600,23 @@ function Requirement({ text, valid }) {
 
 const styles = StyleSheet.create({
   flex: {
-    flex: 1,
+    flex: 1
   },
-
   screen: {
     flex: 1,
-    backgroundColor: COLORS.background,
+    backgroundColor: COLORS.background
   },
-
   loadingScreen: {
     flex: 1,
     backgroundColor: COLORS.background,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-
   loadingText: {
     marginTop: 12,
-    fontSize: 11,
-    color: COLORS.secondary,
+    fontSize: 12,
+    color: COLORS.secondary
   },
-
   header: {
     paddingTop: 46,
     paddingHorizontal: 20,
@@ -621,33 +626,28 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.border,
+    borderBottomColor: COLORS.border
   },
-
   backButton: {
     width: 39,
     height: 39,
     borderRadius: 20,
     backgroundColor: '#F8F7F5',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-
   headerTitle: {
     fontSize: 17,
     fontWeight: '700',
-    color: COLORS.text,
+    color: COLORS.text
   },
-
   headerSpacer: {
-    width: 39,
+    width: 39
   },
-
   content: {
     padding: 20,
-    paddingBottom: 35,
+    paddingBottom: 35
   },
-
   securityIcon: {
     alignSelf: 'center',
     width: 64,
@@ -657,120 +657,104 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 10,
-    marginBottom: 16,
+    marginBottom: 16
   },
-
   title: {
     fontSize: 22,
-    fontWeight: '700',
+    fontWeight: "400",
     textAlign: 'center',
     color: COLORS.text,
+    fontFamily: DESIGN.fonts.editorial,
+    letterSpacing: -0.4
   },
-
   subtitle: {
     marginTop: 5,
     textAlign: 'center',
-    fontSize: 10.5,
-    lineHeight: 15,
-    color: COLORS.secondary,
+    fontSize: 12,
+    lineHeight: 18,
+    color: COLORS.secondary
   },
-
   field: {
-    marginTop: 18,
+    marginTop: 18
   },
-
   label: {
-    fontSize: 10.5,
+    fontSize: 12,
     fontWeight: '600',
     color: '#4A4A4A',
-    marginBottom: 5,
+    marginBottom: 5
   },
-
   inputWrapper: {
-    height: 47,
-    borderRadius: 12,
+    height: 52,
+    borderRadius: 14,
     borderWidth: 1,
     borderColor: COLORS.border,
     backgroundColor: COLORS.white,
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   },
-
   inputIcon: {
     marginLeft: 13,
-    marginRight: 3,
+    marginRight: 3
   },
-
   input: {
     flex: 1,
     height: '100%',
     paddingHorizontal: 9,
-    fontSize: 11.5,
-    color: COLORS.text,
+    fontSize: 15,
+    color: COLORS.text
   },
-
   eyeButton: {
     width: 43,
     height: '100%',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-
   strengthContainer: {
-    marginTop: 9,
+    marginTop: 9
   },
-
   strengthHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 5,
+    marginBottom: 5
   },
-
   strengthLabel: {
-    fontSize: 9,
-    color: COLORS.secondary,
+    fontSize: 12,
+    color: COLORS.secondary
   },
-
   strengthValue: {
-    fontSize: 9,
-    fontWeight: '700',
+    fontSize: 12,
+    fontWeight: '700'
   },
-
   strengthTrack: {
     height: 4,
     borderRadius: 2,
     backgroundColor: '#EAE8E5',
-    overflow: 'hidden',
+    overflow: 'hidden'
   },
-
   strengthProgress: {
     height: '100%',
-    borderRadius: 2,
+    borderRadius: 2
   },
-
   requirements: {
     marginTop: 17,
     padding: 13,
     borderRadius: 14,
     backgroundColor: COLORS.white,
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: COLORS.border
   },
-
   requirementsTitle: {
-    fontSize: 10.5,
+    fontSize: 12,
     fontWeight: '700',
     color: COLORS.text,
-    marginBottom: 8,
+    marginBottom: 8
   },
-
   requirement: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 5,
+    marginBottom: 5
   },
-
   requirementIcon: {
     width: 17,
     height: 17,
@@ -778,22 +762,18 @@ const styles = StyleSheet.create({
     backgroundColor: '#F0EFED',
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 7,
+    marginRight: 7
   },
-
   requirementIconValid: {
-    backgroundColor: COLORS.success,
+    backgroundColor: COLORS.success
   },
-
   requirementText: {
-    fontSize: 9.5,
-    color: COLORS.secondary,
+    fontSize: 12,
+    color: COLORS.secondary
   },
-
   requirementTextValid: {
-    color: COLORS.success,
+    color: COLORS.success
   },
-
   updateButton: {
     height: 49,
     borderRadius: 25,
@@ -807,36 +787,32 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 5,
+      height: 5
     },
     shadowOpacity: 0.1,
-    shadowRadius: 8,
+    shadowRadius: 8
   },
-
   disabledButton: {
-    opacity: 0.65,
+    opacity: 0.65
   },
-
   updateText: {
     fontSize: 13,
     fontWeight: '700',
-    color: COLORS.white,
+    color: COLORS.white
   },
-
   securityNote: {
     marginTop: 14,
     padding: 12,
     borderRadius: 13,
     backgroundColor: COLORS.successLight,
     flexDirection: 'row',
-    alignItems: 'flex-start',
+    alignItems: 'flex-start'
   },
-
   securityNoteText: {
     flex: 1,
     marginLeft: 7,
-    fontSize: 9,
-    lineHeight: 14,
-    color: '#4C735B',
-  },
+    fontSize: 12,
+    lineHeight: 18,
+    color: '#4C735B'
+  }
 });

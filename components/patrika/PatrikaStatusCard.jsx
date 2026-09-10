@@ -1,19 +1,16 @@
 import { Ionicons } from '@expo/vector-icons';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
+import { COLORS as BRAND_COLORS } from '@/constants/brandColors';
+import { hairline, shadow } from '@/constants/theme';
+
 const COLORS = {
-  deepBrown: '#2C1A0A',
-  warmBrown: '#4A2C0D',
-  gold: '#C9A227',
-  goldLight: '#E8C55A',
-  goldDark: '#8B6914',
-  cream: '#FDF6E3',
-  creamDark: '#F5E6C8',
+  ...BRAND_COLORS,
   green: '#2F7D4A',
   greenLight: '#E8F5EC',
   orange: '#B86A17',
   orangeLight: '#FFF3E1',
-  red: '#B44635',
+  red: BRAND_COLORS.dangerRed,
   redLight: '#FBECEA',
 };
 
@@ -177,65 +174,63 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     gap: 12,
     padding: 15,
-    borderRadius: 18,
-    backgroundColor: '#FFFFFF',
+    borderRadius: 24,
+    backgroundColor: COLORS.cream,
     borderWidth: 1,
-    borderColor: '#EDE1D4',
-    shadowColor: '#4E321D',
-    shadowOpacity: 0.08,
-    shadowRadius: 10,
-    shadowOffset: { width: 0, height: 4 },
-    elevation: 2,
+    borderColor: hairline,
+    ...shadow.card,
+    shadowOpacity: 0.045,
+    elevation: 2
   },
   iconWrap: {
     width: 48,
     height: 48,
     borderRadius: 16,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   content: {
-    flex: 1,
+    flex: 1
   },
   titleRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: 8
   },
   title: {
     flex: 1,
     fontSize: 15,
-    fontWeight: '800',
-    color: COLORS.deepBrown,
+    fontWeight: "600",
+    color: COLORS.deepBrown
   },
   description: {
     marginTop: 4,
-    fontSize: 11.5,
-    lineHeight: 17,
-    color: '#7E6857',
+    fontSize: 12,
+    lineHeight: 18,
+    color: COLORS.warmBrown
   },
   activeBadge: {
     paddingHorizontal: 7,
     paddingVertical: 3,
     borderRadius: 8,
-    backgroundColor: COLORS.greenLight,
+    backgroundColor: COLORS.greenLight
   },
   activeBadgeText: {
-    fontSize: 8,
-    fontWeight: '800',
+    fontSize: 10,
+    fontWeight: "600",
     letterSpacing: 0.7,
-    color: COLORS.green,
+    color: COLORS.green
   },
   infoRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 5,
-    marginTop: 10,
+    marginTop: 10
   },
   infoText: {
-    fontSize: 9.5,
+    fontSize: 12,
     color: COLORS.green,
-    fontWeight: '600',
+    fontWeight: '600'
   },
   subscribeButton: {
     marginTop: 11,
@@ -243,28 +238,30 @@ const styles = StyleSheet.create({
     minHeight: 38,
     paddingHorizontal: 15,
     borderRadius: 19,
-    backgroundColor: COLORS.deepBrown,
+    backgroundColor: COLORS.richBrown,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 7,
+    gap: 7
   },
   subscribeButtonText: {
     color: '#FFFFFF',
-    fontSize: 11,
-    fontWeight: '800',
+    fontSize: 12,
+    fontWeight: "600"
   },
   refreshButton: {
-    padding: 5,
+    padding: 5
   },
   loadingCard: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
     padding: 15,
-    borderRadius: 18,
-    backgroundColor: '#FFFFFF',
+    borderRadius: 24,
+    backgroundColor: COLORS.cream,
     borderWidth: 1,
-    borderColor: '#EDE1D4',
+    borderColor: hairline,
+    shadowOpacity: 0.045,
+    elevation: 2
   },
   loadingIcon: {
     width: 48,
@@ -272,22 +269,22 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     backgroundColor: COLORS.creamDark,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   loadingTextArea: {
-    flex: 1,
+    flex: 1
   },
   skeletonTitle: {
     width: '52%',
     height: 12,
     borderRadius: 6,
-    backgroundColor: '#EEE5DA',
+    backgroundColor: COLORS.creamDark
   },
   skeletonLine: {
     width: '82%',
     height: 9,
     borderRadius: 5,
-    backgroundColor: '#F3ECE5',
-    marginTop: 8,
-  },
+    backgroundColor: COLORS.creamDark,
+    marginTop: 8
+  }
 });

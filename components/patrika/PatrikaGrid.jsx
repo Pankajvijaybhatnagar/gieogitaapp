@@ -1,11 +1,8 @@
 import { StyleSheet, Text, View } from 'react-native';
 import PatrikaCard from './PatrikaCard';
 
-const COLORS = {
-  deepBrown: '#2C1A0A',
-  gold: '#C9A227',
-  goldDark: '#8B6914',
-};
+import { COLORS } from '@/constants/brandColors';
+import { hairline, radii } from '@/constants/theme';
 
 export default function PatrikaGrid({
   data = [],
@@ -41,28 +38,28 @@ const styles = StyleSheet.create({
   grid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
   empty: {
     minHeight: 170,
-    borderRadius: 18,
+    borderRadius: radii.lg,
     borderWidth: 1,
-    borderColor: '#EDE1D4',
-    backgroundColor: '#FFFFFF',
+    borderColor: hairline,
+    backgroundColor: COLORS.cream,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 24,
+    paddingHorizontal: 24
   },
   emptyTitle: {
     fontSize: 15,
-    fontWeight: '800',
-    color: COLORS.deepBrown,
+    fontWeight: "600",
+    color: COLORS.deepBrown
   },
   emptyText: {
     marginTop: 7,
     textAlign: 'center',
-    fontSize: 11,
-    lineHeight: 17,
-    color: '#846F5E',
-  },
+    fontSize: 12,
+    lineHeight: 18,
+    color: COLORS.warmBrown
+  }
 });

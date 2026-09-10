@@ -31,20 +31,8 @@ import chantServices from '@/lib/services/chantServices';
 // }
 // ─────────────────────────────────────────────────────────────────────────────
 
-const COLORS = {
-  deepBrown: '#2C1A0A',
-  warmBrown: '#4A2C0D',
-
-  gold: '#C9A227',
-  goldLight: '#E8C55A',
-  goldDark: '#8B6914',
-
-  cream: '#FDF6E3',
-  creamDark: '#F5E6C8',
-
-  saffron: '#E8721C',
-  white: '#FFFFFF',
-};
+import { COLORS, RGB } from '@/constants/brandColors';
+import { hairline, radii, shadow } from '@/constants/theme';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // SECTION LABEL
@@ -167,7 +155,7 @@ export function YourPaath() {
 
       {statsLoading && !stats ? (
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="small" color={COLORS.goldLight} />
+          <ActivityIndicator size="small" color={COLORS.saffron} />
 
           <Text style={styles.loadingText}>Loading your progress...</Text>
         </View>
@@ -235,255 +223,168 @@ const styles = StyleSheet.create({
 
   wrapper: {
     marginHorizontal: 16,
-
-    backgroundColor: COLORS.warmBrown,
-
-    borderRadius: 20,
-
+    backgroundColor: COLORS.cream,
+    borderRadius: radii.lg,
     padding: 18,
-
     borderWidth: 1,
-    borderColor: 'rgba(201,162,39,0.35)',
-
-    overflow: 'hidden',
+    borderColor: hairline,
+    ...shadow.card,
+    overflow: 'hidden'
   },
-
   // ───────────────────────────────────────────────────────────────────────────
   // SECTION LABEL
   // ───────────────────────────────────────────────────────────────────────────
 
   sectionLabelRow: {
     flexDirection: 'row',
-
     alignItems: 'center',
-
-    marginBottom: 14,
+    marginBottom: 14
   },
-
   sectionLabelLine: {
     flex: 1,
-
     height: 1,
-
-    backgroundColor: COLORS.goldDark,
-
-    opacity: 0.3,
+    backgroundColor: hairline
   },
-
   sectionLabelText: {
-    fontSize: 9,
-
+    fontSize: 12,
     letterSpacing: 2,
-
-    fontWeight: '800',
-
+    fontWeight: "600",
     color: COLORS.goldDark,
-
     marginHorizontal: 10,
-
-    textAlign: 'center',
+    textAlign: 'center'
   },
-
   // ───────────────────────────────────────────────────────────────────────────
   // MAIN ROW
   // ───────────────────────────────────────────────────────────────────────────
 
   row: {
     flexDirection: 'row',
-
-    alignItems: 'stretch',
+    alignItems: 'stretch'
   },
-
   // ───────────────────────────────────────────────────────────────────────────
   // TOTAL BOX
   // ───────────────────────────────────────────────────────────────────────────
 
   totalBox: {
     width: 105,
-
     minHeight: 150,
-
-    backgroundColor: COLORS.deepBrown,
-
-    borderRadius: 16,
-
+    backgroundColor: COLORS.richBrown,
+    borderRadius: radii.md,
     borderWidth: 1.5,
-
     borderColor: COLORS.gold,
-
     paddingVertical: 14,
     paddingHorizontal: 10,
-
     alignItems: 'center',
-
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-
   totalLabel: {
     fontSize: 12,
-
-    lineHeight: 16,
-
-    fontWeight: '800',
-
-    color: COLORS.creamDark,
-
-    textAlign: 'center',
+    lineHeight: 18,
+    fontWeight: "600",
+    color: COLORS.cream,
+    textAlign: 'center'
   },
-
   totalDivider: {
     width: 32,
-
     height: 1,
-
-    backgroundColor: COLORS.goldDark,
-
+    backgroundColor: COLORS.gold,
     marginVertical: 8,
-
-    opacity: 0.8,
+    opacity: 0.8
   },
-
   totalNumber: {
     fontSize: 34,
-
     lineHeight: 40,
-
     fontWeight: '900',
-
     color: COLORS.goldLight,
-
-    textAlign: 'center',
+    textAlign: 'center'
   },
-
   totalIcon: {
     fontSize: 22,
-
-    marginTop: 6,
+    marginTop: 6
   },
-
   // ───────────────────────────────────────────────────────────────────────────
   // MONTH / WEEK COLUMN
   // ───────────────────────────────────────────────────────────────────────────
 
   progressCol: {
     flex: 1,
-
     marginLeft: 12,
-
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
-
   // ───────────────────────────────────────────────────────────────────────────
   // PROGRESS CARD
   // ───────────────────────────────────────────────────────────────────────────
 
   progressCard: {
     flex: 1,
-
     minHeight: 70,
-
-    backgroundColor: 'rgba(201,162,39,0.08)',
-
-    borderRadius: 14,
-
+    backgroundColor: COLORS.white,
+    borderRadius: 24,
     borderWidth: 1,
-
-    borderColor: 'rgba(201,162,39,0.22)',
-
+    borderColor: hairline,
     flexDirection: 'row',
-
     alignItems: 'center',
-
     paddingHorizontal: 10,
-
     marginBottom: 8,
+    shadowOpacity: 0.045,
+    elevation: 2
   },
-
   progressCardLast: {
-    marginBottom: 0,
+    marginBottom: 0
   },
-
   // ───────────────────────────────────────────────────────────────────────────
   // ICON BOX
   // ───────────────────────────────────────────────────────────────────────────
 
   progressIconBox: {
     width: 42,
-
     height: 42,
-
     borderRadius: 12,
-
-    backgroundColor: 'rgba(201,162,39,0.13)',
-
+    backgroundColor: `rgba(${RGB.gold},0.13)`,
     borderWidth: 1,
-
-    borderColor: 'rgba(201,162,39,0.25)',
-
+    borderColor: `rgba(${RGB.gold},0.25)`,
     alignItems: 'center',
-
     justifyContent: 'center',
-
-    marginRight: 10,
+    marginRight: 10
   },
-
   progressIcon: {
-    fontSize: 20,
+    fontSize: 20
   },
-
   // ───────────────────────────────────────────────────────────────────────────
   // TEXT
   // ───────────────────────────────────────────────────────────────────────────
 
   progressTextCol: {
-    flex: 1,
+    flex: 1
   },
-
   progressLabel: {
-    fontSize: 11,
-
+    fontSize: 12,
     fontWeight: '700',
-
-    color: COLORS.creamDark,
-
-    marginBottom: 2,
+    color: COLORS.warmBrown,
+    marginBottom: 2
   },
-
   progressNumber: {
     fontSize: 24,
-
     lineHeight: 28,
-
     fontWeight: '900',
-
-    color: COLORS.goldLight,
+    color: COLORS.goldDark
   },
-
   // ───────────────────────────────────────────────────────────────────────────
   // LOADING
   // ───────────────────────────────────────────────────────────────────────────
 
   loadingContainer: {
     minHeight: 150,
-
     alignItems: 'center',
-
     justifyContent: 'center',
-
-    backgroundColor: 'rgba(201,162,39,0.06)',
-
-    borderRadius: 14,
-
+    backgroundColor: COLORS.creamDark,
+    borderRadius: radii.md,
     borderWidth: 1,
-
-    borderColor: 'rgba(201,162,39,0.15)',
+    borderColor: hairline
   },
-
   loadingText: {
     marginTop: 8,
-
-    fontSize: 11,
-
-    color: COLORS.creamDark,
-  },
+    fontSize: 12,
+    color: COLORS.warmBrown
+  }
 });

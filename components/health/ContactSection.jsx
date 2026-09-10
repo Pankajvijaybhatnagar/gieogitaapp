@@ -1,9 +1,10 @@
+import { DESIGN } from '@/constants/design';
+import { useAppAlert } from '@/context/AppAlertContext';
 import { FontAwesome } from '@expo/vector-icons';
 import { useState } from 'react';
 
 import {
   ActivityIndicator,
-  Alert,
   Linking,
   StyleSheet,
   Text,
@@ -22,19 +23,20 @@ import inquiriesServices from '@/lib/services/inquiriesServices';
 // ============================================================
 
 const COLORS = {
-  darkBrown: '#3a2c16',
-  brown: '#5a3816',
+  darkBrown: '#292328',
+  brown: '#55334A',
+  saffron: '#A65338',
 
-  mediumBrown: '#75522F',
-  softBrown: '#92765A',
-  mutedBrown: '#A18D76',
+  mediumBrown: '#74696A',
+  softBrown: '#7A6650',
+  mutedBrown: '#94806A',
 
   background: '#F4E9D8',
 
   biscuit: '#EEDFC9',
   biscuitLight: '#F8F1E7',
 
-  cream: '#FFFDF8',
+  cream: '#FFFFFF',
   white: '#FFFFFF',
 
   border: '#DDC8AA',
@@ -52,6 +54,8 @@ const COLORS = {
 // ============================================================
 
 export default function ContactSection() {
+  const { error } = useAppAlert();
+
   // ==========================================================
   // FORM STATE
   // ==========================================================
@@ -109,25 +113,25 @@ export default function ContactSection() {
 
   const validateForm = () => {
     if (!name.trim()) {
-      Alert.alert('Name Required', 'Please enter your full name.');
+      error('Name Required', 'Please enter your full name.');
 
       return false;
     }
 
     if (name.trim().length < 2) {
-      Alert.alert('Invalid Name', 'Please enter a valid name.');
+      error('Invalid Name', 'Please enter a valid name.');
 
       return false;
     }
 
     if (!phone.trim()) {
-      Alert.alert('Mobile Number Required', 'Please enter your mobile number.');
+      error('Mobile Number Required', 'Please enter your mobile number.');
 
       return false;
     }
 
     if (phone.length !== 10) {
-      Alert.alert(
+      error(
         'Invalid Mobile Number',
         'Please enter a valid 10-digit mobile number.',
       );
@@ -136,19 +140,19 @@ export default function ContactSection() {
     }
 
     if (email.trim() && !validateEmail(email.trim())) {
-      Alert.alert('Invalid Email', 'Please enter a valid email address.');
+      error('Invalid Email', 'Please enter a valid email address.');
 
       return false;
     }
 
     if (!message.trim()) {
-      Alert.alert('Inquiry Required', 'Please write your inquiry.');
+      error('Inquiry Required', 'Please write your inquiry.');
 
       return false;
     }
 
     if (message.trim().length < 5) {
-      Alert.alert(
+      error(
         'Inquiry Too Short',
         'Please provide a little more information.',
       );
@@ -274,8 +278,8 @@ export default function ContactSection() {
   const handleCall = async () => {
     try {
       await Linking.openURL('tel:+911234567890');
-    } catch (error) {
-      Alert.alert(
+    } catch (_error) {
+      error(
         'Unable to Call',
         'Phone service is not available on this device.',
       );
@@ -289,8 +293,8 @@ export default function ContactSection() {
   const handleWhatsApp = async () => {
     try {
       await Linking.openURL('https://wa.me/911234567890');
-    } catch (error) {
-      Alert.alert('Unable to Open WhatsApp', 'WhatsApp could not be opened.');
+    } catch (_error) {
+      error('Unable to Open WhatsApp', 'WhatsApp could not be opened.');
     }
   };
 
@@ -301,8 +305,8 @@ export default function ContactSection() {
   const handleMedantaWebsite = async () => {
     try {
       await Linking.openURL('https://www.medanta.org');
-    } catch (error) {
-      Alert.alert(
+    } catch (_error) {
+      error(
         'Unable to Open Website',
         'Medanta website could not be opened.',
       );
@@ -601,666 +605,427 @@ const styles = StyleSheet.create({
 
   contactSection: {
     paddingHorizontal: 18,
-    paddingBottom: 12,
+    paddingBottom: 12
   },
-
   // ==========================================================
   // LOCATION
   // ==========================================================
 
   locationCard: {
     position: 'relative',
-
     flexDirection: 'row',
-
     alignItems: 'center',
-
     overflow: 'hidden',
-
     paddingHorizontal: 15,
     paddingVertical: 16,
-
     marginBottom: 12,
-
-    borderRadius: 17,
-
-    backgroundColor: COLORS.darkBrown,
-
+    borderRadius: 24,
+    backgroundColor: DESIGN.colors.surface,
     borderWidth: 1,
-
-    borderColor: COLORS.brown,
-
-    elevation: 4,
-
+    borderColor: DESIGN.colors.border,
+    elevation: 2,
     shadowColor: COLORS.darkBrown,
-
     shadowOffset: {
       width: 0,
-      height: 4,
+      height: 4
     },
-
-    shadowOpacity: 0.16,
-
-    shadowRadius: 8,
+    shadowOpacity: 0.045,
+    shadowRadius: 8
   },
-
   locationAccent: {
     position: 'absolute',
-
     left: 0,
     top: 0,
     bottom: 0,
-
     width: 4,
-
-    backgroundColor: '#C9AE86',
+    backgroundColor: COLORS.brown
   },
-
   locationIconBox: {
     width: 47,
     height: 47,
-
     borderRadius: 14,
-
     alignItems: 'center',
     justifyContent: 'center',
-
     marginRight: 12,
-
     backgroundColor: COLORS.brown,
-
     borderWidth: 1,
-
-    borderColor: 'rgba(255,255,255,0.12)',
+    borderColor: 'rgba(255,255,255,0.12)'
   },
-
   locationTextCol: {
-    flex: 1,
+    flex: 1
   },
-
   locationSmallLabel: {
-    color: '#D2B895',
-
-    fontSize: 7,
-
-    fontWeight: '800',
-
+    color: COLORS.softBrown,
+    fontSize: 12,
+    fontWeight: "600",
     letterSpacing: 1,
-
-    marginBottom: 3,
+    marginBottom: 3
   },
-
   locationTitle: {
-    color: COLORS.white,
-
+    color: COLORS.darkBrown,
     fontSize: 14,
-
-    fontWeight: '800',
-
-    marginBottom: 3,
+    fontWeight: "600",
+    marginBottom: 3
   },
-
   locationAddr: {
-    color: 'rgba(255,255,255,0.70)',
-
-    fontSize: 10.5,
-
-    marginBottom: 6,
+    color: COLORS.softBrown,
+    fontSize: 12,
+    marginBottom: 6
   },
-
   locationBottom: {
     flexDirection: 'row',
-
-    alignItems: 'center',
+    alignItems: 'center'
   },
-
   freeDot: {
     width: 6,
     height: 6,
-
     borderRadius: 3,
-
     marginRight: 6,
-
-    backgroundColor: '#A2B67A',
+    backgroundColor: COLORS.green
   },
-
   locationSub: {
     flex: 1,
-
-    color: '#D8C4A6',
-
-    fontSize: 8.5,
-
-    lineHeight: 12,
+    color: COLORS.mutedBrown,
+    fontSize: 12,
+    lineHeight: 18
   },
-
   // ==========================================================
   // CONTACT BUTTONS
   // ==========================================================
 
   contactBtnRow: {
     flexDirection: 'row',
-
     marginHorizontal: -4,
-
-    marginBottom: 25,
+    marginBottom: 25
   },
-
   contactBtn: {
     flex: 1,
-
     minHeight: 46,
-
     flexDirection: 'row',
-
     alignItems: 'center',
-
     justifyContent: 'center',
-
     marginHorizontal: 4,
-
     borderRadius: 12,
-
     backgroundColor: COLORS.biscuitLight,
-
     borderWidth: 1,
-
-    borderColor: COLORS.border,
+    borderColor: COLORS.border
   },
-
   brownContactBtn: {
     backgroundColor: COLORS.brown,
-
-    borderColor: COLORS.darkBrown,
+    borderColor: COLORS.darkBrown
   },
-
   darkContactBtn: {
     backgroundColor: COLORS.darkBrown,
-
-    borderColor: COLORS.darkBrown,
+    borderColor: COLORS.darkBrown
   },
-
   contactBtnText: {
     color: COLORS.darkBrown,
-
     marginLeft: 6,
-
-    fontSize: 10.5,
-
-    fontWeight: '800',
+    fontSize: 12,
+    fontWeight: "600"
   },
-
   contactBtnWhiteText: {
     color: COLORS.white,
-
     marginLeft: 6,
-
-    fontSize: 10.5,
-
-    fontWeight: '800',
+    fontSize: 12,
+    fontWeight: "600"
   },
-
   // ==========================================================
   // INQUIRY HEADER
   // ==========================================================
 
   inquiryHeading: {
     flexDirection: 'row',
-
     alignItems: 'center',
-
-    marginBottom: 12,
+    marginBottom: 12
   },
-
   inquiryIconBox: {
     width: 42,
     height: 42,
-
     borderRadius: 13,
-
     alignItems: 'center',
-
     justifyContent: 'center',
-
     marginRight: 10,
-
     backgroundColor: COLORS.biscuitLight,
-
     borderWidth: 1,
-
-    borderColor: COLORS.border,
+    borderColor: COLORS.border
   },
-
   inquiryHeadingText: {
-    flex: 1,
+    flex: 1
   },
-
   inquiryLabel: {
     color: COLORS.softBrown,
-
-    fontSize: 7.5,
-
-    fontWeight: '800',
-
+    fontSize: 12,
+    fontWeight: "600",
     letterSpacing: 1.1,
-
-    marginBottom: 2,
+    marginBottom: 2
   },
-
   inquiryTitle: {
     color: COLORS.darkBrown,
-
     fontSize: 16,
-
-    fontWeight: '800',
+    fontWeight: "600"
   },
-
   inquirySubtitle: {
     color: COLORS.softBrown,
-
-    fontSize: 9,
-
-    lineHeight: 13,
-
-    marginTop: 2,
+    fontSize: 12,
+    lineHeight: 18,
+    marginTop: 2
   },
-
   // ==========================================================
   // FORM CARD
   // ==========================================================
 
   formCard: {
     position: 'relative',
-
     overflow: 'hidden',
-
     paddingHorizontal: 15,
-
     paddingTop: 19,
     paddingBottom: 15,
-
-    borderRadius: 18,
-
-    backgroundColor: COLORS.cream,
-
+    borderRadius: 24,
+    backgroundColor: DESIGN.colors.surface,
     borderWidth: 1,
-
-    borderColor: COLORS.border,
-
-    elevation: 3,
-
+    borderColor: DESIGN.colors.border,
+    elevation: 2,
     shadowColor: COLORS.darkBrown,
-
     shadowOffset: {
       width: 0,
-      height: 4,
+      height: 4
     },
-
-    shadowOpacity: 0.08,
-
-    shadowRadius: 8,
+    shadowOpacity: 0.045,
+    shadowRadius: 8
   },
-
   // ==========================================================
   // TOP ACCENT
   // ==========================================================
 
   topAccent: {
     position: 'absolute',
-
     top: 0,
     left: 0,
     right: 0,
-
     height: 3,
-
-    flexDirection: 'row',
+    flexDirection: 'row'
   },
-
   topAccentDark: {
     flex: 1,
-
-    backgroundColor: COLORS.darkBrown,
+    backgroundColor: COLORS.darkBrown
   },
-
   topAccentBrown: {
     flex: 1,
-
-    backgroundColor: COLORS.brown,
+    backgroundColor: COLORS.brown
   },
-
   // ==========================================================
   // FORM FIELDS
   // ==========================================================
 
   field: {
-    marginBottom: 12,
+    marginBottom: 12
   },
-
   labelRow: {
     flexDirection: 'row',
-
     alignItems: 'center',
-
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
-
   label: {
     color: COLORS.darkBrown,
-
-    fontSize: 11,
-
-    fontWeight: '800',
-
-    marginBottom: 6,
+    fontSize: 12,
+    fontWeight: "600",
+    marginBottom: 6
   },
-
   required: {
-    color: COLORS.error,
+    color: COLORS.error
   },
-
   optional: {
     color: COLORS.mutedBrown,
-
-    fontSize: 7.5,
-
-    fontWeight: '800',
-
+    fontSize: 12,
+    fontWeight: "600",
     letterSpacing: 0.5,
-
-    marginBottom: 6,
+    marginBottom: 6
   },
-
   counter: {
     color: COLORS.mutedBrown,
-
-    fontSize: 8,
-
-    marginBottom: 6,
+    fontSize: 10,
+    marginBottom: 6
   },
-
   // ==========================================================
   // NORMAL INPUT
   // ==========================================================
 
   input: {
-    height: 45,
-
+    height: 50,
     paddingHorizontal: 13,
-
     borderRadius: 10,
-
     backgroundColor: COLORS.biscuitLight,
-
     borderWidth: 1,
-
     borderColor: COLORS.border,
-
     color: COLORS.darkBrown,
-
-    fontSize: 12,
+    fontSize: 15
   },
-
   // ==========================================================
   // PHONE
   // ==========================================================
 
   phoneContainer: {
-    height: 45,
-
+    height: 52,
     flexDirection: 'row',
-
     overflow: 'hidden',
-
-    borderRadius: 10,
-
+    borderRadius: 14,
     backgroundColor: COLORS.biscuitLight,
-
     borderWidth: 1,
-
-    borderColor: COLORS.border,
+    borderColor: COLORS.border
   },
-
   countryCodeBox: {
     width: 57,
-
     alignItems: 'center',
-
     justifyContent: 'center',
-
     backgroundColor: COLORS.biscuit,
-
     borderRightWidth: 1,
-
-    borderRightColor: COLORS.border,
+    borderRightColor: COLORS.border
   },
-
   countryCode: {
     color: COLORS.brown,
-
-    fontSize: 11,
-
-    fontWeight: '800',
+    fontSize: 12,
+    fontWeight: "600"
   },
-
   phoneInput: {
     flex: 1,
-
     paddingHorizontal: 12,
-
     color: COLORS.darkBrown,
-
-    fontSize: 12,
+    fontSize: 15
   },
-
   // ==========================================================
   // MESSAGE
   // ==========================================================
 
   messageInput: {
     minHeight: 95,
-
     maxHeight: 125,
-
     paddingHorizontal: 13,
-
     paddingVertical: 10,
-
     borderRadius: 10,
-
     backgroundColor: COLORS.biscuitLight,
-
     borderWidth: 1,
-
     borderColor: COLORS.border,
-
     color: COLORS.darkBrown,
-
     fontSize: 12,
-
-    lineHeight: 18,
+    lineHeight: 18
   },
-
   // ==========================================================
   // RESPONSE
   // ==========================================================
 
   responseBox: {
     flexDirection: 'row',
-
     alignItems: 'center',
-
     paddingHorizontal: 10,
-
     paddingVertical: 9,
-
     marginBottom: 11,
-
     borderRadius: 10,
-
-    borderWidth: 1,
+    borderWidth: 1
   },
-
   successBox: {
     backgroundColor: COLORS.greenLight,
-
-    borderColor: '#CAD6B3',
+    borderColor: '#CAD6B3'
   },
-
   errorBox: {
     backgroundColor: COLORS.errorLight,
-
-    borderColor: '#E3BBAE',
+    borderColor: '#E3BBAE'
   },
-
   responseIcon: {
     width: 23,
     height: 23,
-
     borderRadius: 12,
-
     alignItems: 'center',
-
     justifyContent: 'center',
-
-    marginRight: 8,
+    marginRight: 8
   },
-
   successIcon: {
-    backgroundColor: COLORS.green,
+    backgroundColor: COLORS.green
   },
-
   errorIcon: {
-    backgroundColor: COLORS.error,
+    backgroundColor: COLORS.error
   },
-
   responseIconText: {
     color: COLORS.white,
-
     fontSize: 10,
-
-    fontWeight: '900',
+    fontWeight: '900'
   },
-
   responseText: {
     flex: 1,
-
-    fontSize: 9.5,
-
-    lineHeight: 14,
-
-    fontWeight: '600',
+    fontSize: 12,
+    lineHeight: 18,
+    fontWeight: '600'
   },
-
   successText: {
-    color: '#596A40',
+    color: '#596A40'
   },
-
   errorText: {
-    color: '#914735',
+    color: '#914735'
   },
-
   // ==========================================================
   // SUBMIT BUTTON
   // ==========================================================
 
   submitBtn: {
     width: '100%',
-
-    height: 48,
-
     alignItems: 'center',
-
     justifyContent: 'center',
-
-    borderRadius: 11,
-
-    backgroundColor: COLORS.brown,
-
+    borderRadius: 16,
+    backgroundColor: COLORS.richBrown,
     borderWidth: 1,
-
-    borderColor: COLORS.darkBrown,
-
-    elevation: 3,
-
-    shadowColor: COLORS.darkBrown,
-
+    borderColor: COLORS.saffron,
+    elevation: 2,
+    shadowColor: COLORS.saffron,
     shadowOffset: {
       width: 0,
-      height: 3,
+      height: 3
     },
-
-    shadowOpacity: 0.16,
-
+    shadowOpacity: 0.06,
     shadowRadius: 5,
+    minHeight: 52
   },
-
   submitBtnDisabled: {
-    opacity: 0.6,
+    opacity: 0.6
   },
-
   submitRow: {
     flexDirection: 'row',
-
     alignItems: 'center',
-
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-
   submitBtnText: {
     color: COLORS.white,
-
     fontSize: 12,
-
-    fontWeight: '800',
-
-    marginHorizontal: 7,
+    fontWeight: "600",
+    marginHorizontal: 7
   },
-
   arrowBox: {
     width: 22,
     height: 22,
-
     borderRadius: 11,
-
     alignItems: 'center',
-
     justifyContent: 'center',
-
     marginLeft: 3,
-
-    backgroundColor: COLORS.darkBrown,
+    backgroundColor: COLORS.darkBrown
   },
-
   // ==========================================================
   // DEPARTMENT
   // ==========================================================
 
   departmentRow: {
     flexDirection: 'row',
-
     alignItems: 'center',
-
     justifyContent: 'center',
-
-    marginTop: 10,
+    marginTop: 10
   },
-
   departmentDot: {
     width: 5,
     height: 5,
-
     borderRadius: 3,
-
     marginRight: 6,
-
-    backgroundColor: COLORS.brown,
+    backgroundColor: COLORS.brown
   },
-
   departmentText: {
     color: COLORS.mutedBrown,
-
-    fontSize: 8.5,
-  },
+    fontSize: 12
+  }
 });

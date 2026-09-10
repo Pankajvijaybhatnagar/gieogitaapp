@@ -1,3 +1,4 @@
+import { DESIGN } from '@/constants/design';
 import { Ionicons } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
 
@@ -19,6 +20,8 @@ import DonationConsent from './DonationConsent';
 import FormField from './FormField';
 import IdentityFields from './IdentityFields';
 import SevaTypeSelector from './SevaTypeSelector';
+import { COLORS, RGB } from '@/constants/brandColors';
+import { hairline, radii, shadow, type } from '@/constants/theme';
 
 const DonationForm = ({ profile, submitting, serverError, onSubmit }) => {
   const { alert, success, error, warning, loading, hide, confirm } =
@@ -253,7 +256,7 @@ const DonationForm = ({ profile, submitting, serverError, onSubmit }) => {
         contentContainerStyle={styles.scrollContent}>
         <View style={styles.header}>
           <View style={styles.headerIcon}>
-            <Ionicons name="heart" size={20} color="#FFFFFF" />
+            <Ionicons name="heart" size={20} color={COLORS.white} />
           </View>
 
           <View style={styles.headerContent}>
@@ -269,7 +272,7 @@ const DonationForm = ({ profile, submitting, serverError, onSubmit }) => {
 
         {serverError ? (
           <View style={styles.errorBox}>
-            <Ionicons name="alert-circle-outline" size={16} color="#A34B3C" />
+            <Ionicons name="alert-circle-outline" size={16} color={COLORS.dangerRed} />
 
             <Text style={styles.errorText}>{serverError}</Text>
           </View>
@@ -433,22 +436,22 @@ const DonationForm = ({ profile, submitting, serverError, onSubmit }) => {
           disabled={submitting}
           activeOpacity={0.85}>
           {submitting ? (
-            <ActivityIndicator size="small" color="#FFFFFF" />
+            <ActivityIndicator size="small" color={COLORS.white} />
           ) : (
             <>
-              <Ionicons name="heart" size={17} color="#FFFFFF" />
+              <Ionicons name="heart" size={17} color={COLORS.white} />
 
               <Text style={styles.submitText}>
                 Proceed to Donate ₹{Number(amount || 0).toLocaleString('en-IN')}
               </Text>
 
-              <Ionicons name="arrow-forward" size={17} color="#FFFFFF" />
+              <Ionicons name="arrow-forward" size={17} color={COLORS.white} />
             </>
           )}
         </TouchableOpacity>
 
         <View style={styles.secureRow}>
-          <Ionicons name="shield-checkmark-outline" size={13} color="#846A57" />
+          <Ionicons name="shield-checkmark-outline" size={13} color={COLORS.warmBrown} />
 
           <Text style={styles.secureText}>
             Your payment will be processed securely through the authorized
@@ -464,168 +467,137 @@ export default DonationForm;
 
 const styles = StyleSheet.create({
   flex: {
-    flex: 1,
+    flex: 1
   },
-
   scrollContent: {
-    paddingHorizontal: 14,
-    paddingTop: 17,
-    paddingBottom: 45,
+    paddingHorizontal: 24,
+    paddingTop: 24,
+    paddingBottom: 40
   },
-
   header: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    marginBottom: 20,
+    marginBottom: 28,
+    gap: 4
   },
-
   headerIcon: {
-    width: 42,
-    height: 42,
-    borderRadius: 14,
-    backgroundColor: '#704025',
+    width: 50,
+    height: 50,
+    borderRadius: 17,
+    backgroundColor: COLORS.richBrown,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-
   headerContent: {
     flex: 1,
-    marginLeft: 11,
+    marginLeft: 11
   },
-
   eyebrow: {
-    fontSize: 9,
-    fontWeight: '700',
-    letterSpacing: 1.5,
-    color: '#AE7957',
+    ...type.caption,
+    color: COLORS.saffron
   },
-
   title: {
     marginTop: 2,
-    fontSize: 22,
-    fontWeight: '700',
-    color: '#472C1B',
+    fontSize: 29,
+    fontWeight: "400",
+    color: COLORS.deepBrown,
+    fontFamily: DESIGN.fonts.editorial,
+    letterSpacing: -0.4,
+    lineHeight: 36
   },
-
   subtitle: {
     marginTop: 4,
-    fontSize: 10.5,
-    lineHeight: 15,
-    color: '#8C725F',
+    fontSize: 13,
+    lineHeight: 20,
+    color: COLORS.warmBrown
   },
-
   sectionTitleRow: {
     marginTop: 4,
-    marginBottom: 6,
+    marginBottom: 14,
     marginHorizontal: 4,
     flexDirection: 'row',
     alignItems: 'center',
+    flexWrap: "wrap",
+    gap: 6
   },
-
   sectionTitle: {
-    fontSize: 11.5,
-    fontWeight: '700',
-    color: '#523421',
+    fontSize: 16,
+    fontWeight: "600",
+    color: COLORS.deepBrown
   },
-
   sectionHint: {
     marginLeft: 'auto',
-    fontSize: 8.5,
-    color: '#A08673',
+    fontSize: 11,
+    color: COLORS.warmBrown
   },
-
   card: {
-    marginBottom: 14,
-    padding: 13,
-    borderRadius: 16,
+    marginBottom: 20,
+    padding: 20,
+    borderRadius: 24,
     borderWidth: 1,
-    borderColor: '#ECDFD3',
-    backgroundColor: '#FFFFFF',
-
-    shadowColor: '#63412B',
-    shadowOpacity: 0.035,
-    shadowRadius: 6,
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
-
-    elevation: 1,
+    borderColor: hairline,
+    backgroundColor: COLORS.white,
+    ...shadow.card,
+    shadowOpacity: 0.045,
+    elevation: 2
   },
-
   twoColumn: {
-    flexDirection: 'row',
-    gap: 7,
+    flexDirection: "column",
+    gap: 4
   },
-
   column: {
-    flex: 1,
+    flex: 1
   },
-
   errorBox: {
     marginBottom: 12,
     padding: 10,
-    borderRadius: 11,
-    backgroundColor: '#FBEDEA',
+    borderRadius: radii.sm,
+    backgroundColor: `rgba(${RGB.dangerRed},0.08)`,
     flexDirection: 'row',
     gap: 7,
-    alignItems: 'center',
+    alignItems: 'center'
   },
-
   errorText: {
     flex: 1,
-    fontSize: 9.5,
-    lineHeight: 14,
-    color: '#964839',
+    fontSize: 12,
+    lineHeight: 18,
+    color: COLORS.dangerRed
   },
-
   submitButton: {
-    minHeight: 49,
+    minHeight: 56,
     marginTop: 4,
     paddingHorizontal: 15,
     borderRadius: 16,
-    backgroundColor: '#65391F',
+    backgroundColor: COLORS.richBrown,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 7,
-
-    shadowColor: '#4E2917',
-    shadowOpacity: 0.18,
-    shadowRadius: 8,
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-
-    elevation: 3,
+    ...shadow.raised
   },
-
   submitDisabled: {
-    opacity: 0.65,
+    opacity: 0.65
   },
-
   submitText: {
     flex: 1,
     textAlign: 'center',
-    fontSize: 12.5,
+    fontSize: 15,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: COLORS.white,
+    lineHeight: 22
   },
-
   secureRow: {
     marginTop: 11,
     paddingHorizontal: 12,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-
   secureText: {
     marginLeft: 5,
-    fontSize: 8.5,
-    lineHeight: 12,
+    fontSize: 11,
+    lineHeight: 18,
     textAlign: 'center',
-    color: '#927965',
-  },
+    color: COLORS.warmBrown
+  }
 });

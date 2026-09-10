@@ -1,6 +1,9 @@
+import { DESIGN } from '@/constants/design';
 import { PaathCounter } from '@/components/chants/PaathCounter';
 import { TotalPaath } from '@/components/chants/TotalPaath';
 import YourChants from '@/components/chants/YourChants';
+import { COLORS, RGB } from '@/constants/brandColors';
+import { hairline, radii, shadow, spacing, type } from '@/constants/theme';
 import { useAppAlert } from '@/context/AppAlertContext';
 import { FontAwesome } from '@expo/vector-icons';
 import { Image } from 'expo-image';
@@ -16,25 +19,6 @@ import {
 } from 'react-native';
 
 const { width } = Dimensions.get('window');
-
-// ─── COLOR PALETTE ────────────────────────────────────────────────────────────
-const COLORS = {
-  deepBrown: '#2C1A0A',
-  warmBrown: '#4A2C0D',
-  richBrown: '#3D2010',
-  gold: '#C9A227',
-  goldLight: '#E8C55A',
-  goldDark: '#8B6914',
-  cream: '#FDF6E3',
-  creamDark: '#F5E6C8',
-  saffron: '#E8721C',
-  saffronLight: '#F4A44A',
-  purpleDeep: '#2C1A0A',
-  purpleMid: '#4A2C0D',
-  purpleLight: '#8B6914',
-  white: '#F5E6C8',
-  liveRed: '#E53935',
-};
 
 // ─── 18 ADHYAYS DATA ──────────────────────────────────────────────────────────
 const ADHYAYS = [
@@ -58,15 +42,10 @@ const ADHYAYS = [
   { num: 18, name: 'Moksha Sanyasa Yoga', verses: 78, icon: '🕉️' },
 ];
 
-// ─── REUSABLE: GOLD DIVIDER ───────────────────────────────────────────────────
+// ─── REUSABLE: DIVIDER ────────────────────────────────────────────────────────
+// A quiet hairline — no ornamental diamond, no gold.
 function GoldDivider() {
-  return (
-    <View style={sharedStyles.dividerRow}>
-      <View style={sharedStyles.dividerLine} />
-      <Text style={sharedStyles.dividerSymbol}>🔱</Text>
-      <View style={sharedStyles.dividerLine} />
-    </View>
-  );
+  return <View style={sharedStyles.divider} />;
 }
 
 // ─── REUSABLE: SECTION LABEL ─────────────────────────────────────────────────
@@ -188,7 +167,7 @@ function EkMinSection() {
         </Text>
 
         <View style={pmStyles.datePill}>
-          <FontAwesome name="users" size={11} color={COLORS.purpleLight} />
+          <FontAwesome name="users" size={11} color={COLORS.warmBrown} />
           <Text style={pmStyles.datePillText}>
             18 Adhyays • Daily Recitation Campaign
           </Text>
@@ -205,7 +184,7 @@ function EkMinSection() {
           </Text>
         </Text>
         <Text style={pmStyles.significanceDesc}>
-          "Ek Min Ek Saath Gita Paath" is a global initiative by GIEO Gita where
+          &quot;Ek Min Ek Saath Gita Paath&quot; is a global initiative by GIEO Gita where
           millions of devotees pause together for one minute every day to recite
           a verse from the Bhagavad Gita — creating a powerful wave of
           collective consciousness and divine energy.
@@ -293,7 +272,7 @@ function PaathDetailScreen({ setShowPaath, stats, onSubmit }) {
         <TouchableOpacity
           style={cdStyles.backBtn}
           onPress={() => setShowPaath(false)}>
-          <FontAwesome name="chevron-left" size={14} color={COLORS.goldLight} />
+          <FontAwesome name="chevron-left" size={14} color={COLORS.saffron} />
         </TouchableOpacity>
         <Text style={cdStyles.headerTitle}>Gita Paath</Text>
         <View style={{ width: 36 }} />
@@ -472,12 +451,15 @@ export default function EkMinEkSaathScreen() {
 const adhyayStyles = StyleSheet.create({
   card: {
     width: 110,
-    backgroundColor: COLORS.purpleDeep,
-    borderRadius: 14,
-    padding: 12,
+    backgroundColor: COLORS.white,
+    borderRadius: 24,
+    padding: spacing.md,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: 'rgba(155,89,182,0.4)',
+    borderColor: hairline,
+    ...shadow.card,
+    shadowOpacity: 0.045,
+    elevation: 2
   },
   numBadge: {
     width: 28,
@@ -486,425 +468,311 @@ const adhyayStyles = StyleSheet.create({
     backgroundColor: COLORS.gold,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 6,
+    marginBottom: 6
   },
-  numText: { fontSize: 12, fontWeight: '800', color: COLORS.deepBrown },
-  icon: { fontSize: 22, marginBottom: 6 },
+  numText: {
+    fontSize: 12,
+    fontWeight: "600",
+    color: COLORS.deepBrown
+  },
+  icon: {
+    fontSize: 22,
+    marginBottom: 6
+  },
   name: {
-    fontSize: 10,
+    fontSize: 12,
     fontWeight: '700',
-    color: COLORS.goldLight,
+    color: COLORS.deepBrown,
     textAlign: 'center',
     marginBottom: 4,
-    lineHeight: 13,
+    lineHeight: 18
   },
-  verses: { fontSize: 9, color: COLORS.purpleLight, fontStyle: 'italic' },
+  verses: {
+    fontSize: 12,
+    color: COLORS.warmBrown
+  }
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
 // SHARED STYLES
 // ─────────────────────────────────────────────────────────────────────────────
 const sharedStyles = StyleSheet.create({
-  dividerRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginHorizontal: 20,
-    marginVertical: 16,
-  },
-  dividerLine: {
-    flex: 1,
+  divider: {
     height: 1,
-    backgroundColor: COLORS.goldDark,
-    opacity: 0.3,
+    backgroundColor: hairline,
+    marginHorizontal: spacing.lg,
+    marginVertical: spacing.lg
   },
-  dividerSymbol: { fontSize: 14, marginHorizontal: 10 },
   sectionLabelRow: {
     flexDirection: 'row',
     alignItems: 'center',
     marginHorizontal: 20,
-    marginBottom: 14,
+    marginBottom: 14
   },
   sectionLabelLine: {
     flex: 1,
     height: 1,
-    backgroundColor: COLORS.goldDark,
-    opacity: 0.3,
+    backgroundColor: hairline
   },
   sectionLabelText: {
-    fontSize: 9,
+    fontSize: 12,
     letterSpacing: 2,
-    fontWeight: '800',
+    fontWeight: "600",
     color: COLORS.goldDark,
-    marginHorizontal: 10,
-  },
-});
-
-// ─────────────────────────────────────────────────────────────────────────────
-// TOTAL PAATH STYLES
-// ─────────────────────────────────────────────────────────────────────────────
-export const tcStyles = StyleSheet.create({
-  wrapper: {
-    backgroundColor: COLORS.deepBrown,
-    marginHorizontal: 16,
-    borderRadius: 20,
-    padding: 22,
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: 'rgba(201,162,39,0.4)',
-    overflow: 'hidden',
-    position: 'relative',
-  },
-  bgCircle1: {
-    position: 'absolute',
-    width: 160,
-    height: 160,
-    borderRadius: 80,
-    backgroundColor: 'rgba(201,162,39,0.07)',
-    top: -50,
-    right: -40,
-  },
-  bgCircle2: {
-    position: 'absolute',
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    backgroundColor: 'rgba(201,162,39,0.05)',
-    bottom: -30,
-    left: -20,
-  },
-  eyebrow: {
-    fontSize: 9,
-    letterSpacing: 2,
-    color: COLORS.goldDark,
-    fontWeight: '800',
-    marginBottom: 4,
-  },
-  label: {
-    fontSize: 14,
-    fontWeight: '800',
-    color: COLORS.cream,
-    letterSpacing: 1,
-    marginBottom: 12,
-  },
-  countBox: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'rgba(201,162,39,0.1)',
-    borderWidth: 2,
-    borderColor: COLORS.gold,
-    borderRadius: 50,
-    paddingVertical: 12,
-    paddingHorizontal: 28,
-  },
-  countText: {
-    fontSize: 30,
-    fontWeight: '800',
-    color: COLORS.goldLight,
-    letterSpacing: 1,
-  },
-  subText: {
-    fontSize: 11,
-    color: 'rgba(253,246,227,0.5)',
-    fontStyle: 'italic',
-    marginTop: 10,
-  },
-});
-
-// ─────────────────────────────────────────────────────────────────────────────
-// YOUR PAATH STYLES
-// ─────────────────────────────────────────────────────────────────────────────
-export const ycStyles = StyleSheet.create({
-  wrapper: {
-    marginHorizontal: 16,
-    backgroundColor: COLORS.creamDark,
-    borderRadius: 20,
-    padding: 18,
-    borderWidth: 1,
-    borderColor: 'rgba(201,162,39,0.35)',
-  },
-  row: { flexDirection: 'row', gap: 12, alignItems: 'stretch' },
-  totalBox: {
-    backgroundColor: COLORS.deepBrown,
-    borderRadius: 16,
-    padding: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: 'rgba(201,162,39,0.4)',
-    flex: 1,
-  },
-  totalLabel: {
-    fontSize: 11,
-    color: COLORS.goldDark,
-    fontWeight: '700',
-    textAlign: 'center',
-    letterSpacing: 0.5,
-    marginBottom: 8,
-  },
-  totalDivider: {
-    width: 40,
-    height: 1.5,
-    backgroundColor: COLORS.gold,
-    opacity: 0.5,
-    marginBottom: 8,
-  },
-  totalNumber: { fontSize: 34, fontWeight: '800', color: COLORS.goldLight },
-  totalIcon: { fontSize: 22, marginTop: 6 },
-  progressCol: { flex: 1.4, gap: 10, justifyContent: 'space-between' },
-  progressCard: {
-    backgroundColor: COLORS.deepBrown,
-    borderRadius: 14,
-    padding: 12,
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: 'rgba(201,162,39,0.3)',
-    flex: 1,
-  },
-  progressIconBox: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: 'rgba(201,162,39,0.12)',
-    borderWidth: 1,
-    borderColor: 'rgba(201,162,39,0.25)',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 10,
-  },
-  progressIcon: { fontSize: 16 },
-  progressTextCol: { flex: 1 },
-  progressLabel: { fontSize: 10, color: COLORS.goldDark, marginBottom: 2 },
-  progressNumber: { fontSize: 20, fontWeight: '800', color: COLORS.goldLight },
+    marginHorizontal: 10
+  }
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
 // EK MIN EK SAATH SECTION STYLES
 // ─────────────────────────────────────────────────────────────────────────────
 const pmStyles = StyleSheet.create({
-  wrapper: { marginBottom: 4 },
+  wrapper: {
+    marginBottom: 4
+  },
   heroBanner: {
-    backgroundColor: COLORS.purpleDeep,
+    backgroundColor: COLORS.cream,
     marginHorizontal: 16,
-    borderRadius: 20,
+    borderRadius: radii.lg,
     padding: 24,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: 'rgba(155,89,182,0.5)',
+    borderColor: hairline,
     alignItems: 'center',
     marginBottom: 14,
     position: 'relative',
+    ...shadow.card
   },
   decCircle1: {
     position: 'absolute',
     width: 180,
     height: 180,
     borderRadius: 90,
-    backgroundColor: COLORS.purpleLight,
+    backgroundColor: `rgba(${RGB.saffron},0.08)`,
     top: -60,
-    right: -60,
+    right: -60
   },
   decCircle2: {
     position: 'absolute',
     width: 120,
     height: 120,
     borderRadius: 60,
-    backgroundColor: COLORS.purpleMid,
+    backgroundColor: `rgba(${RGB.gold},0.08)`,
     bottom: -40,
-    left: -30,
+    left: -30
   },
   sacredTag: {
-    backgroundColor: COLORS.purpleMid,
+    backgroundColor: COLORS.creamDark,
     borderWidth: 1,
-    borderColor: COLORS.purpleLight,
-    borderRadius: 20,
+    borderColor: hairline,
+    borderRadius: radii.pill,
     paddingHorizontal: 14,
     paddingVertical: 4,
-    marginBottom: 14,
+    marginBottom: 14
   },
   sacredTagText: {
-    fontSize: 9,
-    color: COLORS.purpleLight,
+    fontSize: 10,
+    color: COLORS.warmBrown,
     letterSpacing: 2,
-    fontWeight: '800',
+    fontWeight: "600"
   },
-  deityEmoji: { fontSize: 56, marginBottom: 10 },
+  deityEmoji: {
+    fontSize: 56,
+    marginBottom: 10
+  },
   heroTitle: {
     fontSize: 34,
-    fontWeight: '800',
-    color: COLORS.white,
+    fontWeight: "400",
+    color: COLORS.deepBrown,
     textAlign: 'center',
-    lineHeight: 40,
-    letterSpacing: 1,
+    lineHeight: 45,
+    letterSpacing: -0.4,
+    fontFamily: DESIGN.fonts.editorial
   },
-  heroTitleAccent: { color: COLORS.goldLight, fontSize: 34, fontWeight: '800' },
+  heroTitleAccent: {
+    color: COLORS.saffron,
+    fontSize: 34,
+    fontWeight: "600"
+  },
   heroSubtitle: {
-    fontSize: 13,
-    color: COLORS.purpleLight,
+    ...type.subhead,
+    color: COLORS.warmBrown,
     letterSpacing: 1.5,
     marginTop: 4,
     marginBottom: 10,
     textTransform: 'uppercase',
-    textAlign: 'center',
+    textAlign: 'center'
   },
   heroDesc: {
-    fontSize: 13,
-    color: 'rgba(255,255,255,0.7)',
+    ...type.body,
+    color: COLORS.warmBrown,
     textAlign: 'center',
-    lineHeight: 20,
-    fontStyle: 'italic',
     maxWidth: 280,
-    marginBottom: 14,
+    marginBottom: 14
   },
   datePill: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: COLORS.purpleMid,
+    backgroundColor: COLORS.creamDark,
     borderWidth: 1,
-    borderColor: COLORS.purpleLight,
-    borderRadius: 20,
+    borderColor: hairline,
+    borderRadius: radii.pill,
     paddingHorizontal: 14,
-    paddingVertical: 6,
+    paddingVertical: 6
   },
-  datePillText: { fontSize: 11, color: COLORS.purpleLight, fontWeight: '600' },
+  datePillText: {
+    fontSize: 11,
+    color: COLORS.warmBrown,
+    fontWeight: '600'
+  },
   significanceBox: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.cream,
     marginHorizontal: 16,
-    borderRadius: 16,
+    borderRadius: radii.lg,
     padding: 18,
     borderWidth: 1,
-    borderColor: COLORS.purpleLight,
+    borderColor: hairline,
     marginBottom: 14,
+    ...shadow.card
   },
   pmSectionLabel: {
-    fontSize: 9,
+    fontSize: 12,
     letterSpacing: 2,
-    color: COLORS.purpleMid,
-    fontWeight: '800',
-    marginBottom: 6,
+    color: COLORS.saffron,
+    fontWeight: "600",
+    marginBottom: 6
   },
   significanceTitle: {
-    fontSize: 18,
-    fontWeight: '800',
-    color: COLORS.purpleDeep,
-    marginBottom: 10,
-    lineHeight: 24,
+    ...type.title,
+    color: COLORS.deepBrown,
+    marginBottom: 10
   },
-  significanceTitleAccent: { color: COLORS.purpleMid },
+  significanceTitleAccent: {
+    color: COLORS.saffron
+  },
   significanceDesc: {
-    fontSize: 13,
-    color: '#4A3060',
-    lineHeight: 20,
-    fontStyle: 'italic',
-    marginBottom: 14,
+    ...type.body,
+    color: COLORS.warmBrown,
+    marginBottom: 14
   },
   shlokaBox: {
-    backgroundColor: COLORS.purpleDeep,
-    borderRadius: 12,
+    backgroundColor: COLORS.creamDark,
+    borderRadius: radii.md,
     padding: 14,
     borderLeftWidth: 3,
-    borderLeftColor: COLORS.gold,
+    borderLeftColor: COLORS.saffron
   },
   shlokaDevanagari: {
     fontSize: 12,
-    color: COLORS.goldLight,
+    color: COLORS.richBrown,
     lineHeight: 20,
     fontWeight: '600',
-    marginBottom: 8,
+    marginBottom: 8
   },
   shlokaTranslation: {
-    fontSize: 11,
-    color: COLORS.purpleLight,
-    fontStyle: 'italic',
-    lineHeight: 17,
+    fontSize: 12,
+    color: COLORS.warmBrown,
+    lineHeight: 18
   },
-  benefitsSection: { paddingHorizontal: 16, marginBottom: 14 },
+  benefitsSection: {
+    paddingHorizontal: 16,
+    marginBottom: 14
+  },
   benefitsGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 10,
-    marginTop: 8,
+    marginTop: 8
   },
   benefitCard: {
     width: (width - 52) / 2,
-    backgroundColor: COLORS.purpleDeep,
-    borderRadius: 14,
+    backgroundColor: COLORS.white,
+    borderRadius: 24,
     padding: 14,
     borderWidth: 1,
-    borderColor: COLORS.purpleLight,
+    borderColor: hairline,
     alignItems: 'center',
+    ...shadow.card,
+    shadowOpacity: 0.045,
+    elevation: 2
   },
-  benefitIcon: { fontSize: 28, marginBottom: 8 },
+  benefitIcon: {
+    fontSize: 28,
+    marginBottom: 8
+  },
   benefitTitle: {
     fontSize: 12,
-    fontWeight: '800',
-    color: COLORS.goldLight,
+    fontWeight: "600",
+    color: COLORS.deepBrown,
     textAlign: 'center',
-    marginBottom: 4,
+    marginBottom: 4
   },
   benefitDesc: {
-    fontSize: 10,
-    color: COLORS.purpleLight,
+    fontSize: 12,
+    color: COLORS.warmBrown,
     textAlign: 'center',
-    lineHeight: 14,
-    fontStyle: 'italic',
+    lineHeight: 18
   },
   observanceBox: {
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.cream,
     marginHorizontal: 16,
-    borderRadius: 16,
+    borderRadius: radii.lg,
     padding: 18,
     borderWidth: 1,
-    borderColor: COLORS.purpleLight,
+    borderColor: hairline,
     marginBottom: 14,
+    ...shadow.card
   },
   observanceRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
-    marginTop: 10,
+    marginTop: 10
   },
   observanceIconBox: {
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: COLORS.purpleDeep,
+    backgroundColor: COLORS.creamDark,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-  observanceIcon: { fontSize: 16 },
+  observanceIcon: {
+    fontSize: 16
+  },
   observanceText: {
     flex: 1,
     fontSize: 13,
-    color: COLORS.purpleLight,
-    lineHeight: 18,
+    color: COLORS.warmBrown,
+    lineHeight: 20
   },
   ctaBtn: {
-    backgroundColor: COLORS.purpleMid,
+    backgroundColor: COLORS.saffron,
     marginHorizontal: 16,
-    borderRadius: 24,
+    borderRadius: radii.pill,
     paddingVertical: 15,
     alignItems: 'center',
-    borderWidth: 1,
-    borderColor: COLORS.purpleLight,
-    marginBottom: 6,
+    marginBottom: 6
   },
   ctaBtnText: {
     color: COLORS.white,
     fontSize: 14,
-    fontWeight: '800',
-    letterSpacing: 0.3,
-  },
+    fontWeight: "600",
+    letterSpacing: 0.3
+  }
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
 // PAATH DETAIL STYLES
 // ─────────────────────────────────────────────────────────────────────────────
 const cdStyles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: COLORS.cream },
+  container: {
+    flex: 1,
+    backgroundColor: COLORS.cream
+  },
   header: {
-    backgroundColor: COLORS.deepBrown,
+    backgroundColor: COLORS.cream,
     paddingTop: 52,
     paddingHorizontal: 20,
     paddingBottom: 16,
@@ -912,61 +780,63 @@ const cdStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.purpleLight,
+    borderBottomColor: hairline
   },
   backBtn: {
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: 'rgba(201,162,39,0.12)',
+    backgroundColor: COLORS.creamDark,
     borderWidth: 1,
-    borderColor: 'rgba(201,162,39,0.3)',
+    borderColor: hairline,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   headerTitle: {
-    color: COLORS.goldLight,
+    color: COLORS.deepBrown,
     fontSize: 16,
-    fontWeight: '800',
-    letterSpacing: 1,
-  },
+    fontWeight: "600",
+    letterSpacing: 1
+  }
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
 // MAIN SCREEN STYLES
 // ─────────────────────────────────────────────────────────────────────────────
 const mainStyles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: COLORS.cream },
+  container: {
+    flex: 1,
+    backgroundColor: COLORS.cream
+  },
   header: {
-    backgroundColor: COLORS.deepBrown,
-    // paddingHorizontal: 20,
+    backgroundColor: COLORS.cream,
     paddingTop: 20,
     paddingBottom: 18,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   greetingSmall: {
-    fontSize: 11,
+    fontSize: 12,
     color: COLORS.goldDark,
     letterSpacing: 0.5,
-    marginBottom: 2,
+    marginBottom: 2
   },
   greeting: {
     fontSize: 22,
-    fontWeight: '800',
-    color: COLORS.cream,
-    letterSpacing: 0.5,
+    fontWeight: "600",
+    color: COLORS.deepBrown,
+    letterSpacing: 0.5
   },
   notifBtn: {
     width: 38,
     height: 38,
     borderRadius: 19,
-    backgroundColor: 'rgba(201,162,39,0.12)',
+    backgroundColor: COLORS.creamDark,
     borderWidth: 1,
-    borderColor: 'rgba(201,162,39,0.3)',
+    borderColor: hairline,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   notifDot: {
     position: 'absolute',
@@ -977,108 +847,124 @@ const mainStyles = StyleSheet.create({
     borderRadius: 4,
     backgroundColor: COLORS.saffron,
     borderWidth: 1,
-    borderColor: COLORS.deepBrown,
+    borderColor: COLORS.cream
   },
-  quoteCard: { margin: 0 },
+  quoteCard: {
+    margin: 0
+  },
   quoteCardInner: {
-    backgroundColor: COLORS.warmBrown,
-    // borderRadius: 18,
+    backgroundColor: COLORS.cream,
     borderEndEndRadius: 70,
-    overflow: 'hidden',
+    overflow: 'hidden'
   },
   quoteTopStrip: {
-    backgroundColor: 'rgba(201,162,39,0.15)',
+    backgroundColor: COLORS.creamDark,
     paddingVertical: 7,
     alignItems: 'center',
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(201,162,39,0.2)',
+    borderBottomColor: hairline
   },
   quoteTopLabel: {
     fontSize: 15,
-    color: COLORS.goldLight,
+    color: COLORS.saffron,
     letterSpacing: 2,
-    fontWeight: '700',
+    fontWeight: '700'
   },
-  quoteImage: { width: '100%', height: 180, backgroundColor: COLORS.richBrown },
+  quoteImage: {
+    width: '100%',
+    height: 180,
+    backgroundColor: COLORS.creamDark
+  },
   quoteOverlay: {
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
     height: 180,
-    backgroundColor: 'rgba(44,26,10,0)',
+    backgroundColor: 'transparent'
   },
-  quoteBody: { padding: '-18', paddingHorizontal: 16, paddingBottom: 16 },
+  quoteBody: {
+    paddingHorizontal: 16,
+    paddingTop: 16,
+    paddingBottom: 16
+  },
   quoteIconText: {
     fontSize: 32,
     color: COLORS.gold,
     lineHeight: 36,
-    marginBottom: 4,
+    marginBottom: 4
   },
   quoteText: {
-    fontSize: 14,
-    color: COLORS.creamDark,
-    lineHeight: 22,
-    fontStyle: 'italic',
-    marginBottom: 16,
+    ...type.body,
+    color: COLORS.warmBrown,
+    marginBottom: 16
   },
   startDayBtn: {
-    backgroundColor: COLORS.gold,
+    backgroundColor: COLORS.richBrown,
     paddingVertical: 11,
     paddingHorizontal: 24,
-    borderRadius: 22,
-    alignSelf: 'flex-start',
+    borderRadius: radii.pill,
+    alignSelf: 'flex-start'
   },
   startDayBtnText: {
-    color: COLORS.deepBrown,
-    fontWeight: '800',
+    color: COLORS.white,
+    fontWeight: "600",
     fontSize: 13,
-    letterSpacing: 0.3,
+    letterSpacing: 0.3
   },
-  liveSection: { paddingHorizontal: 16, marginBottom: 4 },
+  liveSection: {
+    paddingHorizontal: 16,
+    marginBottom: 4
+  },
   liveTitleRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
-    marginBottom: 12,
+    marginBottom: 12
   },
   liveBadge: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 5,
-    backgroundColor: 'rgba(229,57,53,0.15)',
+    backgroundColor: 'rgba(214,72,58,0.12)',
     borderWidth: 1,
-    borderColor: 'rgba(229,57,53,0.4)',
+    borderColor: 'rgba(214,72,58,0.35)',
     borderRadius: 10,
     paddingHorizontal: 8,
-    paddingVertical: 3,
+    paddingVertical: 3
   },
   liveDot: {
     width: 6,
     height: 6,
     borderRadius: 3,
-    backgroundColor: COLORS.liveRed,
+    backgroundColor: COLORS.liveRed
   },
   liveBadgeText: {
-    fontSize: 9,
+    fontSize: 10,
     color: COLORS.liveRed,
-    fontWeight: '800',
-    letterSpacing: 1,
+    fontWeight: "600",
+    letterSpacing: 1
   },
   liveTitle: {
-    fontSize: 17,
-    fontWeight: '800',
+    ...type.headline,
     color: COLORS.deepBrown,
-    letterSpacing: 0.3,
+    letterSpacing: 0.3
   },
   liveCard: {
-    backgroundColor: COLORS.deepBrown,
-    borderRadius: 16,
+    backgroundColor: COLORS.white,
+    borderRadius: 24,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: 'rgba(201,162,39,0.3)',
+    borderColor: hairline,
+    ...shadow.card,
+    shadowOpacity: 0.045,
+    elevation: 2
   },
-  liveImage: { width: '100%', height: 160, backgroundColor: COLORS.richBrown },
+  liveImage: {
+    width: '100%',
+    height: 160,
+    backgroundColor: COLORS.creamDark
+  },
   livePlayOverlay: {
     position: 'absolute',
     top: 0,
@@ -1087,81 +973,85 @@ const mainStyles = StyleSheet.create({
     height: 160,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(44,26,10,0.35)',
+    backgroundColor: `rgba(${RGB.deepBrown},0.35)`
   },
   livePlayBtn: {
     width: 52,
     height: 52,
     borderRadius: 26,
-    backgroundColor: 'rgba(201,162,39,0.2)',
+    backgroundColor: `rgba(${RGB.gold},0.2)`,
     borderWidth: 2,
     borderColor: COLORS.gold,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-  liveCardBody: { padding: 14 },
+  liveCardBody: {
+    padding: 14
+  },
   liveDesc: {
-    fontSize: 13,
-    color: COLORS.creamDark,
-    lineHeight: 19,
-    fontStyle: 'italic',
-    marginBottom: 10,
+    ...type.body,
+    color: COLORS.warmBrown,
+    marginBottom: 10
   },
   liveMetaRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
   liveTag: {
-    backgroundColor: 'rgba(232,114,28,0.2)',
+    backgroundColor: `rgba(${RGB.saffron},0.15)`,
     borderWidth: 1,
-    borderColor: 'rgba(232,114,28,0.45)',
+    borderColor: `rgba(${RGB.saffron},0.35)`,
     borderRadius: 10,
     paddingHorizontal: 9,
-    paddingVertical: 3,
+    paddingVertical: 3
   },
   liveTagText: {
-    fontSize: 9,
-    color: COLORS.saffronLight,
-    fontWeight: '800',
-    letterSpacing: 0.5,
+    fontSize: 10,
+    color: COLORS.saffron,
+    fontWeight: "600",
+    letterSpacing: 0.5
   },
-  liveWatching: { fontSize: 11, color: COLORS.goldDark, fontStyle: 'italic' },
+  liveWatching: {
+    fontSize: 12,
+    color: COLORS.warmBrown
+  },
   chantsSection: {
-    backgroundColor: COLORS.warmBrown,
+    backgroundColor: COLORS.cream,
     marginHorizontal: 16,
-    borderRadius: 18,
+    borderRadius: radii.lg,
     padding: 20,
     borderWidth: 1,
-    borderColor: 'rgba(201,162,39,0.35)',
+    borderColor: hairline,
     alignItems: 'center',
+    ...shadow.card
   },
   chantsSectionTitle: {
-    fontSize: 20,
-    fontWeight: '800',
-    color: COLORS.cream,
-    marginBottom: 6,
+    ...type.title,
+    color: COLORS.deepBrown,
+    marginBottom: 6
   },
-  chantsSectionAccent: { color: COLORS.goldLight },
+  chantsSectionAccent: {
+    color: COLORS.saffron
+  },
   chantsSectionDesc: {
     fontSize: 12,
-    color: 'rgba(253,246,227,0.65)',
+    color: COLORS.warmBrown,
     textAlign: 'center',
-    fontStyle: 'italic',
     lineHeight: 18,
     marginBottom: 16,
-    maxWidth: 260,
+    maxWidth: 260
   },
   chantsBtn: {
-    backgroundColor: COLORS.gold,
+    backgroundColor: COLORS.richBrown,
     paddingVertical: 13,
     paddingHorizontal: 32,
-    borderRadius: 24,
+    borderRadius: radii.pill
   },
   chantsBtnText: {
-    color: COLORS.deepBrown,
-    fontWeight: '800',
+    color: COLORS.white,
+    fontWeight: "600",
     fontSize: 14,
-    letterSpacing: 0.3,
-  },
+    letterSpacing: 0.3
+  }
 });

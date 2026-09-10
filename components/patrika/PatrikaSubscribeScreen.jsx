@@ -3,7 +3,6 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
 import {
   ActivityIndicator,
-  Alert,
   KeyboardAvoidingView,
   Platform,
   SafeAreaView,
@@ -16,23 +15,18 @@ import {
 } from 'react-native';
 
 import { useAuth } from '@/context/AuthContext';
+import { useAppAlert } from '@/context/AppAlertContext';
 import masikPatrikaServices from '@/lib/services/masikPatrikaServices';
 
-const COLORS = {
-  deepBrown: '#2C1A0A',
-  warmBrown: '#4A2C0D',
-  gold: '#C9A227',
-  goldLight: '#E8C55A',
-  goldDark: '#8B6914',
-  cream: '#FDF6E3',
-  creamDark: '#F5E6C8',
-};
+import { COLORS } from '@/constants/brandColors';
+import { hairline } from '@/constants/theme';
 
 export default function PatrikaSubscribeScreen() {
   const router = useRouter();
   const params = useLocalSearchParams();
 
   const { access_token, isAuthenticated } = useAuth();
+  const { error, confirm } = useAppAlert();
 
   const [submitting, setSubmitting] = useState(false);
 
@@ -79,17 +73,17 @@ export default function PatrikaSubscribeScreen() {
     const email = formData.email.trim();
 
     if (!name) {
-      Alert.alert('Required', 'Please enter your name.');
+      error('Required', 'Please enter your name.');
       return false;
     }
 
     if (!phone) {
-      Alert.alert('Required', 'Please enter your WhatsApp number.');
+      error('Required', 'Please enter your WhatsApp number.');
       return false;
     }
 
     if (!/^[0-9]{10}$/.test(phone)) {
-      Alert.alert(
+      error(
         'Invalid Number',
         'Please enter a valid 10-digit WhatsApp number.',
       );
@@ -97,12 +91,12 @@ export default function PatrikaSubscribeScreen() {
     }
 
     if (!email) {
-      Alert.alert('Required', 'Please enter your email address.');
+      error('Required', 'Please enter your email address.');
       return false;
     }
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      Alert.alert('Invalid Email', 'Please enter a valid email address.');
+      error('Invalid Email', 'Please enter a valid email address.');
       return false;
     }
 
@@ -157,23 +151,23 @@ export default function PatrikaSubscribeScreen() {
         );
       }
 
-      Alert.alert(
+      confirm(
         'Subscription Successful',
         response?.message ||
           'Your subscription request was submitted successfully.',
-        [
-          {
-            text: 'View Patrika',
-            onPress: () => router.replace('/home/patrika'),
-          },
-        ],
+        () => router.replace('/home/patrika'),
+        {
+          buttonText: 'View Patrika',
+          secondaryButtonText: null,
+          icon: 'checkmark-circle',
+        },
       );
-    } catch (error) {
-      console.log('[Patrika] Subscription error:', error);
+    } catch (err) {
+      console.log('[Patrika] Subscription error:', err);
 
-      Alert.alert(
+      error(
         'Subscription Failed',
-        error?.message || 'Unable to process your subscription.',
+        err?.message || 'Unable to process your subscription.',
       );
     } finally {
       setSubmitting(false);
@@ -205,7 +199,7 @@ export default function PatrikaSubscribeScreen() {
           {/* Hero */}
           <View style={styles.heroCard}>
             <View style={styles.bookIcon}>
-              <Ionicons name="book" size={30} color={COLORS.goldLight} />
+              <Ionicons name="book" size={30} color="#FFFFFF" />
             </View>
 
             <Text style={styles.eyebrow}>GIEO GITA • MONTHLY</Text>
@@ -401,119 +395,103 @@ export default function PatrikaSubscribeScreen() {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: '#FFF9F3',
+    backgroundColor: COLORS.creamDark
   },
-
   keyboard: {
-    flex: 1,
+    flex: 1
   },
-
   content: {
     padding: 16,
-    paddingBottom: 40,
+    paddingBottom: 40
   },
-
   header: {
     minHeight: 46,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 10,
+    marginBottom: 10
   },
-
   backButton: {
     width: 38,
     height: 38,
     borderRadius: 19,
-    backgroundColor: '#F3E7DA',
+    backgroundColor: COLORS.cream,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-
   headerTitle: {
     fontSize: 15,
-    fontWeight: '800',
-    color: COLORS.deepBrown,
+    fontWeight: "600",
+    color: COLORS.deepBrown
   },
-
   heroCard: {
     alignItems: 'center',
     padding: 22,
     borderRadius: 22,
-    backgroundColor: COLORS.deepBrown,
+    backgroundColor: COLORS.cream,
+    borderWidth: 1,
+    borderColor: hairline
   },
-
   bookIcon: {
     width: 64,
     height: 64,
     borderRadius: 20,
-    backgroundColor: COLORS.warmBrown,
-    borderWidth: 1,
-    borderColor: 'rgba(232,197,90,0.4)',
+    backgroundColor: COLORS.richBrown,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 13,
+    marginBottom: 13
   },
-
   eyebrow: {
-    fontSize: 8,
+    fontSize: 10,
     letterSpacing: 1.8,
-    color: COLORS.goldLight,
-    fontWeight: '800',
+    color: COLORS.saffron,
+    fontWeight: "600"
   },
-
   title: {
     marginTop: 7,
     fontSize: 24,
-    fontWeight: '800',
-    color: '#FFFFFF',
+    fontWeight: "700",
+    color: COLORS.deepBrown
   },
-
   issueTitle: {
     marginTop: 5,
     fontSize: 12,
-    color: COLORS.goldLight,
+    color: COLORS.saffron,
     fontWeight: '700',
-    textAlign: 'center',
+    textAlign: 'center'
   },
-
   description: {
     marginTop: 10,
     maxWidth: 310,
-    fontSize: 11,
-    lineHeight: 17,
-    color: '#EBDCCB',
-    textAlign: 'center',
+    fontSize: 12,
+    lineHeight: 18,
+    color: COLORS.warmBrown,
+    textAlign: 'center'
   },
-
   section: {
-    marginTop: 15,
+    marginTop: 15
   },
-
   sectionTitle: {
     fontSize: 13,
-    fontWeight: '800',
+    fontWeight: "600",
     color: COLORS.deepBrown,
-    marginBottom: 9,
+    marginBottom: 9
   },
-
   subscriptionOption: {
     minHeight: 76,
     paddingHorizontal: 14,
     paddingVertical: 12,
     borderRadius: 17,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.cream,
     borderWidth: 1,
-    borderColor: '#EDE1D4',
+    borderColor: hairline,
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   },
-
   subscriptionOptionActive: {
     borderColor: COLORS.gold,
-    backgroundColor: '#FFFDF7',
+    backgroundColor: '#FFFDF7'
   },
-
   radioOuter: {
     width: 22,
     height: 22,
@@ -521,139 +499,124 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: COLORS.goldDark,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-
   radioInner: {
     width: 11,
     height: 11,
     borderRadius: 6,
-    backgroundColor: COLORS.goldDark,
+    backgroundColor: COLORS.goldDark
   },
-
   subscriptionInfo: {
     flex: 1,
-    marginLeft: 11,
+    marginLeft: 11
   },
-
   subscriptionTitle: {
     fontSize: 13,
-    fontWeight: '800',
-    color: COLORS.deepBrown,
+    fontWeight: "600",
+    color: COLORS.deepBrown
   },
-
   subscriptionText: {
     marginTop: 3,
-    fontSize: 9.5,
-    color: '#8E7765',
+    fontSize: 12,
+    color: COLORS.warmBrown
   },
-
   subscriptionPrice: {
     fontSize: 16,
-    fontWeight: '800',
-    color: COLORS.warmBrown,
+    fontWeight: "600",
+    color: COLORS.warmBrown
   },
-
   issueCard: {
     marginTop: 15,
     padding: 14,
-    borderRadius: 17,
-    backgroundColor: '#FFFFFF',
+    borderRadius: 24,
+    backgroundColor: COLORS.cream,
     borderWidth: 1,
-    borderColor: '#EDE1D4',
+    borderColor: hairline,
     flexDirection: 'row',
     alignItems: 'center',
+    shadowOpacity: 0.045,
+    elevation: 2
   },
-
   issueIcon: {
     width: 42,
     height: 42,
     borderRadius: 13,
     backgroundColor: COLORS.cream,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-
   issueInfo: {
     flex: 1,
-    marginLeft: 10,
+    marginLeft: 10
   },
-
   issueLabel: {
-    fontSize: 7,
-    fontWeight: '800',
+    fontSize: 12,
+    fontWeight: "600",
     letterSpacing: 1,
-    color: '#A38C79',
+    color: COLORS.warmBrown
   },
-
   issueName: {
     marginTop: 3,
     fontSize: 12,
-    lineHeight: 17,
-    fontWeight: '800',
-    color: COLORS.deepBrown,
+    lineHeight: 18,
+    fontWeight: "600",
+    color: COLORS.deepBrown
   },
-
   issuePrice: {
     marginLeft: 8,
     fontSize: 13,
-    fontWeight: '800',
-    color: COLORS.warmBrown,
+    fontWeight: "600",
+    color: COLORS.warmBrown
   },
-
   formCard: {
     marginTop: 15,
     padding: 16,
-    borderRadius: 18,
-    backgroundColor: '#FFFFFF',
+    borderRadius: 24,
+    backgroundColor: COLORS.cream,
     borderWidth: 1,
-    borderColor: '#EDE1D4',
+    borderColor: hairline,
+    shadowOpacity: 0.045,
+    elevation: 2
   },
-
   formTitle: {
     fontSize: 15,
-    fontWeight: '800',
-    color: COLORS.deepBrown,
+    fontWeight: "600",
+    color: COLORS.deepBrown
   },
-
   formSubtitle: {
     marginTop: 4,
     marginBottom: 15,
-    fontSize: 9.5,
-    lineHeight: 15,
-    color: '#8E7765',
+    fontSize: 12,
+    lineHeight: 18,
+    color: COLORS.warmBrown
   },
-
   inputGroup: {
-    marginBottom: 13,
+    marginBottom: 13
   },
-
   inputLabel: {
     marginBottom: 6,
-    fontSize: 10,
-    fontWeight: '800',
-    color: COLORS.warmBrown,
+    fontSize: 12,
+    fontWeight: "600",
+    color: COLORS.warmBrown
   },
-
   inputWrapper: {
     minHeight: 48,
     paddingHorizontal: 13,
-    borderRadius: 13,
+    borderRadius: 14,
     borderWidth: 1,
-    borderColor: '#E5D8CA',
-    backgroundColor: '#FFFCF8',
+    borderColor: hairline,
+    backgroundColor: COLORS.creamDark,
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   },
-
   input: {
     flex: 1,
     marginLeft: 9,
     paddingVertical: 0,
-    fontSize: 12,
-    color: COLORS.deepBrown,
+    fontSize: 15,
+    color: COLORS.deepBrown
   },
-
   note: {
     marginTop: 14,
     flexDirection: 'row',
@@ -661,34 +624,30 @@ const styles = StyleSheet.create({
     gap: 7,
     padding: 12,
     borderRadius: 13,
-    backgroundColor: COLORS.cream,
+    backgroundColor: COLORS.cream
   },
-
   noteText: {
     flex: 1,
-    fontSize: 9.5,
-    lineHeight: 15,
-    color: '#806B59',
+    fontSize: 12,
+    lineHeight: 18,
+    color: COLORS.warmBrown
   },
-
   subscribeButton: {
     marginTop: 18,
     minHeight: 52,
     borderRadius: 26,
-    backgroundColor: COLORS.warmBrown,
+    backgroundColor: COLORS.richBrown,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 9,
+    gap: 9
   },
-
   subscribeButtonText: {
     color: '#FFFFFF',
     fontSize: 13,
-    fontWeight: '800',
+    fontWeight: "600"
   },
-
   disabled: {
-    opacity: 0.6,
-  },
+    opacity: 0.6
+  }
 });

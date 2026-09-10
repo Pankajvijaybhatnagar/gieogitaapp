@@ -16,6 +16,8 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { COLORS } from '@/constants/brandColors';
+import { radii, type } from '@/constants/theme';
 
 export default function NewDonationScreen() {
   const router = useRouter();
@@ -378,7 +380,7 @@ export default function NewDonationScreen() {
     return (
       <SafeAreaView style={styles.screen}>
         <View style={styles.center}>
-          <ActivityIndicator size="small" color="#704025" />
+          <ActivityIndicator size="small" color={COLORS.saffron} />
 
           <Text style={styles.loadingText}>Checking your account...</Text>
         </View>
@@ -395,7 +397,7 @@ export default function NewDonationScreen() {
       <SafeAreaView style={styles.screen}>
         <View style={styles.loginContainer}>
           <View style={styles.loginIcon}>
-            <Ionicons name="heart-outline" size={34} color="#7A4527" />
+            <Ionicons name="heart-outline" size={34} color={COLORS.saffron} />
           </View>
 
           <Text style={styles.loginEyebrow}>GITA SEVA</Text>
@@ -411,7 +413,7 @@ export default function NewDonationScreen() {
             style={styles.loginButton}
             onPress={() => router.push('/login2')}
             activeOpacity={0.85}>
-            <Ionicons name="log-in-outline" size={18} color="#FFFFFF" />
+            <Ionicons name="log-in-outline" size={18} color={COLORS.white} />
 
             <Text style={styles.loginButtonText}>Login to Continue</Text>
           </TouchableOpacity>
@@ -428,7 +430,7 @@ export default function NewDonationScreen() {
     return (
       <SafeAreaView style={styles.screen}>
         <View style={styles.center}>
-          <ActivityIndicator size="small" color="#704025" />
+          <ActivityIndicator size="small" color={COLORS.saffron} />
 
           <Text style={styles.loadingText}>Preparing donation form...</Text>
         </View>
@@ -475,76 +477,64 @@ export default function NewDonationScreen() {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: '#FFF9F3',
+    backgroundColor: COLORS.creamDark
   },
-
   center: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-
   loadingText: {
     marginTop: 10,
     fontSize: 12,
-    color: '#846A58',
+    color: COLORS.warmBrown
   },
-
   loginContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 28,
+    paddingHorizontal: 28
   },
-
   loginIcon: {
     width: 72,
     height: 72,
-    borderRadius: 24,
+    borderRadius: radii.xl,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#F2E3D5',
-    marginBottom: 20,
+    backgroundColor: COLORS.creamDark,
+    marginBottom: 20
   },
-
   loginEyebrow: {
-    fontSize: 10,
-    fontWeight: '700',
-    color: '#AC7652',
-    letterSpacing: 2,
+    ...type.caption,
+    color: COLORS.saffron
   },
-
   loginTitle: {
     marginTop: 7,
-    fontSize: 25,
-    fontWeight: '700',
-    color: '#4D2D1A',
+    ...type.largeTitle,
+    color: COLORS.deepBrown
   },
-
   loginDescription: {
     marginTop: 9,
     maxWidth: 320,
     textAlign: 'center',
     fontSize: 13,
     lineHeight: 20,
-    color: '#826855',
+    color: COLORS.warmBrown
   },
-
   loginButton: {
     marginTop: 24,
     minWidth: 200,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: '#6A3C25',
+    borderRadius: 16,
+    backgroundColor: COLORS.richBrown,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 7,
+    minHeight: 52
   },
-
   loginButtonText: {
-    color: '#FFFFFF',
+    color: COLORS.white,
     fontSize: 13,
-    fontWeight: '700',
-  },
+    fontWeight: '700'
+  }
 });

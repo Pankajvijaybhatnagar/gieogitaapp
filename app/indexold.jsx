@@ -18,11 +18,11 @@ const { width, height } = Dimensions.get("window");
 const C = {
   deepBrown:   "#2C1A0A",
   warmBrown:   "#4A2C0D",
-  gold:        "#C9A227",
+  gold:        "#B39562",
   goldLight:   "#E8C55A",
   goldDark:    "#8B6914",
   cream:       "#FDF6E3",
-  saffron:     "#E8721C",
+  saffron:     "#A65338",
   saffronLight:"#F4A44A",
   white:       "#FFFFFF",
 };
@@ -348,26 +348,24 @@ export default function Index() {
 
 // ─── STYLES ───────────────────────────────────────────────────────────────────
 const S = StyleSheet.create({
-
   // ── ROOT & VIDEO ──────────────────────────────────────────────────────────
   root: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "black",
+    backgroundColor: "black"
   },
   video: {
     width: "100%",
     height: "100%",
     position: "absolute",
-    zIndex: -1,
+    zIndex: -1
   },
-
   // ── OVERLAYS ──────────────────────────────────────────────────────────────
   overlay: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: "rgba(20, 8, 0, 0.65)",
-    zIndex: 0,
+    zIndex: 0
   },
   bottomGlow: {
     position: "absolute",
@@ -376,35 +374,46 @@ const S = StyleSheet.create({
     right: 0,
     height: height * 0.45,
     backgroundColor: "rgba(44, 26, 10, 0.7)",
-    zIndex: 0,
+    zIndex: 0
   },
-
   // ── CONTENT WRAPPER ───────────────────────────────────────────────────────
   contentWrap: {
     alignItems: "center",
     zIndex: 2,
     paddingHorizontal: 30,
-    width: "100%",
+    width: "100%"
   },
-
   // ── TOP DECORATION ────────────────────────────────────────────────────────
   topOm: {
     fontSize: 28,
     color: C.gold,
     opacity: 0.8,
     marginBottom: 8,
-    letterSpacing: 2,
+    letterSpacing: 2
   },
   topLineRow: {
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 28,
-    width: 180,
+    width: 180
   },
-  topLineLeft:    { flex: 1, height: 1, backgroundColor: C.goldDark, opacity: 0.6 },
-  topLineRight:   { flex: 1, height: 1, backgroundColor: C.goldDark, opacity: 0.6 },
-  topLineDiamond: { fontSize: 8, color: C.gold, marginHorizontal: 6 },
-
+  topLineLeft: {
+    flex: 1,
+    height: 1,
+    backgroundColor: C.goldDark,
+    opacity: 0.6
+  },
+  topLineRight: {
+    flex: 1,
+    height: 1,
+    backgroundColor: C.goldDark,
+    opacity: 0.6
+  },
+  topLineDiamond: {
+    fontSize: 12,
+    color: C.gold,
+    marginHorizontal: 6
+  },
   // ── LOGO ──────────────────────────────────────────────────────────────────
   logoWrap: {
     width: 140,
@@ -412,7 +421,7 @@ const S = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginBottom: 24,
-    position: "relative",
+    position: "relative"
   },
   logoOuterRing: {
     width: 120,
@@ -421,50 +430,51 @@ const S = StyleSheet.create({
     borderWidth: 2,
     borderColor: C.gold,
     padding: 5,
-    backgroundColor: "rgba(201,162,39,0.1)",
+    backgroundColor: "rgba(179,149,98,0.1)"
   },
   logoInnerRing: {
     flex: 1,
     borderRadius: 55,
     borderWidth: 1,
-    borderColor: "rgba(201,162,39,0.4)",
+    borderColor: "rgba(179,149,98,0.4)",
     alignItems: "center",
     justifyContent: "center",
     overflow: "hidden",
-    backgroundColor: "rgba(44,26,10,0.5)",
+    backgroundColor: "rgba(44,26,10,0.5)"
   },
   logoImage: {
     width: 80,
     height: 80,
-    resizeMode: "contain",
+    resizeMode: "contain"
   },
-
   // ── DIVIDER ───────────────────────────────────────────────────────────────
   divider: {
     height: 2,
     backgroundColor: C.gold,
     borderRadius: 1,
     marginBottom: 16,
-    opacity: 0.8,
+    opacity: 0.8
   },
-
   // ── TEXT ──────────────────────────────────────────────────────────────────
   appName: {
     fontSize: 38,
-    fontWeight: "800",
+    fontWeight: "600",
     color: C.goldLight,
     letterSpacing: 6,
-    textShadowColor: "rgba(201,162,39,0.5)",
-    textShadowOffset: { width: 0, height: 0 },
+    textShadowColor: "rgba(179,149,98,0.5)",
+    textShadowOffset: {
+      width: 0,
+      height: 0
+    },
     textShadowRadius: 20,
-    marginBottom: 6,
+    marginBottom: 6
   },
   subtitle: {
     fontSize: 16,
     color: C.gold,
     letterSpacing: 2,
     marginBottom: 8,
-    fontStyle: "italic",
+    fontStyle: "italic"
   },
   tagline: {
     fontSize: 12,
@@ -473,32 +483,30 @@ const S = StyleSheet.create({
     fontStyle: "italic",
     textAlign: "center",
     marginBottom: 22,
-    lineHeight: 18,
+    lineHeight: 18
   },
-
   // ── FEATURE PILLS ─────────────────────────────────────────────────────────
   pillsRow: {
     flexDirection: "row",
     gap: 8,
     marginBottom: 32,
     flexWrap: "wrap",
-    justifyContent: "center",
+    justifyContent: "center"
   },
   featurePill: {
-    backgroundColor: "rgba(201,162,39,0.12)",
+    backgroundColor: "rgba(179,149,98,0.12)",
     borderWidth: 1,
-    borderColor: "rgba(201,162,39,0.35)",
+    borderColor: "rgba(179,149,98,0.35)",
     borderRadius: 20,
     paddingHorizontal: 12,
-    paddingVertical: 6,
+    paddingVertical: 6
   },
   featurePillText: {
     fontSize: 11,
     color: C.goldLight,
     fontWeight: "700",
-    letterSpacing: 0.3,
+    letterSpacing: 0.3
   },
-
   // ── GET STARTED BUTTON ────────────────────────────────────────────────────
   getStartedBtn: {
     borderRadius: 30,
@@ -509,37 +517,41 @@ const S = StyleSheet.create({
     backgroundColor: C.gold,
     shadowColor: C.gold,
     shadowOpacity: 0.4,
-    shadowOffset: { width: 0, height: 6 },
+    shadowOffset: {
+      width: 0,
+      height: 6
+    },
     shadowRadius: 16,
-    elevation: 8,
+    elevation: 8
   },
   getStartedBtnPressed: {
     opacity: 0.88,
-    transform: [{ scale: 0.97 }],
+    transform: [{
+      scale: 0.97
+    }]
   },
   getStartedBtnInner: {
     flexDirection: "row",
     alignItems: "center",
     paddingVertical: 16,
-    paddingHorizontal: 48,
+    paddingHorizontal: 48
   },
   getStartedBtnText: {
     fontSize: 18,
-    fontWeight: "800",
+    fontWeight: "600",
     color: C.deepBrown,
-    letterSpacing: 1,
+    letterSpacing: 1
   },
   getStartedBtnArrow: {
     fontSize: 22,
-    fontWeight: "800",
-    color: C.deepBrown,
+    fontWeight: "600",
+    color: C.deepBrown
   },
-
   // ── BOTTOM TAGLINE ────────────────────────────────────────────────────────
   bottomTagline: {
     fontSize: 12,
-    color: "rgba(201,162,39,0.55)",
+    color: "rgba(179,149,98,0.55)",
     letterSpacing: 2,
-    fontStyle: "italic",
-  },
+    fontStyle: "italic"
+  }
 });

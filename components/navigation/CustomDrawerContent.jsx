@@ -1,9 +1,10 @@
 import { useAuth } from '@/context/AuthContext';
+import { useAppAlert } from '@/context/AppAlertContext';
 import { FontAwesome } from '@expo/vector-icons';
 import { Image } from 'expo-image';
-import { useRouter } from 'expo-router';
+import { usePathname, useRouter } from 'expo-router';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
-    Alert,
     ScrollView,
     StyleSheet,
     Text,
@@ -12,24 +13,13 @@ import {
 } from 'react-native';
 
 // ─── COLOR PALETTE ────────────────────────────────────────────────────────────
-const COLORS = {
-  deepBrown: '#2C1A0A',
-  warmBrown: '#4A2C0D',
-  richBrown: '#3D2010',
-  gold: '#C9A227',
-  goldLight: '#E8C55A',
-  goldDark: '#8B6914',
-  cream: '#FDF6E3',
-  creamDark: '#F5E6C8',
-  saffron: '#E8721C',
-  saffronLight: '#F4A44A',
-  white: '#FFFFFF',
-  dangerRed: '#C0392B',
-  dangerLight: '#E74C3C',
-};
+import { Fonts, hairline, spacing } from '@/constants/theme';
+import { COLORS, RGB } from '@/constants/brandColors';
 
 // ─── DRAWER NAV ITEMS ─────────────────────────────────────────────────────────
-const DRAWER_ITEMS = [
+// Exported so the header's Search page can reuse the same real, working
+// destinations instead of duplicating (and risking drifting from) this list.
+export const DRAWER_ITEMS = [
   { label: 'Home', icon: 'home', route: '/home/(tabs)' },
   { label: 'Chants', icon: 'music', route: '/home/(tabs)/chants' },
   { label: 'My Donations', icon: 'music', route: '/home/(tabs)/donations' },
@@ -49,34 +39,32 @@ const DRAWER_ITEMS = [
 
 export default function CustomDrawerContent({ navigation }) {
   const router = useRouter();
+  const pathname = usePathname().replace('/(tabs)', '');
+  const insets = useSafeAreaInsets();
   const { user, logout } = useAuth();
+  const { confirm } = useAppAlert();
 
   const handleLogout = () => {
-    Alert.alert(
+    confirm(
       'Logout',
       'Are you sure you want to logout?',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Logout',
-          style: 'destructive',
-          onPress: async () => {
-            const res = await logout();
-            if (res.status) router.replace('/login2');
-          },
-        },
-      ],
-      { cancelable: true },
+      async () => {
+        const res = await logout();
+        if (res.status) router.replace('/login2');
+      },
+      {
+        buttonText: 'Logout',
+        secondaryButtonText: 'Cancel',
+        destructive: true,
+        icon: 'log-out-outline',
+      },
     );
   };
 
   return (
     <View style={drawerStyles.root}>
       {/* ── DRAWER HEADER ── */}
-      <View style={drawerStyles.header}>
-        <View style={drawerStyles.blob1} />
-        <View style={drawerStyles.blob2} />
-
+      <View style={[drawerStyles.header, { paddingTop: Math.max(insets.top, 20) + 20 }]}>
         <View style={drawerStyles.logoRow}>
           <View style={drawerStyles.logoCircle}>
             <Image
@@ -102,7 +90,9 @@ export default function CustomDrawerContent({ navigation }) {
         {DRAWER_ITEMS.map((item, index) => (
           <TouchableOpacity
             key={index}
-            style={drawerStyles.drawerItem}
+            accessibilityRole="button"
+            accessibilityState={{ selected: pathname === item.route.replace('/(tabs)', '') }}
+            style={[drawerStyles.drawerItem, pathname === item.route.replace('/(tabs)', '') && { backgroundColor: `rgba(${RGB.saffron},0.12)` }]}
             onPress={() => {
               router.push(item.route);
               navigation.closeDrawer();
@@ -127,7 +117,7 @@ export default function CustomDrawerContent({ navigation }) {
       </ScrollView>
 
       {/* ── LOGOUT ── */}
-      <View style={drawerStyles.logoutSection}>
+      <View style={[drawerStyles.logoutSection, { paddingBottom: Math.max(insets.bottom, 12) }]}>
         <TouchableOpacity
           style={drawerStyles.logoutBtn}
           onPress={handleLogout}
@@ -153,195 +143,147 @@ export default function CustomDrawerContent({ navigation }) {
 const drawerStyles = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: COLORS.cream,
+    backgroundColor: COLORS.cream
   },
-
   header: {
-    backgroundColor: COLORS.deepBrown,
-    paddingTop: 40,
-    paddingHorizontal: 20,
-    paddingBottom: 0,
-    position: 'relative',
-    overflow: 'hidden',
-    borderBottomWidth: 1.5,
-    borderBottomColor: COLORS.gold,
+    paddingTop: 56,
+    paddingHorizontal: spacing.lg,
+    paddingBottom: 28,
+    borderBottomWidth: 0,
+    borderBottomColor: hairline,
+    backgroundColor: COLORS.richBrown
   },
-
-  blob1: {
-    position: 'absolute',
-    width: 180,
-    height: 180,
-    borderRadius: 90,
-    backgroundColor: 'rgba(201,162,39,0.07)',
-    top: -60,
-    right: -50,
-  },
-
-  blob2: {
-    position: 'absolute',
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    backgroundColor: 'rgba(74,44,13,0.2)',
-    bottom: -30,
-    left: -20,
-  },
-
   logoRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
-    marginBottom: 14,
+    gap: spacing.sm + 2
   },
-
   logoCircle: {
-    width: 42,
-    height: 42,
-    borderRadius: 21,
-    backgroundColor: COLORS.warmBrown,
-    borderWidth: 1.5,
-    borderColor: COLORS.gold,
+    width: 54,
+    height: 54,
+    borderRadius: 18,
+    backgroundColor: COLORS.white,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-
   logoEmoji: {
-    fontSize: 20,
+    fontSize: 20
   },
-
   logoMain: {
-    fontSize: 16,
-    fontWeight: '800',
-    color: COLORS.goldLight,
-    letterSpacing: 1.5,
+    fontSize: 25,
+    fontWeight: "400",
+    color: COLORS.white,
+    letterSpacing: -0.4,
+    fontFamily: Fonts.serif
   },
-
   logoSub: {
-    fontSize: 15,
-    color: COLORS.goldDark,
-    letterSpacing: 1,
-    marginTop: 1,
+    fontSize: 13,
+    color: `rgba(${RGB.cream},0.85)`,
+    marginTop: 2
   },
-
   taglineBox: {
-    backgroundColor: 'rgba(201,162,39,0.08)',
+    backgroundColor: `rgba(${RGB.gold},0.08)`,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: 'rgba(201,162,39,0.2)',
-    padding: 12,
+    borderColor: `rgba(${RGB.gold},0.2)`,
+    padding: 12
   },
-
   taglineBig: {
     fontSize: 14,
-    fontWeight: '800',
+    fontWeight: "600",
     color: COLORS.cream,
     marginBottom: 3,
-    letterSpacing: 0.3,
+    letterSpacing: 0.3
   },
-
   taglineSmall: {
     fontSize: 10,
-    color: COLORS.goldDark,
-    fontStyle: 'italic',
+    color: COLORS.goldDark
   },
-
   itemsScroll: {
-    flex: 1,
+    flex: 1
   },
-
   menuLabel: {
-    fontSize: 9,
-    letterSpacing: 2.5,
-    color: COLORS.goldDark,
-    fontWeight: '800',
+    fontSize: 11,
+    letterSpacing: 1.6,
+    color: COLORS.warmBrown,
+    fontWeight: "600",
     paddingHorizontal: 20,
-    paddingTop: 14,
-    paddingBottom: 6,
-    opacity: 0.7,
+    paddingTop: 24,
+    paddingBottom: 12,
+    opacity: 0.7
   },
-
   drawerItem: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
-    paddingVertical: 11,
-    marginHorizontal: 10,
-    marginVertical: 1,
-    borderRadius: 12,
+    paddingVertical: 10,
+    marginHorizontal: 14,
+    marginVertical: 3,
+    borderRadius: 16,
     gap: 12,
+    minHeight: 56
   },
-
   drawerItemIconBox: {
-    width: 34,
-    height: 34,
-    borderRadius: 10,
-    backgroundColor: 'rgba(201,162,39,0.1)',
-    borderWidth: 1,
-    borderColor: 'rgba(201,162,39,0.2)',
+    width: 38,
+    height: 38,
+    borderRadius: 12,
+    backgroundColor: COLORS.creamDark,
+    borderWidth: 0,
+    borderColor: `rgba(${RGB.gold},0.2)`,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-
   drawerItemLabel: {
     flex: 1,
     fontSize: 14,
-    fontWeight: '600',
-    color: COLORS.warmBrown,
-    letterSpacing: 0.2,
+    fontWeight: "500",
+    color: COLORS.deepBrown,
+    letterSpacing: 0.2
   },
-
   midDivider: {
     flexDirection: 'row',
     alignItems: 'center',
     marginHorizontal: 20,
-    marginVertical: 12,
+    marginVertical: 12
   },
-
   midDividerLine: {
     flex: 1,
     height: 1,
     backgroundColor: COLORS.goldDark,
-    opacity: 0.25,
+    opacity: 0.25
   },
-
   midDividerIcon: {
     fontSize: 13,
-    marginHorizontal: 8,
+    marginHorizontal: 8
   },
-
   verseBox: {
-    backgroundColor: COLORS.warmBrown,
+    backgroundColor: `rgba(${RGB.maroon},0.06)`,
     marginHorizontal: 16,
-    borderRadius: 14,
-    padding: 14,
+    borderRadius: 20,
+    padding: 18,
     borderWidth: 1,
-    borderColor: 'rgba(201,162,39,0.3)',
+    borderColor: hairline,
     borderLeftWidth: 3,
-    borderLeftColor: COLORS.gold,
+    borderLeftColor: COLORS.richBrown
   },
-
   verseText: {
-    fontSize: 11,
-    color: COLORS.creamDark,
-    lineHeight: 18,
-    fontStyle: 'italic',
-    marginBottom: 6,
+    fontSize: 13,
+    color: COLORS.richBrown,
+    lineHeight: 22,
+    marginBottom: 6
   },
-
   verseRef: {
-    fontSize: 10,
-    color: COLORS.goldDark,
+    fontSize: 12,
+    color: COLORS.richBrown,
     fontWeight: '700',
-    letterSpacing: 0.5,
+    letterSpacing: 0.5
   },
-
   logoutSection: {
     paddingHorizontal: 10,
     paddingVertical: 8,
     borderTopWidth: 1,
-    borderTopColor: 'rgba(192,57,43,0.15)',
+    borderTopColor: 'rgba(214,40,57,0.15)'
   },
-
   logoutBtn: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -349,42 +291,37 @@ const drawerStyles = StyleSheet.create({
     paddingVertical: 12,
     borderRadius: 12,
     gap: 12,
-    backgroundColor: 'rgba(192,57,43,0.07)',
+    backgroundColor: 'rgba(214,40,57,0.07)',
     borderWidth: 1,
-    borderColor: 'rgba(192,57,43,0.2)',
+    borderColor: 'rgba(214,40,57,0.2)'
   },
-
   logoutIconBox: {
     width: 34,
     height: 34,
     borderRadius: 10,
-    backgroundColor: 'rgba(192,57,43,0.12)',
+    backgroundColor: 'rgba(214,40,57,0.12)',
     borderWidth: 1,
-    borderColor: 'rgba(192,57,43,0.25)',
+    borderColor: 'rgba(214,40,57,0.25)',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-
   logoutText: {
     flex: 1,
     fontSize: 14,
     fontWeight: '700',
     color: COLORS.dangerLight,
-    letterSpacing: 0.2,
+    letterSpacing: 0.2
   },
-
   footer: {
-    backgroundColor: COLORS.deepBrown,
-    paddingVertical: 13,
+    backgroundColor: COLORS.cream,
+    paddingVertical: 20,
     alignItems: 'center',
     borderTopWidth: 1,
-    borderTopColor: 'rgba(201,162,39,0.3)',
+    borderTopColor: hairline
   },
-
   footerText: {
     fontSize: 11,
-    color: COLORS.goldDark,
-    letterSpacing: 1.5,
-    fontStyle: 'italic',
-  },
+    color: COLORS.warmBrown,
+    letterSpacing: 1.5
+  }
 });

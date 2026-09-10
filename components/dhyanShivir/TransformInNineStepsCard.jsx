@@ -18,31 +18,31 @@ export default function TransformInNineStepsCard({
 
   const scale = scrollX.interpolate({
     inputRange,
-    outputRange: [0.86, 1, 0.86],
+    outputRange: [0.98, 1, 0.98],
     extrapolate: 'clamp',
   });
 
   const translateY = scrollX.interpolate({
     inputRange,
-    outputRange: [34, 0, 34],
+    outputRange: [0, 0, 0],
     extrapolate: 'clamp',
   });
 
   const translateX = scrollX.interpolate({
     inputRange,
-    outputRange: [-10, 0, 10],
+    outputRange: [0, 0, 0],
     extrapolate: 'clamp',
   });
 
   const rotate = scrollX.interpolate({
     inputRange,
-    outputRange: ['-4deg', '0deg', '4deg'],
+    outputRange: ['0deg', '0deg', '0deg'],
     extrapolate: 'clamp',
   });
 
   const opacity = scrollX.interpolate({
     inputRange,
-    outputRange: [0.55, 1, 0.55],
+    outputRange: [1, 1, 1],
     extrapolate: 'clamp',
   });
 

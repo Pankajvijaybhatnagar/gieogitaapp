@@ -11,36 +11,27 @@ import {
   View,
 } from 'react-native';
 
-const { width } = Dimensions.get('window');
+import { COLORS, RGB } from '@/constants/brandColors';
+import { hairline, radii, shadow, spacing, type } from '@/constants/theme';
 
-const COLORS = {
-  deepBrown:   '#2C1A0A',
-  warmBrown:   '#4A2C0D',
-  richBrown:   '#3D2010',
-  gold:        '#C9A227',
-  goldLight:   '#E8C55A',
-  goldDark:    '#8B6914',
-  cream:       '#FDF6E3',
-  saffron:     '#E8721C',
-  saffronLight:'#F4A44A',
-};
+const { width } = Dimensions.get('window');
 
 // ── Data ──────────────────────────────────────────────────────────────────────
 
 const GITA_PRERNA_ISSUES = [
-  { id: 'gp1', month: 'December 2024', issue: 'Issue 48', theme: 'Karma Yoga & Selfless Action', pages: 32, icon: '🕉️', color: 'rgba(232,114,28,0.2)', new: true  },
-  { id: 'gp2', month: 'November 2024', issue: 'Issue 47', theme: 'Bhakti — The Path of Devotion', pages: 28, icon: '🪔', color: 'rgba(201,162,39,0.2)', new: false },
-  { id: 'gp3', month: 'October 2024',  issue: 'Issue 46', theme: 'Jnana Yoga — Wisdom of the Soul', pages: 30, icon: '📿', color: 'rgba(201,162,39,0.15)', new: false },
-  { id: 'gp4', month: 'September 2024',issue: 'Issue 45', theme: 'Dharma — Our Sacred Duty',       pages: 28, icon: '🌸', color: 'rgba(201,162,39,0.1)',  new: false },
-  { id: 'gp5', month: 'August 2024',   issue: 'Issue 44', theme: 'Surrender to the Divine',         pages: 32, icon: '🙏', color: 'rgba(201,162,39,0.1)',  new: false },
-  { id: 'gp6', month: 'July 2024',     issue: 'Issue 43', theme: 'Meditation & Inner Peace',         pages: 26, icon: '🧘', color: 'rgba(201,162,39,0.08)', new: false },
+  { id: 'gp1', month: 'December 2024', issue: 'Issue 48', theme: 'Karma Yoga & Selfless Action', pages: 32, icon: '🕉️', new: true  },
+  { id: 'gp2', month: 'November 2024', issue: 'Issue 47', theme: 'Bhakti — The Path of Devotion', pages: 28, icon: '🪔', new: false },
+  { id: 'gp3', month: 'October 2024',  issue: 'Issue 46', theme: 'Jnana Yoga — Wisdom of the Soul', pages: 30, icon: '📿', new: false },
+  { id: 'gp4', month: 'September 2024',issue: 'Issue 45', theme: 'Dharma — Our Sacred Duty',       pages: 28, icon: '🌸', new: false },
+  { id: 'gp5', month: 'August 2024',   issue: 'Issue 44', theme: 'Surrender to the Divine',         pages: 32, icon: '🙏', new: false },
+  { id: 'gp6', month: 'July 2024',     issue: 'Issue 43', theme: 'Meditation & Inner Peace',         pages: 26, icon: '🧘', new: false },
 ];
 
 const MASIK_PATRIKA_ISSUES = [
-  { id: 'mp1', month: 'December 2024', vol: 'Vol. 12', highlight: 'Gita Jayanti Special Edition', pages: 48, icon: '🏮', color: 'rgba(232,114,28,0.2)', new: true  },
-  { id: 'mp2', month: 'November 2024', vol: 'Vol. 11', highlight: 'Navratri & Devotional Songs',   pages: 40, icon: '🎵', color: 'rgba(201,162,39,0.18)', new: false },
-  { id: 'mp3', month: 'October 2024',  vol: 'Vol. 10', highlight: 'Cow Sanctuary Feature Report',  pages: 44, icon: '🐄', color: 'rgba(201,162,39,0.15)', new: false },
-  { id: 'mp4', month: 'September 2024',vol: 'Vol. 9',  highlight: 'Guru Shishya Parampara',        pages: 36, icon: '📖', color: 'rgba(201,162,39,0.1)',  new: false },
+  { id: 'mp1', month: 'December 2024', vol: 'Vol. 12', highlight: 'Gita Jayanti Special Edition', pages: 48, icon: '🏮', new: true  },
+  { id: 'mp2', month: 'November 2024', vol: 'Vol. 11', highlight: 'Navratri & Devotional Songs',   pages: 40, icon: '🎵', new: false },
+  { id: 'mp3', month: 'October 2024',  vol: 'Vol. 10', highlight: 'Cow Sanctuary Feature Report',  pages: 44, icon: '🐄', new: false },
+  { id: 'mp4', month: 'September 2024',vol: 'Vol. 9',  highlight: 'Guru Shishya Parampara',        pages: 36, icon: '📖', new: false },
 ];
 
 const SPIRITUAL_READS = [
@@ -77,7 +68,7 @@ function SectionHead({ icon, title, accent, onAction, actionLabel }) {
       {onAction && (
         <TouchableOpacity style={styles.sectionActionBtn} onPress={onAction} activeOpacity={0.8}>
           <Text style={styles.sectionActionText}>{actionLabel}</Text>
-          <MaterialCommunityIcons name="chevron-right" size={13} color={COLORS.goldDark} />
+          <MaterialCommunityIcons name="chevron-right" size={13} color={COLORS.saffron} />
         </TouchableOpacity>
       )}
     </View>
@@ -87,7 +78,7 @@ function SectionHead({ icon, title, accent, onAction, actionLabel }) {
 // ── Gita Prerna Card ─────────────────────────────────────────────────────────
 function GitaPrernаCard({ item, onRead }) {
   return (
-    <TouchableOpacity style={[styles.magazineCard, { backgroundColor: item.color }]} activeOpacity={0.85} onPress={() => onRead(item)}>
+    <TouchableOpacity style={styles.magazineCard} activeOpacity={0.85} onPress={() => onRead(item)}>
       {item.new && (
         <View style={styles.newBadge}>
           <Text style={styles.newBadgeText}>NEW</Text>
@@ -104,7 +95,7 @@ function GitaPrernаCard({ item, onRead }) {
         <Text style={styles.magazinePages}>{item.pages} pages</Text>
       </View>
       <View style={styles.readBtn}>
-        <FontAwesome name="book" size={10} color={COLORS.deepBrown} />
+        <FontAwesome name="book" size={10} color={COLORS.white} />
         <Text style={styles.readBtnText}>Read</Text>
       </View>
     </TouchableOpacity>
@@ -115,7 +106,7 @@ function GitaPrernаCard({ item, onRead }) {
 function MasikPatrikaCard({ item, onRead }) {
   return (
     <TouchableOpacity style={styles.patrikaCard} activeOpacity={0.85} onPress={() => onRead(item)}>
-      <View style={[styles.patrikaThumb, { backgroundColor: item.color }]}>
+      <View style={styles.patrikaThumb}>
         {item.new && <View style={styles.newBadge}><Text style={styles.newBadgeText}>NEW</Text></View>}
         <Text style={styles.patrikaIcon}>{item.icon}</Text>
         <Text style={styles.patrikaVol}>{item.vol}</Text>
@@ -129,11 +120,11 @@ function MasikPatrikaCard({ item, onRead }) {
         </View>
         <View style={styles.patrikaActions}>
           <TouchableOpacity style={styles.patrikaReadBtn} onPress={() => onRead(item)} activeOpacity={0.85}>
-            <FontAwesome name="book" size={10} color={COLORS.deepBrown} />
+            <FontAwesome name="book" size={10} color={COLORS.white} />
             <Text style={styles.patrikaReadBtnText}>Read</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.patrikaDownloadBtn} activeOpacity={0.85}>
-            <MaterialCommunityIcons name="download-outline" size={13} color={COLORS.goldLight} />
+            <MaterialCommunityIcons name="download-outline" size={13} color={COLORS.warmBrown} />
           </TouchableOpacity>
         </View>
       </View>
@@ -158,7 +149,7 @@ function ShlokaCard({ item }) {
           <View style={styles.shlokaDivider} />
           <Text style={styles.shlokaMeaning}>{item.meaning}</Text>
           <TouchableOpacity style={styles.shlokaShareBtn} activeOpacity={0.8}>
-            <MaterialCommunityIcons name="share-variant-outline" size={13} color={COLORS.goldLight} />
+            <MaterialCommunityIcons name="share-variant-outline" size={13} color={COLORS.warmBrown} />
             <Text style={styles.shlokaShareText}>Share Shloka</Text>
           </TouchableOpacity>
         </View>
@@ -186,17 +177,17 @@ function BookCard({ item }) {
         </View>
       </View>
       <TouchableOpacity style={styles.bookReadBtn} activeOpacity={0.85}>
-        <MaterialCommunityIcons name="book-open-variant" size={14} color={COLORS.goldLight} />
+        <MaterialCommunityIcons name="book-open-variant" size={14} color={COLORS.saffron} />
       </TouchableOpacity>
     </View>
   );
 }
 
 // ── Read Modal ────────────────────────────────────────────────────────────────
-function ReadModal({ item, type, onClose }) {
+function ReadModal({ item, type: readType, onClose }) {
   if (!item) return null;
-  const title    = type === 'prerna' ? item.theme  : item.highlight;
-  const subtitle = type === 'prerna' ? item.issue  : item.vol;
+  const title    = readType === 'prerna' ? item.theme  : item.highlight;
+  const subtitle = readType === 'prerna' ? item.issue  : item.vol;
   return (
     <Modal visible animationType="slide" transparent onRequestClose={onClose}>
       <View style={styles.modalOverlay}>
@@ -214,9 +205,9 @@ function ReadModal({ item, type, onClose }) {
           </View>
           <View style={styles.modalBody}>
             <View style={styles.modalInfoCard}>
-              <MaterialCommunityIcons name="book-open-page-variant" size={40} color={COLORS.goldLight} />
+              <MaterialCommunityIcons name="book-open-page-variant" size={40} color={COLORS.saffron} />
               <Text style={styles.modalInfoTitle}>
-                {type === 'prerna' ? 'Gita Prerna Magazine' : 'Masik Patrika'}
+                {readType === 'prerna' ? 'Gita Prerna Magazine' : 'Masik Patrika'}
               </Text>
               <Text style={styles.modalInfoDesc}>
                 {item.pages} pages of divine wisdom, shlokas, discourses, and
@@ -225,15 +216,15 @@ function ReadModal({ item, type, onClose }) {
             </View>
             <TouchableOpacity style={styles.modalReadBtn} activeOpacity={0.85}
               onPress={() => { onClose(); Linking.openURL('https://www.gieogita.org'); }}>
-              <FontAwesome name="book" size={14} color={COLORS.deepBrown} />
+              <FontAwesome name="book" size={14} color={COLORS.white} />
               <Text style={styles.modalReadBtnText}>Read Online on Website</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.modalDownloadBtn} activeOpacity={0.85}>
-              <MaterialCommunityIcons name="download-outline" size={15} color={COLORS.goldLight} />
+              <MaterialCommunityIcons name="download-outline" size={15} color={COLORS.warmBrown} />
               <Text style={styles.modalDownloadBtnText}>Download PDF</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.modalShareBtn} activeOpacity={0.85}>
-              <MaterialCommunityIcons name="share-variant-outline" size={14} color="rgba(253,246,227,0.6)" />
+              <MaterialCommunityIcons name="share-variant-outline" size={14} color={COLORS.warmBrown} />
               <Text style={styles.modalShareBtnText}>Share with a Devotee</Text>
             </TouchableOpacity>
           </View>
@@ -250,9 +241,9 @@ export default function ReadingScreen() {
   const [modalType,      setModalType]      = useState(null);
   const [activeShloka,   setActiveShloka]   = useState(0);
 
-  const openRead = (item, type) => {
+  const openRead = (item, readType) => {
     setModalItem(item);
-    setModalType(type);
+    setModalType(readType);
   };
 
   const showAll = (cat) => setActiveCategory(cat);
@@ -269,7 +260,7 @@ export default function ReadingScreen() {
         {/* ── Hero ── */}
         <View style={styles.hero}>
           <View style={styles.heroBadge}>
-            <MaterialCommunityIcons name="book-open-variant" size={12} color={COLORS.goldLight} />
+            <MaterialCommunityIcons name="book-open-variant" size={12} color={COLORS.saffron} />
             <Text style={styles.heroBadgeText}>Reading & Publications</Text>
           </View>
           <Text style={styles.heroHeading}>
@@ -314,7 +305,7 @@ export default function ReadingScreen() {
           <View style={styles.featuredShlokaCard}>
             <View style={styles.featuredShlokaHeader}>
               <View style={styles.featuredShlokaBadge}>
-                <Text style={styles.featuredShlokaBadgeText}>🌅  Today's Shloka</Text>
+                <Text style={styles.featuredShlokaBadgeText}>🌅  Today&apos;s Shloka</Text>
               </View>
               <Text style={styles.featuredShlokaRef}>
                 Gita Ch. {DAILY_SHLOKAS[activeShloka].chapter} · V. {DAILY_SHLOKAS[activeShloka].verse}
@@ -333,14 +324,14 @@ export default function ReadingScreen() {
               <View style={styles.featuredShlokaActions}>
                 <TouchableOpacity style={styles.shlokaNavBtn}
                   onPress={() => setActiveShloka((activeShloka - 1 + DAILY_SHLOKAS.length) % DAILY_SHLOKAS.length)}>
-                  <MaterialCommunityIcons name="chevron-left" size={18} color={COLORS.goldLight} />
+                  <MaterialCommunityIcons name="chevron-left" size={18} color={COLORS.saffron} />
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.shlokaNavBtn}
                   onPress={() => setActiveShloka((activeShloka + 1) % DAILY_SHLOKAS.length)}>
-                  <MaterialCommunityIcons name="chevron-right" size={18} color={COLORS.goldLight} />
+                  <MaterialCommunityIcons name="chevron-right" size={18} color={COLORS.saffron} />
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.shlokaShareFab}>
-                  <MaterialCommunityIcons name="share-variant-outline" size={14} color={COLORS.deepBrown} />
+                  <MaterialCommunityIcons name="share-variant-outline" size={14} color={COLORS.white} />
                   <Text style={styles.shlokaShareFabText}>Share</Text>
                 </TouchableOpacity>
               </View>
@@ -360,7 +351,7 @@ export default function ReadingScreen() {
             />
             <View style={styles.gitaPrernаDesc}>
               <Text style={styles.gitaPrernаDescText}>
-                A monthly magazine by GIEO Gita featuring Maharaj Ji's discourses,
+                A monthly magazine by GIEO Gita featuring Maharaj Ji&apos;s discourses,
                 devotional poetry, Vedic wisdom, and spiritual guidance for seekers.
               </Text>
             </View>
@@ -445,11 +436,11 @@ export default function ReadingScreen() {
             activeOpacity={0.85}
             onPress={() => Linking.openURL('https://www.gieogita.org')}
           >
-            <MaterialCommunityIcons name="newspaper-variant-outline" size={15} color={COLORS.deepBrown} />
+            <MaterialCommunityIcons name="newspaper-variant-outline" size={15} color={COLORS.white} />
             <Text style={styles.ctaBtnText}>Subscribe to Magazine</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.ctaSecondary} activeOpacity={0.85}>
-            <MaterialCommunityIcons name="download-outline" size={14} color={COLORS.goldLight} />
+            <MaterialCommunityIcons name="download-outline" size={14} color={COLORS.saffron} />
             <Text style={styles.ctaSecondaryText}>Download Free Digital Copy</Text>
           </TouchableOpacity>
           <Text style={styles.ctaNote}>🕉️  Jai Shri Krishna • GIEO Gita</Text>
@@ -472,302 +463,778 @@ export default function ReadingScreen() {
 
 // ── STYLES ────────────────────────────────────────────────────────────────────
 const styles = StyleSheet.create({
-  root:   { flex: 1, backgroundColor: COLORS.cream },
-  scroll: { flex: 1 },
-
+  root: {
+    flex: 1,
+    backgroundColor: COLORS.cream
+  },
+  scroll: {
+    flex: 1
+  },
   /* Section header */
   sectionHead: {
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
-    marginHorizontal: 20, marginTop: 22, marginBottom: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginHorizontal: 20,
+    marginTop: 22,
+    marginBottom: 10
   },
-  sectionHeadLeft: { flexDirection: 'row', alignItems: 'center', gap: 10 },
+  sectionHeadLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10
+  },
   sectionIconBox: {
-    width: 40, height: 40, borderRadius: 12,
-    backgroundColor: 'rgba(201,162,39,0.12)', alignItems: 'center', justifyContent: 'center',
-    borderWidth: 1, borderColor: 'rgba(201,162,39,0.25)',
+    width: 40,
+    height: 40,
+    borderRadius: radii.md,
+    backgroundColor: COLORS.creamDark,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: hairline
   },
-  sectionIcon:   { fontSize: 18 },
-  sectionTitle:  { color: COLORS.richBrown, fontSize: 15, fontWeight: '800' },
-  sectionAccent: { color: COLORS.goldDark, fontSize: 10, fontWeight: '600', marginTop: 1 },
+  sectionIcon: {
+    fontSize: 18
+  },
+  sectionTitle: {
+    color: COLORS.deepBrown,
+    fontSize: 15,
+    fontWeight: "600"
+  },
+  sectionAccent: {
+    color: COLORS.warmBrown,
+    fontSize: 12,
+    fontWeight: '600',
+    marginTop: 1
+  },
   sectionActionBtn: {
-    flexDirection: 'row', alignItems: 'center', gap: 3,
-    backgroundColor: 'rgba(201,162,39,0.1)', borderRadius: 20,
-    paddingHorizontal: 10, paddingVertical: 5,
-    borderWidth: 1, borderColor: 'rgba(201,162,39,0.25)',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 3,
+    backgroundColor: COLORS.creamDark,
+    borderRadius: radii.pill,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderWidth: 1,
+    borderColor: hairline
   },
-  sectionActionText: { color: COLORS.goldDark, fontSize: 10, fontWeight: '700' },
-
+  sectionActionText: {
+    color: COLORS.saffron,
+    fontSize: 12,
+    fontWeight: '700'
+  },
   /* Hero */
   hero: {
-    backgroundColor: COLORS.richBrown, margin: 20, borderRadius: 18, padding: 18,
-    borderWidth: 1, borderColor: 'rgba(201,162,39,0.35)',
+    backgroundColor: COLORS.cream,
+    margin: 20,
+    borderRadius: radii.lg,
+    padding: 18,
+    borderWidth: 1,
+    borderColor: hairline,
+    ...shadow.card
   },
   heroBadge: {
-    alignSelf: 'flex-start', flexDirection: 'row', alignItems: 'center', gap: 6,
-    backgroundColor: 'rgba(201,162,39,0.15)', borderRadius: 20,
-    paddingHorizontal: 12, paddingVertical: 5,
-    borderWidth: 1, borderColor: 'rgba(201,162,39,0.35)', marginBottom: 12,
+    alignSelf: 'flex-start',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    backgroundColor: COLORS.creamDark,
+    borderRadius: radii.pill,
+    paddingHorizontal: 12,
+    paddingVertical: 5,
+    borderWidth: 1,
+    borderColor: hairline,
+    marginBottom: 12
   },
-  heroBadgeText: { color: COLORS.goldLight, fontSize: 10, fontWeight: '700' },
-  heroHeading:   { color: COLORS.cream, fontSize: 22, fontWeight: '800', lineHeight: 30, marginBottom: 10 },
-  heroAccent:    { color: COLORS.goldLight },
-  heroDesc:      { color: 'rgba(253,246,227,0.65)', fontSize: 12, lineHeight: 18, fontStyle: 'italic', marginBottom: 16 },
+  heroBadgeText: {
+    color: COLORS.saffron,
+    fontSize: 10,
+    fontWeight: '700'
+  },
+  heroHeading: {
+    ...type.title,
+    color: COLORS.deepBrown,
+    marginBottom: 10
+  },
+  heroAccent: {
+    color: COLORS.saffron
+  },
+  heroDesc: {
+    ...type.body,
+    color: COLORS.warmBrown,
+    marginBottom: 16
+  },
   heroStats: {
-    flexDirection: 'row', backgroundColor: 'rgba(201,162,39,0.1)',
-    borderRadius: 12, paddingVertical: 12,
-    borderWidth: 1, borderColor: 'rgba(201,162,39,0.2)',
+    flexDirection: 'row',
+    backgroundColor: COLORS.creamDark,
+    borderRadius: radii.md,
+    paddingVertical: 12,
+    borderWidth: 1,
+    borderColor: hairline
   },
-  heroStat:       { flex: 1, alignItems: 'center' },
-  heroStatBorder: { borderRightWidth: 1, borderRightColor: 'rgba(201,162,39,0.25)' },
-  heroStatVal:    { color: COLORS.goldLight, fontSize: 14, fontWeight: '800' },
-  heroStatLabel:  { color: 'rgba(253,246,227,0.45)', fontSize: 8, marginTop: 2, textAlign: 'center', fontStyle: 'italic' },
-
+  heroStat: {
+    flex: 1,
+    alignItems: 'center'
+  },
+  heroStatBorder: {
+    borderRightWidth: 1,
+    borderRightColor: hairline
+  },
+  heroStatVal: {
+    color: COLORS.saffron,
+    fontSize: 14,
+    fontWeight: "600"
+  },
+  heroStatLabel: {
+    color: COLORS.warmBrown,
+    fontSize: 12,
+    marginTop: 2,
+    textAlign: 'center'
+  },
   /* Categories */
-  categoriesRow: { paddingHorizontal: 20, gap: 8, marginBottom: 4, paddingBottom: 4, marginTop: 8 },
-  chip: {
-    backgroundColor: COLORS.richBrown, borderRadius: 20,
-    paddingHorizontal: 14, paddingVertical: 7,
-    borderWidth: 1, borderColor: 'rgba(201,162,39,0.25)',
+  categoriesRow: {
+    paddingHorizontal: 20,
+    gap: 8,
+    marginBottom: 4,
+    paddingBottom: 4,
+    marginTop: 8
   },
-  chipActive: { backgroundColor: COLORS.goldLight, borderColor: COLORS.goldDark },
-  chipText:   { color: 'rgba(253,246,227,0.6)', fontSize: 11, fontWeight: '600' },
-  chipTextActive: { color: COLORS.deepBrown, fontWeight: '800' },
-
+  chip: {
+    backgroundColor: COLORS.creamDark,
+    borderRadius: radii.pill,
+    paddingHorizontal: 14,
+    paddingVertical: 7,
+    borderWidth: 1,
+    borderColor: hairline
+  },
+  chipActive: {
+    backgroundColor: COLORS.saffron,
+    borderColor: COLORS.saffron
+  },
+  chipText: {
+    color: COLORS.warmBrown,
+    fontSize: 12,
+    fontWeight: '600'
+  },
+  chipTextActive: {
+    color: COLORS.white,
+    fontWeight: "600"
+  },
   /* Featured Shloka */
   featuredShlokaCard: {
-    backgroundColor: COLORS.richBrown, marginHorizontal: 20, marginTop: 16,
-    borderRadius: 16, padding: 18,
-    borderWidth: 1, borderColor: 'rgba(201,162,39,0.35)',
+    backgroundColor: COLORS.white,
+    marginHorizontal: 20,
+    marginTop: 16,
+    borderRadius: 24,
+    padding: 18,
+    borderWidth: 1,
+    borderColor: hairline,
+    ...shadow.card,
+    shadowOpacity: 0.045,
+    elevation: 2
   },
   featuredShlokaHeader: {
-    flexDirection: 'row', alignItems: 'center',
-    justifyContent: 'space-between', marginBottom: 14,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 14
   },
   featuredShlokaBadge: {
-    backgroundColor: 'rgba(201,162,39,0.15)', borderRadius: 20,
-    paddingHorizontal: 10, paddingVertical: 4,
-    borderWidth: 1, borderColor: 'rgba(201,162,39,0.3)',
+    backgroundColor: COLORS.creamDark,
+    borderRadius: radii.pill,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderWidth: 1,
+    borderColor: hairline
   },
-  featuredShlokaBadgeText: { color: COLORS.goldLight, fontSize: 10, fontWeight: '700' },
-  featuredShlokaRef:       { color: COLORS.goldDark, fontSize: 10, fontStyle: 'italic' },
+  featuredShlokaBadgeText: {
+    color: COLORS.saffron,
+    fontSize: 10,
+    fontWeight: '700'
+  },
+  featuredShlokaRef: {
+    color: COLORS.warmBrown,
+    fontSize: 12
+  },
   featuredShlokaSanskrit: {
-    color: COLORS.cream, fontSize: 15, fontWeight: '700',
-    lineHeight: 24, marginBottom: 10, textAlign: 'center',
-    fontStyle: 'italic',
+    color: COLORS.richBrown,
+    fontSize: 15,
+    fontWeight: '700',
+    lineHeight: 24,
+    marginBottom: 10,
+    textAlign: 'center'
   },
   featuredShlokaMeaning: {
-    color: 'rgba(253,246,227,0.65)', fontSize: 11, lineHeight: 18,
-    textAlign: 'center', fontStyle: 'italic', marginBottom: 14,
+    color: COLORS.warmBrown,
+    fontSize: 12,
+    lineHeight: 18,
+    textAlign: 'center',
+    marginBottom: 14
   },
-  featuredShlokaFooter: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  shlokaDots:     { flexDirection: 'row', gap: 6 },
-  shlokaDot:      { width: 6, height: 6, borderRadius: 3, backgroundColor: 'rgba(201,162,39,0.25)' },
-  shlokaDotActive:{ width: 16, backgroundColor: COLORS.goldLight },
-  featuredShlokaActions: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+  featuredShlokaFooter: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between'
+  },
+  shlokaDots: {
+    flexDirection: 'row',
+    gap: 6
+  },
+  shlokaDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: hairline
+  },
+  shlokaDotActive: {
+    width: 16,
+    backgroundColor: COLORS.saffron
+  },
+  featuredShlokaActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6
+  },
   shlokaNavBtn: {
-    width: 30, height: 30, borderRadius: 15,
-    backgroundColor: 'rgba(201,162,39,0.12)', alignItems: 'center', justifyContent: 'center',
-    borderWidth: 1, borderColor: 'rgba(201,162,39,0.25)',
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    backgroundColor: COLORS.creamDark,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: hairline
   },
   shlokaShareFab: {
-    flexDirection: 'row', alignItems: 'center', gap: 5,
-    backgroundColor: COLORS.goldLight, borderRadius: 20,
-    paddingHorizontal: 10, paddingVertical: 6,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    backgroundColor: COLORS.saffron,
+    borderRadius: radii.pill,
+    paddingHorizontal: 10,
+    paddingVertical: 6
   },
-  shlokaShareFabText: { color: COLORS.deepBrown, fontSize: 10, fontWeight: '800' },
-
+  shlokaShareFabText: {
+    color: COLORS.white,
+    fontSize: 12,
+    fontWeight: "600"
+  },
   /* Gita Prerna desc */
   gitaPrernаDesc: {
-    marginHorizontal: 20, marginBottom: 12,
-    backgroundColor: 'rgba(201,162,39,0.06)',
-    borderRadius: 10, padding: 10,
-    borderLeftWidth: 3, borderLeftColor: COLORS.goldDark,
+    marginHorizontal: 20,
+    marginBottom: 12,
+    backgroundColor: COLORS.creamDark,
+    borderRadius: radii.sm,
+    padding: 10,
+    borderLeftWidth: 3,
+    borderLeftColor: COLORS.saffron
   },
-  gitaPrernаDescText: { color: 'rgba(60,30,10,0.7)', fontSize: 11, lineHeight: 16, fontStyle: 'italic' },
-
+  gitaPrernаDescText: {
+    color: COLORS.warmBrown,
+    fontSize: 12,
+    lineHeight: 18
+  },
   /* Magazine card */
-  hScroll: { paddingHorizontal: 20, gap: 12, paddingBottom: 4 },
+  hScroll: {
+    paddingHorizontal: 20,
+    gap: 12,
+    paddingBottom: 4
+  },
   magazineCard: {
-    width: 150, borderRadius: 16, padding: 14,
-    borderWidth: 1, borderColor: 'rgba(201,162,39,0.3)',
+    width: 150,
+    borderRadius: 24,
+    padding: 14,
+    backgroundColor: COLORS.white,
+    borderWidth: 1,
+    borderColor: hairline,
     position: 'relative',
+    ...shadow.card,
+    shadowOpacity: 0.045,
+    elevation: 2
   },
   newBadge: {
-    position: 'absolute', top: 8, right: 8,
-    backgroundColor: COLORS.saffron, borderRadius: 6,
-    paddingHorizontal: 6, paddingVertical: 2,
+    position: 'absolute',
+    top: 8,
+    right: 8,
+    backgroundColor: COLORS.saffron,
+    borderRadius: 6,
+    paddingHorizontal: 6,
+    paddingVertical: 2
   },
-  newBadgeText: { color: '#fff', fontSize: 7, fontWeight: '800', letterSpacing: 0.5 },
-  magazineIcon:  { fontSize: 30, marginBottom: 8 },
+  newBadgeText: {
+    color: COLORS.white,
+    fontSize: 10,
+    fontWeight: "600",
+    letterSpacing: 0.5
+  },
+  magazineIcon: {
+    fontSize: 30,
+    marginBottom: 8
+  },
   magazineIssueBadge: {
     alignSelf: 'flex-start',
-    backgroundColor: COLORS.richBrown, borderRadius: 6,
-    paddingHorizontal: 7, paddingVertical: 2, marginBottom: 6,
+    backgroundColor: COLORS.creamDark,
+    borderRadius: 6,
+    paddingHorizontal: 7,
+    paddingVertical: 2,
+    marginBottom: 6
   },
-  magazineIssueText: { color: COLORS.goldLight, fontSize: 8, fontWeight: '700' },
-  magazineMonth:     { color: COLORS.richBrown, fontSize: 10, fontWeight: '700', marginBottom: 4 },
-  magazineTheme:     { color: 'rgba(60,30,10,0.7)', fontSize: 10, fontStyle: 'italic', lineHeight: 14, marginBottom: 8 },
-  magazineFooter:    { flexDirection: 'row', alignItems: 'center', gap: 4, marginBottom: 8 },
-  magazinePages:     { color: 'rgba(60,30,10,0.55)', fontSize: 9 },
+  magazineIssueText: {
+    color: COLORS.warmBrown,
+    fontSize: 12,
+    fontWeight: '700'
+  },
+  magazineMonth: {
+    color: COLORS.richBrown,
+    fontSize: 12,
+    fontWeight: '700',
+    marginBottom: 4
+  },
+  magazineTheme: {
+    color: COLORS.warmBrown,
+    fontSize: 12,
+    lineHeight: 18,
+    marginBottom: 8
+  },
+  magazineFooter: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    marginBottom: 8
+  },
+  magazinePages: {
+    color: COLORS.warmBrown,
+    fontSize: 10
+  },
   readBtn: {
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 5,
-    backgroundColor: COLORS.goldLight, borderRadius: 8, paddingVertical: 7,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 5,
+    backgroundColor: COLORS.richBrown,
+    borderRadius: radii.sm,
+    paddingVertical: 7
   },
-  readBtnText: { color: COLORS.deepBrown, fontSize: 10, fontWeight: '800' },
-
+  readBtnText: {
+    color: COLORS.white,
+    fontSize: 12,
+    fontWeight: "600"
+  },
   /* Masik Patrika */
-  patrikaList: { marginHorizontal: 20, gap: 10 },
+  patrikaList: {
+    marginHorizontal: 20,
+    gap: 10
+  },
   patrikaCard: {
-    flexDirection: 'row', backgroundColor: COLORS.richBrown, borderRadius: 14,
-    borderWidth: 1, borderColor: 'rgba(201,162,39,0.25)', overflow: 'hidden',
+    flexDirection: 'row',
+    backgroundColor: COLORS.white,
+    borderRadius: 24,
+    borderWidth: 1,
+    borderColor: hairline,
+    overflow: 'hidden',
+    ...shadow.card,
+    shadowOpacity: 0.045,
+    elevation: 2
   },
   patrikaThumb: {
-    width: 90, alignItems: 'center', justifyContent: 'center',
-    padding: 10, position: 'relative',
+    width: 90,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 10,
+    position: 'relative',
+    backgroundColor: COLORS.creamDark
   },
-  patrikaIcon: { fontSize: 30, marginBottom: 6 },
-  patrikaVol:  { color: COLORS.richBrown, fontSize: 9, fontWeight: '800' },
-  patrikaInfo: { flex: 1, padding: 12 },
-  patrikaMonth: { color: COLORS.goldLight, fontSize: 10, fontWeight: '700', marginBottom: 3 },
-  patrikaHighlight: { color: COLORS.cream, fontSize: 12, fontWeight: '700', lineHeight: 16, marginBottom: 6 },
-  patrikaMetaRow: { flexDirection: 'row', alignItems: 'center', gap: 4, marginBottom: 8 },
-  patrikaMeta:    { color: 'rgba(253,246,227,0.45)', fontSize: 9 },
-  patrikaActions: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  patrikaIcon: {
+    fontSize: 30,
+    marginBottom: 6
+  },
+  patrikaVol: {
+    color: COLORS.warmBrown,
+    fontSize: 12,
+    fontWeight: "600"
+  },
+  patrikaInfo: {
+    flex: 1,
+    padding: 12
+  },
+  patrikaMonth: {
+    color: COLORS.saffron,
+    fontSize: 12,
+    fontWeight: '700',
+    marginBottom: 3
+  },
+  patrikaHighlight: {
+    color: COLORS.deepBrown,
+    fontSize: 12,
+    fontWeight: '700',
+    lineHeight: 18,
+    marginBottom: 6
+  },
+  patrikaMetaRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    marginBottom: 8
+  },
+  patrikaMeta: {
+    color: COLORS.warmBrown,
+    fontSize: 12
+  },
+  patrikaActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8
+  },
   patrikaReadBtn: {
-    flexDirection: 'row', alignItems: 'center', gap: 5,
-    backgroundColor: COLORS.goldLight, borderRadius: 8,
-    paddingVertical: 7, paddingHorizontal: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    backgroundColor: COLORS.richBrown,
+    borderRadius: radii.sm,
+    paddingVertical: 7,
+    paddingHorizontal: 12
   },
-  patrikaReadBtnText: { color: COLORS.deepBrown, fontSize: 10, fontWeight: '800' },
+  patrikaReadBtnText: {
+    color: COLORS.white,
+    fontSize: 12,
+    fontWeight: "600"
+  },
   patrikaDownloadBtn: {
-    width: 32, height: 32, borderRadius: 8,
-    backgroundColor: 'rgba(201,162,39,0.12)', alignItems: 'center', justifyContent: 'center',
-    borderWidth: 1, borderColor: 'rgba(201,162,39,0.25)',
+    width: 32,
+    height: 32,
+    borderRadius: radii.sm,
+    backgroundColor: COLORS.creamDark,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: hairline
   },
-
   /* Shlokas list */
-  shlokasList: { marginHorizontal: 20, gap: 10 },
+  shlokasList: {
+    marginHorizontal: 20,
+    gap: 10
+  },
   shlokaCard: {
-    backgroundColor: COLORS.richBrown, borderRadius: 14, padding: 14,
-    borderWidth: 1, borderColor: 'rgba(201,162,39,0.25)',
+    backgroundColor: COLORS.white,
+    borderRadius: 24,
+    padding: 14,
+    borderWidth: 1,
+    borderColor: hairline,
+    ...shadow.card,
+    shadowOpacity: 0.045,
+    elevation: 2
   },
-  shlokaTopRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 },
+  shlokaTopRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 8
+  },
   shlokaChapterBadge: {
-    backgroundColor: 'rgba(201,162,39,0.18)', borderRadius: 20,
-    paddingHorizontal: 10, paddingVertical: 3,
+    backgroundColor: COLORS.creamDark,
+    borderRadius: radii.pill,
+    paddingHorizontal: 10,
+    paddingVertical: 3
   },
-  shlokaChapterText: { color: COLORS.goldLight, fontSize: 9, fontWeight: '700' },
-  shlokaSanskrit: { color: COLORS.cream, fontSize: 13, fontWeight: '700', lineHeight: 20, fontStyle: 'italic' },
+  shlokaChapterText: {
+    color: COLORS.saffron,
+    fontSize: 12,
+    fontWeight: '700'
+  },
+  shlokaSanskrit: {
+    color: COLORS.richBrown,
+    fontSize: 13,
+    fontWeight: '700',
+    lineHeight: 20
+  },
   shlokaExpanded: {},
-  shlokaDivider:  { height: 1, backgroundColor: 'rgba(201,162,39,0.15)', marginVertical: 10 },
-  shlokaMeaning:  { color: 'rgba(253,246,227,0.65)', fontSize: 11, lineHeight: 17, fontStyle: 'italic', marginBottom: 10 },
-  shlokaShareBtn: {
-    flexDirection: 'row', alignItems: 'center', gap: 5,
-    alignSelf: 'flex-end',
-    backgroundColor: 'rgba(201,162,39,0.12)', borderRadius: 20,
-    paddingHorizontal: 10, paddingVertical: 5,
-    borderWidth: 1, borderColor: 'rgba(201,162,39,0.25)',
+  shlokaDivider: {
+    height: 1,
+    backgroundColor: hairline,
+    marginVertical: 10
   },
-  shlokaShareText: { color: COLORS.goldLight, fontSize: 10, fontWeight: '600' },
-
+  shlokaMeaning: {
+    color: COLORS.warmBrown,
+    fontSize: 12,
+    lineHeight: 18,
+    marginBottom: 10
+  },
+  shlokaShareBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    alignSelf: 'flex-end',
+    backgroundColor: COLORS.creamDark,
+    borderRadius: radii.pill,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderWidth: 1,
+    borderColor: hairline
+  },
+  shlokaShareText: {
+    color: COLORS.warmBrown,
+    fontSize: 12,
+    fontWeight: '600'
+  },
   /* Books */
-  booksList: { marginHorizontal: 20, gap: 10 },
+  booksList: {
+    marginHorizontal: 20,
+    gap: 10
+  },
   bookCard: {
-    flexDirection: 'row', alignItems: 'center', gap: 12,
-    backgroundColor: COLORS.richBrown, borderRadius: 14, padding: 12,
-    borderWidth: 1, borderColor: 'rgba(201,162,39,0.22)',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    backgroundColor: COLORS.white,
+    borderRadius: 24,
+    padding: 12,
+    borderWidth: 1,
+    borderColor: hairline,
+    ...shadow.card,
+    shadowOpacity: 0.045,
+    elevation: 2
   },
   bookIconBox: {
-    width: 50, height: 50, borderRadius: 14,
-    backgroundColor: 'rgba(201,162,39,0.12)', alignItems: 'center', justifyContent: 'center',
-    borderWidth: 1, borderColor: 'rgba(201,162,39,0.25)',
+    width: 50,
+    height: 50,
+    borderRadius: radii.md,
+    backgroundColor: COLORS.creamDark,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: hairline
   },
-  bookIcon:  { fontSize: 24 },
-  bookInfo:  { flex: 1 },
+  bookIcon: {
+    fontSize: 24
+  },
+  bookInfo: {
+    flex: 1
+  },
   bookCategoryBadge: {
     alignSelf: 'flex-start',
-    backgroundColor: 'rgba(201,162,39,0.15)', borderRadius: 6,
-    paddingHorizontal: 7, paddingVertical: 2, marginBottom: 4,
+    backgroundColor: COLORS.creamDark,
+    borderRadius: 6,
+    paddingHorizontal: 7,
+    paddingVertical: 2,
+    marginBottom: 4
   },
-  bookCategoryText: { color: COLORS.goldLight, fontSize: 8, fontWeight: '700' },
-  bookTitle:   { color: COLORS.cream, fontSize: 12, fontWeight: '700', marginBottom: 3, lineHeight: 16 },
-  bookAuthor:  { color: 'rgba(253,246,227,0.5)', fontSize: 10, fontStyle: 'italic', marginBottom: 4 },
-  bookMetaRow: { flexDirection: 'row', alignItems: 'center', gap: 4 },
-  bookPages:   { color: 'rgba(253,246,227,0.4)', fontSize: 9 },
+  bookCategoryText: {
+    color: COLORS.saffron,
+    fontSize: 12,
+    fontWeight: '700'
+  },
+  bookTitle: {
+    color: COLORS.deepBrown,
+    fontSize: 12,
+    fontWeight: '700',
+    marginBottom: 3,
+    lineHeight: 18
+  },
+  bookAuthor: {
+    color: COLORS.warmBrown,
+    fontSize: 12,
+    marginBottom: 4
+  },
+  bookMetaRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4
+  },
+  bookPages: {
+    color: COLORS.warmBrown,
+    fontSize: 10
+  },
   bookReadBtn: {
-    width: 36, height: 36, borderRadius: 10,
-    backgroundColor: 'rgba(201,162,39,0.12)', alignItems: 'center', justifyContent: 'center',
-    borderWidth: 1, borderColor: 'rgba(201,162,39,0.25)',
+    width: 36,
+    height: 36,
+    borderRadius: radii.sm,
+    backgroundColor: COLORS.creamDark,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: hairline
   },
-
   /* CTA */
   ctaCard: {
-    backgroundColor: COLORS.richBrown, margin: 20, borderRadius: 18, padding: 20,
-    alignItems: 'center', borderWidth: 1, borderColor: 'rgba(201,162,39,0.4)',
+    backgroundColor: COLORS.white,
+    margin: 20,
+    borderRadius: 24,
+    padding: 20,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: hairline,
+    ...shadow.card,
+    shadowOpacity: 0.045,
+    elevation: 2
   },
-  ctaEmoji:   { fontSize: 36, marginBottom: 10 },
-  ctaHeading: { color: COLORS.cream, fontSize: 17, fontWeight: '800', textAlign: 'center', marginBottom: 8 },
+  ctaEmoji: {
+    fontSize: 36,
+    marginBottom: 10
+  },
+  ctaHeading: {
+    color: COLORS.deepBrown,
+    fontSize: 17,
+    fontWeight: "600",
+    textAlign: 'center',
+    marginBottom: 8
+  },
   ctaDesc: {
-    color: 'rgba(253,246,227,0.6)', fontSize: 11, fontStyle: 'italic',
-    textAlign: 'center', lineHeight: 17, marginBottom: 16,
+    color: COLORS.warmBrown,
+    fontSize: 12,
+    textAlign: 'center',
+    lineHeight: 18,
+    marginBottom: 16
   },
   ctaBtn: {
-    flexDirection: 'row', alignItems: 'center', gap: 8,
-    backgroundColor: COLORS.goldLight, borderRadius: 10,
-    paddingVertical: 13, paddingHorizontal: 24, marginBottom: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    backgroundColor: COLORS.saffron,
+    borderRadius: radii.md,
+    paddingVertical: 13,
+    paddingHorizontal: 24,
+    marginBottom: 10
   },
-  ctaBtnText:       { color: COLORS.deepBrown, fontSize: 13, fontWeight: '800' },
+  ctaBtnText: {
+    color: COLORS.white,
+    fontSize: 13,
+    fontWeight: "600"
+  },
   ctaSecondary: {
-    flexDirection: 'row', alignItems: 'center', gap: 6,
-    paddingVertical: 8, marginBottom: 14,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingVertical: 8,
+    marginBottom: 14
   },
-  ctaSecondaryText: { color: COLORS.goldLight, fontSize: 12, fontWeight: '600', textDecorationLine: 'underline' },
-  ctaNote:          { color: 'rgba(253,246,227,0.35)', fontSize: 10, fontStyle: 'italic' },
-
+  ctaSecondaryText: {
+    color: COLORS.saffron,
+    fontSize: 12,
+    fontWeight: '600',
+    textDecorationLine: 'underline'
+  },
+  ctaNote: {
+    color: COLORS.warmBrown,
+    fontSize: 12
+  },
   /* Modal */
   modalOverlay: {
-    flex: 1, backgroundColor: 'rgba(0,0,0,0.65)', justifyContent: 'flex-end',
+    flex: 1,
+    backgroundColor: `rgba(${RGB.deepBrown},0.55)`,
+    justifyContent: 'flex-end'
   },
   modalSheet: {
-    backgroundColor: COLORS.richBrown, borderTopLeftRadius: 24, borderTopRightRadius: 24,
-    padding: 20, paddingBottom: 36,
-    borderTopWidth: 1, borderTopColor: 'rgba(201,162,39,0.4)',
+    backgroundColor: COLORS.cream,
+    borderTopLeftRadius: radii.xl,
+    borderTopRightRadius: radii.xl,
+    padding: 20,
+    paddingBottom: 36,
+    borderTopWidth: 1,
+    borderTopColor: hairline
   },
   modalHandle: {
-    width: 40, height: 4, borderRadius: 2,
-    backgroundColor: 'rgba(201,162,39,0.4)', alignSelf: 'center', marginBottom: 16,
+    width: 40,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: hairline,
+    alignSelf: 'center',
+    marginBottom: 16
   },
-  modalHeader: { flexDirection: 'row', alignItems: 'flex-start', gap: 12, marginBottom: 18 },
-  modalIcon:   { fontSize: 30 },
-  modalTitle:  { color: COLORS.cream, fontSize: 15, fontWeight: '800', lineHeight: 20, marginBottom: 3 },
-  modalSub:    { color: 'rgba(253,246,227,0.5)', fontSize: 10, fontStyle: 'italic' },
+  modalHeader: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 12,
+    marginBottom: 18
+  },
+  modalIcon: {
+    fontSize: 30
+  },
+  modalTitle: {
+    color: COLORS.deepBrown,
+    fontSize: 15,
+    fontWeight: "600",
+    lineHeight: 20,
+    marginBottom: 3
+  },
+  modalSub: {
+    color: COLORS.warmBrown,
+    fontSize: 12
+  },
   modalCloseBtn: {
-    width: 32, height: 32, borderRadius: 16,
-    backgroundColor: 'rgba(201,162,39,0.12)', alignItems: 'center', justifyContent: 'center',
-    borderWidth: 1, borderColor: 'rgba(201,162,39,0.25)',
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: COLORS.creamDark,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: hairline
   },
-  modalBody: { gap: 10 },
+  modalBody: {
+    gap: 10
+  },
   modalInfoCard: {
-    alignItems: 'center', backgroundColor: 'rgba(201,162,39,0.08)',
-    borderRadius: 14, padding: 18, gap: 8,
-    borderWidth: 1, borderColor: 'rgba(201,162,39,0.2)',
+    alignItems: 'center',
+    backgroundColor: COLORS.white,
+    borderRadius: 24,
+    padding: 18,
+    gap: 8,
+    borderWidth: 1,
+    borderColor: hairline,
+    shadowOpacity: 0.045,
+    elevation: 2
   },
-  modalInfoTitle: { color: COLORS.cream, fontSize: 14, fontWeight: '800' },
-  modalInfoDesc:  { color: 'rgba(253,246,227,0.55)', fontSize: 11, fontStyle: 'italic', textAlign: 'center', lineHeight: 16 },
+  modalInfoTitle: {
+    color: COLORS.deepBrown,
+    fontSize: 14,
+    fontWeight: "600"
+  },
+  modalInfoDesc: {
+    color: COLORS.warmBrown,
+    fontSize: 12,
+    textAlign: 'center',
+    lineHeight: 18
+  },
   modalReadBtn: {
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8,
-    backgroundColor: COLORS.goldLight, borderRadius: 12, paddingVertical: 14,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    backgroundColor: COLORS.richBrown,
+    borderRadius: radii.md,
+    paddingVertical: 14
   },
-  modalReadBtnText:     { color: COLORS.deepBrown, fontSize: 13, fontWeight: '800' },
+  modalReadBtnText: {
+    color: COLORS.white,
+    fontSize: 13,
+    fontWeight: "600"
+  },
   modalDownloadBtn: {
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8,
-    backgroundColor: 'rgba(201,162,39,0.12)', borderRadius: 12, paddingVertical: 12,
-    borderWidth: 1, borderColor: 'rgba(201,162,39,0.3)',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    backgroundColor: COLORS.creamDark,
+    borderRadius: radii.md,
+    paddingVertical: 12,
+    borderWidth: 1,
+    borderColor: hairline
   },
-  modalDownloadBtnText: { color: COLORS.goldLight, fontSize: 12, fontWeight: '700' },
+  modalDownloadBtnText: {
+    color: COLORS.warmBrown,
+    fontSize: 12,
+    fontWeight: '700'
+  },
   modalShareBtn: {
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6,
-    paddingVertical: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    paddingVertical: 8
   },
-  modalShareBtnText: { color: 'rgba(253,246,227,0.45)', fontSize: 11, fontStyle: 'italic' },
+  modalShareBtnText: {
+    color: COLORS.warmBrown,
+    fontSize: 12
+  }
 });

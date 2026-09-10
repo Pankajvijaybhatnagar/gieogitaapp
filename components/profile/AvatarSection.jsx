@@ -77,51 +77,120 @@ export default function AvatarSection({ user }) {
 
 const styles = StyleSheet.create({
   avatarWrap: {
-    width: 110, height: 110,
-    alignItems: 'center', justifyContent: 'center',
-    marginBottom: 16, position: 'relative',
+    width: 110,
+    height: 110,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 16,
+    position: 'relative'
   },
   avatarOuterRing: {
-    width: 96, height: 96, borderRadius: 48,
-    borderWidth: 2, borderColor: C.gold, padding: 3,
-    backgroundColor: 'rgba(201,162,39,0.08)',
+    width: 96,
+    height: 96,
+    borderRadius: 48,
+    borderWidth: 2,
+    borderColor: C.gold,
+    padding: 3,
+    backgroundColor: C.goldPale
   },
   avatarInnerRing: {
-    flex: 1, borderRadius: 43,
-    borderWidth: 1, borderColor: 'rgba(201,162,39,0.25)', padding: 2,
+    flex: 1,
+    borderRadius: 43,
+    borderWidth: 1,
+    borderColor: C.goldBorder,
+    padding: 2
   },
   avatarCircle: {
-    flex: 1, borderRadius: 40,
-    backgroundColor: C.warmBrown,
-    alignItems: 'center', justifyContent: 'center',
+    flex: 1,
+    borderRadius: 40,
+    backgroundColor: C.saffron,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
-  avatarText:  { fontSize: 30, fontWeight: '800', color: C.goldLight, letterSpacing: 2 },
+  avatarText: {
+    fontSize: 30,
+    fontWeight: "600",
+    color: C.white,
+    letterSpacing: 2
+  },
   onlineDot: {
-    position: 'absolute', bottom: 6, right: 6,
-    width: 15, height: 15, borderRadius: 8,
-    backgroundColor: C.green, borderWidth: 2.5, borderColor: C.deepBrown,
+    position: 'absolute',
+    bottom: 6,
+    right: 6,
+    width: 15,
+    height: 15,
+    borderRadius: 8,
+    backgroundColor: C.green,
+    borderWidth: 2.5,
+    borderColor: C.white
   },
-
-  heroName:   { fontSize: 24, fontWeight: '800', color: C.cream, letterSpacing: 0.5, marginBottom: 5 },
-  emailRow:   { flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 12 },
-  heroEmail:  { fontSize: 12, color: C.goldDark, fontStyle: 'italic' },
-
+  heroName: {
+    fontSize: 24,
+    fontWeight: "600",
+    color: C.deepBrown,
+    letterSpacing: 0.5,
+    marginBottom: 5
+  },
+  emailRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    marginBottom: 12
+  },
+  heroEmail: {
+    fontSize: 12,
+    color: C.warmBrown
+  },
   devoteeBadge: {
-    backgroundColor: 'rgba(201,162,39,0.12)', borderWidth: 1, borderColor: C.goldBorder,
-    borderRadius: 20, paddingHorizontal: 16, paddingVertical: 6, marginBottom: 20,
+    backgroundColor: C.goldPale,
+    borderWidth: 1,
+    borderColor: C.goldBorder,
+    borderRadius: 20,
+    paddingHorizontal: 16,
+    paddingVertical: 6,
+    marginBottom: 20
   },
-  devoteeBadgeText: { fontSize: 11, fontWeight: '700', color: C.goldLight, letterSpacing: 0.5 },
-
+  devoteeBadgeText: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: C.goldDark,
+    letterSpacing: 0.5
+  },
   statsRow: {
     flexDirection: 'row',
-    backgroundColor: 'rgba(201,162,39,0.08)',
-    borderRadius: 18, borderWidth: 1, borderColor: 'rgba(201,162,39,0.2)',
-    paddingVertical: 14, paddingHorizontal: 10,
-    width: '88%', alignItems: 'center',
+    backgroundColor: C.goldPale,
+    borderRadius: 18,
+    borderWidth: 1,
+    borderColor: C.goldBorder,
+    paddingVertical: 14,
+    paddingHorizontal: 10,
+    width: '88%',
+    alignItems: 'center'
   },
-  statCard:          { flex: 1, alignItems: 'center', gap: 3 },
-  statCardIcon:      { fontSize: 18, marginBottom: 2 },
-  statCardValue:     { fontSize: 16, fontWeight: '800', color: C.goldLight, letterSpacing: 0.5 },
-  statCardLabel:     { fontSize: 9, color: C.goldDark, letterSpacing: 0.5, fontWeight: '600' },
-  statsVertDivider:  { width: 1, height: 38, backgroundColor: 'rgba(201,162,39,0.22)' },
+  statCard: {
+    flex: 1,
+    alignItems: 'center',
+    gap: 3
+  },
+  statCardIcon: {
+    fontSize: 18,
+    marginBottom: 2
+  },
+  statCardValue: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: C.deepBrown,
+    letterSpacing: 0.5
+  },
+  statCardLabel: {
+    fontSize: 12,
+    color: C.goldDark,
+    letterSpacing: 0.5,
+    fontWeight: '600'
+  },
+  statsVertDivider: {
+    width: 1,
+    height: 38,
+    backgroundColor: C.goldBorder
+  }
 });

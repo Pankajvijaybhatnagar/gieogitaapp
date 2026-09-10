@@ -1,9 +1,9 @@
 import joinGieoGitaServices from '@/lib/services/joinGieoGitaServices';
+import { useAppAlert } from '@/context/AppAlertContext';
 import { Ionicons } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
-  Alert,
   KeyboardAvoidingView,
   Modal,
   Platform,
@@ -15,24 +15,19 @@ import {
   View,
 } from 'react-native';
 
-const COLORS = {
-  primary: '#6E3F1F',
-  secondary: '#A8692D',
-  background: '#FFF9F2',
-  text: '#3F2A1F',
-  muted: '#8B7566',
-};
+import { COLORS, RGB } from '@/constants/brandColors';
+import { hairline, radii, spacing, type } from '@/constants/theme';
 
 const Input = ({ label, icon, ...props }) => (
   <View style={styles.inputGroup}>
     <Text style={styles.label}>{label}</Text>
 
     <View style={styles.inputContainer}>
-      <Ionicons name={icon} size={18} color={COLORS.secondary} />
+      <Ionicons name={icon} size={18} color={COLORS.goldDark} />
 
       <TextInput
         style={styles.input}
-        placeholderTextColor="#B4A397"
+        placeholderTextColor={`rgba(${RGB.deepBrown}, 0.4)`}
         {...props}
       />
     </View>
@@ -45,6 +40,7 @@ export default function EditProfileModal({
   onClose,
   onUpdated,
 }) {
+  const { success, error } = useAppAlert();
   const [email, setEmail] = useState('');
   const [dob, setDob] = useState('');
   const [anniversary, setAnniversary] = useState('');
@@ -72,7 +68,7 @@ export default function EditProfileModal({
       const response = await joinGieoGitaServices.updateProfile(payload);
 
       if (response?.success || response?.status) {
-        Alert.alert('Success', 'Profile updated successfully.');
+        success('Success', 'Profile updated successfully.');
 
         onClose();
 
@@ -81,14 +77,14 @@ export default function EditProfileModal({
         return;
       }
 
-      Alert.alert(
+      error(
         'Update Failed',
         response?.error || response?.message || 'Unable to update profile.',
       );
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      console.log(err);
 
-      Alert.alert('Error', error?.message || 'Unable to update profile.');
+      error('Error', err?.message || 'Unable to update profile.');
     } finally {
       setLoading(false);
     }
@@ -116,7 +112,7 @@ export default function EditProfileModal({
             </View>
 
             <Pressable onPress={onClose} style={styles.closeButton}>
-              <Ionicons name="close" size={21} color={COLORS.text} />
+              <Ionicons name="close" size={21} color={COLORS.deepBrown} />
             </Pressable>
           </View>
 
@@ -154,13 +150,13 @@ export default function EditProfileModal({
               disabled={loading}
               style={[styles.saveButton, loading && styles.disabled]}>
               {loading ? (
-                <ActivityIndicator color="#FFF" />
+                <ActivityIndicator color={COLORS.white} />
               ) : (
                 <>
                   <Ionicons
                     name="checkmark-circle-outline"
                     size={20}
-                    color="#FFF"
+                    color={COLORS.white}
                   />
 
                   <Text style={styles.saveText}>Save Changes</Text>
@@ -177,109 +173,95 @@ export default function EditProfileModal({
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-end'
   },
-
   backdrop: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(33,20,12,0.55)',
+    backgroundColor: `rgba(${RGB.deepBrown}, 0.55)`
   },
-
   sheet: {
     maxHeight: '82%',
-    backgroundColor: COLORS.background,
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
-    paddingHorizontal: 20,
-    paddingBottom: 28,
+    backgroundColor: COLORS.creamDark,
+    borderTopLeftRadius: radii.xl + 6,
+    borderTopRightRadius: radii.xl + 6,
+    paddingHorizontal: spacing.lg - 4,
+    paddingBottom: spacing.lg + 4
   },
-
   handle: {
     width: 48,
     height: 5,
-    borderRadius: 10,
-    backgroundColor: '#D7C8BD',
+    borderRadius: radii.sm,
+    backgroundColor: hairline,
     alignSelf: 'center',
-    marginVertical: 10,
+    marginVertical: spacing.sm + 2
   },
-
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 22,
+    marginBottom: spacing.lg - 2
   },
-
   eyebrow: {
-    color: COLORS.secondary,
-    fontSize: 9,
-    fontWeight: '800',
-    letterSpacing: 1.5,
+    color: COLORS.goldDark,
+    fontSize: 10,
+    fontWeight: "600",
+    letterSpacing: 1.5
   },
-
   title: {
-    color: COLORS.text,
+    ...type.title,
     fontSize: 23,
-    fontWeight: '800',
-    marginTop: 3,
+    color: COLORS.deepBrown,
+    marginTop: 3
   },
-
   closeButton: {
     width: 40,
     height: 40,
-    borderRadius: 20,
-    backgroundColor: '#EFE2D5',
+    borderRadius: radii.pill,
+    backgroundColor: COLORS.cream,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-
   inputGroup: {
-    marginBottom: 16,
+    marginBottom: spacing.md
   },
-
   label: {
-    color: COLORS.text,
+    color: COLORS.deepBrown,
     fontSize: 12,
     fontWeight: '700',
-    marginBottom: 7,
+    marginBottom: spacing.sm - 1
   },
-
   inputContainer: {
     minHeight: 54,
     borderWidth: 1,
-    borderColor: '#E4D4C6',
-    backgroundColor: '#FFF',
-    borderRadius: 15,
+    borderColor: hairline,
+    backgroundColor: COLORS.cream,
+    borderRadius: 14,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 15,
+    paddingHorizontal: spacing.md - 1
   },
-
   input: {
     flex: 1,
-    marginLeft: 10,
-    color: COLORS.text,
-    fontSize: 14,
+    marginLeft: spacing.sm + 2,
+    color: COLORS.deepBrown,
+    fontSize: 15
   },
-
   saveButton: {
-    marginTop: 8,
-    backgroundColor: COLORS.primary,
+    marginTop: spacing.sm,
+    backgroundColor: COLORS.richBrown,
     borderRadius: 16,
-    minHeight: 54,
+    minHeight: 52,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 8,
+    gap: spacing.sm
   },
-
   saveText: {
-    color: '#FFF',
+    color: COLORS.white,
     fontSize: 14,
-    fontWeight: '800',
+    fontWeight: "600"
   },
-
   disabled: {
-    opacity: 0.65,
-  },
+    opacity: 0.65
+  }
 });

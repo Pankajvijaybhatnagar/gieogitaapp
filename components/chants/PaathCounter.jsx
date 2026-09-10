@@ -1,3 +1,4 @@
+
 // ─────────────────────────────────────────────────────────────────────────────
 // PAATH COUNTER
 // One Minute Chant
@@ -18,30 +19,8 @@ import {
 import { useAppAlert } from '@/context/AppAlertContext';
 import { useAuth } from '@/context/AuthContext';
 import chantServices from '@/lib/services/chantServices';
-
-// ─────────────────────────────────────────────────────────────────────────────
-// COLORS
-// ─────────────────────────────────────────────────────────────────────────────
-
-const COLORS = {
-  deepBrown: '#2C1A0A',
-  warmBrown: '#4A2C0D',
-  richBrown: '#3D2010',
-
-  gold: '#C9A227',
-  goldLight: '#E8C55A',
-  goldDark: '#8B6914',
-
-  cream: '#FDF6E3',
-  creamDark: '#F5E6C8',
-
-  saffron: '#E8721C',
-  saffronLight: '#F4A44A',
-
-  white: '#FFFFFF',
-
-  green: '#72B44C',
-};
+import { COLORS, RGB } from '@/constants/brandColors';
+import { hairline, radii } from '@/constants/theme';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // SECTION LABEL
@@ -396,7 +375,7 @@ export function PaathCounter({ todayPaath = 0, onSubmit }) {
             <FontAwesome
               name="sign-in"
               size={16}
-              color={COLORS.deepBrown}
+              color={COLORS.white}
               style={styles.loginButtonIcon}
             />
 
@@ -420,7 +399,7 @@ export function PaathCounter({ todayPaath = 0, onSubmit }) {
       {/* ───────────────────────────────────────────────────────────────────── */}
 
       <View style={styles.todayBadge}>
-        <Text style={styles.todayBadgeText}>Today's submitted:</Text>
+        <Text style={styles.todayBadgeText}>Today&apos;s submitted:</Text>
 
         <Text style={styles.todayBadgeNumber}>{todayPaath}</Text>
       </View>
@@ -529,7 +508,7 @@ export function PaathCounter({ todayPaath = 0, onSubmit }) {
                   <FontAwesome
                     name="check-circle"
                     size={16}
-                    color={COLORS.deepBrown}
+                    color={COLORS.white}
                     style={styles.submitIcon}
                   />
 
@@ -550,382 +529,250 @@ export function PaathCounter({ todayPaath = 0, onSubmit }) {
 
 const styles = StyleSheet.create({
   wrapper: {
-    marginHorizontal: 16,
-
-    backgroundColor: COLORS.warmBrown,
-
-    borderRadius: 20,
-
-    padding: 18,
-
+    marginHorizontal: 24,
+    backgroundColor: COLORS.white,
+    borderRadius: 24,
+    padding: 20,
     borderWidth: 1,
-
-    borderColor: 'rgba(201,162,39,0.35)',
-
+    borderColor: hairline,
     overflow: 'hidden',
+    shadowOpacity: 0.045,
+    elevation: 2
   },
-
   // ───────────────────────────────────────────────────────────────────────────
   // SECTION LABEL
   // ───────────────────────────────────────────────────────────────────────────
 
   sectionLabelRow: {
     flexDirection: 'row',
-
     alignItems: 'center',
-
-    marginBottom: 14,
+    marginBottom: 14
   },
-
   sectionLabelLine: {
     flex: 1,
-
     height: 1,
-
-    backgroundColor: COLORS.goldDark,
-
-    opacity: 0.3,
+    backgroundColor: hairline
   },
-
   sectionLabelText: {
-    fontSize: 9,
-
+    fontSize: 12,
     letterSpacing: 2,
-
-    fontWeight: '800',
-
+    fontWeight: "600",
     color: COLORS.goldDark,
-
     marginHorizontal: 10,
-
-    textAlign: 'center',
+    textAlign: 'center'
   },
-
   // ───────────────────────────────────────────────────────────────────────────
   // TODAY
   // ───────────────────────────────────────────────────────────────────────────
 
   todayBadge: {
     flexDirection: 'row',
-
     alignItems: 'center',
-
     alignSelf: 'center',
-
-    backgroundColor: 'rgba(201,162,39,0.12)',
-
-    borderWidth: 1,
-
-    borderColor: 'rgba(201,162,39,0.3)',
-
-    borderRadius: 20,
-
+    backgroundColor: '#EAF0E8',
+    borderWidth: 0,
+    borderColor: hairline,
+    borderRadius: radii.pill,
     paddingHorizontal: 16,
-
-    paddingVertical: 5,
-
-    marginBottom: 16,
+    paddingVertical: 8,
+    marginBottom: 16
   },
-
   todayBadgeText: {
     fontSize: 12,
-
-    color: COLORS.creamDark,
+    color: COLORS.warmBrown
   },
-
   todayBadgeNumber: {
     fontSize: 14,
-
-    fontWeight: '800',
-
-    color: COLORS.goldLight,
-
-    marginLeft: 4,
+    fontWeight: "600",
+    color: '#3E8E5A',
+    marginLeft: 4
   },
-
   // ───────────────────────────────────────────────────────────────────────────
   // MAIN ROW
   // ───────────────────────────────────────────────────────────────────────────
 
   mainRow: {
-    flexDirection: 'row',
-
+    flexDirection: "column",
     alignItems: 'center',
+    gap: 24
   },
-
   // ───────────────────────────────────────────────────────────────────────────
   // COUNTER
   // ───────────────────────────────────────────────────────────────────────────
 
   counterCol: {
-    width: 90,
-
+    width: "100%",
     alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
+    gap: 18
   },
-
   arrowBtn: {
-    width: 44,
-
-    height: 44,
-
-    borderRadius: 22,
-
-    backgroundColor: 'rgba(201,162,39,0.15)',
-
-    borderWidth: 1.5,
-
+    width: 46,
+    height: 46,
+    borderRadius: 23,
+    backgroundColor: COLORS.creamDark,
+    borderWidth: 0,
     borderColor: COLORS.gold,
-
     alignItems: 'center',
-
     justifyContent: 'center',
-
-    marginVertical: 4,
+    marginVertical: 4
   },
-
   arrowText: {
     fontSize: 16,
-
-    color: COLORS.goldLight,
-
-    fontWeight: '800',
+    color: COLORS.goldDark,
+    fontWeight: "600"
   },
-
   counterBox: {
-    width: 90,
-
-    height: 130,
-
-    backgroundColor: COLORS.deepBrown,
-
-    borderRadius: 16,
-
-    borderWidth: 2.5,
-
+    width: 148,
+    height: 148,
+    backgroundColor: COLORS.richBrown,
+    borderRadius: 74,
+    borderWidth: 1,
     borderColor: COLORS.gold,
-
     alignItems: 'center',
-
     justifyContent: 'center',
-
-    marginVertical: 4,
+    marginVertical: 4
   },
-
   bookIcon: {
     fontSize: 22,
-
-    marginBottom: 4,
+    marginBottom: 4
   },
-
   counterText: {
-    fontSize: 44,
-
-    fontWeight: '800',
-
-    color: COLORS.goldLight,
-
-    lineHeight: 50,
+    fontSize: 52,
+    fontWeight: "400",
+    color: "#FFFFFF",
+    lineHeight: 62
   },
-
   swipeHint: {
-    fontSize: 9,
-
-    color: COLORS.goldDark,
-
+    fontSize: 12,
+    color: COLORS.goldLight,
     letterSpacing: 0.5,
-
-    marginTop: 3,
+    marginTop: 3
   },
-
   // ───────────────────────────────────────────────────────────────────────────
   // RIGHT COLUMN
   // ───────────────────────────────────────────────────────────────────────────
 
   rightCol: {
-    flex: 1,
-
-    marginLeft: 16,
+    flex: 0,
+    marginLeft: 0,
+    width: "100%"
   },
-
   // ───────────────────────────────────────────────────────────────────────────
   // INSTRUCTIONS
   // ───────────────────────────────────────────────────────────────────────────
 
   instructionsBox: {
-    backgroundColor: 'rgba(201,162,39,0.08)',
-
-    borderRadius: 14,
-
-    padding: 14,
-
+    backgroundColor: "#FCFAF7",
+    borderRadius: 16,
+    padding: 18,
     borderWidth: 1,
-
-    borderColor: 'rgba(201,162,39,0.2)',
-
-    marginBottom: 14,
+    borderColor: hairline,
+    marginBottom: 14
   },
-
   instrTitle: {
     fontSize: 12,
-
-    fontWeight: '800',
-
-    color: COLORS.goldLight,
-
+    fontWeight: "600",
+    color: COLORS.deepBrown,
     marginBottom: 8,
-
-    letterSpacing: 0.3,
+    letterSpacing: 0.3
   },
-
   instrRow: {
     flexDirection: 'row',
-
     alignItems: 'flex-start',
-
-    marginBottom: 7,
+    marginBottom: 7
   },
-
   instrDot: {
     width: 5,
-
     height: 5,
-
     borderRadius: 3,
-
     backgroundColor: COLORS.saffron,
-
     marginTop: 5,
-
-    marginRight: 7,
+    marginRight: 7
   },
-
   instrText: {
     flex: 1,
-
-    fontSize: 11,
-
-    color: COLORS.creamDark,
-
-    lineHeight: 16,
+    fontSize: 13,
+    color: COLORS.warmBrown,
+    lineHeight: 21
   },
-
   // ───────────────────────────────────────────────────────────────────────────
   // SUBMIT BUTTON
   // ───────────────────────────────────────────────────────────────────────────
 
   submitBtn: {
-    backgroundColor: COLORS.gold,
-
-    borderRadius: 22,
-
+    backgroundColor: COLORS.richBrown,
+    borderRadius: 16,
     paddingVertical: 13,
-
     flexDirection: 'row',
-
     alignItems: 'center',
-
     justifyContent: 'center',
+    minHeight: 54
   },
-
   submitBtnDisabled: {
-    opacity: 0.65,
+    opacity: 0.65
   },
-
   submitIcon: {
-    marginRight: 6,
+    marginRight: 6
   },
-
   submitBtnText: {
-    color: COLORS.deepBrown,
-
+    color: COLORS.white,
     fontSize: 15,
-
-    fontWeight: '800',
-
-    letterSpacing: 0.3,
+    fontWeight: "600",
+    letterSpacing: 0.3
   },
-
   disabledButton: {
-    opacity: 0.5,
+    opacity: 0.5
   },
-
   // ───────────────────────────────────────────────────────────────────────────
   // LOGIN
   // ───────────────────────────────────────────────────────────────────────────
 
   loginContainer: {
     alignItems: 'center',
-
-    backgroundColor: 'rgba(201,162,39,0.08)',
-
-    borderRadius: 16,
-
+    backgroundColor: COLORS.creamDark,
+    borderRadius: radii.lg,
     borderWidth: 1,
-
-    borderColor: 'rgba(201,162,39,0.22)',
-
+    borderColor: hairline,
     paddingVertical: 24,
-
-    paddingHorizontal: 18,
+    paddingHorizontal: 18
   },
-
   loginIcon: {
     fontSize: 30,
-
-    marginBottom: 8,
+    marginBottom: 8
   },
-
   loginTitle: {
     fontSize: 16,
-
-    fontWeight: '800',
-
-    color: COLORS.goldLight,
-
-    textAlign: 'center',
-
-    marginBottom: 5,
-  },
-
-  loginDescription: {
-    fontSize: 11,
-
-    lineHeight: 17,
-
-    color: COLORS.creamDark,
-
-    textAlign: 'center',
-
-    marginBottom: 16,
-  },
-
-  loginButton: {
-    backgroundColor: COLORS.gold,
-
-    borderRadius: 22,
-
-    paddingVertical: 12,
-
-    paddingHorizontal: 28,
-
-    flexDirection: 'row',
-
-    alignItems: 'center',
-
-    justifyContent: 'center',
-  },
-
-  loginButtonIcon: {
-    marginRight: 7,
-  },
-
-  loginButtonText: {
+    fontWeight: "600",
     color: COLORS.deepBrown,
-
-    fontSize: 14,
-
-    fontWeight: '800',
-
-    letterSpacing: 0.3,
+    textAlign: 'center',
+    marginBottom: 5
   },
+  loginDescription: {
+    fontSize: 12,
+    lineHeight: 18,
+    color: COLORS.warmBrown,
+    textAlign: 'center',
+    marginBottom: 16
+  },
+  loginButton: {
+    backgroundColor: COLORS.richBrown,
+    borderRadius: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 28,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: 52
+  },
+  loginButtonIcon: {
+    marginRight: 7
+  },
+  loginButtonText: {
+    color: COLORS.white,
+    fontSize: 14,
+    fontWeight: "600",
+    letterSpacing: 0.3
+  }
 });

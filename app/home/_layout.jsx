@@ -1,169 +1,67 @@
 import { FontAwesome } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
-import { Link, usePathname } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
 import { Drawer } from 'expo-router/drawer';
-import {
-  StatusBar,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { StatusBar, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-
 import CustomDrawerContent from '@/components/navigation/CustomDrawerContent';
 import SharedTabBar from '@/components/navigation/SharedTabBar';
+import { COLORS, RGB } from '@/constants/brandColors';
+import { radii, shadow, spacing } from '@/constants/theme';
 
-// ─────────────────────────────────────────────────────────────
-// COLORS
-// ─────────────────────────────────────────────────────────────
-const COLORS = {
-  deepBrown: '#2C1A0A',
-  gold: '#C9A227',
-  goldLight: '#E8C55A',
-  goldDark: '#8B6914',
-  saffron: '#E8721C',
-};
+function HomeHeader({ navigation }) {
+  const router = useRouter();
 
-// ─────────────────────────────────────────────────────────────
-// HEADER TITLE
-// ─────────────────────────────────────────────────────────────
-function HeaderTitle() {
   return (
-    <View style={headerStyles.container}>
-      <Text style={headerStyles.big}>Gieo Gita</Text>
+    // Shadow lives on this outer, unclipped layer — `overflow: hidden`
+    // (needed below to clip the blur to the rounded bottom corners) would
+    // otherwise suppress it.
+    <View style={styles.headerShadowWrap}>
+      <SafeAreaView edges={['top']} style={styles.header}>
+        <BlurView intensity={65} tint="light" style={StyleSheet.absoluteFill} />
+        <View style={[StyleSheet.absoluteFill, styles.headerTint]} />
 
-      <Text style={headerStyles.small}>
-        Eighteen verse Gita recitation campaign
-      </Text>
+        <View style={styles.topRow}>
+          <TouchableOpacity accessibilityRole="button" accessibilityLabel="Open menu" onPress={() => navigation.toggleDrawer()} style={styles.menuButton}>
+            <View style={styles.menuBar} />
+            <View style={[styles.menuBar, styles.menuBarShort]} />
+            <View style={styles.menuBar} />
+          </TouchableOpacity>
+          <View style={styles.brand} />
+          {__DEV__ && <Link href="/_sitemap" style={styles.sitemap}>S</Link>}
+          <TouchableOpacity
+            accessibilityRole="button"
+            accessibilityLabel="Notifications"
+            style={styles.iconButton}
+            onPress={() => router.push('/home/notifications')}>
+            <FontAwesome name="bell-o" size={18} color={COLORS.richBrown} />
+            <View style={styles.notificationDot} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            accessibilityRole="button"
+            accessibilityLabel="Search"
+            style={styles.iconButton}
+            onPress={() => router.push('/home/search')}>
+            <FontAwesome name="search" size={17} color={COLORS.richBrown} />
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
     </View>
   );
 }
 
-// ─────────────────────────────────────────────────────────────
-// HOME LAYOUT
-// ─────────────────────────────────────────────────────────────
 export default function HomeLayout() {
-  const pathname = usePathname();
-
-  const isProfile = pathname.includes('/profile');
-
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <StatusBar
-        barStyle={isProfile ? 'dark-content' : 'light-content'}
-        backgroundColor={isProfile ? '#FFFFFF' : COLORS.deepBrown}
-      />
-
-      <View
-        style={{
-          flex: 1,
-          backgroundColor: 'transparent',
-        }}>
-        {/* =====================================================
-            DRAWER AREA
-        ===================================================== */}
-        <View style={{ flex: 1 }}>
-          <Drawer
-            drawerContent={props => <CustomDrawerContent {...props} />}
-
-            screenOptions={({ navigation }) => ({
-              headerShown: !isProfile,
-
-              // =================================================
-              // HEADER
-              // =================================================
-              headerStyle: {
-                backgroundColor: 'transparent',
-                borderBottomWidth: 1.5,
-                borderBottomColor: COLORS.gold,
-                elevation: 0,
-                shadowOpacity: 0,
-              },
-
-              headerBackground: () => (
-                <BlurView
-                  intensity={35}
-                  tint="dark"
-                  style={{
-                    flex: 1,
-                    backgroundColor: `${COLORS.deepBrown}E6`,
-                  }}
-                />
-              ),
-
-              headerTintColor: COLORS.goldLight,
-
-              headerTitleAlign: 'center',
-
-              // IMPORTANT:
-              // Pass the component directly instead of creating
-              // another anonymous component.
-              headerTitle: HeaderTitle,
-
-              // =================================================
-              // LEFT MENU BUTTON
-              // =================================================
-              headerLeft: () => (
-                <TouchableOpacity
-                  style={headerStyles.menuBtn}
-                  activeOpacity={0.8}
-                  onPress={() => navigation.toggleDrawer()}>
-                  <FontAwesome name="bars" size={17} color={COLORS.goldLight} />
-                </TouchableOpacity>
-              ),
-
-              // =================================================
-              // RIGHT SIDE
-              // =================================================
-              headerRight: () => (
-                <View style={headerStyles.rightRow}>
-                  {__DEV__ && (
-                    <Link href="/_sitemap" style={{ color: '#FFFFFF' }}>
-                      S
-                    </Link>
-                  )}
-
-                  <TouchableOpacity
-                    style={headerStyles.iconBtn}
-                    activeOpacity={0.8}>
-                    <FontAwesome
-                      name="bell"
-                      size={15}
-                      color={COLORS.goldLight}
-                    />
-
-                    <View style={headerStyles.notifDot} />
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
-                    style={headerStyles.iconBtn}
-                    activeOpacity={0.8}>
-                    <FontAwesome
-                      name="search"
-                      size={15}
-                      color={COLORS.goldLight}
-                    />
-                  </TouchableOpacity>
-                </View>
-              ),
-
-              // =================================================
-              // DRAWER PANEL
-              // =================================================
-              drawerStyle: {
-                backgroundColor: '#FDF6E3',
-                width: 300,
-              },
-
-              drawerActiveTintColor: COLORS.goldLight,
-              drawerInactiveTintColor: '#4A2C0D',
-              drawerActiveBackgroundColor: 'rgba(201,162,39,0.1)',
-            })}>
-            {/* =================================================
-                REGISTERED DRAWER SCREENS
-            ================================================= */}
-
+    <GestureHandlerRootView style={styles.screen}>
+      <StatusBar barStyle="dark-content" backgroundColor={COLORS.cream} />
+      <View style={styles.screen}>
+        <Drawer drawerContent={props => <CustomDrawerContent {...props} />}
+          screenOptions={{ headerShown: true, header: props => <HomeHeader {...props} />,
+            sceneStyle: { backgroundColor: COLORS.cream },
+            drawerStyle: { backgroundColor: COLORS.cream, width: 304 },
+            drawerActiveTintColor: COLORS.saffron, drawerInactiveTintColor: COLORS.warmBrown,
+            drawerActiveBackgroundColor: `rgba(${RGB.saffron},0.12)` }}>
             <Drawer.Screen
               name="(tabs)"
               options={{
@@ -235,90 +133,59 @@ export default function HomeLayout() {
                 title: 'Help',
               }}
             />
-          </Drawer>
-        </View>
 
-        {/* =====================================================
-            TAB BAR
-            ===================================================== */}
+        </Drawer>
         <SharedTabBar />
       </View>
     </GestureHandlerRootView>
   );
 }
-
-// ─────────────────────────────────────────────────────────────
-// HEADER STYLES
-// ─────────────────────────────────────────────────────────────
-const headerStyles = StyleSheet.create({
-  container: {
+const styles = StyleSheet.create({
+  screen: { flex: 1, backgroundColor: COLORS.cream },
+  headerShadowWrap: {
+    borderBottomLeftRadius: radii.xl,
+    borderBottomRightRadius: radii.xl,
+    ...shadow.card,
+  },
+  header: {
+    overflow: 'hidden',
+    paddingHorizontal: spacing.sm + 4,
+    paddingBottom: spacing.xs,
+    borderBottomLeftRadius: radii.xl,
+    borderBottomRightRadius: radii.xl,
+  },
+  // Frosted glass tint over the blur — same treatment as the bottom tab
+  // bar, so the header reads as genuinely glassy rather than flat white.
+  headerTint: {
+    backgroundColor: `rgba(${RGB.cream},0.38)`,
+  },
+  topRow: { flexDirection: 'row', alignItems: 'center', minHeight: 46, gap: 2 },
+  iconButton: {
+    width: 42,
+    height: 42,
     alignItems: 'center',
     justifyContent: 'center',
   },
-
-  big: {
-    fontSize: 16,
-    fontWeight: '800',
-    color: COLORS.goldLight,
-    letterSpacing: 0.8,
-  },
-
-  small: {
-    fontSize: 9,
-    color: COLORS.goldDark,
-    letterSpacing: 0.4,
-    marginTop: 1,
-    fontStyle: 'italic',
-  },
-
-  menuBtn: {
-    marginLeft: 16,
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-
-    backgroundColor: 'rgba(201,162,39,0.12)',
-
-    borderWidth: 1,
-    borderColor: 'rgba(201,162,39,0.28)',
-
+  // Custom asymmetric bar mark instead of a stock hamburger glyph.
+  menuButton: {
+    width: 42,
+    height: 42,
     alignItems: 'center',
     justifyContent: 'center',
+    gap: 4,
   },
-
-  rightRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginRight: 12,
-    gap: 8,
+  menuBar: {
+    width: 18,
+    height: 2,
+    borderRadius: 1,
+    backgroundColor: COLORS.richBrown,
   },
-
-  iconBtn: {
-    width: 34,
-    height: 34,
-    borderRadius: 17,
-
-    backgroundColor: 'rgba(201,162,39,0.12)',
-
-    borderWidth: 1,
-    borderColor: 'rgba(201,162,39,0.28)',
-
-    alignItems: 'center',
-    justifyContent: 'center',
+  menuBarShort: {
+    width: 11,
+    alignSelf: 'flex-start',
+    marginLeft: 12,
   },
-
-  notifDot: {
-    position: 'absolute',
-    top: 6,
-    right: 6,
-
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-
-    backgroundColor: COLORS.saffron,
-
-    borderWidth: 1,
-    borderColor: COLORS.deepBrown,
-  },
+  brand: { flex: 1 },
+  sitemap: { color: COLORS.warmBrown, fontSize: 10, padding: 4 },
+  notificationDot: { width: 8, height: 8, borderRadius: 4, borderWidth: 1.5, borderColor: COLORS.cream, backgroundColor: COLORS.saffron, position: 'absolute', top: 6, right: 8 },
 });

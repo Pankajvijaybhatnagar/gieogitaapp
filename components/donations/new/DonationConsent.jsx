@@ -1,7 +1,10 @@
+
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { COLORS } from '@/constants/brandColors';
+import { hairline, radii } from '@/constants/theme';
 
 const Checkbox = ({ checked, onPress }) => {
   return (
@@ -9,7 +12,7 @@ const Checkbox = ({ checked, onPress }) => {
       style={[styles.checkbox, checked && styles.checkboxActive]}
       onPress={onPress}
       activeOpacity={0.8}>
-      {checked && <Ionicons name="checkmark" size={13} color="#FFFFFF" />}
+      {checked && <Ionicons name="checkmark" size={13} color={COLORS.white} />}
     </TouchableOpacity>
   );
 };
@@ -29,7 +32,7 @@ const DonationConsent = ({
       <View style={styles.infoCard}>
         <View style={styles.infoHeader}>
           <View style={styles.infoIcon}>
-            <Ionicons name="receipt-outline" size={17} color="#704025" />
+            <Ionicons name="receipt-outline" size={17} color={COLORS.saffron} />
           </View>
 
           <Text style={styles.infoTitle}>Donation & 80G Information</Text>
@@ -37,7 +40,7 @@ const DonationConsent = ({
 
         <Text style={styles.infoText}>
           Eligible donations may qualify for tax benefits under Section 80G,
-          subject to applicable laws and GIEO GITA's eligibility for the
+          subject to applicable laws and GIEO GITA&apos;s eligibility for the
           relevant donation.
         </Text>
 
@@ -93,93 +96,83 @@ const styles = StyleSheet.create({
   infoCard: {
     marginBottom: 15,
     padding: 13,
-    borderRadius: 14,
+    borderRadius: 24,
     borderWidth: 1,
-    borderColor: '#E5D4C5',
-    backgroundColor: '#F8EFE7',
+    borderColor: hairline,
+    backgroundColor: COLORS.white,
+    shadowOpacity: 0.045,
+    elevation: 2
   },
-
   infoHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: 8
   },
-
   infoIcon: {
     width: 30,
     height: 30,
     borderRadius: 10,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.cream,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-
   infoTitle: {
     marginLeft: 8,
-    fontSize: 11.5,
+    fontSize: 12,
     fontWeight: '700',
-    color: '#553420',
+    color: COLORS.deepBrown
   },
-
   infoText: {
     marginTop: 5,
-    fontSize: 9.5,
-    lineHeight: 14,
-    color: '#826A57',
+    fontSize: 12,
+    lineHeight: 18,
+    color: COLORS.warmBrown
   },
-
   consentRow: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    marginBottom: 12,
+    marginBottom: 12
   },
-
   checkbox: {
     width: 20,
     height: 20,
     marginTop: 1,
     borderRadius: 6,
     borderWidth: 1,
-    borderColor: '#CDB9A8',
-    backgroundColor: '#FFFFFF',
+    borderColor: hairline,
+    backgroundColor: COLORS.cream,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-
   checkboxActive: {
-    backgroundColor: '#704025',
-    borderColor: '#704025',
+    backgroundColor: COLORS.saffron,
+    borderColor: COLORS.saffron
   },
-
   consentContent: {
     flex: 1,
-    marginLeft: 9,
+    marginLeft: 9
   },
-
   consentTitle: {
-    fontSize: 10.5,
+    fontSize: 12,
     fontWeight: '700',
-    color: '#573925',
+    color: COLORS.deepBrown
   },
-
   consentText: {
     marginTop: 2,
-    fontSize: 9,
-    lineHeight: 13,
-    color: '#927863',
+    fontSize: 12,
+    lineHeight: 18,
+    color: COLORS.warmBrown
   },
-
   legalText: {
     flex: 1,
     marginLeft: 9,
-    fontSize: 9.5,
-    lineHeight: 15,
-    color: '#735A48',
+    fontSize: 12,
+    lineHeight: 18,
+    color: COLORS.warmBrown
   },
-
   link: {
-    color: '#704025',
+    color: COLORS.saffron,
     fontWeight: '700',
-    textDecorationLine: 'underline',
-  },
+    textDecorationLine: 'underline'
+  }
 });

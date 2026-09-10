@@ -1,15 +1,14 @@
+import { DESIGN } from '@/constants/design';
+import { FontAwesome } from '@expo/vector-icons';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { hairline, spacing, type } from '@/constants/theme';
 import { COLORS } from './constant';
 
-// ─── GOLD DIVIDER ─────────────────────────────────────────────────────────────
+// ─── DIVIDER ──────────────────────────────────────────────────────────────────
+// A quiet hairline with room to breathe — no ornamental diamond, no gold.
+// Depth/rhythm comes from spacing, not decoration.
 export function GoldDivider() {
-  return (
-    <View style={styles.dividerRow}>
-      <View style={styles.dividerLine} />
-      <View style={styles.dividerDiamond} />
-      <View style={styles.dividerLine} />
-    </View>
-  );
+  return <View style={styles.divider} />;
 }
 
 // ─── SECTION HEADER ───────────────────────────────────────────────────────────
@@ -17,17 +16,22 @@ export function SectionHeader({
   title,
   accent,
   onSeeAll,
-  seeAllLabel = 'See all »',
+  seeAllLabel = 'See All',
 }) {
   return (
     <View style={styles.sectionHeader}>
-      <Text style={styles.sectionTitle}>
-        {title}{' '}
+      <Text style={styles.sectionTitle} numberOfLines={1}>
+        {title}
+        {title && accent ? ' ' : ''}
         {accent ? <Text style={styles.sectionAccent}>{accent}</Text> : null}
       </Text>
       {onSeeAll && (
-        <TouchableOpacity onPress={onSeeAll}>
-          {/* <Text style={styles.seeAll}>{seeAllLabel}</Text> */}
+        <TouchableOpacity
+          style={styles.seeAllBtn}
+          onPress={onSeeAll}
+          hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
+          <Text style={styles.seeAll}>{seeAllLabel}</Text>
+          <FontAwesome name="chevron-right" size={11} color={COLORS.saffron} />
         </TouchableOpacity>
       )}
     </View>
@@ -35,43 +39,46 @@ export function SectionHeader({
 }
 
 const styles = StyleSheet.create({
-  dividerRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginHorizontal: 20,
-    marginVertical: 12,
-  },
-  dividerLine: {
-    flex: 1,
+  divider: {
     height: 1,
-    backgroundColor: COLORS.goldDark,
-    opacity: 0.35,
-  },
-  dividerDiamond: {
-    width: 7,
-    height: 7,
-    backgroundColor: COLORS.gold,
-    transform: [{ rotate: '45deg' }],
-    marginHorizontal: 8,
+    backgroundColor: DESIGN.colors.border,
+    marginHorizontal: 24,
+    marginVertical: spacing.sm
   },
   sectionHeader: {
     flexDirection: 'row',
-    alignItems: 'baseline',
+    alignItems: "center",
     justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    paddingTop: 6,
-    paddingBottom: 10,
+    paddingHorizontal: 24,
+    paddingTop: 8,
+    paddingBottom: 18,
+    gap: 12
   },
   sectionTitle: {
-    fontSize: 15,
-    fontWeight: '800',
-    color: COLORS.deepBrown,
-    letterSpacing: 0.3,
+    ...type.title,
+    color: DESIGN.colors.ink,
+    flexShrink: 1,
+    fontFamily: DESIGN.fonts.editorial,
+    fontWeight: "400",
+    letterSpacing: -0.4,
+    fontSize: 25,
+    lineHeight: 33
   },
-  sectionAccent: { color: COLORS.goldDark },
+  sectionAccent: {
+    color: DESIGN.colors.plum
+  },
+  seeAllBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 7,
+    paddingLeft: spacing.sm,
+    minHeight: 44,
+    paddingHorizontal: 10
+  },
   seeAll: {
+    ...type.subhead,
+    color: DESIGN.colors.accent,
     fontSize: 12,
-    color: COLORS.saffron,
-    fontStyle: 'italic',
-  },
+    fontWeight: "600"
+  }
 });

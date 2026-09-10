@@ -9,18 +9,21 @@ import {
   View,
 } from 'react-native';
 
+import { COLORS as BASE, RGB } from '@/constants/brandColors';
+import { hairline, radii, shadow } from '@/constants/theme';
+
 const COLORS = {
-  primary: '#6E3F1F',
-  primaryDark: '#432412',
-  secondary: '#A8692D',
-  cream: '#FFF8EF',
-  creamDark: '#F4E6D5',
-  gold: '#D9A35D',
-  goldLight: '#F2D19D',
-  white: '#FFFFFF',
-  text: '#382418',
-  muted: '#866F61',
-  border: '#EBDCCD',
+  primary: BASE.saffron,
+  primaryDark: BASE.deepBrown,
+  secondary: BASE.warmBrown,
+  cream: BASE.cream,
+  creamDark: BASE.creamDark,
+  gold: BASE.gold,
+  goldLight: BASE.goldLight,
+  white: BASE.white,
+  text: BASE.deepBrown,
+  muted: BASE.warmBrown,
+  border: hairline,
 };
 
 const AUTO_REFRESH_INTERVAL = 30000; // 5 seconds
@@ -200,7 +203,7 @@ export function TotalPaath() {
 
       <View style={styles.peopleRow}>
         <View style={styles.peopleIcon}>
-          <Ionicons name="people" size={20} color={COLORS.goldLight} />
+          <Ionicons name="people" size={20} color={COLORS.primary} />
         </View>
         <View style={styles.peopleContent}>
           <Text style={styles.peopleLabel}>Total Participants</Text>
@@ -299,83 +302,94 @@ const styles = StyleSheet.create({
   wrapper: {
     position: 'relative',
     overflow: 'hidden',
-    backgroundColor: COLORS.primary,
-    borderRadius: 28,
+    backgroundColor: COLORS.cream,
+    borderRadius: radii.xl,
     padding: 18,
     marginHorizontal: 16,
     marginVertical: 12,
-    shadowColor: COLORS.primaryDark,
-    shadowOffset: { width: 0, height: 7 },
-    shadowOpacity: 0.2,
-    shadowRadius: 12,
-    elevation: 6,
+    borderWidth: 1,
+    borderColor: hairline,
+    ...shadow.card
   },
   bgCircle1: {
     position: 'absolute',
     width: 190,
     height: 190,
     borderRadius: 100,
-    backgroundColor: 'rgba(255,255,255,0.05)',
+    backgroundColor: `rgba(${RGB.saffron},0.06)`,
     right: -75,
-    top: -85,
+    top: -85
   },
   bgCircle2: {
     position: 'absolute',
     width: 145,
     height: 145,
     borderRadius: 100,
-    backgroundColor: 'rgba(255,204,130,0.05)',
+    backgroundColor: `rgba(${RGB.gold},0.06)`,
     left: -50,
-    bottom: -45,
+    bottom: -45
   },
   loadingContainer: {
     minHeight: 190,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: COLORS.cream,
+    backgroundColor: COLORS.cream
   },
-  loadingText: { fontSize: 11, color: COLORS.muted, marginTop: 8 },
+  loadingText: {
+    fontSize: 12,
+    color: COLORS.muted,
+    marginTop: 8
+  },
   errorContainer: {
     margin: 16,
     padding: 20,
     borderRadius: 20,
     backgroundColor: COLORS.cream,
     alignItems: 'center',
-    gap: 7,
+    gap: 7
   },
-  errorText: { fontSize: 12, color: COLORS.muted, textAlign: 'center' },
+  errorText: {
+    fontSize: 12,
+    color: COLORS.muted,
+    textAlign: 'center'
+  },
   topRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
   eyebrow: {
     fontSize: 11,
-    fontWeight: '800',
+    fontWeight: "600",
     letterSpacing: 1.1,
-    color: COLORS.goldLight,
+    color: COLORS.primary
   },
-  label: { fontSize: 20, fontWeight: '800', color: COLORS.white, marginTop: 3 },
+  label: {
+    fontSize: 20,
+    fontWeight: "600",
+    color: COLORS.text,
+    marginTop: 3
+  },
   liveCapsule: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 5,
-    backgroundColor: 'rgba(255,255,255,0.11)',
+    backgroundColor: COLORS.creamDark,
     paddingHorizontal: 9,
     paddingVertical: 6,
-    borderRadius: 100,
+    borderRadius: radii.pill
   },
   liveDot: {
     width: 6,
     height: 6,
     borderRadius: 3,
-    backgroundColor: COLORS.goldLight,
+    backgroundColor: COLORS.primary
   },
   liveText: {
-    fontSize: 8,
-    fontWeight: '800',
+    fontSize: 12,
+    fontWeight: "600",
     letterSpacing: 1,
-    color: COLORS.goldLight,
+    color: COLORS.primary
   },
   countBox: {
     marginTop: 18,
@@ -383,30 +397,33 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderTopWidth: 1,
     borderBottomWidth: 1,
-    borderColor: 'rgba(255,255,255,0.12)',
-    paddingVertical: 12,
+    borderColor: hairline,
+    paddingVertical: 12
   },
   countLabel: {
-    fontSize: 9,
+    fontSize: 12,
     fontWeight: '700',
     letterSpacing: 1,
-    color: '#D8BEAC',
+    color: COLORS.muted
   },
   countText: {
     fontSize: 43,
     lineHeight: 52,
     fontWeight: '900',
     letterSpacing: -1,
-    color: COLORS.white,
+    color: COLORS.text
   },
-  subText: { fontSize: 10, color: '#D8BEAC' },
+  subText: {
+    fontSize: 12,
+    color: COLORS.muted
+  },
   peopleRow: {
     marginTop: 17,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(255,255,255,0.08)',
+    backgroundColor: COLORS.creamDark,
     padding: 10,
-    borderRadius: 17,
+    borderRadius: radii.lg
   },
   peopleIcon: {
     width: 39,
@@ -414,36 +431,58 @@ const styles = StyleSheet.create({
     borderRadius: 13,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(255,255,255,0.09)',
+    backgroundColor: `rgba(${RGB.saffron},0.12)`
   },
-  peopleContent: { flex: 1, marginLeft: 10 },
-  peopleLabel: { fontSize: 11, fontWeight: '700', color: COLORS.white },
-  peopleDescription: { fontSize: 9, color: '#CFB6A6', marginTop: 1 },
-  peopleValue: { fontSize: 18, fontWeight: '900', color: COLORS.goldLight },
+  peopleContent: {
+    flex: 1,
+    marginLeft: 10
+  },
+  peopleLabel: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: COLORS.text
+  },
+  peopleDescription: {
+    fontSize: 12,
+    color: COLORS.muted,
+    marginTop: 1
+  },
+  peopleValue: {
+    fontSize: 18,
+    fontWeight: '900',
+    color: COLORS.primary
+  },
   divider: {
     height: 1,
     backgroundColor: 'rgba(255,255,255,0.12)',
-    marginVertical: 17,
+    marginVertical: 17
   },
   sectionMiniTitle: {
-    fontSize: 9,
-    fontWeight: '800',
+    fontSize: 12,
+    fontWeight: "600",
     letterSpacing: 1.3,
     color: COLORS.goldLight,
-    marginBottom: 9,
+    marginBottom: 9
   },
-  yearCards: { flexDirection: 'row', gap: 9 },
+  yearCards: {
+    flexDirection: 'row',
+    gap: 9
+  },
   yearCard: {
     flex: 1,
-    backgroundColor: COLORS.cream,
-    borderRadius: 19,
+    backgroundColor: COLORS.white,
+    borderRadius: 24,
     padding: 12,
+    borderColor: hairline,
+    borderWidth: 1,
+    shadowOpacity: 0.045,
+    elevation: 2
   },
   yearHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 7,
-    marginBottom: 10,
+    marginBottom: 10
   },
   calendarIcon: {
     width: 29,
@@ -451,57 +490,81 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: COLORS.creamDark,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-  year: { fontSize: 13, fontWeight: '800', color: COLORS.primary },
-  yearCardLabel: { fontSize: 9, color: COLORS.muted },
+  year: {
+    fontSize: 13,
+    fontWeight: "600",
+    color: COLORS.primary
+  },
+  yearCardLabel: {
+    fontSize: 12,
+    color: COLORS.muted
+  },
   yearChants: {
     fontSize: 20,
     fontWeight: '900',
     color: COLORS.text,
-    marginTop: 1,
+    marginTop: 1
   },
   yearUserRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    marginTop: 7,
+    marginTop: 7
   },
-  yearUsers: { fontSize: 9, color: COLORS.muted, flexShrink: 1 },
+  yearUsers: {
+    fontSize: 12,
+    color: COLORS.muted,
+    flexShrink: 1
+  },
   historyBox: {
     marginTop: 10,
     backgroundColor: 'rgba(255,255,255,0.08)',
     borderRadius: 19,
     paddingHorizontal: 13,
-    paddingTop: 12,
+    paddingTop: 12
   },
   historyTitleRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingBottom: 7,
+    paddingBottom: 7
   },
-  historyTitle: { fontSize: 11, fontWeight: '800', color: COLORS.white },
+  historyTitle: {
+    fontSize: 12,
+    fontWeight: "600",
+    color: COLORS.white
+  },
   historyRow: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 9,
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255,255,255,0.08)',
+    borderBottomColor: 'rgba(255,255,255,0.08)'
   },
-  historyRowLast: { borderBottomWidth: 0 },
+  historyRowLast: {
+    borderBottomWidth: 0
+  },
   historyYear: {
     width: 48,
-    fontSize: 11,
-    fontWeight: '800',
-    color: COLORS.goldLight,
+    fontSize: 12,
+    fontWeight: "600",
+    color: COLORS.goldLight
   },
   historyData: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
-  historyChants: { fontSize: 10, fontWeight: '700', color: COLORS.white },
-  historyUsers: { fontSize: 9, color: '#CFB6A6' },
+  historyChants: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: COLORS.white
+  },
+  historyUsers: {
+    fontSize: 12,
+    color: '#CFB6A6'
+  }
 });

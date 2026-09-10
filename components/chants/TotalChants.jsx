@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { View, Text, StyleSheet, Animated } from "react-native";
+import { COLORS } from "@/constants/brandColors";
+import { radii, shadow } from "@/constants/theme";
 
 const TotalChants = () => {
   // Fetching number from Redux store
@@ -53,35 +55,31 @@ const TotalChants = () => {
 const styles = StyleSheet.create({
   container: {
     alignItems: "center",
-    marginVertical: 10,
+    marginVertical: 10
   },
   label: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "#7B1B1B", // Dark red color for the label
-    marginBottom: 8,
+    color: COLORS.richBrown,
+    marginBottom: 8
   },
   chantsContainer: {
-    backgroundColor: "#FFF", // White background
-    borderColor: "#7B1B1B", // Dark red border
+    backgroundColor: COLORS.cream,
+    borderColor: COLORS.richBrown,
     borderWidth: 2,
-    borderRadius: 50, // Rounded edges
+    borderRadius: radii.pill,
     paddingVertical: 10,
     paddingHorizontal: 20,
     justifyContent: "center",
     alignItems: "center",
-    shadowColor: "#000", // Shadow
-    shadowOpacity: 0.3,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 5,
-    elevation: 5, // Shadow for Android
-    minWidth: 200,
+    ...shadow.card,
+    minWidth: 200
   },
   chantsText: {
     fontSize: 28,
     fontWeight: "bold",
-    color: "#000", // Black color for the text
-  },
+    color: COLORS.deepBrown
+  }
 });
 
 export default TotalChants;

@@ -1,3 +1,4 @@
+import { DESIGN } from '@/constants/design';
 import { useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
@@ -11,6 +12,8 @@ import {
 
 import eventServices from '@/lib/services/eventServices';
 import { router } from 'expo-router';
+import Card from '@/components/ui/Card';
+import { radii } from '@/constants/theme';
 import { COLORS } from './constant';
 import { SectionHeader } from './Sharedui';
 
@@ -39,42 +42,43 @@ function formatEventTime(time) {
 function EventCard({ item }) {
   return (
     <TouchableOpacity
-      style={styles.eventCard}
       activeOpacity={0.85}
       onPress={() => {
         router.push(`/home/events/${item.slug}`);
       }}>
-      <View style={styles.eventCardTop}>
-        <View style={styles.eventDateBox}>
-          <Text style={styles.eventDateDay}>{item.day}</Text>
+      <Card radius={radii.xl} style={styles.eventCard}>
+        <View style={styles.eventCardTop}>
+          <View style={styles.eventDateBox}>
+            <Text style={styles.eventDateDay}>{item.day}</Text>
 
-          <Text style={styles.eventDateMonth}>{item.month}</Text>
-        </View>
+            <Text style={styles.eventDateMonth}>{item.month}</Text>
+          </View>
 
-        <View style={styles.eventInfo}>
-          <Text style={styles.eventTitle} numberOfLines={2}>
-            {item.title}
-          </Text>
-
-          {!!item.location && (
-            <Text style={styles.eventLoc} numberOfLines={1}>
-              📍 {item.location}
+          <View style={styles.eventInfo}>
+            <Text style={styles.eventTitle} numberOfLines={2}>
+              {item.title}
             </Text>
-          )}
 
-          {!!item.time && (
-            <Text style={styles.eventTime} numberOfLines={1}>
-              ⏰ {item.time}
-            </Text>
-          )}
-        </View>
-      </View>
+            {!!item.location && (
+              <Text style={styles.eventLoc} numberOfLines={1}>
+                📍 {item.location}
+              </Text>
+            )}
 
-      <View style={styles.eventFooter}>
-        <View style={styles.eventTagBadge}>
-          <Text style={styles.eventTagText}>{item.tag}</Text>
+            {!!item.time && (
+              <Text style={styles.eventTime} numberOfLines={1}>
+                ⏰ {item.time}
+              </Text>
+            )}
+          </View>
         </View>
-      </View>
+
+        <View style={styles.eventFooter}>
+          <View style={styles.eventTagBadge}>
+            <Text style={styles.eventTagText}>{item.tag}</Text>
+          </View>
+        </View>
+      </Card>
     </TouchableOpacity>
   );
 }
@@ -253,150 +257,134 @@ export default function EventsSection() {
 
 const styles = StyleSheet.create({
   section: {
-    width: '100%',
+    width: '100%'
   },
-
   listContent: {
-    paddingHorizontal: HORIZONTAL_PADDING,
+    paddingHorizontal: HORIZONTAL_PADDING
   },
-
   cardWrapper: {
-    width: CARD_WIDTH,
+    width: CARD_WIDTH
   },
-
   loadingContainer: {
     paddingVertical: 30,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-
   loadingText: {
     marginTop: 8,
-    fontSize: 11,
-    color: COLORS.goldLight,
+    fontSize: 12,
+    color: COLORS.warmBrown
   },
-
   emptyContainer: {
     paddingVertical: 25,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-
   emptyText: {
     fontSize: 12,
-    color: 'rgba(253,246,227,0.6)',
+    color: COLORS.warmBrown,
+    opacity: 0.7
   },
-
   eventCard: {
     width: '100%',
-    backgroundColor: COLORS.deepBrown,
-    borderRadius: 16,
-    overflow: 'hidden',
+    backgroundColor: DESIGN.colors.surface,
+    borderColor: DESIGN.colors.border,
     borderWidth: 1,
-    borderColor: 'rgba(201,162,39,0.3)',
+    borderRadius: 24,
+    shadowOpacity: 0.045,
+    elevation: 2
   },
-
   eventCardTop: {
-    backgroundColor: COLORS.richBrown,
-    padding: 14,
+    backgroundColor: DESIGN.colors.surface,
+    padding: 20,
     flexDirection: 'row',
-    gap: 12,
+    gap: 16,
     alignItems: 'flex-start',
-    minHeight: 95,
+    minHeight: 132
   },
-
   eventDateBox: {
-    backgroundColor: COLORS.gold,
-    borderRadius: 10,
+    backgroundColor: DESIGN.colors.plumSoft,
+    borderRadius: 16,
     paddingHorizontal: 10,
-    paddingVertical: 7,
+    paddingVertical: 14,
     alignItems: 'center',
     justifyContent: 'center',
-    minWidth: 50,
+    minWidth: 60
   },
-
   eventDateDay: {
-    fontSize: 20,
-    fontWeight: '800',
-    color: COLORS.deepBrown,
-    lineHeight: 22,
+    fontSize: 28,
+    fontWeight: "500",
+    color: DESIGN.colors.plum,
+    lineHeight: 32
   },
-
   eventDateMonth: {
-    fontSize: 9,
-    fontWeight: '800',
-    color: COLORS.deepBrown,
-    letterSpacing: 0.5,
-    marginTop: 2,
+    fontSize: 11,
+    fontWeight: "600",
+    color: DESIGN.colors.plum,
+    letterSpacing: 1.2,
+    marginTop: 2
   },
-
   eventInfo: {
-    flex: 1,
+    flex: 1
   },
-
   eventTitle: {
-    color: COLORS.cream,
-    fontSize: 13,
-    fontWeight: '700',
-    marginBottom: 6,
-    lineHeight: 18,
+    color: DESIGN.colors.ink,
+    fontSize: 20,
+    fontWeight: "400",
+    marginBottom: 7,
+    lineHeight: 27,
+    fontFamily: DESIGN.fonts.editorial,
+    letterSpacing: -0.4
   },
-
   eventLoc: {
-    fontSize: 11,
-    color: 'rgba(253,246,227,0.6)',
-    fontStyle: 'italic',
+    fontSize: 12,
+    color: DESIGN.colors.muted,
     marginBottom: 4,
+    lineHeight: 18
   },
-
   eventTime: {
-    fontSize: 11,
-    color: COLORS.goldLight,
+    fontSize: 12,
+    color: DESIGN.colors.accent
   },
-
   eventFooter: {
-    paddingHorizontal: 14,
-    paddingVertical: 9,
+    paddingHorizontal: 20,
+    paddingVertical: 13,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     borderTopWidth: 1,
-    borderTopColor: 'rgba(201,162,39,0.15)',
+    borderTopColor: DESIGN.colors.border,
+    backgroundColor: "#FCFAF7"
   },
-
   eventTagBadge: {
-    backgroundColor: 'rgba(232,114,28,0.2)',
-    borderWidth: 1,
-    borderColor: 'rgba(232,114,28,0.4)',
-    borderRadius: 10,
-    paddingHorizontal: 9,
-    paddingVertical: 3,
+    backgroundColor: DESIGN.colors.accentSoft,
+    borderWidth: 0,
+    borderColor: 'rgba(166,83,56,0.3)',
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 6
   },
-
   eventTagText: {
-    color: COLORS.saffronLight,
-    fontSize: 9,
-    fontWeight: '800',
-    letterSpacing: 0.5,
+    color: DESIGN.colors.accent,
+    fontSize: 10,
+    fontWeight: "600",
+    letterSpacing: 0.5
   },
-
   pagination: {
     marginTop: 10,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 6,
+    gap: 6
   },
-
   paginationDot: {
     width: 6,
     height: 6,
     borderRadius: 3,
-    backgroundColor: 'rgba(201,162,39,0.25)',
+    backgroundColor: 'rgba(179,149,98,0.25)'
   },
-
   paginationDotActive: {
     width: 18,
-    backgroundColor: COLORS.gold,
-  },
+    backgroundColor: COLORS.gold
+  }
 });

@@ -1,3 +1,4 @@
+import { DESIGN } from '@/constants/design';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import {
@@ -11,6 +12,8 @@ import {
 } from 'react-native';
 
 import { transformInNineStepsData } from '@/components/dhyanShivir/TransformInNineStepsData';
+import { COLORS } from '@/constants/brandColors';
+import { hairline, radii, shadow, spacing, type } from '@/constants/theme';
 
 export default function ProgrammeDetails() {
   const { slug } = useLocalSearchParams();
@@ -64,7 +67,7 @@ export default function ProgrammeDetails() {
   if (loading) {
     return (
       <View style={styles.loader}>
-        <ActivityIndicator size="small" color="#D8A746" />
+        <ActivityIndicator size="small" color={COLORS.saffron} />
 
         <Text style={styles.loaderText}>Loading programme...</Text>
       </View>
@@ -188,62 +191,52 @@ export default function ProgrammeDetails() {
 const styles = StyleSheet.create({
   page: {
     flex: 1,
-    backgroundColor: '#24120D',
+    backgroundColor: COLORS.cream
   },
-
   scrollContent: {
-    paddingBottom: 45,
+    paddingBottom: 45
   },
-
   loader: {
     flex: 1,
-    backgroundColor: '#24120D',
+    backgroundColor: COLORS.cream,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 25,
+    paddingHorizontal: 25
   },
-
   loaderText: {
-    color: '#D8A746',
+    color: COLORS.warmBrown,
     fontSize: 12,
-    marginTop: 10,
+    marginTop: 10
   },
-
   notFound: {
-    color: '#FFF3DB',
+    color: COLORS.deepBrown,
     fontSize: 16,
     fontWeight: '700',
-    marginBottom: 18,
+    marginBottom: 18
   },
-
   backButton: {
-    backgroundColor: '#D8A746',
+    backgroundColor: COLORS.richBrown,
     paddingHorizontal: 20,
     paddingVertical: 10,
-    borderRadius: 20,
+    borderRadius: radii.pill
   },
-
   backButtonText: {
-    color: '#321A11',
-    fontWeight: '800',
+    color: COLORS.white,
+    fontWeight: "600"
   },
-
   hero: {
     height: 340,
     position: 'relative',
-    backgroundColor: '#301A13',
+    backgroundColor: COLORS.creamDark
   },
-
   heroImage: {
     width: '100%',
-    height: '100%',
+    height: '100%'
   },
-
   heroOverlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(36,18,13,0.25)',
+    backgroundColor: 'rgba(41,35,40,0.18)'
   },
-
   backIcon: {
     position: 'absolute',
     top: 52,
@@ -251,160 +244,132 @@ const styles = StyleSheet.create({
     width: 42,
     height: 42,
     borderRadius: 21,
-    backgroundColor: 'rgba(36,18,13,0.8)',
+    backgroundColor: 'rgba(255,255,255,0.85)',
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: 'rgba(216,167,70,0.4)',
+    ...shadow.card
   },
-
   backIconText: {
-    color: '#FFF3DB',
+    color: COLORS.deepBrown,
     fontSize: 31,
     lineHeight: 31,
-    marginTop: -3,
+    marginTop: -3
   },
-
   stepBadge: {
     position: 'absolute',
     bottom: 18,
     left: 20,
-    backgroundColor: 'rgba(36,18,13,0.9)',
-    borderWidth: 1,
-    borderColor: 'rgba(216,167,70,0.55)',
+    backgroundColor: COLORS.cream,
     paddingHorizontal: 14,
     paddingVertical: 7,
-    borderRadius: 20,
+    borderRadius: radii.pill,
+    ...shadow.card
   },
-
   stepText: {
-    color: '#F3CA70',
-    fontSize: 9,
+    color: COLORS.saffron,
+    fontSize: 12,
     fontWeight: '900',
-    letterSpacing: 1.3,
+    letterSpacing: 1.3
   },
-
   content: {
-    paddingHorizontal: 20,
-    paddingTop: 24,
+    paddingHorizontal: spacing.md,
+    paddingTop: spacing.lg
   },
-
   eyebrow: {
-    color: '#D8A746',
-    fontSize: 9,
-    fontWeight: '800',
+    color: COLORS.saffron,
+    fontSize: 10,
+    fontWeight: "600",
     letterSpacing: 1.6,
-    marginBottom: 7,
+    marginBottom: 7
   },
-
   title: {
-    color: '#FFF3DB',
+    ...type.largeTitle,
     fontSize: 29,
     lineHeight: 35,
-    fontWeight: '800',
+    color: COLORS.deepBrown,
+    fontFamily: DESIGN.fonts.editorial,
+    fontWeight: "400",
+    letterSpacing: -0.4
   },
-
   metaRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 8,
-    marginTop: 15,
+    marginTop: 15
   },
-
   metaBadge: {
-    backgroundColor: '#3A2118',
-    borderWidth: 1,
-    borderColor: 'rgba(216,167,70,0.24)',
+    backgroundColor: COLORS.creamDark,
     paddingHorizontal: 11,
     paddingVertical: 7,
-    borderRadius: 18,
+    borderRadius: radii.pill
   },
-
   metaText: {
-    color: '#EACB8D',
-    fontSize: 10,
-    fontWeight: '600',
+    color: COLORS.warmBrown,
+    fontSize: 12,
+    fontWeight: '600'
   },
-
   divider: {
     height: 1,
-    backgroundColor: 'rgba(216,167,70,0.16)',
-    marginVertical: 24,
+    backgroundColor: hairline,
+    marginVertical: spacing.lg
   },
-
   sectionTitle: {
-    color: '#FFF0D1',
-    fontSize: 17,
-    fontWeight: '800',
-    marginBottom: 10,
+    ...type.headline,
+    color: COLORS.deepBrown,
+    marginBottom: spacing.sm
   },
-
   description: {
-    color: 'rgba(255,243,219,0.65)',
-    fontSize: 12,
-    lineHeight: 20,
-    marginBottom: 14,
+    ...type.body,
+    color: COLORS.warmBrown,
+    marginBottom: spacing.sm
   },
-
   quoteBox: {
-    backgroundColor: '#321B13',
-    borderWidth: 1,
-    borderColor: 'rgba(216,167,70,0.2)',
-    borderRadius: 16,
-    padding: 18,
-    marginVertical: 10,
-    alignItems: 'center',
+    backgroundColor: COLORS.creamDark,
+    borderRadius: radii.lg,
+    padding: spacing.lg,
+    marginVertical: spacing.sm,
+    alignItems: 'center'
   },
-
   quoteIcon: {
-    color: '#D8A746',
+    color: COLORS.saffron,
     fontSize: 23,
-    marginBottom: 8,
+    marginBottom: spacing.sm
   },
-
   quoteText: {
-    color: '#E9D5AE',
+    color: COLORS.deepBrown,
     fontSize: 12,
     lineHeight: 19,
-    textAlign: 'center',
-    fontStyle: 'italic',
+    textAlign: 'center'
   },
-
   learnBox: {
-    backgroundColor: '#321B13',
-    borderRadius: 16,
-    padding: 16,
-    gap: 11,
-    borderWidth: 1,
-    borderColor: 'rgba(216,167,70,0.16)',
+    backgroundColor: COLORS.creamDark,
+    borderRadius: radii.lg,
+    padding: spacing.md,
+    gap: 11
   },
-
   learnItem: {
-    color: '#E8D5B1',
+    color: COLORS.warmBrown,
     fontSize: 12,
-    lineHeight: 18,
+    lineHeight: 18
   },
-
   enrollButton: {
-    marginTop: 26,
-    backgroundColor: '#D8A746',
-    borderRadius: 16,
-    paddingHorizontal: 18,
+    marginTop: spacing.lg,
+    backgroundColor: COLORS.richBrown,
+    borderRadius: radii.lg,
+    paddingHorizontal: spacing.md,
     paddingVertical: 15,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
-
   enrollButtonText: {
-    color: '#321A11',
+    color: COLORS.white,
     fontSize: 13,
-    fontWeight: '900',
+    fontWeight: '900'
   },
-
   enrollArrow: {
-    color: '#321A11',
+    color: COLORS.white,
     fontSize: 22,
-    fontWeight: '800',
-  },
+    fontWeight: "600"
+  }
 });

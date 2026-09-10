@@ -1,11 +1,9 @@
 import { Ionicons } from '@expo/vector-icons';
 import { StyleSheet, Text, View } from 'react-native';
 
-const COLORS = {
-  primary: '#6E3F1F',
-  secondary: '#A8692D',
-  text: '#4B3427',
-};
+import Card from '@/components/ui/Card';
+import { COLORS, RGB } from '@/constants/brandColors';
+import { radii, spacing, type } from '@/constants/theme';
 
 export default function RastSuchna() {
   return (
@@ -15,7 +13,7 @@ export default function RastSuchna() {
           <Ionicons
             name="notifications-outline"
             size={19}
-            color={COLORS.secondary}
+            color={COLORS.goldDark}
           />
         </View>
 
@@ -26,7 +24,7 @@ export default function RastSuchna() {
         </View>
       </View>
 
-      <View style={styles.card}>
+      <Card radius={radii.xl} style={styles.card}>
         <View style={styles.quoteLine} />
 
         <Text style={styles.text}>
@@ -34,7 +32,7 @@ export default function RastSuchna() {
           पीढ़ी संस्कारवान बने, अपनी परंपराओं और अपने ग्रंथों को जाने।
           {'\n\n'}
           🌺 इसी दृष्टिकोण से पूज्य गुरुदेव गीता मनीषी स्वामी श्री ज्ञानानंद जी
-          महाराज के सानिध्य में जीओगीता द्वारा विशेष अभियान "बाल संस्कार योजना"
+          महाराज के सानिध्य में जीओगीता द्वारा विशेष अभियान &quot;बाल संस्कार योजना&quot;
           प्रारंभ किया गया है।
           {'\n\n'}
           इसके अंतर्गत हर नगर में अधिक से अधिक स्थानों, गली, मोहल्ले और सेक्टर
@@ -54,70 +52,58 @@ export default function RastSuchna() {
           {'\n'}
           सुषमा जी — 9254585312
         </Text>
-      </View>
+      </Card>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   wrapper: {
-    marginHorizontal: 16,
-    marginTop: 22,
+    marginHorizontal: spacing.md,
+    marginTop: spacing.lg - 2
   },
-
   heading: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 11,
+    marginBottom: spacing.sm + 3
   },
-
   headingIcon: {
     width: 39,
     height: 39,
-    borderRadius: 13,
-    backgroundColor: '#F1DFCE',
+    borderRadius: radii.md - 1,
+    backgroundColor: `rgba(${RGB.gold}, 0.14)`,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 10,
+    marginRight: spacing.sm + 2
   },
-
   eyebrow: {
-    color: COLORS.secondary,
-    fontSize: 8,
-    fontWeight: '800',
-    letterSpacing: 1.4,
+    color: COLORS.goldDark,
+    fontSize: 10,
+    fontWeight: "600",
+    letterSpacing: 1.4
   },
-
   title: {
     marginTop: 1,
-    color: COLORS.primary,
+    ...type.title,
     fontSize: 20,
-    fontWeight: '800',
+    color: COLORS.deepBrown
   },
-
   card: {
-    backgroundColor: '#FFF8EF',
-    borderRadius: 22,
-    padding: 18,
-    position: 'relative',
-    overflow: 'hidden',
-    borderWidth: 1,
-    borderColor: '#EEDFCC',
+    padding: spacing.lg - 6,
+    position: 'relative'
   },
-
   quoteLine: {
     position: 'absolute',
     left: 0,
     top: 0,
     bottom: 0,
     width: 4,
-    backgroundColor: COLORS.secondary,
+    backgroundColor: COLORS.saffron
   },
-
   text: {
-    color: COLORS.text,
-    fontSize: 14,
+    ...type.body,
+    color: COLORS.deepBrown,
     lineHeight: 23,
-    textAlign: 'left',
-  },
+    textAlign: 'left'
+  }
 });

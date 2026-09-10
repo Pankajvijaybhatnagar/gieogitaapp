@@ -1,4 +1,4 @@
-fullUrl = `https://parivaar.gieogita.org/login/api/_api_config.php`;
+const fullUrl = `https://parivaar.gieogita.org/login/api/_api_config.php`;
 
 export const sendOtp = async (phoneNumber) => {
   try {

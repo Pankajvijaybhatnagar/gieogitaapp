@@ -1,6 +1,9 @@
+import { DESIGN } from '@/constants/design';
 import { FontAwesome } from '@expo/vector-icons';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { COLORS } from './constant';
+import Card from '@/components/ui/Card';
+import { hairline, radii, spacing, type } from '@/constants/theme';
+import { COLORS, RGB } from '@/constants/brandColors';
 import { SectionHeader } from './Sharedui';
 
 const sevas = [
@@ -40,7 +43,7 @@ export default function GieoGaushalaSection() {
       <SectionHeader title="🐄 Gieo" accent="Gaushala" />
 
       {/* ── Hero ── */}
-      <View style={styles.heroCard}>
+      <Card radius={radii.xl} style={styles.heroCard}>
         <View style={styles.heroBadge}>
           <Text style={styles.heroBadgeText}>🕉️  Sacred Cow Sanctuary</Text>
         </View>
@@ -63,10 +66,10 @@ export default function GieoGaushalaSection() {
             </View>
           ))}
         </View>
-      </View>
+      </Card>
 
       {/* ── Seva Activities ── */}
-      <View style={styles.sectionCard}>
+      <Card radius={radii.xl} style={styles.sectionCard}>
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionIcon}>🌸</Text>
           <View>
@@ -85,10 +88,10 @@ export default function GieoGaushalaSection() {
             </View>
           ))}
         </View>
-      </View>
+      </Card>
 
       {/* ── Gau Products ── */}
-      <View style={styles.sectionCard}>
+      <Card radius={radii.xl} style={styles.sectionCard}>
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionIcon}>🛕</Text>
           <View>
@@ -109,12 +112,12 @@ export default function GieoGaushalaSection() {
         </View>
         <TouchableOpacity style={styles.productsCta} activeOpacity={0.85}>
           <Text style={styles.productsCtaText}>View All Products</Text>
-          <FontAwesome name="chevron-right" size={11} color={COLORS.goldDark || '#C9A227'} />
+          <FontAwesome name="chevron-right" size={11} color={COLORS.saffron} />
         </TouchableOpacity>
-      </View>
+      </Card>
 
       {/* ── Our Journey ── */}
-      <View style={styles.sectionCard}>
+      <Card radius={radii.xl} style={styles.sectionCard}>
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionIcon}>📿</Text>
           <View>
@@ -133,10 +136,10 @@ export default function GieoGaushalaSection() {
             </View>
           </View>
         ))}
-      </View>
+      </Card>
 
       {/* ── Volunteer / Visit ── */}
-      <View style={styles.sectionCard}>
+      <Card radius={radii.xl} style={styles.sectionCard}>
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionIcon}>🤝</Text>
           <View>
@@ -159,13 +162,13 @@ export default function GieoGaushalaSection() {
           </View>
         </View>
         <View style={styles.visitInfo}>
-          <FontAwesome name="map-marker" size={13} color={COLORS.goldDark || '#C9A227'} />
+          <FontAwesome name="map-marker" size={13} color={COLORS.goldDark} />
           <Text style={styles.visitText}>GIEO Gaushala, Vrindavan Road, Mathura, UP</Text>
         </View>
-      </View>
+      </Card>
 
       {/* ── Donation CTA ── */}
-      <View style={styles.donateCard}>
+      <Card radius={radii.xl} style={styles.donateCard}>
         <Text style={styles.donateEmoji}>🐄</Text>
         <Text style={styles.donateHeading}>Support Gau Mata Today</Text>
         <Text style={styles.donateSubtext}>
@@ -181,10 +184,10 @@ export default function GieoGaushalaSection() {
         </View>
         <TouchableOpacity style={styles.donateBtn} activeOpacity={0.85}>
           <Text style={styles.donateBtnText}>Donate for Gau Seva</Text>
-          <FontAwesome name="heart" size={12} color="#2C1A0E" />
+          <FontAwesome name="heart" size={12} color={COLORS.white} />
         </TouchableOpacity>
         <Text style={styles.donateNote}>🕉️  Every seva is a step towards moksha</Text>
-      </View>
+      </Card>
 
     </View>
   );
@@ -192,203 +195,348 @@ export default function GieoGaushalaSection() {
 
 const styles = StyleSheet.create({
   page: {
-    backgroundColor: COLORS.cream,
+    backgroundColor: COLORS.cream
   },
-
   /* ── Hero ── */
   heroCard: {
-    backgroundColor: COLORS.richBrown,
-    marginHorizontal: 20,
-    borderRadius: 16,
-    padding: 18,
-    borderWidth: 1,
-    borderColor: 'rgba(201,162,39,0.35)',
-    marginBottom: 14,
+    marginHorizontal: spacing.md,
+    padding: spacing.md,
+    marginBottom: spacing.md
   },
   heroBadge: {
     alignSelf: 'flex-start',
-    backgroundColor: 'rgba(201,162,39,0.15)',
-    borderRadius: 20,
-    paddingHorizontal: 12,
-    paddingVertical: 4,
+    backgroundColor: `rgba(${RGB.saffron},0.12)`,
+    borderRadius: radii.pill,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
     borderWidth: 1,
-    borderColor: 'rgba(201,162,39,0.35)',
-    marginBottom: 12,
+    borderColor: `rgba(${RGB.saffron},0.3)`,
+    marginBottom: spacing.sm
   },
-  heroBadgeText: { color: COLORS.goldLight, fontSize: 10, fontWeight: '700', letterSpacing: 0.4 },
-  heroHeading: { color: COLORS.cream, fontSize: 20, fontWeight: '800', lineHeight: 28, marginBottom: 10 },
-  heroAccent: { color: COLORS.goldLight },
-  heroDesc: { color: 'rgba(253,246,227,0.65)', fontSize: 12, lineHeight: 18, fontStyle: 'italic', marginBottom: 16 },
+  heroBadgeText: {
+    color: COLORS.saffron,
+    ...type.caption,
+    letterSpacing: 0.4
+  },
+  heroHeading: {
+    ...type.title,
+    fontSize: 20,
+    color: COLORS.deepBrown,
+    lineHeight: 28,
+    marginBottom: spacing.sm,
+    fontFamily: DESIGN.fonts.editorial,
+    fontWeight: "400",
+    letterSpacing: -0.4
+  },
+  heroAccent: {
+    color: COLORS.saffron
+  },
+  heroDesc: {
+    ...type.body,
+    color: COLORS.warmBrown,
+    marginBottom: spacing.md
+  },
   statsGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 8,
+    gap: spacing.sm
   },
   statBox: {
     width: '47%',
-    backgroundColor: 'rgba(201,162,39,0.12)',
-    borderRadius: 12,
-    padding: 12,
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: 'rgba(201,162,39,0.22)',
+    backgroundColor: COLORS.creamDark,
+    borderRadius: radii.md,
+    padding: spacing.sm,
+    alignItems: 'center'
   },
-  statBoxRight: { },
-  statValue: { color: COLORS.goldLight, fontSize: 20, fontWeight: '800' },
-  statLabel: { color: 'rgba(253,246,227,0.55)', fontSize: 9, marginTop: 3, textAlign: 'center', fontStyle: 'italic' },
-
+  statBoxRight: {},
+  statValue: {
+    color: COLORS.saffron,
+    fontSize: 20,
+    fontWeight: "600"
+  },
+  statLabel: {
+    ...type.footnote,
+    fontSize: 12,
+    color: COLORS.warmBrown,
+    marginTop: 3,
+    textAlign: 'center'
+  },
   /* ── Section Cards ── */
   sectionCard: {
-    backgroundColor: COLORS.richBrown,
-    marginHorizontal: 20,
-    borderRadius: 16,
-    padding: 16,
-    borderWidth: 1,
-    borderColor: 'rgba(201,162,39,0.3)',
-    marginBottom: 14,
+    marginHorizontal: spacing.md,
+    padding: spacing.md,
+    marginBottom: spacing.md
   },
   sectionHeader: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    gap: 10,
-    marginBottom: 14,
+    gap: spacing.sm,
+    marginBottom: spacing.sm
   },
-  sectionIcon: { fontSize: 22, marginTop: 1 },
-  sectionTitle: { color: COLORS.cream, fontSize: 15, fontWeight: '800' },
-  sectionSubtitle: { color: 'rgba(253,246,227,0.5)', fontSize: 10, marginTop: 2, fontStyle: 'italic' },
-
+  sectionIcon: {
+    fontSize: 22,
+    marginTop: 1
+  },
+  sectionTitle: {
+    ...type.headline,
+    fontSize: 15,
+    color: COLORS.deepBrown
+  },
+  sectionSubtitle: {
+    ...type.footnote,
+    color: COLORS.warmBrown,
+    marginTop: 2
+  },
   /* ── Seva Grid ── */
-  sevaGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
+  sevaGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing.sm
+  },
   sevaCard: {
     width: '47%',
-    backgroundColor: 'rgba(201,162,39,0.08)',
-    borderRadius: 12,
-    padding: 12,
+    backgroundColor: DESIGN.colors.surface,
+    borderRadius: 24,
+    padding: spacing.sm,
+    borderColor: DESIGN.colors.border,
     borderWidth: 1,
-    borderColor: 'rgba(201,162,39,0.2)',
+    shadowOpacity: 0.045,
+    elevation: 2
   },
   sevaIconCircle: {
-    width: 38, height: 38, borderRadius: 19,
-    backgroundColor: 'rgba(201,162,39,0.15)',
-    alignItems: 'center', justifyContent: 'center',
-    marginBottom: 8,
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    backgroundColor: `rgba(${RGB.saffron},0.14)`,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: spacing.xs
   },
-  sevaIconText: { fontSize: 18 },
-  sevaTitle: { color: COLORS.cream, fontSize: 12, fontWeight: '700', marginBottom: 4 },
-  sevaDesc: { color: 'rgba(253,246,227,0.5)', fontSize: 9, fontStyle: 'italic', lineHeight: 13 },
-
+  sevaIconText: {
+    fontSize: 18
+  },
+  sevaTitle: {
+    color: COLORS.deepBrown,
+    fontSize: 12,
+    fontWeight: '700',
+    marginBottom: 4
+  },
+  sevaDesc: {
+    color: COLORS.warmBrown,
+    fontSize: 12,
+    lineHeight: 18
+  },
   /* ── Products ── */
-  productsRow: { flexDirection: 'row', gap: 8, marginBottom: 12 },
+  productsRow: {
+    flexDirection: 'row',
+    gap: spacing.sm,
+    marginBottom: spacing.sm
+  },
   productCard: {
     flex: 1,
-    backgroundColor: 'rgba(201,162,39,0.08)',
-    borderRadius: 12,
+    backgroundColor: DESIGN.colors.surface,
+    borderRadius: 24,
     padding: 10,
     alignItems: 'center',
+    borderColor: DESIGN.colors.border,
     borderWidth: 1,
-    borderColor: 'rgba(201,162,39,0.2)',
+    shadowOpacity: 0.045,
+    elevation: 2
   },
-  productIcon: { fontSize: 22, marginBottom: 5 },
+  productIcon: {
+    fontSize: 22,
+    marginBottom: 5
+  },
   productTag: {
-    backgroundColor: 'rgba(201,162,39,0.2)',
-    borderRadius: 6,
+    backgroundColor: `rgba(${RGB.saffron},0.14)`,
+    borderRadius: radii.sm,
     paddingHorizontal: 5,
     paddingVertical: 2,
-    marginBottom: 4,
+    marginBottom: 4
   },
-  productTagText: { color: COLORS.goldLight, fontSize: 7, fontWeight: '700' },
-  productName: { color: COLORS.cream, fontSize: 10, fontWeight: '700', textAlign: 'center' },
+  productTagText: {
+    color: COLORS.saffron,
+    fontSize: 10,
+    fontWeight: '700'
+  },
+  productName: {
+    color: COLORS.deepBrown,
+    fontSize: 12,
+    fontWeight: '700',
+    textAlign: 'center'
+  },
   productsCta: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 6,
-    paddingVertical: 10,
+    paddingVertical: spacing.sm,
     borderWidth: 1,
-    borderColor: 'rgba(201,162,39,0.3)',
-    borderRadius: 10,
-    backgroundColor: 'rgba(201,162,39,0.08)',
+    borderColor: `rgba(${RGB.saffron},0.3)`,
+    borderRadius: radii.sm,
+    backgroundColor: `rgba(${RGB.saffron},0.08)`
   },
-  productsCtaText: { color: COLORS.goldLight, fontSize: 12, fontWeight: '700' },
-
+  productsCtaText: {
+    color: COLORS.saffron,
+    fontSize: 12,
+    fontWeight: '700'
+  },
   /* ── Timeline ── */
-  timelineRow: { flexDirection: 'row', gap: 12 },
-  timelineLeft: { alignItems: 'center', width: 40 },
-  timelineYear: { color: COLORS.goldLight, fontSize: 10, fontWeight: '800', marginBottom: 4 },
-  timelineLine: { width: 2, flex: 1, backgroundColor: 'rgba(201,162,39,0.25)', marginBottom: 4 },
+  timelineRow: {
+    flexDirection: 'row',
+    gap: spacing.sm
+  },
+  timelineLeft: {
+    alignItems: 'center',
+    width: 40
+  },
+  timelineYear: {
+    color: COLORS.saffron,
+    fontSize: 12,
+    fontWeight: "600",
+    marginBottom: 4
+  },
+  timelineLine: {
+    width: 2,
+    flex: 1,
+    backgroundColor: hairline,
+    marginBottom: 4
+  },
   timelineCard: {
     flex: 1,
-    backgroundColor: 'rgba(201,162,39,0.08)',
-    borderRadius: 10,
-    padding: 10,
-    marginBottom: 8,
-    borderWidth: 1,
-    borderColor: 'rgba(201,162,39,0.18)',
+    backgroundColor: DESIGN.colors.surface,
+    borderRadius: 24,
+    padding: spacing.sm,
+    marginBottom: spacing.sm,
     justifyContent: 'center',
+    borderColor: DESIGN.colors.border,
+    borderWidth: 1,
+    shadowOpacity: 0.045,
+    elevation: 2
   },
-  timelineEvent: { color: COLORS.cream, fontSize: 11, fontWeight: '600', lineHeight: 15 },
-
+  timelineEvent: {
+    color: COLORS.deepBrown,
+    fontSize: 12,
+    fontWeight: '600',
+    lineHeight: 18
+  },
   /* ── Join Seva ── */
-  joinRow: { flexDirection: 'row', gap: 10, marginBottom: 12 },
+  joinRow: {
+    flexDirection: 'row',
+    gap: spacing.sm,
+    marginBottom: spacing.sm
+  },
   joinCard: {
     flex: 1,
-    backgroundColor: 'rgba(201,162,39,0.08)',
-    borderRadius: 12,
-    padding: 12,
+    backgroundColor: DESIGN.colors.surface,
+    borderRadius: 24,
+    padding: spacing.sm,
     alignItems: 'center',
+    borderColor: DESIGN.colors.border,
     borderWidth: 1,
-    borderColor: 'rgba(201,162,39,0.2)',
+    shadowOpacity: 0.045,
+    elevation: 2
   },
-  joinCardIcon: { fontSize: 24, marginBottom: 6 },
-  joinCardTitle: { color: COLORS.cream, fontSize: 12, fontWeight: '700', marginBottom: 2 },
-  joinCardTime: { color: COLORS.goldLight, fontSize: 10, fontWeight: '700', marginBottom: 4 },
-  joinCardDesc: { color: 'rgba(253,246,227,0.5)', fontSize: 9, fontStyle: 'italic', textAlign: 'center' },
+  joinCardIcon: {
+    fontSize: 24,
+    marginBottom: 6
+  },
+  joinCardTitle: {
+    color: COLORS.deepBrown,
+    fontSize: 12,
+    fontWeight: '700',
+    marginBottom: 2
+  },
+  joinCardTime: {
+    color: COLORS.saffron,
+    fontSize: 12,
+    fontWeight: '700',
+    marginBottom: 4
+  },
+  joinCardDesc: {
+    color: COLORS.warmBrown,
+    fontSize: 12,
+    textAlign: 'center'
+  },
   visitInfo: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
-    backgroundColor: 'rgba(201,162,39,0.08)',
-    borderRadius: 10,
-    padding: 10,
-    borderWidth: 1,
-    borderColor: 'rgba(201,162,39,0.2)',
+    gap: spacing.sm,
+    backgroundColor: COLORS.creamDark,
+    borderRadius: radii.sm,
+    padding: spacing.sm
   },
-  visitText: { color: 'rgba(253,246,227,0.65)', fontSize: 11, flex: 1, fontStyle: 'italic' },
-
+  visitText: {
+    color: COLORS.warmBrown,
+    fontSize: 12,
+    flex: 1
+  },
   /* ── Donate ── */
   donateCard: {
-    backgroundColor: COLORS.richBrown,
-    marginHorizontal: 20,
-    borderRadius: 16,
-    padding: 20,
-    borderWidth: 1,
-    borderColor: 'rgba(201,162,39,0.45)',
+    marginHorizontal: spacing.md,
+    padding: spacing.lg,
     alignItems: 'center',
-    marginBottom: 16,
+    marginBottom: spacing.md
   },
-  donateEmoji: { fontSize: 36, marginBottom: 10 },
-  donateHeading: { color: COLORS.cream, fontSize: 18, fontWeight: '800', textAlign: 'center', marginBottom: 8 },
-  donateSubtext: { color: 'rgba(253,246,227,0.6)', fontSize: 11, fontStyle: 'italic', textAlign: 'center', lineHeight: 17, marginBottom: 16 },
-  donateAmounts: { flexDirection: 'row', gap: 8, marginBottom: 16, flexWrap: 'wrap', justifyContent: 'center' },
+  donateEmoji: {
+    fontSize: 36,
+    marginBottom: spacing.sm
+  },
+  donateHeading: {
+    ...type.headline,
+    fontSize: 18,
+    color: COLORS.deepBrown,
+    textAlign: 'center',
+    marginBottom: spacing.sm,
+    fontFamily: DESIGN.fonts.editorial,
+    fontWeight: "400",
+    letterSpacing: -0.4
+  },
+  donateSubtext: {
+    ...type.footnote,
+    color: COLORS.warmBrown,
+    textAlign: 'center',
+    lineHeight: 17,
+    marginBottom: spacing.md
+  },
+  donateAmounts: {
+    flexDirection: 'row',
+    gap: spacing.sm,
+    marginBottom: spacing.md,
+    flexWrap: 'wrap',
+    justifyContent: 'center'
+  },
   amountChip: {
-    backgroundColor: 'rgba(201,162,39,0.15)',
-    borderRadius: 20,
-    paddingHorizontal: 16,
+    backgroundColor: `rgba(${RGB.saffron},0.12)`,
+    borderRadius: radii.pill,
+    paddingHorizontal: spacing.md,
     paddingVertical: 7,
     borderWidth: 1,
-    borderColor: 'rgba(201,162,39,0.4)',
+    borderColor: `rgba(${RGB.saffron},0.35)`
   },
-  amountText: { color: COLORS.goldLight, fontSize: 13, fontWeight: '700' },
+  amountText: {
+    color: COLORS.saffron,
+    fontSize: 13,
+    fontWeight: '700'
+  },
   donateBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
-    backgroundColor: COLORS.goldLight,
-    borderRadius: 10,
+    gap: spacing.sm,
+    backgroundColor: COLORS.richBrown,
+    borderRadius: radii.lg,
     paddingVertical: 13,
-    paddingHorizontal: 32,
-    marginBottom: 12,
+    paddingHorizontal: spacing.xl,
+    marginBottom: spacing.sm
   },
-  donateBtnText: { color: '#2C1A0E', fontSize: 14, fontWeight: '800' },
-  donateNote: { color: 'rgba(253,246,227,0.4)', fontSize: 10, fontStyle: 'italic' },
+  donateBtnText: {
+    color: COLORS.white,
+    fontSize: 14,
+    fontWeight: "600"
+  },
+  donateNote: {
+    ...type.footnote,
+    fontSize: 12,
+    color: COLORS.warmBrown
+  }
 });

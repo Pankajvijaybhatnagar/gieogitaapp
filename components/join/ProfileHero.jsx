@@ -3,13 +3,8 @@ import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
-const COLORS = {
-  primary: '#6E3F1F',
-  secondary: '#A8692D',
-  cream: '#FFF8EF',
-  text: '#382418',
-  muted: '#846F61',
-};
+import { COLORS } from '@/constants/brandColors';
+import { hairline, radii, shadow, spacing, type } from '@/constants/theme';
 
 export default function ProfileHero({ profile }) {
   const router = useRouter();
@@ -25,7 +20,7 @@ export default function ProfileHero({ profile }) {
         <View style={styles.patternTwo} />
 
         <Pressable onPress={() => router.back()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={22} color="#FFF" />
+          <Ionicons name="arrow-back" size={22} color={COLORS.white} />
         </Pressable>
 
         <Text style={styles.om}>ॐ</Text>
@@ -43,14 +38,14 @@ export default function ProfileHero({ profile }) {
               />
             ) : (
               <View style={styles.avatarFallback}>
-                <Ionicons name="person" size={58} color="#9D7553" />
+                <Ionicons name="person" size={58} color={COLORS.warmBrown} />
               </View>
             )}
           </View>
         </View>
 
         <View style={styles.memberBadge}>
-          <Ionicons name="checkmark-circle" size={15} color="#FFF" />
+          <Ionicons name="checkmark-circle" size={15} color={COLORS.white} />
 
           <Text style={styles.memberBadgeText}>GIEO GITA MEMBER</Text>
         </View>
@@ -66,7 +61,7 @@ export default function ProfileHero({ profile }) {
             <Ionicons
               name="location-outline"
               size={16}
-              color={COLORS.secondary}
+              color={COLORS.goldDark}
             />
 
             <Text style={styles.location}>{location}</Text>
@@ -87,17 +82,15 @@ export default function ProfileHero({ profile }) {
 
 const styles = StyleSheet.create({
   wrapper: {
-    marginBottom: 12,
+    marginBottom: spacing.sm + 4
   },
-
   banner: {
     height: 140,
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.richBrown,
     position: 'relative',
     overflow: 'hidden',
-    alignItems: 'center',
+    alignItems: 'center'
   },
-
   backButton: {
     position: 'absolute',
     top: 16,
@@ -108,9 +101,8 @@ const styles = StyleSheet.create({
     borderRadius: 21,
     backgroundColor: 'rgba(0,0,0,0.22)',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-
   patternOne: {
     position: 'absolute',
     width: 190,
@@ -119,9 +111,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(255,255,255,0.08)',
     top: -85,
-    left: -65,
+    left: -65
   },
-
   patternTwo: {
     position: 'absolute',
     width: 240,
@@ -130,133 +121,115 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(255,255,255,0.07)',
     right: -100,
-    top: -115,
+    top: -115
   },
-
   om: {
     color: 'rgba(255,255,255,0.09)',
     fontSize: 88,
     fontWeight: '700',
-    marginTop: 6,
+    marginTop: 6
   },
-
   card: {
-    marginHorizontal: 16,
+    marginHorizontal: spacing.md,
     marginTop: -66,
-    borderRadius: 28,
-    backgroundColor: '#FFF',
-    paddingHorizontal: 18,
+    borderRadius: 24,
+    backgroundColor: COLORS.cream,
+    paddingHorizontal: spacing.lg - 6,
     paddingTop: 76,
-    paddingBottom: 24,
+    paddingBottom: spacing.lg,
     alignItems: 'center',
-    elevation: 5,
-    shadowColor: '#52301E',
-    shadowOffset: {
-      width: 0,
-      height: 5,
-    },
-    shadowOpacity: 0.12,
-    shadowRadius: 12,
+    ...shadow.raised,
+    borderColor: hairline,
+    borderWidth: 1,
+    shadowOpacity: 0.045,
+    elevation: 2
   },
-
   avatarOuter: {
     position: 'absolute',
     top: -63,
     width: 130,
     height: 130,
-    borderRadius: 65,
+    borderRadius: radii.pill,
     padding: 5,
-    backgroundColor: '#E5CDAF',
+    backgroundColor: COLORS.creamDark
   },
-
   avatarInner: {
     flex: 1,
-    borderRadius: 60,
-    backgroundColor: '#FFF',
-    padding: 3,
+    borderRadius: radii.pill,
+    backgroundColor: COLORS.cream,
+    padding: 3
   },
-
   avatar: {
     width: '100%',
     height: '100%',
-    borderRadius: 60,
+    borderRadius: radii.pill
   },
-
   avatarFallback: {
     flex: 1,
-    borderRadius: 60,
-    backgroundColor: '#F4E8DB',
+    borderRadius: radii.pill,
+    backgroundColor: COLORS.creamDark,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-
   memberBadge: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 5,
-    backgroundColor: COLORS.secondary,
-    borderRadius: 30,
-    paddingHorizontal: 11,
-    paddingVertical: 5,
+    backgroundColor: COLORS.goldDark,
+    borderRadius: radii.pill,
+    paddingHorizontal: spacing.sm + 3,
+    paddingVertical: spacing.xs + 1
   },
-
   memberBadgeText: {
-    color: '#FFF',
-    fontSize: 9,
-    fontWeight: '800',
-    letterSpacing: 1,
+    color: COLORS.white,
+    fontSize: 10,
+    fontWeight: "600",
+    letterSpacing: 1
   },
-
   name: {
-    marginTop: 13,
-    color: COLORS.text,
+    marginTop: spacing.sm + 5,
+    ...type.title,
     fontSize: 25,
-    fontWeight: '800',
-    textAlign: 'center',
+    color: COLORS.deepBrown,
+    textAlign: 'center'
   },
-
   designation: {
-    marginTop: 4,
-    color: COLORS.secondary,
+    marginTop: spacing.xs,
+    color: COLORS.goldDark,
     fontSize: 14,
-    fontWeight: '700',
+    fontWeight: '700'
   },
-
   locationRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 9,
-    gap: 4,
+    marginTop: spacing.sm + 1,
+    gap: 4
   },
-
   location: {
-    color: COLORS.muted,
+    color: COLORS.warmBrown,
     fontSize: 13,
     textAlign: 'center',
-    maxWidth: 280,
+    maxWidth: 280
   },
-
   wingBadge: {
-    marginTop: 15,
-    borderRadius: 13,
-    backgroundColor: '#FAF1E7',
-    paddingHorizontal: 18,
-    paddingVertical: 8,
+    marginTop: spacing.md - 1,
+    borderRadius: radii.md - 1,
+    backgroundColor: COLORS.creamDark,
+    paddingHorizontal: spacing.lg - 6,
+    paddingVertical: spacing.sm,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 7,
+    gap: 7
   },
-
   wingLabel: {
-    color: '#A47C5A',
-    fontSize: 9,
-    fontWeight: '800',
-    letterSpacing: 1.4,
-  },
-
-  wingValue: {
-    color: COLORS.primary,
+    color: COLORS.warmBrown,
     fontSize: 12,
-    fontWeight: '800',
+    fontWeight: "600",
+    letterSpacing: 1.4
   },
+  wingValue: {
+    color: COLORS.deepBrown,
+    fontSize: 12,
+    fontWeight: "600"
+  }
 });

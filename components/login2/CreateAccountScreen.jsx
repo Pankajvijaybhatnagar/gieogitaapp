@@ -1,3 +1,4 @@
+import { DESIGN } from '@/constants/design';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect, useRef, useState } from 'react';
 import SocialLogin from './SocialLogin';
@@ -18,17 +19,20 @@ import {
   View,
 } from 'react-native';
 
-const PRIMARY_BROWN = '#A55A12';
+import { COLORS } from '@/constants/brandColors';
+import { hairline, radii } from '@/constants/theme';
 
-const DARK_BROWN = '#6D3B0D';
+const PRIMARY_BROWN = COLORS.richBrown;
 
-const TEXT_COLOR = '#171717';
+const DARK_BROWN = COLORS.richBrown;
 
-const MUTED_COLOR = '#868686';
+const TEXT_COLOR = COLORS.deepBrown;
 
-const INPUT_BG = '#F6F6F6';
+const MUTED_COLOR = COLORS.warmBrown;
 
-const BORDER_COLOR = '#E6E6E6';
+const INPUT_BG = COLORS.creamDark;
+
+const BORDER_COLOR = hairline;
 
 export default function CreateAccountScreen({
   onSignUp,
@@ -201,7 +205,7 @@ export default function CreateAccountScreen({
                 <Ionicons
                   name="person-outline"
                   size={17}
-                  color="#999"
+                  color={COLORS.warmBrown}
                   style={styles.inputIcon}
                 />
 
@@ -209,7 +213,7 @@ export default function CreateAccountScreen({
                   value={name}
                   onChangeText={setName}
                   placeholder="Ex. John Doe"
-                  placeholderTextColor="#A6A6A6"
+                  placeholderTextColor={COLORS.warmBrown}
                   editable={!loading}
                   style={styles.input}
                 />
@@ -223,7 +227,7 @@ export default function CreateAccountScreen({
                 <Ionicons
                   name="mail-outline"
                   size={17}
-                  color="#999"
+                  color={COLORS.warmBrown}
                   style={styles.inputIcon}
                 />
 
@@ -231,7 +235,7 @@ export default function CreateAccountScreen({
                   value={email}
                   onChangeText={setEmail}
                   placeholder="example@gmail.com"
-                  placeholderTextColor="#A6A6A6"
+                  placeholderTextColor={COLORS.warmBrown}
                   keyboardType="email-address"
                   autoCapitalize="none"
                   editable={!loading}
@@ -247,7 +251,7 @@ export default function CreateAccountScreen({
                 <Ionicons
                   name="lock-closed-outline"
                   size={17}
-                  color="#999"
+                  color={COLORS.warmBrown}
                   style={styles.inputIcon}
                 />
 
@@ -255,7 +259,7 @@ export default function CreateAccountScreen({
                   value={password}
                   onChangeText={setPassword}
                   placeholder="****************"
-                  placeholderTextColor="#A6A6A6"
+                  placeholderTextColor={COLORS.warmBrown}
                   secureTextEntry={!showPassword}
                   editable={!loading}
                   style={styles.input}
@@ -268,7 +272,7 @@ export default function CreateAccountScreen({
                   <Ionicons
                     name={showPassword ? 'eye-outline' : 'eye-off-outline'}
                     size={21}
-                    color="#444"
+                    color={COLORS.warmBrown}
                   />
                 </TouchableOpacity>
               </View>
@@ -283,7 +287,7 @@ export default function CreateAccountScreen({
                 <Ionicons
                   name="shield-checkmark-outline"
                   size={17}
-                  color="#999"
+                  color={COLORS.warmBrown}
                   style={styles.inputIcon}
                 />
 
@@ -291,7 +295,7 @@ export default function CreateAccountScreen({
                   value={confirmPassword}
                   onChangeText={setConfirmPassword}
                   placeholder="****************"
-                  placeholderTextColor="#A6A6A6"
+                  placeholderTextColor={COLORS.warmBrown}
                   secureTextEntry={!showConfirmPassword}
                   editable={!loading}
                   style={styles.input}
@@ -306,7 +310,7 @@ export default function CreateAccountScreen({
                       showConfirmPassword ? 'eye-outline' : 'eye-off-outline'
                     }
                     size={21}
-                    color="#444"
+                    color={COLORS.warmBrown}
                   />
                 </TouchableOpacity>
               </View>
@@ -323,7 +327,7 @@ export default function CreateAccountScreen({
                     agreeTerms && styles.checkboxSelected,
                   ]}>
                   {agreeTerms ? (
-                    <Ionicons name="checkmark" size={14} color="#FFFFFF" />
+                    <Ionicons name="checkmark" size={14} color={COLORS.white} />
                   ) : null}
                 </Animated.View>
 
@@ -344,7 +348,7 @@ export default function CreateAccountScreen({
                         : 'alert-circle-outline'
                     }
                     size={17}
-                    color={messageType === 'success' ? '#15803D' : '#DC2626'}
+                    color={messageType === 'success' ? '#15803D' : COLORS.dangerRed}
                   />
 
                   <Text
@@ -352,7 +356,7 @@ export default function CreateAccountScreen({
                       styles.message,
                       {
                         color:
-                          messageType === 'success' ? '#15803D' : '#DC2626',
+                          messageType === 'success' ? '#15803D' : COLORS.dangerRed,
                       },
                     ]}>
                     {message}
@@ -378,7 +382,7 @@ export default function CreateAccountScreen({
                   onPress={handleSignUp}
                   disabled={loading}>
                   {loading ? (
-                    <ActivityIndicator color="#FFFFFF" />
+                    <ActivityIndicator color={COLORS.white} />
                   ) : (
                     <>
                       <Text style={styles.primaryButtonText}>Sign Up</Text>
@@ -386,7 +390,7 @@ export default function CreateAccountScreen({
                       <Ionicons
                         name="arrow-forward"
                         size={18}
-                        color="#FFFFFF"
+                        color={COLORS.white}
                         style={styles.buttonIcon}
                       />
                     </>
@@ -446,129 +450,111 @@ export default function CreateAccountScreen({
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.cream
   },
-
   scrollContent: {
-    flexGrow: 1,
+    flexGrow: 1
   },
-
   container: {
     flex: 1,
     paddingHorizontal: 28,
     paddingTop: 44,
-    paddingBottom: 27,
+    paddingBottom: 27
   },
-
   header: {
     alignItems: 'center',
-    marginBottom: 23,
+    marginBottom: 23
   },
-
   logoCircle: {
     width: 47,
     height: 47,
     borderRadius: 24,
-    backgroundColor: '#FBF1E5',
+    backgroundColor: COLORS.creamDark,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 11,
+    marginBottom: 11
   },
-
   title: {
     fontSize: 22,
-    fontWeight: '700',
+    fontWeight: "400",
     color: TEXT_COLOR,
+    fontFamily: DESIGN.fonts.editorial,
+    letterSpacing: -0.4
   },
-
   subtitle: {
     marginTop: 1,
-    fontSize: 10.8,
+    fontSize: 12,
     color: MUTED_COLOR,
-    textAlign: 'center',
+    textAlign: 'center'
   },
-
   form: {
-    width: '100%',
+    width: '100%'
   },
-
   label: {
-    fontSize: 11.5,
-    color: '#333333',
+    fontSize: 12,
+    color: COLORS.deepBrown,
     marginBottom: 1,
-    fontWeight: '600',
+    fontWeight: '600'
   },
-
   fieldSpacing: {
-    marginTop: 13,
+    marginTop: 13
   },
-
   inputWrapper: {
     width: '100%',
-    height: 40,
-    borderRadius: 13,
+    height: 52,
+    borderRadius: 14,
     backgroundColor: INPUT_BG,
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#EFEFEF',
+    borderColor: BORDER_COLOR
   },
-
   inputIcon: {
-    marginLeft: 13,
+    marginLeft: 13
   },
-
   input: {
     flex: 1,
     height: '100%',
     paddingHorizontal: 12,
-    fontSize: 12,
-    color: '#333333',
+    fontSize: 15,
+    color: COLORS.deepBrown
   },
-
   eyeButton: {
     width: 44,
     height: '100%',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-
   termsRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 15,
+    marginTop: 15
   },
-
   checkbox: {
     width: 20,
     height: 20,
     borderRadius: 5,
     borderWidth: 1,
-    borderColor: '#C8C8C8',
+    borderColor: hairline,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 8,
+    marginRight: 8
   },
-
   checkboxSelected: {
     backgroundColor: PRIMARY_BROWN,
-    borderColor: PRIMARY_BROWN,
+    borderColor: PRIMARY_BROWN
   },
-
   agreeText: {
-    fontSize: 10.5,
-    color: '#595959',
+    fontSize: 12,
+    color: COLORS.warmBrown
   },
-
   termsText: {
     color: DARK_BROWN,
     fontWeight: '700',
-    textDecorationLine: 'underline',
+    textDecorationLine: 'underline'
   },
-
   primaryButton: {
-    height: 49,
-    borderRadius: 25,
+    borderRadius: 16,
     backgroundColor: PRIMARY_BROWN,
     alignItems: 'center',
     justifyContent: 'center',
@@ -577,83 +563,72 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 7,
+      height: 7
     },
-    shadowOpacity: 0.13,
+    shadowOpacity: 0.06,
     shadowRadius: 12,
-    elevation: 5,
+    elevation: 2,
+    minHeight: 52
   },
-
   disabledButton: {
-    opacity: 0.68,
+    opacity: 0.68
   },
-
   primaryButtonText: {
-    color: '#FFFFFF',
+    color: COLORS.white,
     fontSize: 14,
-    fontWeight: '700',
+    fontWeight: '700'
   },
-
   buttonIcon: {
-    marginLeft: 9,
+    marginLeft: 9
   },
-
   messageBox: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 12,
+    marginTop: 12
   },
-
   message: {
-    fontSize: 10.5,
+    fontSize: 12,
     marginLeft: 5,
     flex: 1,
-    textAlign: 'center',
+    textAlign: 'center'
   },
-
   dividerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 20,
+    marginTop: 20
   },
-
   dividerLine: {
     flex: 1,
     height: 1,
-    backgroundColor: '#E9E9E9',
+    backgroundColor: hairline
   },
-
   dividerText: {
     marginHorizontal: 11,
-    fontSize: 10,
-    color: '#999999',
+    fontSize: 12,
+    color: COLORS.warmBrown
   },
-
   socialContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
     gap: 14,
-    marginTop: 10,
+    marginTop: 10
   },
-
   bottomAccount: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 21,
-    marginBottom: 51,
+    marginBottom: 51
   },
-
   bottomText: {
     fontSize: 12,
-    color: '#444444',
+    color: COLORS.warmBrown
   },
-
   linkText: {
-    fontSize: 10.5,
+    fontSize: 12,
     fontWeight: '700',
     color: DARK_BROWN,
-    textDecorationLine: 'underline',
-  },
+    textDecorationLine: 'underline'
+  }
 });

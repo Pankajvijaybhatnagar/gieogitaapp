@@ -1,21 +1,11 @@
+import { useEffect, useRef } from 'react';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { BlurView } from 'expo-blur';
 import { usePathname, useRouter } from 'expo-router';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Animated, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-
-const COLORS = {
-  deepBrown: '#2C1A0A',
-  warmBrown: '#4A2C0D',
-  richBrown: '#3D2010',
-  gold: '#C9A227',
-  goldLight: '#E8C55A',
-  goldDark: '#8B6914',
-  cream: '#FDF6E3',
-  creamDark: '#F5E6C8',
-  saffron: '#E8721C',
-  saffronLight: '#F4A44A',
-  white: '#FFFFFF',
-};
+import { COLORS, RGB } from '@/constants/brandColors';
+import { radii, spacing } from '@/constants/theme';
 
 const TABS = [
   {
@@ -71,80 +61,169 @@ export default function SharedTabBar() {
     return pathname.endsWith(segment.replace('/', ''));
   };
 
+  const sevaIndex = TABS.findIndex(tab => tab.label === 'Seva');
+  const sevaTab = TABS[sevaIndex];
+  const isSevaActive = sevaTab ? isTabActive(sevaTab.route) : false;
+
+  /*
+  |--------------------------------------------------------------------------
+  | ACTIVE-TAB ANIMATION
+  |--------------------------------------------------------------------------
+  |
+  | One Animated.Value per tab (0 = inactive, 1 = active). Whichever page
+  | the person is on springs its pill highlight + icon in, and the Seva
+  | button gets the same "pop" treatment as every other tab.
+  |
+  */
+
+  const tabAnims = useRef(TABS.map(tab => new Animated.Value(isTabActive(tab.route) ? 1 : 0))).current;
+
+  useEffect(() => {
+    TABS.forEach((tab, index) => {
+      Animated.spring(tabAnims[index], {
+        toValue: isTabActive(tab.route) ? 1 : 0,
+        useNativeDriver: true,
+        friction: 7,
+        tension: 70,
+      }).start();
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname]);
+
   return (
     <View
       style={[
         styles.tabBarWrapper,
         {
-          paddingBottom: Math.max(insets.bottom, 8),
+          // Floats the bar above the home indicator instead of letting it
+          // sit flush against the very bottom edge of the screen.
+          paddingBottom: Math.max(insets.bottom, spacing.sm) + spacing.sm,
         },
       ]}>
-      <View style={styles.tabBar}>
-        {TABS.map((tab, index) => {
-          const isSeva = tab.label === 'Seva';
-          const isActive = isTabActive(tab.route);
+      {/* FLOATING PILL — shadow lives here, unclipped, so it reads as lifted */}
+      <View style={styles.tabBarFloating}>
+        {/* CLIPPED BACKGROUND — rounded corners cut the blur/tint cleanly */}
+        <View style={styles.tabBarClip}>
+          <BlurView intensity={65} tint="light" style={StyleSheet.absoluteFill} />
+          <View style={[StyleSheet.absoluteFill, styles.tabBarOverlay]} />
 
-          // ─────────────────────────────────────────
-          // CENTER SEVA BUTTON
-          // ─────────────────────────────────────────
-          if (isSeva) {
-            return (
-              <TouchableOpacity
-                key={index}
-                activeOpacity={0.85}
-                onPress={() => router.push(tab.route)}
-                style={styles.centerTab}>
-                <View style={styles.notchWrap}>
-                  <View style={styles.leftShoulder} />
-                  <View style={styles.rightShoulder} />
+          <View style={styles.tabBar}>
+            {TABS.map((tab, index) => {
+              // The Seva tab renders as a floating overlay below (outside
+              // the clip) so its notch can pop above the bar — reserve an
+              // equal-width empty slot here to keep the other tabs centered.
+              if (tab.label === 'Seva') {
+                return <View key={index} style={styles.centerSpacer} />;
+              }
 
-                  <View
-                    style={[
-                      styles.centerButton,
-                      isActive && styles.centerButtonActive,
-                    ]}>
-                    <MaterialCommunityIcons
-                      name={isActive ? tab.iconFocused : tab.icon}
-                      size={23}
-                      color={isActive ? COLORS.deepBrown : COLORS.warmBrown}
+              const isActive = isTabActive(tab.route);
+              const anim = tabAnims[index];
+
+              return (
+                <TouchableOpacity
+                  key={index}
+                  activeOpacity={0.75}
+                  onPress={() => router.push(tab.route)}
+                  style={styles.tabItem}>
+                  <View style={styles.iconSlot}>
+                    {/* Pill highlight — fades + grows in behind the icon
+                        for whichever page the person is currently on. */}
+                    <Animated.View
+                      pointerEvents="none"
+                      style={[
+                        styles.iconPill,
+                        {
+                          opacity: anim,
+                          transform: [
+                            {
+                              scale: anim.interpolate({
+                                inputRange: [0, 1],
+                                outputRange: [0.6, 1],
+                              }),
+                            },
+                          ],
+                        },
+                      ]}
                     />
 
-                    <Text
-                      style={[
-                        styles.centerLabel,
-                        isActive && styles.centerLabelActive,
-                      ]}>
-                      {tab.label}
-                    </Text>
+                    <Animated.View
+                      style={{
+                        transform: [
+                          {
+                            translateY: anim.interpolate({
+                              inputRange: [0, 1],
+                              outputRange: [0, -2],
+                            }),
+                          },
+                          {
+                            scale: anim.interpolate({
+                              inputRange: [0, 1],
+                              outputRange: [1, 1.12],
+                            }),
+                          },
+                        ],
+                      }}>
+                      <MaterialCommunityIcons
+                        name={isActive ? tab.iconFocused : tab.icon}
+                        size={22}
+                        color={isActive ? COLORS.richBrown : COLORS.warmBrown}
+                      />
+                    </Animated.View>
                   </View>
-                </View>
-              </TouchableOpacity>
-            );
-          }
 
-          // ─────────────────────────────────────────
-          // NORMAL TAB
-          // ─────────────────────────────────────────
-          return (
+                  <Text
+                    numberOfLines={1}
+                    style={[styles.tabLabel, isActive && styles.tabLabelActive]}>
+                    {tab.label}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        </View>
+
+        {/* ───────────────────────────────────────
+            CENTER SEVA BUTTON — unclipped overlay
+        ─────────────────────────────────────── */}
+        {sevaTab && (
+          // `box-none`: this outer box itself never intercepts touches —
+          // only its children can. Without this, the full 78x58 notch
+          // envelope (including the transparent gaps) was swallowing taps
+          // meant for the Chants/join tabs next to it.
+          <View pointerEvents="box-none" style={styles.centerTabAbsolute}>
+            {/* The only real tap target — sized to the visible circle, not
+                the wider decorative notch, so it can't reach into the
+                neighboring tabs' touch areas. */}
             <TouchableOpacity
-              key={index}
-              activeOpacity={0.75}
-              onPress={() => router.push(tab.route)}
-              style={styles.tabItem}>
-              <MaterialCommunityIcons
-                name={isActive ? tab.iconFocused : tab.icon}
-                size={22}
-                color={isActive ? COLORS.goldLight : COLORS.goldDark}
-              />
+              activeOpacity={0.85}
+              onPress={() => router.push(sevaTab.route)}
+              style={styles.centerButtonTouchable}>
+              <Animated.View
+                style={[
+                  styles.centerButton,
+                  isSevaActive && styles.centerButtonActive,
+                  {
+                    transform: [
+                      {
+                        scale: tabAnims[sevaIndex].interpolate({
+                          inputRange: [0, 1],
+                          outputRange: [1, 1.08],
+                        }),
+                      },
+                    ],
+                  },
+                ]}>
+                <MaterialCommunityIcons
+                  name={isSevaActive ? sevaTab.iconFocused : sevaTab.icon}
+                  size={23}
+                  color={COLORS.white}
+                />
 
-              <Text
-                numberOfLines={1}
-                style={[styles.tabLabel, isActive && styles.tabLabelActive]}>
-                {tab.label}
-              </Text>
+                <Text style={styles.centerLabel}>{sevaTab.label}</Text>
+              </Animated.View>
             </TouchableOpacity>
-          );
-        })}
+          </View>
+        )}
       </View>
     </View>
   );
@@ -163,11 +242,61 @@ const styles = StyleSheet.create({
   tabBarWrapper: {
     width: '100%',
 
-    backgroundColor: COLORS.deepBrown,
+    position: 'relative',
+
+    overflow: 'visible',
 
     zIndex: 999,
 
     elevation: 20,
+
+    // Side + bottom breathing room so the bar reads as a floating pill
+    // instead of a bar glued to the screen edges.
+    paddingHorizontal: spacing.md,
+
+    paddingTop: spacing.xs,
+  },
+
+  // Unclipped outer layer — holds the "lifted" shadow. Overflow stays
+  // visible so the center Seva button can pop up above the bar.
+  tabBarFloating: {
+    position: 'relative',
+
+    overflow: 'visible',
+
+    borderRadius: radii.xl,
+
+    shadowColor: COLORS.richBrown,
+
+    shadowOffset: { width: 0, height: 10 },
+
+    shadowOpacity: 0.14,
+
+    shadowRadius: 20,
+
+    elevation: 15,
+  },
+
+  // Clipped inner layer — rounds the blur/tint to a clean pill shape.
+  tabBarClip: {
+    height: 58,
+
+    borderRadius: radii.xl,
+
+    overflow: 'hidden',
+
+    borderWidth: 1,
+
+    borderColor: `rgba(${RGB.gold}, 0.18)`,
+  },
+
+  // A lighter, more transparent tint than the shared `glass.overlayStrong`
+  // (98% opaque) — that value is tuned for GlassCard's solid frosted
+  // surfaces, but painted over the tab bar's blur it hid almost all of it.
+  // This keeps just enough tint for the icons/labels to stay readable
+  // while still reading as genuinely glassy.
+  tabBarOverlay: {
+    backgroundColor: `rgba(${RGB.cream},0.38)`,
   },
 
   // =====================================================
@@ -179,25 +308,11 @@ const styles = StyleSheet.create({
 
     width: '100%',
 
-    backgroundColor: COLORS.deepBrown,
-
     flexDirection: 'row',
 
     alignItems: 'center',
 
     paddingHorizontal: 8,
-
-    borderTopWidth: 1,
-
-    // borderColor: 'rgba(201, 162, 39, 0.22)',
-
-    shadowOpacity: 0.22,
-
-    shadowRadius: 10,
-
-    elevation: 15,
-
-    overflow: 'visible',
   },
 
   // =====================================================
@@ -218,10 +333,42 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
 
+  centerSpacer: {
+    flex: 1,
+
+    height: '100%',
+  },
+
+  // Fixed-size slot so the animated pill always sits exactly behind the
+  // icon, regardless of the tab item's own layout.
+  iconSlot: {
+    width: 40,
+
+    height: 28,
+
+    alignItems: 'center',
+
+    justifyContent: 'center',
+
+    position: 'relative',
+  },
+
+  iconPill: {
+    position: 'absolute',
+
+    width: 40,
+
+    height: 28,
+
+    borderRadius: radii.pill,
+
+    backgroundColor: `rgba(${RGB.maroon},0.12)`,
+  },
+
   tabLabel: {
     fontSize: 9,
 
-    color: COLORS.goldDark,
+    color: COLORS.warmBrown,
 
     fontWeight: '600',
 
@@ -229,7 +376,7 @@ const styles = StyleSheet.create({
   },
 
   tabLabelActive: {
-    color: COLORS.goldLight,
+    color: COLORS.richBrown,
 
     fontWeight: '700',
   },
@@ -238,8 +385,16 @@ const styles = StyleSheet.create({
   // CENTER SEVA TAB
   // =====================================================
 
-  centerTab: {
-    flex: 1,
+  centerTabAbsolute: {
+    position: 'absolute',
+
+    top: 0,
+
+    left: '50%',
+
+    marginLeft: -39,
+
+    width: 78,
 
     height: 58,
 
@@ -247,77 +402,26 @@ const styles = StyleSheet.create({
 
     justifyContent: 'center',
 
-    position: 'relative',
-
-    overflow: 'visible',
-
     zIndex: 20,
   },
 
-  // =====================================================
-  // CENTER NOTCH
-  // =====================================================
-
-  notchWrap: {
+  // The real tap target — sized to just the visible circle (plus a small
+  // comfortable margin), not the wider decorative notch envelope, so it
+  // can't steal taps meant for the Chants/join tabs on either side.
+  centerButtonTouchable: {
     position: 'absolute',
 
-    top: -29,
+    top: -23,
 
-    width: 78,
+    left: 6,
 
-    height: 78,
+    width: 66,
+
+    height: 66,
 
     alignItems: 'center',
 
     justifyContent: 'center',
-
-    backgroundColor: 'transparent',
-
-    zIndex: 50,
-  },
-
-  // =====================================================
-  // LEFT SHOULDER
-  // =====================================================
-
-  leftShoulder: {
-    position: 'absolute',
-
-    width: 28,
-
-    height: 28,
-
-    left: -17,
-
-    bottom: 10,
-
-    backgroundColor: COLORS.deepBrown,
-
-    borderTopRightRadius: 28,
-
-    zIndex: 1,
-  },
-
-  // =====================================================
-  // RIGHT SHOULDER
-  // =====================================================
-
-  rightShoulder: {
-    position: 'absolute',
-
-    width: 28,
-
-    height: 28,
-
-    right: -17,
-
-    bottom: 10,
-
-    backgroundColor: COLORS.deepBrown,
-
-    borderTopLeftRadius: 28,
-
-    zIndex: 1,
   },
 
   // =====================================================
@@ -331,11 +435,11 @@ const styles = StyleSheet.create({
 
     borderRadius: 31,
 
-    backgroundColor: 'rgba(201, 162, 39, 0.96)',
+    backgroundColor: COLORS.richBrown,
 
-    borderWidth: 2,
+    borderWidth: 3,
 
-    borderColor: 'rgba(232, 197, 90, 0.8)',
+    borderColor: COLORS.cream,
 
     alignItems: 'center',
 
@@ -343,23 +447,23 @@ const styles = StyleSheet.create({
 
     zIndex: 100,
 
-    shadowColor: '#000',
+    shadowColor: COLORS.richBrown,
 
     shadowOffset: {
       width: 0,
-      height: 4,
+      height: 6,
     },
 
-    shadowOpacity: 0.25,
+    shadowOpacity: 0.35,
 
-    shadowRadius: 8,
+    shadowRadius: 10,
 
     elevation: 15,
   },
 
+  // Active state keeps the same brown fill (all buttons stay one color) and
+  // signals "active" with a gold ring instead of swapping the fill color.
   centerButtonActive: {
-    backgroundColor: 'rgba(232, 197, 90, 0.98)',
-
     borderColor: COLORS.gold,
   },
 
@@ -372,16 +476,10 @@ const styles = StyleSheet.create({
 
     marginTop: 1,
 
-    color: COLORS.deepBrown,
+    color: COLORS.white,
 
     fontWeight: '700',
 
     letterSpacing: 0.1,
-  },
-
-  centerLabelActive: {
-    color: COLORS.deepBrown,
-
-    fontWeight: '800',
   },
 });

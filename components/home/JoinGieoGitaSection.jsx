@@ -1,4 +1,6 @@
+import { DESIGN } from '@/constants/design';
 import { StyleSheet, Text, View } from 'react-native';
+import { hairline, radii, shadow, spacing, type } from '@/constants/theme';
 import { COLORS } from './constant';
 import { SectionHeader } from './Sharedui';
 
@@ -42,73 +44,70 @@ export default function JoinGieoGitaSection() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: COLORS.richBrown,
-    marginHorizontal: 20,
-    borderRadius: 16,
-    padding: 24,
-    borderWidth: 1,
-    borderColor: 'rgba(201,162,39,0.3)',
+    backgroundColor: COLORS.cream,
+    marginHorizontal: spacing.md,
+    borderRadius: radii.lg,
+    padding: spacing.lg,
     alignItems: 'center',
     minHeight: 220,
     justifyContent: 'center',
+    ...shadow.card
   },
   badge: {
-    backgroundColor: 'rgba(201,162,39,0.15)',
-    borderRadius: 20,
+    backgroundColor: COLORS.creamDark,
+    borderRadius: radii.pill,
     paddingHorizontal: 14,
     paddingVertical: 5,
     borderWidth: 1,
-    borderColor: 'rgba(201,162,39,0.4)',
-    marginBottom: 16,
+    borderColor: hairline,
+    marginBottom: spacing.md
   },
   badgeText: {
-    color: COLORS.goldLight,
-    fontSize: 11,
-    fontWeight: '700',
-    letterSpacing: 0.5,
+    ...type.caption,
+    color: COLORS.saffron
   },
   heading: {
-    color: COLORS.cream,
+    ...type.title,
     fontSize: 18,
-    fontWeight: '800',
+    color: COLORS.deepBrown,
     textAlign: 'center',
     lineHeight: 26,
-    marginBottom: 12,
+    marginBottom: spacing.sm,
+    fontFamily: DESIGN.fonts.editorial,
+    fontWeight: "400",
+    letterSpacing: -0.4
   },
   headingAccent: {
-    color: COLORS.goldLight,
+    color: COLORS.saffron
   },
   desc: {
-    color: 'rgba(253,246,227,0.6)',
-    fontSize: 12,
-    lineHeight: 18,
-    fontStyle: 'italic',
+    ...type.body,
+    color: COLORS.warmBrown,
     textAlign: 'center',
-    marginBottom: 20,
-    paddingHorizontal: 8,
+    marginBottom: spacing.lg,
+    paddingHorizontal: 8
   },
   dotsRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    marginBottom: 20,
+    marginBottom: spacing.lg
   },
   dot: {
     width: 6,
     height: 6,
     borderRadius: 3,
-    backgroundColor: 'rgba(201,162,39,0.35)',
+    backgroundColor: COLORS.goldLight
   },
   dotLarge: {
     width: 10,
     height: 10,
     borderRadius: 5,
-    backgroundColor: COLORS.goldLight,
+    backgroundColor: COLORS.saffron
   },
   footerNote: {
-    color: 'rgba(253,246,227,0.4)',
-    fontSize: 10,
-    letterSpacing: 0.5,
-    fontStyle: 'italic',
-  },
+    ...type.footnote,
+    color: COLORS.warmBrown,
+    letterSpacing: 0.5
+  }
 });

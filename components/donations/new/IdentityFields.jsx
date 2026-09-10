@@ -5,6 +5,8 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native';
+import { COLORS, RGB } from '@/constants/brandColors';
+import { hairline, radii } from '@/constants/theme';
 
 const IdentityFields = ({
   amount,
@@ -107,7 +109,7 @@ const IdentityFields = ({
           placeholder={
             identityType === 'pan' ? 'Enter PAN number' : 'Enter Aadhaar number'
           }
-          placeholderTextColor="#AF9987"
+          placeholderTextColor={COLORS.warmBrown}
           style={styles.input}
         />
       </View>
@@ -125,98 +127,83 @@ export default IdentityFields;
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 14,
+    marginBottom: 14
   },
-
   titleRow: {
     marginBottom: 7,
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   },
-
   label: {
     flex: 1,
-    fontSize: 10.5,
+    fontSize: 12,
     fontWeight: '600',
-    color: '#634735',
+    color: COLORS.deepBrown
   },
-
   required: {
-    color: '#B54E3F',
+    color: COLORS.dangerRed
   },
-
   requirementBadge: {
     paddingHorizontal: 7,
     paddingVertical: 3,
     borderRadius: 10,
-    backgroundColor: '#F3ECE6',
+    backgroundColor: COLORS.creamDark
   },
-
   requirementBadgeRequired: {
-    backgroundColor: '#FBE7E3',
+    backgroundColor: `rgba(${RGB.dangerRed},0.1)`
   },
-
   requirementText: {
-    fontSize: 8,
+    fontSize: 12,
     fontWeight: '600',
-    color: '#947A66',
+    color: COLORS.warmBrown
   },
-
   requirementTextRequired: {
-    color: '#A34A3C',
+    color: COLORS.dangerRed
   },
-
   typeRow: {
     flexDirection: 'row',
     gap: 6,
-    marginBottom: 7,
+    marginBottom: 7
   },
-
   typeButton: {
     minWidth: 68,
     height: 29,
     paddingHorizontal: 13,
-    borderRadius: 15,
+    borderRadius: radii.pill,
     borderWidth: 1,
-    borderColor: '#E5D6C9',
+    borderColor: hairline,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
-
   typeButtonActive: {
-    backgroundColor: '#704025',
-    borderColor: '#704025',
+    backgroundColor: COLORS.richBrown,
+    borderColor: COLORS.saffron
   },
-
   typeText: {
-    fontSize: 9.5,
+    fontSize: 12,
     fontWeight: '600',
-    color: '#755541',
+    color: COLORS.warmBrown
   },
-
   typeTextActive: {
-    color: '#FFFFFF',
+    color: COLORS.white
   },
-
   inputWrapper: {
-    height: 43,
-    borderRadius: 12,
+    height: 52,
+    borderRadius: 14,
     borderWidth: 1,
-    borderColor: '#E9DCCE',
-    backgroundColor: '#FFFFFF',
+    borderColor: hairline,
+    backgroundColor: COLORS.creamDark
   },
-
   input: {
     flex: 1,
     paddingHorizontal: 12,
-    fontSize: 12,
-    color: '#412A1D',
+    fontSize: 15,
+    color: COLORS.deepBrown
   },
-
   helper: {
     marginTop: 5,
-    fontSize: 9,
-    lineHeight: 13,
-    color: '#9A806C',
-  },
+    fontSize: 12,
+    lineHeight: 18,
+    color: COLORS.warmBrown
+  }
 });

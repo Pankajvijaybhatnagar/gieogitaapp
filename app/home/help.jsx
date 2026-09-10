@@ -1,7 +1,6 @@
 import { useState } from 'react';
 
 import {
-  Alert,
   Linking,
   Platform,
   SafeAreaView,
@@ -16,33 +15,8 @@ import {
 import { useAppAlert } from '@/context/AppAlertContext';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 
-// ============================================================
-// COLORS
-// ============================================================
-
-const COLORS = {
-  darkBrown: '#3a2c16',
-  brown: '#5a3816',
-
-  mediumBrown: '#76532E',
-  softBrown: '#9A7B57',
-
-  background: '#F4E9D8',
-  biscuit: '#EFE1CD',
-  lightBiscuit: '#F8F1E7',
-
-  card: '#FFFDF8',
-  white: '#FFFFFF',
-
-  border: '#DFCCAF',
-  softBorder: '#EADCC8',
-
-  text: '#3a2c16',
-  secondaryText: '#7E6A52',
-  mutedText: '#9C8A73',
-
-  success: '#65774A',
-};
+import { COLORS } from '@/constants/brandColors';
+import { hairline, radii, shadow, spacing, type } from '@/constants/theme';
 
 // ============================================================
 // FAQ DATA
@@ -86,7 +60,7 @@ function QuickHelpItem({ icon, title, subtitle, onPress }) {
       style={styles.quickHelpCard}
       onPress={onPress}>
       <View style={styles.quickIconBox}>
-        <MaterialCommunityIcons name={icon} size={23} color={COLORS.brown} />
+        <MaterialCommunityIcons name={icon} size={23} color={COLORS.saffron} />
       </View>
 
       <View style={styles.quickTextArea}>
@@ -97,7 +71,7 @@ function QuickHelpItem({ icon, title, subtitle, onPress }) {
         </Text>
       </View>
 
-      <Ionicons name="chevron-forward" size={18} color={COLORS.softBrown} />
+      <Ionicons name="chevron-forward" size={18} color={COLORS.warmBrown} />
     </TouchableOpacity>
   );
 }
@@ -126,7 +100,7 @@ function FAQItem({ item, expanded, onPress }) {
           <Ionicons
             name={expanded ? 'remove' : 'add'}
             size={17}
-            color={expanded ? COLORS.white : COLORS.brown}
+            color={expanded ? COLORS.white : COLORS.saffron}
           />
         </View>
       </TouchableOpacity>
@@ -162,10 +136,10 @@ export default function Help() {
       if (supported) {
         await Linking.openURL(url);
       } else {
-        Alert.alert('Unable to Open', 'The website could not be opened.');
+        error('Unable to Open', 'The website could not be opened.');
       }
-    } catch (error) {
-      Alert.alert('Error', 'Something went wrong while opening the website.');
+    } catch (_error) {
+      error('Error', 'Something went wrong while opening the website.');
     }
   };
 
@@ -182,13 +156,13 @@ export default function Help() {
       if (supported) {
         await Linking.openURL(email);
       } else {
-        Alert.alert(
+        error(
           'Email Not Available',
           'No email application was found on this device.',
         );
       }
-    } catch (error) {
-      Alert.alert('Error', 'Unable to open the email application.');
+    } catch (_error) {
+      error('Error', 'Unable to open the email application.');
     }
   };
 
@@ -202,7 +176,7 @@ export default function Help() {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <StatusBar barStyle="light-content" backgroundColor={COLORS.darkBrown} />
+      <StatusBar barStyle="dark-content" backgroundColor={COLORS.cream} />
 
       <View style={styles.root}>
         {/* ==================================================
@@ -329,7 +303,7 @@ export default function Help() {
               <MaterialCommunityIcons
                 name="headset"
                 size={28}
-                color={COLORS.brown}
+                color={COLORS.saffron}
               />
             </View>
 
@@ -361,7 +335,7 @@ export default function Help() {
                 <MaterialCommunityIcons
                   name="web"
                   size={17}
-                  color={COLORS.brown}
+                  color={COLORS.saffron}
                 />
 
                 <Text style={styles.secondaryButtonText}>Visit Website</Text>
@@ -397,549 +371,328 @@ const styles = StyleSheet.create({
 
   safeArea: {
     flex: 1,
-    backgroundColor: COLORS.darkBrown,
+    backgroundColor: COLORS.cream
   },
-
   root: {
     flex: 1,
-    backgroundColor: COLORS.background,
+    backgroundColor: COLORS.cream
   },
-
   scroll: {
-    flex: 1,
+    flex: 1
   },
-
   scrollContent: {
-    paddingBottom: Platform.OS === 'ios' ? 35 : 25,
+    paddingBottom: Platform.OS === 'ios' ? 35 : 25
   },
-
   // ==========================================================
   // HEADER
   // ==========================================================
 
   header: {
-    backgroundColor: COLORS.darkBrown,
-
-    paddingHorizontal: 20,
+    backgroundColor: COLORS.creamDark,
+    paddingHorizontal: spacing.md,
     paddingTop: 18,
-    paddingBottom: 22,
-
-    borderBottomLeftRadius: 28,
-    borderBottomRightRadius: 28,
+    paddingBottom: spacing.lg,
+    borderBottomLeftRadius: radii.xl,
+    borderBottomRightRadius: radii.xl
   },
-
   headerDecoration: {
     flexDirection: 'row',
     alignItems: 'center',
-
-    marginBottom: 16,
+    marginBottom: spacing.md
   },
-
   headerDecorationLine: {
     width: 37,
     height: 2,
-
     borderRadius: 2,
-
-    backgroundColor: COLORS.accentLight,
+    backgroundColor: COLORS.saffron
   },
-
   headerDecorationDot: {
     width: 5,
     height: 5,
-
     borderRadius: 3,
-
     marginLeft: 5,
-
-    backgroundColor: COLORS.accentLight,
+    backgroundColor: COLORS.saffron
   },
-
   headerTop: {
     flexDirection: 'row',
-
-    alignItems: 'center',
+    alignItems: 'center'
   },
-
   headerIcon: {
     width: 50,
     height: 50,
-
-    borderRadius: 16,
-
+    borderRadius: radii.md,
     alignItems: 'center',
     justifyContent: 'center',
-
     marginRight: 13,
-
-    backgroundColor: COLORS.brown,
-
-    borderWidth: 1,
-
-    borderColor: 'rgba(255,255,255,0.15)',
+    backgroundColor: COLORS.saffron
   },
-
   headerTextArea: {
-    flex: 1,
+    flex: 1
   },
-
   headerTitle: {
-    color: COLORS.white,
-
-    fontSize: 24,
-    fontWeight: '800',
-
-    letterSpacing: 0.2,
+    ...type.title,
+    color: COLORS.deepBrown
   },
-
   headerSubtitle: {
-    color: '#E6D4BC',
-
+    color: COLORS.warmBrown,
     fontSize: 12,
-
-    marginTop: 3,
+    marginTop: 3
   },
-
   headerDescription: {
     maxWidth: 350,
-
-    marginTop: 15,
-
-    color: 'rgba(255,255,255,0.62)',
-
-    fontSize: 11.5,
-
-    lineHeight: 17,
+    marginTop: spacing.md,
+    color: COLORS.warmBrown,
+    fontSize: 12,
+    lineHeight: 18
   },
-
   // ==========================================================
   // SECTION HEADER
   // ==========================================================
 
   sectionHeader: {
     marginHorizontal: 18,
-
     marginTop: 22,
-    marginBottom: 11,
+    marginBottom: 11
   },
-
   faqSectionHeader: {
-    marginTop: 25,
+    marginTop: 25
   },
-
   sectionTitle: {
-    color: COLORS.text,
-
+    color: COLORS.deepBrown,
     fontSize: 16,
-    fontWeight: '800',
+    fontWeight: "600"
   },
-
   sectionSubtitle: {
-    color: COLORS.secondaryText,
-
-    fontSize: 10,
-
-    marginTop: 2,
+    color: COLORS.warmBrown,
+    fontSize: 12,
+    marginTop: 2
   },
-
   // ==========================================================
   // QUICK HELP
   // ==========================================================
 
   quickHelpContainer: {
-    marginHorizontal: 18,
+    marginHorizontal: 18
   },
-
   quickHelpCard: {
     minHeight: 71,
-
     flexDirection: 'row',
-
     alignItems: 'center',
-
     paddingHorizontal: 13,
     paddingVertical: 10,
-
     marginBottom: 10,
-
-    borderRadius: 15,
-
-    backgroundColor: COLORS.card,
-
+    borderRadius: 24,
+    backgroundColor: COLORS.cream,
+    ...shadow.card,
+    borderColor: hairline,
     borderWidth: 1,
-
-    borderColor: COLORS.softBorder,
-
-    elevation: 2,
-
-    shadowColor: COLORS.darkBrown,
-
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-
-    shadowOpacity: 0.06,
-
-    shadowRadius: 5,
+    shadowOpacity: 0.045,
+    elevation: 2
   },
-
   quickIconBox: {
     width: 42,
     height: 42,
-
-    borderRadius: 13,
-
+    borderRadius: radii.sm,
     alignItems: 'center',
     justifyContent: 'center',
-
     marginRight: 11,
-
-    backgroundColor: COLORS.lightBiscuit,
-
-    borderWidth: 1,
-    borderColor: COLORS.border,
+    backgroundColor: COLORS.creamDark
   },
-
   quickTextArea: {
     flex: 1,
-
-    paddingRight: 7,
+    paddingRight: 7
   },
-
   quickTitle: {
-    color: COLORS.text,
-
+    color: COLORS.deepBrown,
     fontSize: 12.5,
-
-    fontWeight: '800',
-
-    marginBottom: 3,
+    fontWeight: "600",
+    marginBottom: 3
   },
-
   quickSubtitle: {
-    color: COLORS.secondaryText,
-
-    fontSize: 9.5,
-
-    lineHeight: 14,
+    color: COLORS.warmBrown,
+    fontSize: 12,
+    lineHeight: 18
   },
-
   // ==========================================================
   // FAQ
   // ==========================================================
 
   faqContainer: {
-    marginHorizontal: 18,
+    marginHorizontal: 18
   },
-
   faqCard: {
     marginBottom: 9,
-
     overflow: 'hidden',
-
-    borderRadius: 14,
-
-    backgroundColor: COLORS.card,
-
+    borderRadius: 24,
+    backgroundColor: COLORS.cream,
+    ...shadow.card,
+    borderColor: hairline,
     borderWidth: 1,
-
-    borderColor: COLORS.softBorder,
+    shadowOpacity: 0.045,
+    elevation: 2
   },
-
   faqHeader: {
     minHeight: 57,
-
     flexDirection: 'row',
-
     alignItems: 'center',
-
     paddingHorizontal: 12,
-
-    paddingVertical: 9,
+    paddingVertical: 9
   },
-
   faqQuestionArea: {
     flex: 1,
-
     flexDirection: 'row',
-
     alignItems: 'center',
-
-    paddingRight: 8,
+    paddingRight: 8
   },
-
   questionCircle: {
     width: 29,
     height: 29,
-
-    borderRadius: 9,
-
+    borderRadius: radii.sm,
     alignItems: 'center',
     justifyContent: 'center',
-
     marginRight: 9,
-
-    backgroundColor: COLORS.lightBiscuit,
+    backgroundColor: COLORS.creamDark
   },
-
   questionMark: {
-    color: COLORS.brown,
-
+    color: COLORS.saffron,
     fontSize: 14,
-
-    fontWeight: '800',
+    fontWeight: "600"
   },
-
   faqQuestion: {
     flex: 1,
-
-    color: COLORS.text,
-
-    fontSize: 11.5,
-
-    lineHeight: 16,
-
-    fontWeight: '700',
+    color: COLORS.deepBrown,
+    fontSize: 12,
+    lineHeight: 18,
+    fontWeight: '700'
   },
-
   expandButton: {
     width: 27,
     height: 27,
-
-    borderRadius: 9,
-
+    borderRadius: radii.sm,
     alignItems: 'center',
     justifyContent: 'center',
-
-    backgroundColor: COLORS.lightBiscuit,
-
-    borderWidth: 1,
-    borderColor: COLORS.border,
+    backgroundColor: COLORS.creamDark
   },
-
   expandButtonActive: {
-    backgroundColor: COLORS.brown,
-
-    borderColor: COLORS.brown,
+    backgroundColor: COLORS.richBrown
   },
-
   answerContainer: {
     flexDirection: 'row',
-
     paddingHorizontal: 13,
-
-    paddingBottom: 13,
+    paddingBottom: 13
   },
-
   answerLine: {
     width: 3,
-
     borderRadius: 2,
-
     marginRight: 10,
-
-    backgroundColor: COLORS.brown,
+    backgroundColor: COLORS.saffron
   },
-
   answerText: {
     flex: 1,
-
-    color: COLORS.secondaryText,
-
-    fontSize: 10,
-
-    lineHeight: 16,
+    color: COLORS.warmBrown,
+    fontSize: 12,
+    lineHeight: 18
   },
-
   // ==========================================================
   // SUPPORT CTA
   // ==========================================================
 
   supportCard: {
     alignItems: 'center',
-
     marginHorizontal: 18,
-
     marginTop: 23,
-
     paddingHorizontal: 18,
     paddingVertical: 21,
-
-    borderRadius: 20,
-
-    backgroundColor: COLORS.card,
-
+    borderRadius: 24,
+    backgroundColor: COLORS.cream,
+    ...shadow.raised,
+    borderColor: hairline,
     borderWidth: 1,
-    borderColor: COLORS.border,
-
-    elevation: 3,
-
-    shadowColor: COLORS.darkBrown,
-
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-
-    shadowOpacity: 0.08,
-
-    shadowRadius: 8,
+    shadowOpacity: 0.045,
+    elevation: 2
   },
-
   supportIconBox: {
     width: 56,
     height: 56,
-
-    borderRadius: 18,
-
+    borderRadius: radii.lg,
     alignItems: 'center',
     justifyContent: 'center',
-
     marginBottom: 11,
-
-    backgroundColor: COLORS.lightBiscuit,
-
-    borderWidth: 1,
-    borderColor: COLORS.border,
+    backgroundColor: COLORS.creamDark
   },
-
   supportTitle: {
-    color: COLORS.text,
-
+    color: COLORS.deepBrown,
     fontSize: 17,
-
-    fontWeight: '800',
-
-    marginBottom: 6,
+    fontWeight: "600",
+    marginBottom: 6
   },
-
   supportDescription: {
     maxWidth: 290,
-
-    color: COLORS.secondaryText,
-
-    fontSize: 10.5,
-
-    lineHeight: 16,
-
+    color: COLORS.warmBrown,
+    fontSize: 12,
+    lineHeight: 18,
     textAlign: 'center',
-
-    marginBottom: 16,
+    marginBottom: 16
   },
-
   supportActions: {
-    width: '100%',
+    width: '100%'
   },
-
   primaryButton: {
     width: '100%',
-
-    minHeight: 47,
-
+    minHeight: 52,
     flexDirection: 'row',
-
     alignItems: 'center',
     justifyContent: 'center',
-
-    borderRadius: 11,
-
+    borderRadius: 16,
     marginBottom: 9,
-
-    backgroundColor: COLORS.brown,
-
-    borderWidth: 1,
-
-    borderColor: COLORS.darkBrown,
-
-    elevation: 2,
-
-    shadowColor: COLORS.darkBrown,
-
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-
-    shadowOpacity: 0.13,
-
-    shadowRadius: 4,
+    backgroundColor: COLORS.richBrown
   },
-
   primaryButtonText: {
     color: COLORS.white,
-
     fontSize: 12,
-
-    fontWeight: '800',
-
-    marginLeft: 7,
+    fontWeight: "600",
+    marginLeft: 7
   },
-
   secondaryButton: {
     width: '100%',
-
     minHeight: 45,
-
     flexDirection: 'row',
-
     alignItems: 'center',
     justifyContent: 'center',
-
-    borderRadius: 11,
-
-    backgroundColor: COLORS.lightBiscuit,
-
+    borderRadius: radii.md,
+    backgroundColor: COLORS.creamDark,
     borderWidth: 1,
-
-    borderColor: COLORS.border,
+    borderColor: hairline
   },
-
   secondaryButtonText: {
-    color: COLORS.brown,
-
-    fontSize: 11.5,
-
-    fontWeight: '800',
-
-    marginLeft: 7,
+    color: COLORS.saffron,
+    fontSize: 12,
+    fontWeight: "600",
+    marginLeft: 7
   },
-
   // ==========================================================
   // FOOTER
   // ==========================================================
 
   footer: {
     alignItems: 'center',
-
-    marginTop: 27,
+    marginTop: 27
   },
-
   footerLine: {
     width: 34,
-
     height: 1,
-
     marginBottom: 9,
-
-    backgroundColor: COLORS.border,
+    backgroundColor: hairline
   },
-
   footerBrand: {
-    color: COLORS.brown,
-
-    fontSize: 9,
-
-    fontWeight: '800',
-
-    letterSpacing: 2,
+    color: COLORS.saffron,
+    fontSize: 12,
+    fontWeight: "600",
+    letterSpacing: 2
   },
-
   footerText: {
-    color: COLORS.mutedText,
-
-    fontSize: 9,
-
-    marginTop: 4,
-  },
+    color: COLORS.warmBrown,
+    fontSize: 12,
+    marginTop: 4
+  }
 });

@@ -1,6 +1,11 @@
+import { DESIGN } from '@/constants/design';
 import { Ionicons } from '@expo/vector-icons';
 
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+
+import Card from '@/components/ui/Card';
+import { COLORS } from '@/constants/brandColors';
+import { hairline, radii, spacing, type } from '@/constants/theme';
 
 export default function PaymentResult({
   status,
@@ -30,7 +35,7 @@ export default function PaymentResult({
       <Text style={styles.description}>{message || config.message}</Text>
 
       {donation && (
-        <View style={styles.receiptCard}>
+        <Card style={styles.receiptCard}>
           <Detail
             label="Amount"
             value={`₹${Number(donation?.amount || 0).toLocaleString('en-IN', {
@@ -48,7 +53,7 @@ export default function PaymentResult({
           <View style={styles.divider} />
 
           <Detail label="Status" value={donation?.status || status} />
-        </View>
+        </Card>
       )}
 
       <TouchableOpacity
@@ -57,7 +62,7 @@ export default function PaymentResult({
         activeOpacity={0.85}>
         <Text style={styles.buttonText}>View My Donations</Text>
 
-        <Ionicons name="arrow-forward" size={17} color="#FFFFFF" />
+        <Ionicons name="arrow-forward" size={17} color={COLORS.white} />
       </TouchableOpacity>
     </View>
   );
@@ -94,7 +99,7 @@ function getStatusConfig(status) {
         message:
           'We could not complete your payment. No successful payment has been confirmed.',
         icon: 'close-circle',
-        color: '#A54D41',
+        color: COLORS.dangerRed,
         background: '#FBEAE7',
       };
 
@@ -104,7 +109,7 @@ function getStatusConfig(status) {
         message:
           'Your payment status is being confirmed. You can check your donation history for the latest status.',
         icon: 'time',
-        color: '#987027',
+        color: COLORS.goldDark,
         background: '#FFF1D8',
       };
   }
@@ -115,94 +120,78 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 25,
-    backgroundColor: '#FFF9F3',
+    paddingHorizontal: spacing.lg,
+    backgroundColor: COLORS.cream
   },
-
   iconCircle: {
     width: 78,
     height: 78,
     borderRadius: 28,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-
   eyebrow: {
-    marginTop: 20,
-    fontSize: 9,
-    fontWeight: '700',
-    letterSpacing: 1.8,
-    color: '#AF7955',
+    marginTop: spacing.lg,
+    ...type.caption,
+    color: COLORS.warmBrown
   },
-
   title: {
-    marginTop: 6,
+    marginTop: spacing.xs,
+    ...type.title,
     fontSize: 23,
-    fontWeight: '700',
-    color: '#4D3020',
+    color: COLORS.deepBrown,
     textAlign: 'center',
+    fontFamily: DESIGN.fonts.editorial,
+    fontWeight: "400",
+    letterSpacing: -0.4
   },
-
   description: {
-    marginTop: 8,
+    marginTop: spacing.sm,
     maxWidth: 320,
     textAlign: 'center',
-    fontSize: 11,
+    ...type.footnote,
     lineHeight: 17,
-    color: '#876F5C',
+    color: COLORS.warmBrown
   },
-
   receiptCard: {
     width: '100%',
-    marginTop: 24,
-    paddingHorizontal: 14,
-    paddingVertical: 5,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 15,
-    borderWidth: 1,
-    borderColor: '#EADFD5',
+    marginTop: spacing.lg,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs
   },
-
   detailRow: {
     minHeight: 44,
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   },
-
   detailLabel: {
-    fontSize: 10,
-    color: '#927866',
+    ...type.footnote,
+    color: COLORS.warmBrown
   },
-
   detailValue: {
     flex: 1,
-    marginLeft: 15,
+    marginLeft: spacing.md,
     textAlign: 'right',
-    fontSize: 10.5,
-    fontWeight: '700',
-    color: '#543621',
+    ...type.subhead,
+    color: COLORS.deepBrown
   },
-
   divider: {
     height: 1,
-    backgroundColor: '#F1E8E0',
+    backgroundColor: hairline
   },
-
   button: {
     width: '100%',
     height: 48,
-    marginTop: 20,
-    borderRadius: 15,
-    backgroundColor: '#673A21',
+    marginTop: spacing.lg,
+    borderRadius: radii.lg,
+    backgroundColor: COLORS.richBrown,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 8,
+    gap: spacing.sm
   },
-
   buttonText: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: '#FFFFFF',
-  },
+    ...type.subhead,
+    color: COLORS.white
+  }
 });

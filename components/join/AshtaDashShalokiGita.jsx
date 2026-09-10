@@ -9,6 +9,9 @@ import {
   View,
 } from 'react-native';
 
+import { COLORS, RGB } from '@/constants/brandColors';
+import { radii, spacing, type } from '@/constants/theme';
+
 const IMAGES = [
   require('../../assets/ashtadash/3.jpg'),
   require('../../assets/ashtadash/4.jpg'),
@@ -19,11 +22,6 @@ const IMAGES = [
   require('../../assets/ashtadash/9.jpg'),
   require('../../assets/ashtadash/10.jpg'),
 ];
-
-const COLORS = {
-  primary: '#6E3F1F',
-  secondary: '#A8692D',
-};
 
 export default function AshtaDashShalokiGita() {
   const { width } = useWindowDimensions();
@@ -45,7 +43,7 @@ export default function AshtaDashShalokiGita() {
     <View style={styles.wrapper}>
       <View style={styles.headingRow}>
         <View style={styles.icon}>
-          <Ionicons name="book-outline" size={20} color={COLORS.secondary} />
+          <Ionicons name="book-outline" size={20} color={COLORS.goldDark} />
         </View>
 
         <View>
@@ -96,75 +94,65 @@ export default function AshtaDashShalokiGita() {
 
 const styles = StyleSheet.create({
   wrapper: {
-    marginTop: 24,
+    marginTop: spacing.lg
   },
-
   headingRow: {
-    marginHorizontal: 16,
-    marginBottom: 12,
+    marginHorizontal: spacing.md,
+    marginBottom: spacing.sm + 4,
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   },
-
   icon: {
     width: 40,
     height: 40,
-    borderRadius: 13,
-    backgroundColor: '#F1DFCE',
+    borderRadius: radii.md - 1,
+    backgroundColor: `rgba(${RGB.gold}, 0.14)`,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 10,
+    marginRight: spacing.sm + 2
   },
-
   eyebrow: {
-    color: COLORS.secondary,
-    fontSize: 8,
-    fontWeight: '800',
-    letterSpacing: 1.4,
+    color: COLORS.goldDark,
+    fontSize: 10,
+    fontWeight: "600",
+    letterSpacing: 1.4
   },
-
   title: {
-    color: COLORS.primary,
+    ...type.title,
     fontSize: 20,
-    fontWeight: '800',
-    marginTop: 2,
+    color: COLORS.deepBrown,
+    marginTop: 2
   },
-
   slide: {
-    paddingHorizontal: 16,
+    paddingHorizontal: spacing.md
   },
-
   image: {
     width: '100%',
     height: 460,
-    backgroundColor: '#FFF',
-    borderRadius: 22,
+    backgroundColor: COLORS.cream,
+    borderRadius: radii.xl - 2
   },
-
   pagination: {
-    marginTop: 13,
+    marginTop: spacing.sm + 5,
     flexDirection: 'row',
     justifyContent: 'center',
-    gap: 5,
+    gap: 5
   },
-
   dot: {
     width: 6,
     height: 6,
     borderRadius: 3,
-    backgroundColor: '#D9C7B7',
+    backgroundColor: `rgba(${RGB.gold}, 0.25)`
   },
-
   dotActive: {
     width: 21,
-    backgroundColor: COLORS.secondary,
+    backgroundColor: COLORS.gold
   },
-
   pageText: {
     textAlign: 'center',
-    marginTop: 7,
-    color: '#907765',
+    marginTop: spacing.sm - 1,
+    color: COLORS.warmBrown,
     fontSize: 10,
-    fontWeight: '700',
-  },
+    fontWeight: '700'
+  }
 });

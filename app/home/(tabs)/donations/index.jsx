@@ -1,3 +1,4 @@
+import { DESIGN } from '@/constants/design';
 import DonationCard from '@/components/donations/DonationCard';
 import DonationListFooter from '@/components/donations/DonationListFooter';
 import { useAuth } from '@/context/AuthContext';
@@ -18,6 +19,8 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { COLORS, RGB } from '@/constants/brandColors';
+import { hairline, radii, shadow, spacing, type } from '@/constants/theme';
 
 const LIMIT = 10;
 
@@ -250,10 +253,10 @@ const DonationHistoryScreen = () => {
       <SafeAreaView style={styles.container}>
         <View style={styles.loadingContainer}>
           <View style={styles.loadingIcon}>
-            <Ionicons name="person-circle-outline" size={34} color="#7A4527" />
+            <Ionicons name="person-circle-outline" size={34} color={COLORS.saffron} />
           </View>
 
-          <ActivityIndicator size="small" color="#7A4527" />
+          <ActivityIndicator size="small" color={COLORS.saffron} />
 
           <Text style={styles.loadingText}>Checking your account...</Text>
         </View>
@@ -273,7 +276,7 @@ const DonationHistoryScreen = () => {
         <View style={styles.guestContainer}>
           <View style={styles.guestIconWrapper}>
             <View style={styles.guestIcon}>
-              <Ionicons name="receipt-outline" size={38} color="#7A4527" />
+              <Ionicons name="receipt-outline" size={38} color={COLORS.saffron} />
             </View>
           </View>
 
@@ -289,7 +292,7 @@ const DonationHistoryScreen = () => {
           <View style={styles.guestFeatures}>
             <View style={styles.featureRow}>
               <View style={styles.featureIcon}>
-                <Ionicons name="time-outline" size={18} color="#7A4527" />
+                <Ionicons name="time-outline" size={18} color={COLORS.saffron} />
               </View>
 
               <View style={styles.featureContent}>
@@ -306,7 +309,7 @@ const DonationHistoryScreen = () => {
                 <Ionicons
                   name="document-text-outline"
                   size={18}
-                  color="#7A4527"
+                  color={COLORS.saffron}
                 />
               </View>
 
@@ -324,7 +327,7 @@ const DonationHistoryScreen = () => {
                 <Ionicons
                   name="shield-checkmark-outline"
                   size={18}
-                  color="#7A4527"
+                  color={COLORS.saffron}
                 />
               </View>
 
@@ -366,10 +369,10 @@ const DonationHistoryScreen = () => {
       <SafeAreaView style={styles.container}>
         <View style={styles.loadingContainer}>
           <View style={styles.loadingIcon}>
-            <Ionicons name="receipt-outline" size={32} color="#7A4527" />
+            <Ionicons name="receipt-outline" size={32} color={COLORS.saffron} />
           </View>
 
-          <ActivityIndicator size="small" color="#7A4527" />
+          <ActivityIndicator size="small" color={COLORS.saffron} />
 
           <Text style={styles.loadingText}>Loading your donations...</Text>
         </View>
@@ -401,8 +404,8 @@ const DonationHistoryScreen = () => {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={handleRefresh}
-            tintColor="#7A4527"
-            colors={['#7A4527']}
+            tintColor={COLORS.saffron}
+            colors={[COLORS.saffron]}
           />
         }
         ListHeaderComponent={
@@ -416,7 +419,7 @@ const DonationHistoryScreen = () => {
                 style={styles.addDonationButton}
                 activeOpacity={0.8}
                 onPress={() => router.push('/home/(tabs)/donations/new')}>
-                <Ionicons name="add" size={17} color="#ffffff" />
+                <Ionicons name="add" size={17} color={COLORS.white} />
 
                 <Text style={styles.addDonationText}>New Donation</Text>
               </TouchableOpacity>
@@ -437,7 +440,7 @@ const DonationHistoryScreen = () => {
                 <Ionicons
                   name="alert-circle-outline"
                   size={18}
-                  color="#A14332"
+                  color={COLORS.dangerRed}
                 />
 
                 <Text style={styles.inlineErrorText}>{error}</Text>
@@ -453,7 +456,7 @@ const DonationHistoryScreen = () => {
                   <Ionicons
                     name="cloud-offline-outline"
                     size={34}
-                    color="#9B6A4A"
+                    color={COLORS.warmBrown}
                   />
                 </View>
 
@@ -465,7 +468,7 @@ const DonationHistoryScreen = () => {
                   style={styles.retryButton}
                   onPress={handleRetry}
                   activeOpacity={0.85}>
-                  <Ionicons name="refresh-outline" size={18} color="#FFFFFF" />
+                  <Ionicons name="refresh-outline" size={18} color={COLORS.white} />
 
                   <Text style={styles.retryButtonText}>Try Again</Text>
                 </TouchableOpacity>
@@ -473,7 +476,7 @@ const DonationHistoryScreen = () => {
             ) : (
               <>
                 <View style={styles.emptyIcon}>
-                  <Ionicons name="heart-outline" size={36} color="#9B6A4A" />
+                  <Ionicons name="heart-outline" size={36} color={COLORS.warmBrown} />
                 </View>
 
                 <Text style={styles.emptyTitle}>No donations yet</Text>
@@ -503,9 +506,8 @@ export default DonationHistoryScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFF9F2',
+    backgroundColor: COLORS.creamDark
   },
-
   /*
   |--------------------------------------------------------------------------
   | LIST
@@ -514,13 +516,11 @@ const styles = StyleSheet.create({
 
   listContent: {
     paddingHorizontal: 16,
-    paddingBottom: 40,
+    paddingBottom: 40
   },
-
   emptyListContent: {
-    flexGrow: 1,
+    flexGrow: 1
   },
-
   /*
   |--------------------------------------------------------------------------
   | HEADER
@@ -529,50 +529,39 @@ const styles = StyleSheet.create({
 
   header: {
     paddingTop: 10,
-    paddingBottom: 5,
+    paddingBottom: 5
   },
-
   headerTop: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
-
   headerText: {
-    flex: 1,
+    flex: 1
   },
-
   eyebrow: {
-    fontSize: 11,
-    fontWeight: '700',
-    letterSpacing: 1.7,
-    color: '#B17A55',
-    marginBottom: 5,
+    ...type.caption,
+    color: COLORS.saffron,
+    marginBottom: 5
   },
-
   title: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: '#4D2D1A',
+    ...type.title,
+    color: COLORS.deepBrown
   },
-
   description: {
     fontSize: 12,
-    // lineHeight: 21,
-    color: '#82644F',
+    color: COLORS.warmBrown,
     marginTop: 0,
-    maxWidth: '55%',
+    maxWidth: '55%'
   },
-
   headerIcon: {
     width: 30,
     height: 30,
     borderRadius: 18,
-    backgroundColor: '#6C3B24',
+    backgroundColor: COLORS.saffron,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-
   /*
   |--------------------------------------------------------------------------
   | SUMMARY
@@ -581,50 +570,43 @@ const styles = StyleSheet.create({
 
   summaryCard: {
     marginTop: 15,
-
     borderRadius: 18,
     paddingVertical: 1,
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   },
-
   summaryIcon: {
     width: 42,
     height: 42,
     borderRadius: 14,
-    backgroundColor: '#FFF9F2',
+    backgroundColor: COLORS.creamDark,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 10,
+    marginRight: 10
   },
-
   summaryTextContainer: {
     flex: 1,
-    marginLeft: 12,
+    marginLeft: 12
   },
-
   summaryLabel: {
-    color: '#896B56',
+    color: COLORS.warmBrown,
     fontSize: 12,
-    fontWeight: '500',
+    fontWeight: '500'
   },
-
   summaryValue: {
-    color: '#4D2D1A',
+    color: COLORS.deepBrown,
     fontSize: 12,
     fontWeight: '700',
-    marginTop: 2,
+    marginTop: 2
   },
-
   summaryHeart: {
     width: 34,
     height: 34,
     borderRadius: 12,
-    backgroundColor: '#FFF9F2',
+    backgroundColor: COLORS.creamDark,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
-
   /*
   |--------------------------------------------------------------------------
   | LOADING
@@ -635,25 +617,22 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 30,
+    paddingHorizontal: 30
   },
-
   loadingIcon: {
     width: 64,
     height: 64,
     borderRadius: 22,
-    backgroundColor: '#F2E2D2',
+    backgroundColor: COLORS.creamDark,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 20,
+    marginBottom: 20
   },
-
   loadingText: {
-    color: '#82644F',
+    color: COLORS.warmBrown,
     fontSize: 14,
-    marginTop: 12,
+    marginTop: 12
   },
-
   /*
   |--------------------------------------------------------------------------
   | NOT LOGGED IN
@@ -664,128 +643,103 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     paddingHorizontal: 26,
-    paddingBottom: 35,
+    paddingBottom: 35
   },
-
   guestIconWrapper: {
     alignItems: 'center',
-    marginBottom: 25,
+    marginBottom: 25
   },
-
   guestIcon: {
     width: 82,
     height: 82,
     borderRadius: 28,
-    backgroundColor: '#F1DFCE',
+    backgroundColor: COLORS.creamDark,
     borderWidth: 1,
-    borderColor: '#E6CDB7',
+    borderColor: hairline,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-
   guestEyebrow: {
     textAlign: 'center',
-    fontSize: 10,
-    fontWeight: '700',
-    letterSpacing: 2,
-    color: '#AE7955',
-    marginBottom: 8,
+    ...type.caption,
+    color: COLORS.saffron,
+    marginBottom: 8
   },
-
   guestTitle: {
     textAlign: 'center',
-    fontSize: 20,
-    fontWeight: '700',
-    color: '#4D2D1A',
+    ...type.title,
+    color: COLORS.deepBrown
   },
-
   guestDescription: {
     textAlign: 'center',
-    color: '#846753',
+    color: COLORS.warmBrown,
     fontSize: 13,
     lineHeight: 21,
     paddingHorizontal: 15,
-    marginTop: 10,
+    marginTop: 10
   },
-
   guestFeatures: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 20,
+    backgroundColor: COLORS.cream,
+    borderRadius: radii.xl,
     borderWidth: 1,
-    borderColor: '#EFE0D2',
-    padding: 17,
-    marginTop: 28,
-    marginBottom: 22,
+    borderColor: hairline,
+    padding: spacing.md,
+    marginTop: spacing.xl,
+    marginBottom: spacing.lg,
+    ...shadow.card
   },
-
   featureRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 9,
+    paddingVertical: 9
   },
-
   featureIcon: {
     width: 38,
     height: 38,
     borderRadius: 13,
-    backgroundColor: '#F6EADD',
+    backgroundColor: COLORS.creamDark,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
-
   featureContent: {
     flex: 1,
-    marginLeft: 12,
+    marginLeft: 12
   },
-
   featureTitle: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#523321',
+    color: COLORS.deepBrown
   },
-
   featureDescription: {
-    fontSize: 11,
-    lineHeight: 16,
-    color: '#967B67',
-    marginTop: 2,
+    fontSize: 12,
+    lineHeight: 18,
+    color: COLORS.warmBrown,
+    marginTop: 2
   },
-
   loginButton: {
-    height: 37,
     width: 200,
-    borderRadius: 20,
-    backgroundColor: '#693B24',
+    borderRadius: 16,
+    backgroundColor: COLORS.richBrown,
     paddingHorizontal: 19,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#57301C',
-    shadowOpacity: 0.18,
-    shadowRadius: 10,
-    shadowOffset: {
-      width: 0,
-      height: 5,
-    },
-    elevation: 3,
     marginHorizontal: 'auto',
+    minHeight: 52
   },
-
   loginButtonText: {
     flex: 1,
     textAlign: 'center',
-    color: '#FFFFFF',
+    color: COLORS.white,
     fontSize: 14,
-    fontWeight: '700',
+    fontWeight: '700'
   },
-
   loginHint: {
-    fontSize: 10,
-    color: '#A08876',
+    fontSize: 12,
+    color: COLORS.warmBrown,
     textAlign: 'center',
-    marginTop: 12,
+    marginTop: 12
   },
-
   /*
   |--------------------------------------------------------------------------
   | EMPTY
@@ -797,35 +751,33 @@ const styles = StyleSheet.create({
     minHeight: 360,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 30,
+    paddingHorizontal: 30
   },
-
   emptyIcon: {
     width: 76,
     height: 76,
     borderRadius: 25,
-    backgroundColor: '#F4E6D8',
+    backgroundColor: COLORS.creamDark,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 18,
+    marginBottom: 18
   },
-
   emptyTitle: {
     fontSize: 19,
-    fontWeight: '700',
-    color: '#4D2D1A',
+    fontWeight: "400",
+    color: COLORS.deepBrown,
     textAlign: 'center',
+    fontFamily: DESIGN.fonts.editorial,
+    letterSpacing: -0.4
   },
-
   emptyDescription: {
     fontSize: 13,
     lineHeight: 20,
-    color: '#8B6D58',
+    color: COLORS.warmBrown,
     textAlign: 'center',
     marginTop: 7,
-    maxWidth: 300,
+    maxWidth: 300
   },
-
   /*
   |--------------------------------------------------------------------------
   | RETRY
@@ -833,23 +785,21 @@ const styles = StyleSheet.create({
   */
 
   retryButton: {
-    backgroundColor: '#6C3B24',
+    backgroundColor: COLORS.richBrown,
     paddingHorizontal: 18,
     height: 44,
-    borderRadius: 14,
+    borderRadius: radii.md,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 7,
-    marginTop: 18,
+    marginTop: 18
   },
-
   retryButtonText: {
-    color: '#FFFFFF',
+    color: COLORS.white,
     fontSize: 13,
-    fontWeight: '600',
+    fontWeight: '600'
   },
-
   /*
   |--------------------------------------------------------------------------
   | INLINE ERROR
@@ -859,40 +809,33 @@ const styles = StyleSheet.create({
   inlineError: {
     marginTop: 14,
     padding: 12,
-    borderRadius: 12,
-    backgroundColor: '#FBEDEA',
+    borderRadius: radii.sm,
+    backgroundColor: `rgba(${RGB.dangerRed},0.08)`,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: 8
   },
-
   inlineErrorText: {
-    color: '#934635',
+    color: COLORS.dangerRed,
     fontSize: 12,
     flex: 1,
-    lineHeight: 17,
+    lineHeight: 18
   },
-
   addDonationButton: {
     height: 34,
     paddingHorizontal: 11,
-    borderRadius: 17,
-
+    borderRadius: radii.pill,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 4,
-
-    backgroundColor: '#5B321D',
-    // backgroundColor: '#FFF3E5',
-
+    backgroundColor: COLORS.richBrown,
     borderWidth: 1,
-    borderColor: 'rgb(255, 255, 255)',
+    borderColor: COLORS.white
   },
-
   addDonationText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#FFF3E5',
-  },
+    color: COLORS.white
+  }
 });

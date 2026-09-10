@@ -1,7 +1,8 @@
+import { DESIGN } from '@/constants/design';
+import { useAppAlert } from '@/context/AppAlertContext';
 import { FontAwesome } from '@expo/vector-icons';
 import { useState } from 'react';
 import {
-  Alert,
   Dimensions,
   Linking,
   Modal,
@@ -17,6 +18,7 @@ import { C, OCCASIONS, UPI_ID, UPI_NAME } from './constants';
 const { width } = Dimensions.get('window');
 
 export default function PaymentModal({ visible, seva, onClose }) {
+  const { error } = useAppAlert();
   const [name,      setName]      = useState('');
   const [phone,     setPhone]     = useState('');
   const [occasion,  setOccasion]  = useState('General Donation');
@@ -26,7 +28,7 @@ export default function PaymentModal({ visible, seva, onClose }) {
 
   const openUPI = (app) => {
     if (!name.trim()) {
-      Alert.alert('🙏 Required', 'Please enter your name before proceeding.');
+      error('🙏 Required', 'Please enter your name before proceeding.');
       return;
     }
     const note   = `${seva?.name} - ${occasion} - ${name}`;
@@ -43,7 +45,7 @@ export default function PaymentModal({ visible, seva, onClose }) {
         Linking.openURL(intentUrl);
       } else {
         Linking.openURL(upiUrl).catch(() =>
-          Alert.alert('🙏 App not found', `Please install the app or use UPI ID: ${UPI_ID}`)
+          error('🙏 App not found', `Please install the app or use UPI ID: ${UPI_ID}`)
         );
       }
     });
@@ -170,7 +172,7 @@ export default function PaymentModal({ visible, seva, onClose }) {
 
             {/* Any UPI */}
             <TouchableOpacity style={PM.anyUpiBtn} onPress={() => openUPI('any')} activeOpacity={0.85}>
-              <FontAwesome name="mobile" size={16} color={C.deepBrown} style={{ marginRight: 8 }} />
+              <FontAwesome name="mobile" size={16} color={C.white} style={{ marginRight: 8 }} />
               <Text style={PM.anyUpiBtnText}>Pay with Any UPI App</Text>
             </TouchableOpacity>
 
@@ -189,89 +191,266 @@ export default function PaymentModal({ visible, seva, onClose }) {
 }
 
 const PM = StyleSheet.create({
-  overlay: { flex: 1, justifyContent: 'flex-end', backgroundColor: 'rgba(0,0,0,0.6)' },
+  overlay: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    backgroundColor: 'rgba(0,0,0,0.6)'
+  },
   sheet: {
-    backgroundColor: C.cream, borderTopLeftRadius: 28, borderTopRightRadius: 28,
-    borderTopWidth: 2, borderTopColor: C.gold, maxHeight: '90%',
+    backgroundColor: C.cream,
+    borderTopLeftRadius: 28,
+    borderTopRightRadius: 28,
+    borderTopWidth: 2,
+    borderTopColor: C.gold,
+    maxHeight: '90%'
   },
-  handle: { width: 40, height: 4, borderRadius: 2, backgroundColor: C.goldDark, alignSelf: 'center', marginTop: 10, marginBottom: 4 },
-
+  handle: {
+    width: 40,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: C.goldDark,
+    alignSelf: 'center',
+    marginTop: 10,
+    marginBottom: 4
+  },
   header: {
-    backgroundColor: C.deepBrown, padding: 20, alignItems: 'center',
-    position: 'relative', overflow: 'hidden',
-    borderBottomWidth: 1, borderBottomColor: C.gold,
+    backgroundColor: C.richBrown,
+    padding: 20,
+    alignItems: 'center',
+    position: 'relative',
+    overflow: 'hidden',
+    borderBottomWidth: 1,
+    borderBottomColor: C.gold
   },
-  headerBlob:  { position: 'absolute', width: 180, height: 180, borderRadius: 90, backgroundColor: 'rgba(201,162,39,0.07)', top: -60, right: -50 },
-  headerEmoji: { fontSize: 36, marginBottom: 6 },
-  headerTitle: { fontSize: 18, fontWeight: '800', color: C.cream },
-  headerDesc:  { fontSize: 11, color: C.goldDark, fontStyle: 'italic', marginTop: 3 },
+  headerBlob: {
+    position: 'absolute',
+    width: 180,
+    height: 180,
+    borderRadius: 90,
+    backgroundColor: 'rgba(179,149,98,0.1)',
+    top: -60,
+    right: -50
+  },
+  headerEmoji: {
+    fontSize: 36,
+    marginBottom: 6
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: "400",
+    color: C.white,
+    fontFamily: DESIGN.fonts.editorial,
+    letterSpacing: -0.4
+  },
+  headerDesc: {
+    fontSize: 12,
+    color: C.goldLight,
+    marginTop: 3
+  },
   closeBtn: {
-    position: 'absolute', top: 12, right: 14,
-    width: 32, height: 32, borderRadius: 16,
-    backgroundColor: 'rgba(201,162,39,0.15)', borderWidth: 1, borderColor: C.goldBorder,
-    alignItems: 'center', justifyContent: 'center',
+    position: 'absolute',
+    top: 12,
+    right: 14,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: 'rgba(179,149,98,0.15)',
+    borderWidth: 1,
+    borderColor: C.goldBorder,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
-
-  body:         { paddingHorizontal: 20 },
-  amountRow:    { flexDirection: 'row', gap: 12, marginTop: 16, marginBottom: 6 },
+  body: {
+    paddingHorizontal: 20
+  },
+  amountRow: {
+    flexDirection: 'row',
+    gap: 12,
+    marginTop: 16,
+    marginBottom: 6
+  },
   amountBox: {
-    flex: 1, backgroundColor: C.deepBrown, borderRadius: 14, padding: 14,
-    borderWidth: 1, borderColor: C.goldBorder, alignItems: 'center',
+    flex: 1,
+    backgroundColor: C.creamDark,
+    borderRadius: 14,
+    padding: 14,
+    borderWidth: 1,
+    borderColor: C.goldBorder,
+    alignItems: 'center'
   },
-  amountLabel:     { fontSize: 10, color: C.goldDark, fontWeight: '700', marginBottom: 4 },
-  amountValue:     { fontSize: 22, fontWeight: '800', color: C.goldLight },
+  amountLabel: {
+    fontSize: 12,
+    color: C.goldDark,
+    fontWeight: '700',
+    marginBottom: 4
+  },
+  amountValue: {
+    fontSize: 22,
+    fontWeight: "600",
+    color: C.saffron
+  },
   amountInput: {
-    flex: 1, backgroundColor: C.creamDark, borderRadius: 14, padding: 14,
-    borderWidth: 1, borderColor: C.goldBorder,
+    flex: 1,
+    backgroundColor: C.creamDark,
+    borderRadius: 14,
+    padding: 14,
+    borderWidth: 1,
+    borderColor: C.goldBorder
   },
-  amountTextInput: { fontSize: 20, fontWeight: '800', color: C.deepBrown, borderBottomWidth: 1, borderBottomColor: C.goldBorder, paddingVertical: 2 },
-
-  fieldLabel: { fontSize: 11, fontWeight: '700', color: C.goldDark, marginTop: 12, marginBottom: 6, letterSpacing: 0.5 },
+  amountTextInput: {
+    fontSize: 20,
+    fontWeight: "600",
+    color: C.deepBrown,
+    borderBottomWidth: 1,
+    borderBottomColor: C.goldBorder,
+    paddingVertical: 2
+  },
+  fieldLabel: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: C.goldDark,
+    marginTop: 12,
+    marginBottom: 6,
+    letterSpacing: 0.5
+  },
   textInput: {
-    backgroundColor: C.white, borderRadius: 12, borderWidth: 1, borderColor: C.goldBorder,
-    paddingHorizontal: 14, paddingVertical: 11, fontSize: 14, color: C.deepBrown,
+    backgroundColor: C.white,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: C.goldBorder,
+    paddingHorizontal: 14,
+    paddingVertical: 11,
+    fontSize: 15,
+    color: C.deepBrown
   },
-
-  occasionScroll:      { marginTop: 2, marginBottom: 4 },
+  occasionScroll: {
+    marginTop: 2,
+    marginBottom: 4
+  },
   occasionChip: {
-    alignItems: 'center', backgroundColor: C.creamDark, borderWidth: 1, borderColor: C.goldBorder,
-    borderRadius: 14, padding: 10, marginRight: 8, minWidth: 80,
+    alignItems: 'center',
+    backgroundColor: C.creamDark,
+    borderWidth: 1,
+    borderColor: C.goldBorder,
+    borderRadius: 14,
+    padding: 10,
+    marginRight: 8,
+    minWidth: 80
   },
-  occasionChipActive:  { backgroundColor: C.deepBrown, borderColor: C.gold },
-  occasionIcon:        { fontSize: 18, marginBottom: 4 },
-  occasionLabel:       { fontSize: 10, color: C.warmBrown, fontWeight: '600', textAlign: 'center' },
-  occasionLabelActive: { color: C.goldLight },
-
+  occasionChipActive: {
+    backgroundColor: C.saffron,
+    borderColor: C.saffron
+  },
+  occasionIcon: {
+    fontSize: 18,
+    marginBottom: 4
+  },
+  occasionLabel: {
+    fontSize: 12,
+    color: C.warmBrown,
+    fontWeight: '600',
+    textAlign: 'center'
+  },
+  occasionLabelActive: {
+    color: C.white
+  },
   occasionNote: {
-    backgroundColor: 'rgba(201,162,39,0.08)', borderRadius: 12, padding: 12, marginTop: 10,
-    borderWidth: 1, borderColor: C.goldBorder, borderLeftWidth: 3, borderLeftColor: C.gold,
+    backgroundColor: 'rgba(179,149,98,0.08)',
+    borderRadius: 12,
+    padding: 12,
+    marginTop: 10,
+    borderWidth: 1,
+    borderColor: C.goldBorder,
+    borderLeftWidth: 3,
+    borderLeftColor: C.gold
   },
-  occasionNoteText: { fontSize: 12, color: C.warmBrown, lineHeight: 18, fontStyle: 'italic' },
-
+  occasionNoteText: {
+    fontSize: 12,
+    color: C.warmBrown,
+    lineHeight: 18
+  },
   totalRow: {
-    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
-    backgroundColor: C.deepBrown, borderRadius: 14, paddingHorizontal: 16, paddingVertical: 12,
-    marginTop: 14, marginBottom: 4, borderWidth: 1, borderColor: C.goldBorder,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: C.richBrown,
+    borderRadius: 14,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    marginTop: 14,
+    marginBottom: 4,
+    borderWidth: 1,
+    borderColor: C.goldBorder
   },
-  totalLabel:  { fontSize: 13, color: C.goldDark, fontWeight: '700' },
-  totalAmount: { fontSize: 22, fontWeight: '800', color: C.goldLight },
-
-  payLabel: { fontSize: 11, fontWeight: '800', color: C.goldDark, letterSpacing: 1, marginTop: 14, marginBottom: 10 },
-  payGrid:  { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
+  totalLabel: {
+    fontSize: 13,
+    color: C.goldLight,
+    fontWeight: '700'
+  },
+  totalAmount: {
+    fontSize: 22,
+    fontWeight: "600",
+    color: C.white
+  },
+  payLabel: {
+    fontSize: 12,
+    fontWeight: "600",
+    color: C.goldDark,
+    letterSpacing: 1,
+    marginTop: 14,
+    marginBottom: 10
+  },
+  payGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 10
+  },
   payBtn: {
-    width: (width - 60) / 2, borderRadius: 14, paddingVertical: 13,
-    alignItems: 'center', flexDirection: 'row', justifyContent: 'center', gap: 8,
+    width: (width - 60) / 2,
+    borderRadius: 14,
+    paddingVertical: 13,
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: 8
   },
-  payBtnEmoji: { fontSize: 16, fontWeight: '900', color: C.white },
-  payBtnText:  { fontSize: 13, fontWeight: '800', color: C.white },
-
+  payBtnEmoji: {
+    fontSize: 16,
+    fontWeight: '900',
+    color: C.white
+  },
+  payBtnText: {
+    fontSize: 13,
+    fontWeight: "600",
+    color: C.white
+  },
   anyUpiBtn: {
-    backgroundColor: C.gold, borderRadius: 22, paddingVertical: 13, marginTop: 12,
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
+    backgroundColor: C.richBrown,
+    borderRadius: 22,
+    paddingVertical: 13,
+    marginTop: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
-  anyUpiBtnText: { fontSize: 14, fontWeight: '800', color: C.deepBrown },
-
-  upiIdRow:  { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 10 },
-  upiIdLabel:{ fontSize: 11, color: C.goldDark },
-  upiIdValue:{ fontSize: 12, fontWeight: '800', color: C.deepBrown },
+  anyUpiBtnText: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: C.white
+  },
+  upiIdRow: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 10
+  },
+  upiIdLabel: {
+    fontSize: 12,
+    color: C.goldDark
+  },
+  upiIdValue: {
+    fontSize: 12,
+    fontWeight: "600",
+    color: C.deepBrown
+  }
 });

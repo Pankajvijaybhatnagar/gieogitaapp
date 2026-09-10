@@ -5,11 +5,16 @@ import { Image } from 'expo-image';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
+  Modal,
   Pressable,
   StyleSheet,
   Text,
   View,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
+import { COLORS, RGB } from '@/constants/brandColors';
+import { hairline, radii, shadow, spacing, type } from '@/constants/theme';
 
 function formatTime(milliseconds = 0) {
   if (!milliseconds || milliseconds < 0) {
@@ -33,6 +38,8 @@ export default function MusicPlayer({
   onPlayingChange,
   onTrackStarted,
 }) {
+  const insets = useSafeAreaInsets();
+
   const soundRef = useRef(null);
   const progressWidthRef = useRef(0);
   const finishedRef = useRef(false);
@@ -42,6 +49,10 @@ export default function MusicPlayer({
   const [position, setPosition] = useState(0);
   const [duration, setDuration] = useState(0);
   const [error, setError] = useState('');
+
+  // Spotify-style two-tier player: a slim bar above the tab bar that
+  // expands into a full "Now Playing" screen when tapped.
+  const [expanded, setExpanded] = useState(false);
 
   const updatePlaying = useCallback(
     value => {
@@ -220,6 +231,8 @@ export default function MusicPlayer({
   };
 
   const handleClose = async () => {
+    setExpanded(false);
+
     await unload();
 
     updatePlaying(false);
@@ -234,246 +247,375 @@ export default function MusicPlayer({
   const progress =
     duration > 0 ? Math.min((position / duration) * 100, 100) : 0;
 
-  return (
-    <View style={styles.wrapper}>
-      <BlurView intensity={90} tint="light" style={styles.player}>
-        <View style={styles.topRow}>
-          <View style={styles.trackInfo}>
-            {track.cover ? (
-              <Image
-                source={{ uri: track.cover }}
-                style={styles.cover}
-                contentFit="cover"
-              />
-            ) : (
-              <View style={styles.coverPlaceholder}>
-                <Ionicons name="musical-notes" size={24} color="#5a3816" />
-              </View>
-            )}
+  const coverArt = track.cover ? (
+    <Image source={{ uri: track.cover }} style={styles.miniCover} contentFit="cover" />
+  ) : (
+    <View style={styles.miniCoverPlaceholder}>
+      <Ionicons name="musical-notes" size={22} color={COLORS.saffron} />
+    </View>
+  );
 
-            <View style={styles.textContainer}>
-              <Text style={styles.title} numberOfLines={1}>
+  return (
+    <>
+      {/* ═══════════════════════════════════════════════════════════
+          MINI PLAYER — the slim bar that sits above the tab bar.
+          Tapping it (outside the play button) opens the full player.
+      ═══════════════════════════════════════════════════════════ */}
+      <View style={styles.wrapper}>
+        <BlurView intensity={90} tint="light" style={styles.miniBar}>
+          {/* Thin progress line along the top edge, Spotify-style. */}
+          <View style={styles.miniProgressTrack}>
+            <View style={[styles.miniProgressFill, { width: `${progress}%` }]} />
+          </View>
+
+          <Pressable
+            style={styles.miniContent}
+            onPress={() => setExpanded(true)}
+            accessibilityRole="button"
+            accessibilityLabel="Open now playing">
+            {coverArt}
+
+            <View style={styles.miniTextContainer}>
+              <Text style={styles.miniTitle} numberOfLines={1}>
                 {track.title}
               </Text>
 
-              <Text style={styles.artist} numberOfLines={1}>
+              <Text style={styles.miniArtist} numberOfLines={1}>
                 {track.artist || 'Gieogita Bhajan'}
               </Text>
             </View>
+
+            <Pressable
+              disabled={loading || !!error}
+              onPress={togglePlayback}
+              hitSlop={10}
+              style={styles.miniPlayButton}>
+              {loading ? (
+                <ActivityIndicator size="small" color={COLORS.richBrown} />
+              ) : (
+                <Ionicons
+                  name={isPlaying ? 'pause' : 'play'}
+                  size={22}
+                  color={COLORS.richBrown}
+                />
+              )}
+            </Pressable>
+
+            <Pressable onPress={handleClose} hitSlop={10} style={styles.miniCloseButton}>
+              <Ionicons name="close" size={18} color={COLORS.warmBrown} />
+            </Pressable>
+          </Pressable>
+        </BlurView>
+      </View>
+
+      {/* ═══════════════════════════════════════════════════════════
+          FULL "NOW PLAYING" SCREEN
+      ═══════════════════════════════════════════════════════════ */}
+      <Modal
+        visible={expanded}
+        animationType="slide"
+        presentationStyle="fullScreen"
+        onRequestClose={() => setExpanded(false)}>
+        <View style={[styles.fullScreen, { paddingTop: insets.top + spacing.sm }]}>
+          <View style={styles.fullTopBar}>
+            <Pressable
+              onPress={() => setExpanded(false)}
+              hitSlop={10}
+              style={styles.fullTopButton}
+              accessibilityRole="button"
+              accessibilityLabel="Minimize player">
+              <Ionicons name="chevron-down" size={26} color={COLORS.deepBrown} />
+            </Pressable>
+
+            <Text style={styles.fullTopLabel} numberOfLines={1}>
+              NOW PLAYING
+            </Text>
+
+            <Pressable
+              onPress={handleClose}
+              hitSlop={10}
+              style={styles.fullTopButton}
+              accessibilityRole="button"
+              accessibilityLabel="Stop playback">
+              <Ionicons name="close" size={24} color={COLORS.deepBrown} />
+            </Pressable>
           </View>
 
-          <Pressable
-            onPress={handleClose}
-            hitSlop={10}
-            style={styles.closeButton}>
-            <Ionicons name="close" size={22} color="#555" />
-          </Pressable>
-        </View>
-
-        {!!error && <Text style={styles.error}>{error}</Text>}
-
-        <Pressable
-          onPress={seekTo}
-          onLayout={event => {
-            progressWidthRef.current = event.nativeEvent.layout.width;
-          }}
-          style={styles.progressTouch}>
-          <View style={styles.progressBackground}>
-            <View
-              style={[
-                styles.progressFill,
-                {
-                  width: `${progress}%`,
-                },
-              ]}
-            />
-          </View>
-        </Pressable>
-
-        <View style={styles.timeRow}>
-          <Text style={styles.time}>{formatTime(position)}</Text>
-
-          <Text style={styles.time}>{formatTime(duration)}</Text>
-        </View>
-
-        <View style={styles.controls}>
-          <Pressable
-            disabled={isFirst}
-            onPress={onPrevious}
-            style={[styles.controlButton, isFirst && styles.disabledControl]}>
-            <Ionicons name="play-skip-back" size={25} color="#333" />
-          </Pressable>
-
-          <Pressable
-            disabled={loading || !!error}
-            onPress={togglePlayback}
-            style={styles.mainButton}>
-            {loading ? (
-              <ActivityIndicator color="#fff" />
-            ) : (
-              <Ionicons
-                name={isPlaying ? 'pause' : 'play'}
-                size={29}
-                color="#fff"
-                style={!isPlaying && styles.playIcon}
+          <View style={styles.fullArtWrap}>
+            {track.cover ? (
+              <Image
+                source={{ uri: track.cover }}
+                style={styles.fullArt}
+                contentFit="cover"
               />
+            ) : (
+              <View style={styles.fullArtPlaceholder}>
+                <Ionicons name="musical-notes" size={72} color={COLORS.saffron} />
+              </View>
             )}
-          </Pressable>
+          </View>
+
+          <View style={styles.fullTextBlock}>
+            <Text style={styles.fullTitle} numberOfLines={2}>
+              {track.title}
+            </Text>
+
+            <Text style={styles.fullArtist} numberOfLines={1}>
+              {track.artist || 'Gieogita Bhajan'}
+            </Text>
+          </View>
+
+          {!!error && <Text style={styles.error}>{error}</Text>}
 
           <Pressable
-            disabled={isLast}
-            onPress={onNext}
-            style={[styles.controlButton, isLast && styles.disabledControl]}>
-            <Ionicons name="play-skip-forward" size={25} color="#333" />
+            onPress={seekTo}
+            onLayout={event => {
+              progressWidthRef.current = event.nativeEvent.layout.width;
+            }}
+            style={styles.fullProgressTouch}>
+            <View style={styles.progressBackground}>
+              <View style={[styles.progressFill, { width: `${progress}%` }]} />
+              <View style={[styles.progressThumb, { left: `${progress}%` }]} />
+            </View>
           </Pressable>
+
+          <View style={styles.timeRow}>
+            <Text style={styles.time}>{formatTime(position)}</Text>
+
+            <Text style={styles.time}>{formatTime(duration)}</Text>
+          </View>
+
+          <View style={styles.fullControls}>
+            <Pressable
+              disabled={isFirst}
+              onPress={onPrevious}
+              style={[styles.controlButton, isFirst && styles.disabledControl]}>
+              <Ionicons name="play-skip-back" size={30} color={COLORS.deepBrown} />
+            </Pressable>
+
+            <Pressable
+              disabled={loading || !!error}
+              onPress={togglePlayback}
+              style={styles.fullPlayButton}>
+              {loading ? (
+                <ActivityIndicator color={COLORS.white} />
+              ) : (
+                <Ionicons
+                  name={isPlaying ? 'pause' : 'play'}
+                  size={36}
+                  color={COLORS.white}
+                  style={!isPlaying && styles.playIcon}
+                />
+              )}
+            </Pressable>
+
+            <Pressable
+              disabled={isLast}
+              onPress={onNext}
+              style={[styles.controlButton, isLast && styles.disabledControl]}>
+              <Ionicons name="play-skip-forward" size={30} color={COLORS.deepBrown} />
+            </Pressable>
+          </View>
         </View>
-      </BlurView>
-    </View>
+      </Modal>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
+  /* ══════════════════ MINI PLAYER ══════════════════ */
   wrapper: {
     position: 'absolute',
-    left: 12,
-    right: 12,
-    bottom: 12,
-    borderRadius: 24,
+    left: spacing.sm,
+    right: spacing.sm,
+    bottom: spacing.sm,
+    borderRadius: radii.xl,
     overflow: 'hidden',
-    elevation: 12,
-
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 5,
-    },
-    shadowOpacity: 0.15,
-    shadowRadius: 15,
+    ...shadow.raised,
   },
-
-  player: {
-    paddingHorizontal: 16,
-    paddingTop: 14,
-    paddingBottom: 14,
-    backgroundColor: 'rgba(255,255,255,0.85)',
+  miniBar: {
+    backgroundColor: `rgba(${RGB.cream}, 0.9)`,
   },
-
-  topRow: {
+  miniProgressTrack: {
+    height: 2,
+    backgroundColor: hairline,
+  },
+  miniProgressFill: {
+    height: '100%',
+    backgroundColor: COLORS.saffron,
+  },
+  miniContent: {
     flexDirection: 'row',
     alignItems: 'center',
+    paddingVertical: spacing.sm,
+    paddingHorizontal: spacing.sm + 2,
   },
-
-  trackInfo: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
+  miniCover: {
+    width: 44,
+    height: 44,
+    borderRadius: radii.sm,
   },
-
-  cover: {
-    width: 52,
-    height: 52,
-    borderRadius: 12,
-  },
-
-  coverPlaceholder: {
-    width: 52,
-    height: 52,
-    borderRadius: 12,
-    backgroundColor: '#FFF1E3',
+  miniCoverPlaceholder: {
+    width: 44,
+    height: 44,
+    borderRadius: radii.sm,
+    backgroundColor: COLORS.creamDark,
     alignItems: 'center',
     justifyContent: 'center',
   },
-
-  textContainer: {
+  miniTextContainer: {
     flex: 1,
-    marginLeft: 11,
+    marginLeft: spacing.sm + 2,
     minWidth: 0,
   },
-
-  title: {
-    fontSize: 15,
-    color: '#222',
+  miniTitle: {
+    fontSize: 14,
     fontWeight: '700',
+    color: COLORS.deepBrown,
   },
-
-  artist: {
-    marginTop: 3,
-    fontSize: 12,
-    color: '#777',
+  miniArtist: {
+    marginTop: 2,
+    ...type.caption,
+    fontWeight: '400',
+    letterSpacing: 0,
+    color: COLORS.warmBrown,
   },
-
-  closeButton: {
-    width: 38,
-    height: 38,
-    borderRadius: 19,
+  miniPlayButton: {
+    width: 40,
+    height: 40,
+    borderRadius: radii.pill,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  miniCloseButton: {
+    width: 32,
+    height: 32,
+    marginLeft: spacing.xs,
     alignItems: 'center',
     justifyContent: 'center',
   },
 
+  /* ══════════════════ FULL "NOW PLAYING" SCREEN ══════════════════ */
+  fullScreen: {
+    flex: 1,
+    backgroundColor: COLORS.cream,
+    paddingHorizontal: spacing.lg,
+  },
+  fullTopBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: spacing.lg,
+  },
+  fullTopButton: {
+    width: 40,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  fullTopLabel: {
+    ...type.caption,
+    color: COLORS.warmBrown,
+    letterSpacing: 1.5,
+  },
+  fullArtWrap: {
+    alignItems: 'center',
+    marginTop: spacing.md,
+    marginBottom: spacing.xl,
+  },
+  fullArt: {
+    width: '100%',
+    aspectRatio: 1,
+    borderRadius: radii.xl,
+    ...shadow.raised,
+  },
+  fullArtPlaceholder: {
+    width: '100%',
+    aspectRatio: 1,
+    borderRadius: radii.xl,
+    backgroundColor: COLORS.creamDark,
+    alignItems: 'center',
+    justifyContent: 'center',
+    ...shadow.raised,
+  },
+  fullTextBlock: {
+    marginBottom: spacing.lg,
+  },
+  fullTitle: {
+    ...type.title,
+    fontSize: 24,
+    color: COLORS.deepBrown,
+  },
+  fullArtist: {
+    marginTop: spacing.xs,
+    ...type.body,
+    color: COLORS.warmBrown,
+  },
   error: {
-    color: '#C62828',
+    color: COLORS.dangerRed,
     fontSize: 12,
-    marginTop: 8,
+    marginBottom: spacing.sm,
   },
-
-  progressTouch: {
-    paddingVertical: 10,
-    marginTop: 4,
+  fullProgressTouch: {
+    paddingVertical: spacing.sm,
   },
-
   progressBackground: {
     height: 4,
-    backgroundColor: '#E3E3E3',
-    borderRadius: 50,
-    overflow: 'hidden',
+    backgroundColor: hairline,
+    borderRadius: radii.pill,
+    justifyContent: 'center',
   },
-
   progressFill: {
     height: '100%',
-    backgroundColor: '#5a3816',
-    borderRadius: 50,
+    backgroundColor: COLORS.saffron,
+    borderRadius: radii.pill,
   },
-
+  progressThumb: {
+    position: 'absolute',
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    backgroundColor: COLORS.saffron,
+    marginLeft: -6,
+    ...shadow.card,
+  },
   timeRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: -4,
+    marginBottom: spacing.xl,
   },
-
   time: {
-    fontSize: 10,
-    color: '#888',
+    ...type.caption,
+    fontWeight: '400',
+    letterSpacing: 0,
+    color: COLORS.warmBrown,
   },
-
-  controls: {
+  fullControls: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 26,
-    marginTop: 1,
+    gap: spacing.xl,
   },
-
   controlButton: {
-    width: 44,
-    height: 44,
+    width: 50,
+    height: 50,
     justifyContent: 'center',
     alignItems: 'center',
   },
-
   disabledControl: {
     opacity: 0.25,
   },
-
-  mainButton: {
-    width: 55,
-    height: 55,
-    borderRadius: 28,
-    backgroundColor: '#5a3816',
+  fullPlayButton: {
+    width: 76,
+    height: 76,
+    borderRadius: radii.pill,
+    backgroundColor: COLORS.richBrown,
     alignItems: 'center',
     justifyContent: 'center',
+    ...shadow.raised,
+    shadowColor: COLORS.richBrown,
   },
-
   playIcon: {
-    marginLeft: 3,
+    marginLeft: 4,
   },
 });

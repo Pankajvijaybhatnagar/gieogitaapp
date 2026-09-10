@@ -1,39 +1,57 @@
 import {
+  ImageBackground,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
+import Card from '@/components/ui/Card';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
+import { radii, spacing, type } from '@/constants/theme';
 import { COLORS, exclusiveContent } from './constant';
 import { SectionHeader } from './Sharedui';
 
 function ExclusiveCard({ item }) {
+  const router = useRouter();
+
   return (
-    <TouchableOpacity style={styles.excCard} activeOpacity={0.85}>
-      <View style={styles.excCardImg}>
-        {/* <Text style={styles.excCardIcon}>{item.icon}</Text> */}
-        {item.badge && (
-          <View style={styles.excBadge}>
-            <Text style={styles.excBadgeText}>{item.badge}</Text>
-          </View>
-        )}
-        <View style={styles.excImgOverlay} />
-      </View>
-      <View style={styles.excCardBody}>
-        <Text style={styles.excCardTitle} numberOfLines={2}>
-          {item.title}
-        </Text>
-        <Text style={styles.excCardMeta}>{item.meta}</Text>
-      </View>
+    <TouchableOpacity
+      activeOpacity={0.8}
+      onPress={() => router.push(`/home/(tabs)/exclusive/${item.id}`)}>
+      <Card radius={radii.lg} style={styles.excCard}>
+        <ImageBackground source={require('@/assets/images/krishna-bg.jpg')} resizeMode="cover" style={styles.excCardImg}>
+          <LinearGradient colors={['rgba(41,24,36,0.08)', 'rgba(41,24,36,0.65)']} style={StyleSheet.absoluteFillObject} />
+          <View style={styles.iconMedallion}><Text style={styles.excCardIcon}>{item.icon}</Text></View>
+          {/* <Text style={styles.excCardIcon}>{item.icon}</Text> */}
+          {item.badge && (
+            <View style={styles.excBadge}>
+              <Text style={styles.excBadgeText}>{item.badge}</Text>
+            </View>
+          )}
+        </ImageBackground>
+        <View style={styles.excCardBody}>
+          <Text style={styles.excCardTitle} numberOfLines={2}>
+            {item.title}
+          </Text>
+          <Text style={styles.excCardMeta}>{item.meta}</Text>
+        </View>
+      </Card>
     </TouchableOpacity>
   );
 }
 
 export default function ExclusiveContent() {
+  const router = useRouter();
+
   return (
     <>
-      <SectionHeader title="✦ Exclusive" accent="Content" onSeeAll={() => {}} />
+      <SectionHeader
+        title="✦ Exclusive"
+        accent="Content"
+        onSeeAll={() => router.push('/home/exclusive-all')}
+      />
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -48,62 +66,53 @@ export default function ExclusiveContent() {
 
 const styles = StyleSheet.create({
   hScrollContent: {
-    paddingHorizontal: 20,
-    paddingBottom: 6,
-    gap: 12,
+    paddingHorizontal: spacing.md,
+    paddingBottom: spacing.xs,
+    gap: spacing.md
   },
   excCard: {
-    width: 300,
-    backgroundColor: COLORS.deepBrown,
-    borderRadius: 10,
-    overflow: 'hidden',
-    borderWidth: 1,
-    borderColor: 'rgba(201,162,39,0.3)',
+    width: 210
   },
   excCardImg: {
     width: '100%',
-    height: 50,
-    backgroundColor: COLORS.warmBrown,
+    height: 100,
+    backgroundColor: COLORS.creamDark,
     alignItems: 'center',
     justifyContent: 'center',
-    position: 'relative',
+    position: 'relative'
   },
-  excCardIcon: { fontSize: 36, zIndex: 1 },
-  excImgOverlay: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: 32,
-    backgroundColor: 'rgba(44,26,10,0.7)',
+  excCardIcon: {
+    fontSize: 36,
+    zIndex: 1
   },
   excBadge: {
     position: 'absolute',
-    top: 7,
-    left: 7,
+    top: spacing.sm,
+    left: spacing.sm,
     backgroundColor: COLORS.saffron,
-    borderRadius: 10,
-    paddingHorizontal: 7,
-    paddingVertical: 2,
-    zIndex: 2,
+    borderRadius: radii.pill,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    zIndex: 2
   },
   excBadgeText: {
     color: COLORS.white,
-    fontSize: 8,
-    fontWeight: '800',
-    letterSpacing: 0.5,
+    ...type.caption,
+    fontSize: 10
   },
-  excCardBody: { padding: 10 },
+  excCardBody: {
+    padding: spacing.md
+  },
   excCardTitle: {
-    color: COLORS.cream,
-    fontSize: 17,
-    fontWeight: '700',
-    lineHeight: 15,
+    color: COLORS.deepBrown,
+    ...type.headline,
+    fontSize: 15,
+    lineHeight: 20
   },
   excCardMeta: {
-    color: 'rgba(232,197,90,0.6)',
-    fontSize: 12,
+    color: COLORS.warmBrown,
+    ...type.footnote,
     marginTop: 4,
-    fontStyle: 'italic',
-  },
+    opacity: 0.75
+  }
 });

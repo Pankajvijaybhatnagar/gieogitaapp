@@ -1,3 +1,4 @@
+import { DESIGN } from '@/constants/design';
 import { useEffect, useState } from 'react';
 import {
     ActivityIndicator,
@@ -9,6 +10,8 @@ import {
 
 import getDeviceHeaders from '@/lib/api/deviceHeaders';
 import ChantCounter from '../../../components/chants/ChantCounter2';
+import { COLORS } from '@/constants/brandColors';
+import { hairline, radii, spacing, type } from '@/constants/theme';
 
 const Index = () => {
   const [deviceInfo, setDeviceInfo] = useState(null);
@@ -81,74 +84,64 @@ export default Index;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: COLORS.cream
   },
-
   contentContainer: {
-    padding: 20,
-    paddingBottom: 40,
+    padding: spacing.lg,
+    paddingBottom: 40
   },
-
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f5f5f5',
-    padding: 20,
+    backgroundColor: COLORS.cream,
+    padding: spacing.lg
   },
-
   loadingText: {
-    marginTop: 12,
-    fontSize: 16,
-    color: '#555',
+    marginTop: spacing.sm,
+    ...type.body,
+    color: COLORS.warmBrown
   },
-
   title: {
-    fontSize: 26,
-    fontWeight: '700',
-    marginBottom: 20,
-    color: '#222',
+    ...type.largeTitle,
+    marginBottom: spacing.lg,
+    color: COLORS.deepBrown
   },
-
   infoCard: {
-    backgroundColor: '#fff',
-    borderRadius: 10,
+    backgroundColor: DESIGN.colors.surface,
+    borderRadius: 24,
     padding: 15,
-    marginBottom: 10,
+    marginBottom: spacing.sm,
     borderWidth: 1,
-    borderColor: '#e5e5e5',
+    borderColor: DESIGN.colors.border,
+    shadowOpacity: 0.045,
+    elevation: 2
   },
-
   key: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#666',
-    marginBottom: 6,
+    color: COLORS.warmBrown,
+    marginBottom: 6
   },
-
   value: {
     fontSize: 17,
-    color: '#111',
+    color: COLORS.deepBrown
   },
-
   sectionTitle: {
-    fontSize: 20,
-    fontWeight: '700',
-    marginTop: 20,
-    marginBottom: 10,
-    color: '#222',
+    ...type.title,
+    marginTop: spacing.lg,
+    marginBottom: spacing.sm,
+    color: COLORS.deepBrown
   },
-
   jsonContainer: {
-    backgroundColor: '#1e1e1e',
-    borderRadius: 10,
-    padding: 15,
+    backgroundColor: COLORS.deepBrown,
+    borderRadius: radii.sm,
+    padding: 15
   },
-
   jsonText: {
-    color: '#fff',
+    color: COLORS.cream,
     fontSize: 13,
     lineHeight: 20,
-    fontFamily: 'monospace',
-  },
+    fontFamily: 'monospace'
+  }
 });

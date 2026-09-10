@@ -1,3 +1,4 @@
+import { DESIGN } from '@/constants/design';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { SectionHead } from './SharedUI';
@@ -7,18 +8,18 @@ import { SectionHead } from './SharedUI';
 // ============================================================
 
 const COLORS = {
-  darkBrown: '#3a2c16',
-  brown: '#5a3816',
+  darkBrown: '#292328',
+  brown: '#55334A',
 
-  mediumBrown: '#74512F',
-  softBrown: '#957A5B',
-  mutedBrown: '#A08B72',
+  mediumBrown: '#74696A',
+  softBrown: '#7A6650',
+  mutedBrown: '#94806A',
 
   background: '#F4E9D8',
   biscuit: '#EEDFC9',
   biscuitLight: '#F8F1E7',
 
-  cream: '#FFFDF8',
+  cream: '#FFFFFF',
   white: '#FFFFFF',
 
   border: '#DDC8AA',
@@ -87,7 +88,7 @@ export default function AboutMedanta() {
             <Text style={styles.aboutLogoTitle}>Medanta — The Medicity</Text>
 
             <Text style={styles.aboutLogoSub}>
-              India's Leading Multi-Specialty Hospital
+              India&apos;s Leading Multi-Specialty Hospital
             </Text>
           </View>
         </View>
@@ -107,7 +108,7 @@ export default function AboutMedanta() {
         =================================================== */}
 
         <Text style={styles.aboutDesc}>
-          Medanta is one of India's largest and most prestigious hospital
+          Medanta is one of India&apos;s largest and most prestigious hospital
           groups. In a divine seva initiative, Medanta has partnered with GIEO
           GITA to provide FREE quality healthcare to devotees, pilgrims and
           visitors at Gita Gyan Sansthanam, Kurukshetra — bringing quality
@@ -193,421 +194,281 @@ const styles = StyleSheet.create({
 
   aboutSection: {
     paddingHorizontal: 18,
-    paddingTop: 20,
+    paddingTop: 20
   },
-
   // ==========================================================
   // MAIN CARD
   // ==========================================================
 
   aboutCard: {
     position: 'relative',
-
     overflow: 'hidden',
-
-    backgroundColor: COLORS.cream,
-
-    borderRadius: 20,
-
+    backgroundColor: DESIGN.colors.surface,
+    borderRadius: 24,
     paddingHorizontal: 17,
     paddingTop: 20,
     paddingBottom: 17,
-
     borderWidth: 1,
-    borderColor: COLORS.border,
-
+    borderColor: DESIGN.colors.border,
     shadowColor: COLORS.darkBrown,
-
-    shadowOpacity: 0.09,
-
+    shadowOpacity: 0.045,
     shadowOffset: {
       width: 0,
-      height: 5,
+      height: 5
     },
-
     shadowRadius: 10,
-
-    elevation: 3,
+    elevation: 2
   },
-
   // ==========================================================
   // TOP ACCENT
   // ==========================================================
 
   topAccent: {
     position: 'absolute',
-
     top: 0,
     left: 0,
     right: 0,
-
     height: 4,
-
-    flexDirection: 'row',
+    flexDirection: 'row'
   },
-
   topAccentDark: {
     flex: 1,
-    backgroundColor: COLORS.darkBrown,
+    backgroundColor: COLORS.darkBrown
   },
-
   topAccentLight: {
     flex: 1,
-    backgroundColor: COLORS.brown,
+    backgroundColor: COLORS.brown
   },
-
   // ==========================================================
   // LOGO
   // ==========================================================
 
   aboutLogoRow: {
     flexDirection: 'row',
-
     alignItems: 'center',
-
-    marginBottom: 15,
+    marginBottom: 15
   },
-
   aboutLogoOuter: {
     width: 58,
     height: 58,
-
     borderRadius: 18,
-
     alignItems: 'center',
     justifyContent: 'center',
-
     marginRight: 12,
-
     backgroundColor: COLORS.biscuitLight,
-
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: COLORS.border
   },
-
   aboutLogoBox: {
     width: 44,
     height: 44,
-
     borderRadius: 14,
-
     backgroundColor: COLORS.brown,
-
     alignItems: 'center',
     justifyContent: 'center',
-
     shadowColor: COLORS.darkBrown,
-
     shadowOpacity: 0.15,
-
     shadowOffset: {
       width: 0,
-      height: 3,
+      height: 3
     },
-
     shadowRadius: 5,
-
-    elevation: 2,
+    elevation: 2
   },
-
   aboutLogoText: {
     fontSize: 20,
-
     fontWeight: '900',
-
-    color: COLORS.white,
+    color: COLORS.white
   },
-
   aboutLogoTextCol: {
-    flex: 1,
+    flex: 1
   },
-
   aboutSmallLabel: {
     color: COLORS.softBrown,
-
-    fontSize: 7.5,
-
-    fontWeight: '800',
-
+    fontSize: 12,
+    fontWeight: "600",
     letterSpacing: 1.2,
-
-    marginBottom: 3,
+    marginBottom: 3
   },
-
   aboutLogoTitle: {
     color: COLORS.darkBrown,
-
     fontSize: 14,
-
-    fontWeight: '800',
+    fontWeight: "600"
   },
-
   aboutLogoSub: {
     color: COLORS.softBrown,
-
-    fontSize: 9.5,
-
-    lineHeight: 14,
-
-    marginTop: 3,
+    fontSize: 12,
+    lineHeight: 18,
+    marginTop: 3
   },
-
   // ==========================================================
   // DIVIDER
   // ==========================================================
 
   dividerRow: {
     flexDirection: 'row',
-
     alignItems: 'center',
-
-    marginBottom: 14,
+    marginBottom: 14
   },
-
   dividerLine: {
     flex: 1,
-
     height: 1,
-
-    backgroundColor: COLORS.borderSoft,
+    backgroundColor: COLORS.borderSoft
   },
-
   dividerDot: {
     width: 5,
     height: 5,
-
     borderRadius: 3,
-
     marginHorizontal: 7,
-
-    backgroundColor: COLORS.brown,
+    backgroundColor: COLORS.brown
   },
-
   // ==========================================================
   // DESCRIPTION
   // ==========================================================
 
   aboutDesc: {
-    color: '#665541',
-
-    fontSize: 11.5,
-
+    color: COLORS.mediumBrown,
+    fontSize: 12,
     lineHeight: 18,
-
-    marginBottom: 16,
+    marginBottom: 16
   },
-
   // ==========================================================
   // SEVA HIGHLIGHT
   // ==========================================================
 
   sevaHighlight: {
     minHeight: 62,
-
     flexDirection: 'row',
-
     alignItems: 'center',
-
     paddingHorizontal: 11,
     paddingVertical: 9,
-
     marginBottom: 18,
-
     borderRadius: 14,
-
     backgroundColor: COLORS.biscuitLight,
-
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: COLORS.border
   },
-
   sevaIconBox: {
     width: 37,
     height: 37,
-
     borderRadius: 12,
-
     alignItems: 'center',
     justifyContent: 'center',
-
     marginRight: 10,
-
-    backgroundColor: COLORS.brown,
+    backgroundColor: COLORS.brown
   },
-
   sevaIcon: {
     color: COLORS.white,
-
     fontSize: 22,
-
     fontWeight: '500',
-
-    lineHeight: 24,
+    lineHeight: 24
   },
-
   sevaTextArea: {
     flex: 1,
-
-    paddingRight: 8,
+    paddingRight: 8
   },
-
   sevaTitle: {
     color: COLORS.darkBrown,
-
-    fontSize: 11.5,
-
-    fontWeight: '800',
-
-    marginBottom: 2,
+    fontSize: 12,
+    fontWeight: "600",
+    marginBottom: 2
   },
-
   sevaSubtitle: {
     color: COLORS.softBrown,
-
-    fontSize: 8.5,
-
-    lineHeight: 12.5,
+    fontSize: 12,
+    lineHeight: 18
   },
-
   freeBadge: {
     paddingHorizontal: 9,
     paddingVertical: 5,
-
     borderRadius: 20,
-
     backgroundColor: COLORS.greenLight,
-
     borderWidth: 1,
-    borderColor: '#CDD8B6',
+    borderColor: '#CDD8B6'
   },
-
   freeBadgeText: {
     color: COLORS.green,
-
-    fontSize: 8,
-
+    fontSize: 10,
     fontWeight: '900',
-
-    letterSpacing: 0.6,
+    letterSpacing: 0.6
   },
-
   // ==========================================================
   // STATS TITLE
   // ==========================================================
 
   statsTitleRow: {
     flexDirection: 'row',
-
     alignItems: 'center',
-
-    marginBottom: 11,
+    marginBottom: 11
   },
-
   statsTitle: {
     color: COLORS.darkBrown,
-
-    fontSize: 10.5,
-
-    fontWeight: '800',
-
-    marginRight: 9,
+    fontSize: 12,
+    fontWeight: "600",
+    marginRight: 9
   },
-
   statsTitleLine: {
     flex: 1,
-
     height: 1,
-
-    backgroundColor: COLORS.borderSoft,
+    backgroundColor: COLORS.borderSoft
   },
-
   // ==========================================================
   // STATS
   // ==========================================================
 
   aboutStatsRow: {
     flexDirection: 'row',
-
-    marginHorizontal: -4,
+    marginHorizontal: -4
   },
-
   aboutStatBox: {
     flex: 1,
-
     minHeight: 70,
-
     alignItems: 'center',
     justifyContent: 'center',
-
     marginHorizontal: 4,
-
     paddingHorizontal: 4,
     paddingVertical: 10,
-
     borderRadius: 12,
-
     overflow: 'hidden',
-
     backgroundColor: COLORS.biscuitLight,
-
     borderWidth: 1,
     borderColor: COLORS.border,
-
-    position: 'relative',
+    position: 'relative'
   },
-
   freeStatBox: {
     backgroundColor: COLORS.greenLight,
-
-    borderColor: '#CDD8B6',
+    borderColor: '#CDD8B6'
   },
-
   statTopLine: {
     position: 'absolute',
-
     top: 0,
     left: 8,
     right: 8,
-
     height: 2,
-
     borderBottomLeftRadius: 2,
     borderBottomRightRadius: 2,
-
-    backgroundColor: COLORS.brown,
+    backgroundColor: COLORS.brown
   },
-
   freeStatTopLine: {
-    backgroundColor: COLORS.green,
+    backgroundColor: COLORS.green
   },
-
   aboutStatValue: {
     color: COLORS.brown,
-
     fontSize: 15,
-
     fontWeight: '900',
-
-    marginBottom: 3,
+    marginBottom: 3
   },
-
   aboutStatLabel: {
     color: COLORS.softBrown,
-
-    fontSize: 8,
-
+    fontSize: 12,
     fontWeight: '600',
-
-    textAlign: 'center',
+    textAlign: 'center'
   },
-
   freeStatValue: {
     color: COLORS.green,
-
-    fontSize: 13,
+    fontSize: 13
   },
-
   freeStatLabel: {
-    color: COLORS.green,
-  },
+    color: COLORS.green
+  }
 });

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { LoginScreen } from '@/components';
 import { useRouter } from 'expo-router';
 import { useSelector } from 'react-redux';
+import { COLORS } from '@/constants/brandColors';
 
 export default function Index() {
   const router = useRouter();
@@ -26,9 +27,13 @@ export default function Index() {
   }
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: COLORS.cream }}>
       {/* Render the LoginScreen if the user is not logged in */}
-      {!isLoggedIn ? <LoginScreen /> : <Text>Redirecting...</Text>}
+      {!isLoggedIn ? (
+        <LoginScreen />
+      ) : (
+        <Text style={{ color: COLORS.deepBrown }}>Redirecting...</Text>
+      )}
     </View>
   );
 }

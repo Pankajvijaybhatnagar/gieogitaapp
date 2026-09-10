@@ -1,3 +1,4 @@
+import { DESIGN } from '@/constants/design';
 import JoinGitaProfile from '@/components/join/JoinGitaProfile';
 import joinGieoGitaServices from '@/lib/services/joinGieoGitaServices';
 import { Ionicons } from '@expo/vector-icons';
@@ -12,13 +13,15 @@ import {
   View,
 } from 'react-native';
 
+import { COLORS as BASE } from '@/constants/brandColors';
+
 const COLORS = {
-  background: '#F7EFE5',
-  primary: '#6E3F1F',
-  secondary: '#A8692D',
-  cream: '#FFF9F2',
-  text: '#382418',
-  muted: '#8B7465',
+  background: BASE.creamDark,
+  primary: BASE.saffron,
+  secondary: BASE.warmBrown,
+  cream: BASE.cream,
+  text: BASE.deepBrown,
+  muted: BASE.warmBrown,
 };
 
 export default function JoinGieoGitaProfilePage() {
@@ -97,7 +100,7 @@ export default function JoinGieoGitaProfilePage() {
             </Text>
 
             <Pressable style={styles.backButton} onPress={() => router.back()}>
-              <Ionicons name="arrow-back" size={18} color="#fff" />
+              <Ionicons name="arrow-back" size={18} color={COLORS.cream} />
 
               <Text style={styles.backButtonText}>Go Back</Text>
             </Pressable>
@@ -119,46 +122,42 @@ export default function JoinGieoGitaProfilePage() {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: COLORS.background,
+    backgroundColor: COLORS.background
   },
-
   center: {
     flex: 1,
     paddingHorizontal: 30,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-
   loadingText: {
     marginTop: 14,
     color: COLORS.muted,
-    fontSize: 15,
+    fontSize: 15
   },
-
   errorIcon: {
     width: 72,
     height: 72,
     borderRadius: 36,
-    backgroundColor: '#EEDCCB',
+    backgroundColor: COLORS.background,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 18,
+    marginBottom: 18
   },
-
   errorTitle: {
     color: COLORS.text,
     fontSize: 22,
-    fontWeight: '800',
+    fontWeight: "400",
+    fontFamily: DESIGN.fonts.editorial,
+    letterSpacing: -0.4
   },
-
   errorText: {
     color: COLORS.muted,
     fontSize: 14,
     textAlign: 'center',
     marginTop: 8,
-    lineHeight: 21,
+    lineHeight: 21
   },
-
   backButton: {
     marginTop: 24,
     borderRadius: 14,
@@ -167,11 +166,10 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: 8
   },
-
   backButtonText: {
     color: '#fff',
-    fontWeight: '700',
-  },
+    fontWeight: '700'
+  }
 });

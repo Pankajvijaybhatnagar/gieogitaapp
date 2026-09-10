@@ -1,5 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { COLORS } from '@/constants/brandColors';
+import { hairline, radii } from '@/constants/theme';
 
 const FormField = ({
   label,
@@ -30,14 +32,14 @@ const FormField = ({
           !editable && styles.disabledWrapper,
         ]}>
         {icon && (
-          <Ionicons name={icon} size={16} color="#94745D" style={styles.icon} />
+          <Ionicons name={icon} size={16} color={COLORS.warmBrown} style={styles.icon} />
         )}
 
         <TextInput
           value={value}
           onChangeText={onChangeText}
           placeholder={placeholder}
-          placeholderTextColor="#B09A88"
+          placeholderTextColor={COLORS.warmBrown}
           keyboardType={keyboardType}
           autoCapitalize={autoCapitalize}
           editable={editable}
@@ -56,56 +58,48 @@ export default FormField;
 
 const styles = StyleSheet.create({
   wrapper: {
-    marginBottom: 11,
+    marginBottom: 11
   },
-
   label: {
     marginLeft: 2,
     marginBottom: 5,
-    fontSize: 10.5,
+    fontSize: 12,
     fontWeight: '600',
-    color: '#634735',
+    color: COLORS.deepBrown
   },
-
   required: {
-    color: '#B54E3F',
+    color: COLORS.dangerRed
   },
-
   inputWrapper: {
     minHeight: 43,
-    borderRadius: 12,
+    borderRadius: 14,
     borderWidth: 1,
-    borderColor: '#E9DCCE',
-    backgroundColor: '#FFFFFF',
+    borderColor: hairline,
+    backgroundColor: COLORS.creamDark,
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   },
-
   disabledWrapper: {
-    backgroundColor: '#F8F3ED',
+    backgroundColor: COLORS.creamDark
   },
-
   multilineWrapper: {
     minHeight: 88,
-    alignItems: 'flex-start',
+    alignItems: 'flex-start'
   },
-
   icon: {
     marginLeft: 12,
-    marginRight: 3,
+    marginRight: 3
   },
-
   input: {
     flex: 1,
     minHeight: 43,
     paddingHorizontal: 8,
-    fontSize: 12,
-    color: '#412A1D',
+    fontSize: 15,
+    color: COLORS.deepBrown
   },
-
   multilineInput: {
     minHeight: 85,
     paddingTop: 12,
-    textAlignVertical: 'top',
-  },
+    textAlignVertical: 'top'
+  }
 });

@@ -1,6 +1,9 @@
 import { FontAwesome } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import Card from '@/components/ui/Card';
+import { RGB } from '@/constants/brandColors';
+import { radii, spacing, type } from '@/constants/theme';
 import { aboutInitiatives, COLORS } from './constant';
 import { SectionHeader } from './Sharedui';
 
@@ -10,7 +13,7 @@ export default function InitiativesSection() {
   return (
     <>
       <SectionHeader title="🌿 Our" accent="Initiatives" />
-      <View style={styles.aboutSection}>
+      <Card radius={radii.xl} style={styles.aboutSection}>
         <Text style={styles.aboutHeading}>
           Serving With{' '}
           <Text style={styles.aboutHeadingAccent}>Spiritual Purpose</Text>
@@ -38,66 +41,65 @@ export default function InitiativesSection() {
             <FontAwesome name="chevron-right" size={12} color={COLORS.goldDark} />
           </TouchableOpacity>
         ))}
-      </View>
+      </Card>
     </>
   );
 }
 
 const styles = StyleSheet.create({
   aboutSection: {
-    backgroundColor: COLORS.richBrown,
-    marginHorizontal: 20,
-    borderRadius: 16,
-    padding: 18,
-    borderWidth: 1,
-    borderColor: 'rgba(201,162,39,0.3)',
+    marginHorizontal: spacing.md,
+    padding: spacing.md + 2
   },
   aboutHeading: {
-    color: COLORS.cream,
+    ...type.headline,
     fontSize: 17,
-    fontWeight: '800',
+    color: COLORS.deepBrown,
     lineHeight: 24,
-    marginBottom: 10,
+    marginBottom: spacing.sm
   },
-  aboutHeadingAccent: { color: COLORS.goldLight },
+  aboutHeadingAccent: {
+    color: COLORS.saffron
+  },
   aboutDesc: {
-    color: 'rgba(253,246,227,0.65)',
+    ...type.footnote,
     fontSize: 12,
+    color: COLORS.warmBrown,
     lineHeight: 18,
-    fontStyle: 'italic',
-    marginBottom: 14,
+    marginBottom: spacing.md
   },
   initiativeCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
-    backgroundColor: 'rgba(201,162,39,0.08)',
-    borderRadius: 12,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    marginBottom: 8,
-    borderWidth: 1,
-    borderColor: 'rgba(201,162,39,0.2)',
+    gap: spacing.sm,
+    backgroundColor: COLORS.creamDark,
+    borderRadius: radii.md,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.sm + 2,
+    marginBottom: spacing.sm
   },
   initiativeIcon: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: 'rgba(201,162,39,0.15)',
+    backgroundColor: `rgba(${RGB.saffron},0.14)`,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-  initiativeIconText: { fontSize: 20 },
-  initiativeText: { flex: 1 },
+  initiativeIconText: {
+    fontSize: 20
+  },
+  initiativeText: {
+    flex: 1
+  },
   initiativeTitle: {
-    color: COLORS.cream,
+    color: COLORS.deepBrown,
     fontSize: 13,
-    fontWeight: '700',
+    fontWeight: '700'
   },
   initiativeDesc: {
-    color: 'rgba(253,246,227,0.55)',
-    fontSize: 10,
-    marginTop: 2,
-    fontStyle: 'italic',
-  },
+    color: COLORS.warmBrown,
+    fontSize: 12,
+    marginTop: 2
+  }
 });

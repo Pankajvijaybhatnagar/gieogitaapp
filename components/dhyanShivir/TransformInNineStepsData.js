@@ -1,101 +1,101 @@
 export const transformInNineStepsData = [
   {
     id: '1',
-    slug: 'discover-your-true-self',
-    step: 'STEP 01',
-    title: 'Discover Your True Self',
+    slug: 'ideal-teacher',
+    step: 'PART 01',
+    title: 'Sapt Shloki Gita – The Ideal Teacher',
     description:
-      'Begin your journey within and understand your true nature through the timeless wisdom of Bhagavad Gita.',
+      'Understand the qualities of an ideal teacher through the Sapt Shloki Gita.',
     image:
       'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=85',
-    duration: '7 Days',
+    duration: 'Part 1 of 9',
   },
   {
     id: '2',
-    slug: 'master-your-mind',
-    step: 'STEP 02',
-    title: 'Master Your Mind',
+    slug: 'good-education-good-life',
+    step: 'PART 02',
+    title: 'Sapt Shloki Gita – Good Education, Good Life',
     description:
-      'Learn how to overcome distractions, negative thoughts and develop clarity through the teachings of Shri Krishna.',
+      'Learn how to balance education and life in the light of the Gita.',
     image:
       'https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=900&q=85',
-    duration: '7 Days',
+    duration: 'Part 2 of 9',
   },
   {
     id: '3',
-    slug: 'transform-your-karma',
-    step: 'STEP 03',
-    title: 'Transform Your Karma',
+    slug: 'medicine-service-to-humanity',
+    step: 'PART 03',
+    title: 'Sapt Shloki Gita – Medicine, A Service to Humanity',
     description:
-      'Understand Karma Yoga and learn how to perform every action with awareness, peace and a higher purpose.',
+      'Inspiration to embrace medicine as a form of service to humanity.',
     image:
       'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=900&q=85',
-    duration: '7 Days',
+    duration: 'Part 3 of 9',
   },
   {
     id: '4',
-    slug: 'find-inner-peace',
-    step: 'STEP 04',
-    title: 'Find Inner Peace',
+    slug: 'medicine-and-prayer',
+    step: 'PART 04',
+    title: 'Sapt Shloki Gita – Medicine as Well as Prayer',
     description:
-      'Develop emotional strength and learn how to remain peaceful even when the world around you becomes difficult.',
+      'Understand the importance of faith and prayer alongside medical treatment.',
     image:
       'https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=900&q=85',
-    duration: '7 Days',
+    duration: 'Part 4 of 9',
   },
   {
     id: '5',
-    slug: 'discover-your-purpose',
-    step: 'STEP 05',
-    title: 'Discover Your Purpose',
+    slug: 'from-evil-to-goodness',
+    step: 'PART 05',
+    title: 'Sapt Shloki Gita – From Evil Towards Goodness...',
     description:
-      'Understand Dharma and discover how to live with greater purpose, direction and spiritual awareness.',
+      'A journey of moving away from negativity towards goodness.',
     image:
       'https://images.unsplash.com/photo-1497250681960-ef046c08a56e?auto=format&fit=crop&w=900&q=85',
-    duration: '7 Days',
+    duration: 'Part 5 of 9',
   },
   {
     id: '6',
-    slug: 'rise-above-fear',
-    step: 'STEP 06',
-    title: 'Rise Above Fear',
+    slug: 'ideal-householder',
+    step: 'PART 06',
+    title: 'Sapt Shloki Gita – The Ideal Householder',
     description:
-      'Build courage and confidence by understanding the spiritual principles that free the mind from unnecessary fear.',
+      "Inspiration to bring the Gita's values into householder life.",
     image:
       'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=900&q=85',
-    duration: '7 Days',
+    duration: 'Part 6 of 9',
   },
   {
     id: '7',
-    slug: 'create-better-relationships',
-    step: 'STEP 07',
-    title: 'Create Better Relationships',
+    slug: 'brave-youth-dont-give-up',
+    step: 'PART 07',
+    title: 'Sapt Shloki Gita – Brave Youth, Never Give Up',
     description:
-      'Bring compassion, understanding and spiritual wisdom into your relationships and everyday interactions.',
+      'A message of courage and resilience for the youth.',
     image:
       'https://images.unsplash.com/photo-1514222134-b57cbb8ce073?auto=format&fit=crop&w=900&q=85',
-    duration: '7 Days',
+    duration: 'Part 7 of 9',
   },
   {
     id: '8',
-    slug: 'experience-devotion',
-    step: 'STEP 08',
-    title: 'Experience Devotion',
+    slug: 'from-sorrow-to-yoga',
+    step: 'PART 08',
+    title: 'Sapt Shloki Gita – From Sorrow Towards Yoga.....',
     description:
-      'Discover the beauty of Bhakti and develop a deeper connection with the divine through Gita wisdom.',
+      'The path of rising from sorrow towards yoga and peace.',
     image:
       'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=900&q=85',
-    duration: '7 Days',
+    duration: 'Part 8 of 9',
   },
   {
     id: '9',
-    slug: 'transform-your-life',
-    step: 'STEP 09',
-    title: 'Transform Your Life',
+    slug: 'balanced-nature-pure-environment',
+    step: 'PART 09',
+    title: 'Sapt Shloki Gita – Balanced Nature, Pure Environment',
     description:
-      'Bring all nine teachings together and begin living a more peaceful, purposeful and spiritually awakened life.',
+      'The importance of balance in nature and a pure environment.',
     image:
       'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=900&q=85',
-    duration: '7 Days',
+    duration: 'Part 9 of 9',
   },
 ];

@@ -1,16 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-const COLORS = {
-  deepBrown: '#2C1A0A',
-  warmBrown: '#4A2C0D',
-  gold: '#C9A227',
-  goldLight: '#E8C55A',
-  goldDark: '#8B6914',
-  cream: '#FDF6E3',
-  creamDark: '#F5E6C8',
-  white: '#FFFFFF',
-};
+import { COLORS, RGB } from '@/constants/brandColors';
+import { hairline, radii, shadow } from '@/constants/theme';
 
 export default function PatrikaCard({
   item,
@@ -37,7 +29,7 @@ export default function PatrikaCard({
           />
         ) : (
           <View style={styles.placeholderCover}>
-            <Ionicons name="book-outline" size={34} color={COLORS.goldLight} />
+            <Ionicons name="book-outline" size={34} color={COLORS.saffron} />
             <Text style={styles.placeholderText}>GIEO GITA</Text>
           </View>
         )}
@@ -94,39 +86,40 @@ export default function PatrikaCard({
 const styles = StyleSheet.create({
   card: {
     width: '48%',
-    marginBottom: 14,
-    borderRadius: 16,
+    marginBottom: 20,
+    borderRadius: 18,
     overflow: 'hidden',
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.cream,
     borderWidth: 1,
-    borderColor: '#EDE1D4',
-    shadowColor: '#4E321D',
-    shadowOpacity: 0.08,
-    shadowRadius: 9,
-    shadowOffset: { width: 0, height: 4 },
-    elevation: 2,
+    borderColor: hairline,
+    ...shadow.card,
+    shadowOpacity: 0.045,
+    elevation: 2
   },
   coverWrap: {
-    height: 195,
-    backgroundColor: COLORS.warmBrown,
+    backgroundColor: COLORS.creamDark,
     position: 'relative',
+    aspectRatio: 0.76,
+    margin: 8,
+    borderRadius: 12,
+    overflow: "hidden"
   },
   cover: {
     width: '100%',
-    height: '100%',
+    height: '100%'
   },
   placeholderCover: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: COLORS.warmBrown,
+    backgroundColor: COLORS.creamDark
   },
   placeholderText: {
     marginTop: 8,
-    fontSize: 10,
-    fontWeight: '800',
+    fontSize: 12,
+    fontWeight: "600",
     letterSpacing: 1.7,
-    color: COLORS.goldLight,
+    color: COLORS.warmBrown
   },
   topBadge: {
     position: 'absolute',
@@ -138,13 +131,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 7,
     paddingVertical: 5,
     borderRadius: 8,
-    backgroundColor: 'rgba(44,26,10,0.78)',
+    backgroundColor: `rgba(${RGB.deepBrown},0.78)`
   },
   topBadgeText: {
-    fontSize: 7,
-    fontWeight: '800',
+    fontSize: 10,
+    fontWeight: "600",
     letterSpacing: 0.7,
-    color: '#FFFFFF',
+    color: '#FFFFFF'
   },
   pagesBadge: {
     position: 'absolute',
@@ -154,57 +147,57 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 5,
     borderRadius: 8,
-    backgroundColor: 'rgba(44,26,10,0.72)',
+    backgroundColor: `rgba(${RGB.deepBrown},0.72)`
   },
   pagesBadgeText: {
-    fontSize: 7.5,
+    fontSize: 10,
     color: '#FFFFFF',
-    fontWeight: '600',
+    fontWeight: '600'
   },
   body: {
-    padding: 11,
+    padding: 14
   },
   title: {
-    fontSize: 13,
-    lineHeight: 18,
-    fontWeight: '800',
+    fontSize: 17,
+    lineHeight: 24,
+    fontWeight: "700",
     color: COLORS.deepBrown,
-    minHeight: 36,
+    minHeight: 48
   },
   metaRow: {
     marginTop: 6,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
+    gap: 4
   },
   metaText: {
-    fontSize: 9,
-    color: '#8C7664',
+    fontSize: 11,
+    color: COLORS.warmBrown
   },
   bottomRow: {
     marginTop: 10,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
   priceCaption: {
-    fontSize: 7,
-    fontWeight: '800',
+    fontSize: 10,
+    fontWeight: "600",
     letterSpacing: 0.8,
-    color: '#A58E7B',
+    color: COLORS.warmBrown
   },
   price: {
     marginTop: 2,
-    fontSize: 11,
-    fontWeight: '800',
-    color: COLORS.warmBrown,
+    fontSize: 14,
+    fontWeight: "600",
+    color: COLORS.warmBrown
   },
   readButton: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-    backgroundColor: COLORS.goldLight,
+    width: 42,
+    height: 42,
+    borderRadius: 14,
+    backgroundColor: `rgba(${RGB.saffron}, 0.12)`,
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center'
+  }
 });

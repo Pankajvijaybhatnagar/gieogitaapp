@@ -1,3 +1,4 @@
+import { DESIGN } from '@/constants/design';
 import { router } from 'expo-router';
 import React, { useEffect, useRef, useState } from 'react';
 import {
@@ -23,6 +24,8 @@ import {
   verifyOtpSuccess,
 } from '../redux/authSlice';
 import { FontAwesome, AntDesign } from '@expo/vector-icons';
+import { COLORS, RGB } from '@/constants/brandColors';
+import { hairline, radii, shadow } from '@/constants/theme';
 
 const { width, height } = Dimensions.get('window');
 
@@ -30,22 +33,22 @@ const { width, height } = Dimensions.get('window');
 const FALL_DURATION = 6000;
 const NUM_LEAVES    = 10;
 
-// ─── COLOR PALETTE ────────────────────────────────────────────────────────────
+// ─── COLOR PALETTE (mapped onto the shared design system) ────────────────────
 const C = {
-  deepBrown:   '#2C1A0A',
-  warmBrown:   '#4A2C0D',
-  richBrown:   '#3D2010',
-  gold:        '#C9A227',
-  goldLight:   '#E8C55A',
-  goldDark:    '#8B6914',
-  goldBorder:  'rgba(201,162,39,0.30)',
-  cream:       '#FDF6E3',
-  creamDark:   '#F5E6C8',
-  saffron:     '#E8721C',
-  saffronLight:'#F4A44A',
-  white:       '#FFFFFF',
+  deepBrown:   COLORS.deepBrown,
+  warmBrown:   COLORS.warmBrown,
+  richBrown:   COLORS.richBrown,
+  gold:        COLORS.gold,
+  goldLight:   COLORS.goldLight,
+  goldDark:    COLORS.goldDark,
+  goldBorder:  'rgba(179,149,98,0.30)',
+  cream:       COLORS.cream,
+  creamDark:   COLORS.creamDark,
+  saffron:     COLORS.saffron,
+  saffronLight:COLORS.saffronLight,
+  white:       COLORS.white,
   black:       '#000000',
-  error:       '#E74C3C',
+  error:       COLORS.dangerRed,
   googleRed:   '#DB4437',
   appleBlack:  '#1C1C1E',
 };
@@ -168,8 +171,8 @@ const LoginScreen = () => {
   const blurAnim = (anim) =>
     Animated.timing(anim, { toValue: 0, duration: 200, useNativeDriver: false }).start();
 
-  const emailBorder = emailFocus.interpolate({ inputRange: [0, 1], outputRange: [C.goldBorder, C.gold] });
-  const passBorder  = passFocus.interpolate({  inputRange: [0, 1], outputRange: [C.goldBorder, C.gold] });
+  const emailBorder = emailFocus.interpolate({ inputRange: [0, 1], outputRange: [hairline, C.saffron] });
+  const passBorder  = passFocus.interpolate({  inputRange: [0, 1], outputRange: [hairline, C.saffron] });
 
   // ── email login handler (original dispatch logic preserved) ───────────────
   const handleLogin = async () => {
@@ -331,12 +334,12 @@ const LoginScreen = () => {
               <Text style={S.inputLabel}>Email Address</Text>
               <Animated.View style={[S.inputWrap, { borderColor: emailBorder }]}>
                 <View style={S.inputIconBox}>
-                  <FontAwesome name="envelope-o" size={14} color={C.goldDark} />
+                  <FontAwesome name="envelope-o" size={14} color={C.warmBrown} />
                 </View>
                 <TextInput
                   style={S.input}
                   placeholder="Enter your email"
-                  placeholderTextColor={C.goldDark}
+                  placeholderTextColor={C.warmBrown}
                   value={email}
                   onChangeText={setEmail}
                   keyboardType="email-address"
@@ -351,12 +354,12 @@ const LoginScreen = () => {
               <Text style={S.inputLabel}>Password</Text>
               <Animated.View style={[S.inputWrap, { borderColor: passBorder }]}>
                 <View style={S.inputIconBox}>
-                  <FontAwesome name="lock" size={15} color={C.goldDark} />
+                  <FontAwesome name="lock" size={15} color={C.warmBrown} />
                 </View>
                 <TextInput
                   style={S.input}
                   placeholder="Enter your password"
-                  placeholderTextColor={C.goldDark}
+                  placeholderTextColor={C.warmBrown}
                   value={password}
                   onChangeText={setPassword}
                   secureTextEntry={!showPass}
@@ -373,7 +376,7 @@ const LoginScreen = () => {
                   <FontAwesome
                     name={showPass ? 'eye' : 'eye-slash'}
                     size={15}
-                    color={C.goldDark}
+                    color={C.warmBrown}
                   />
                 </TouchableOpacity>
               </Animated.View>
@@ -392,13 +395,13 @@ const LoginScreen = () => {
                   activeOpacity={0.88}
                 >
                   {loading ? (
-                    <ActivityIndicator size="small" color={C.deepBrown} />
+                    <ActivityIndicator size="small" color={C.white} />
                   ) : (
                     <View style={S.loginBtnInner}>
                       <FontAwesome
                         name="sign-in"
                         size={16}
-                        color={C.deepBrown}
+                        color={C.white}
                         style={{ marginRight: 8 }}
                       />
                       <Text style={S.loginBtnText}>Login with Email</Text>
@@ -449,258 +452,394 @@ const LoginScreen = () => {
 
 // ─── STYLES ───────────────────────────────────────────────────────────────────
 const S = StyleSheet.create({
-
   // ── ROOT ───────────────────────────────────────────────────────────────────
   root: {
     flex: 1,
-    backgroundColor: C.deepBrown,
+    backgroundColor: C.cream
   },
   bgBlob1: {
-    position: 'absolute', width: 300, height: 300, borderRadius: 150,
-    backgroundColor: 'rgba(201,162,39,0.06)', top: -80, right: -80,
+    position: 'absolute',
+    width: 300,
+    height: 300,
+    borderRadius: 150,
+    backgroundColor: 'rgba(179,149,98,0.07)',
+    top: -80,
+    right: -80
   },
   bgBlob2: {
-    position: 'absolute', width: 200, height: 200, borderRadius: 100,
-    backgroundColor: 'rgba(74,44,13,0.3)', bottom: 100, left: -60,
+    position: 'absolute',
+    width: 200,
+    height: 200,
+    borderRadius: 100,
+    backgroundColor: 'rgba(166,83,56,0.06)',
+    bottom: 100,
+    left: -60
   },
   bgBlob3: {
-    position: 'absolute', width: 120, height: 120, borderRadius: 60,
-    backgroundColor: 'rgba(232,114,28,0.05)', top: height * 0.4, right: 20,
+    position: 'absolute',
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    backgroundColor: 'rgba(166,83,56,0.05)',
+    top: height * 0.4,
+    right: 20
   },
-
   // ── SCROLL ─────────────────────────────────────────────────────────────────
   scroll: {
     alignItems: 'center',
     paddingHorizontal: 24,
-    paddingTop: 60,
+    paddingTop: 60
   },
-
   // ── TOP DECORATION ─────────────────────────────────────────────────────────
   topDeco: {
-    flexDirection: 'row', alignItems: 'center',
-    marginBottom: 28, width: 200,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 28,
+    width: 200
   },
-  topDecoLine: { flex: 1, height: 1, backgroundColor: C.goldDark, opacity: 0.5 },
-  topDecoOm:   { fontSize: 20, color: C.gold, marginHorizontal: 12, opacity: 0.9 },
-
+  topDecoLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: hairline
+  },
+  topDecoOm: {
+    fontSize: 20,
+    color: C.saffron,
+    marginHorizontal: 12,
+    opacity: 0.9
+  },
   // ── LOGO ───────────────────────────────────────────────────────────────────
   logoWrap: {
     marginBottom: 18,
-    alignItems: 'center', justifyContent: 'center',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   logoOuterRing: {
-    width: 110, height: 110, borderRadius: 55,
-    borderWidth: 2, borderColor: C.gold,
-    padding: 5, backgroundColor: 'rgba(201,162,39,0.1)',
+    width: 110,
+    height: 110,
+    borderRadius: 55,
+    borderWidth: 2,
+    borderColor: C.gold,
+    padding: 5,
+    backgroundColor: 'rgba(179,149,98,0.08)'
   },
   logoInnerRing: {
-    flex: 1, borderRadius: 50,
-    borderWidth: 1, borderColor: 'rgba(201,162,39,0.35)',
-    alignItems: 'center', justifyContent: 'center',
-    overflow: 'hidden', backgroundColor: 'rgba(44,26,10,0.5)',
+    flex: 1,
+    borderRadius: 50,
+    borderWidth: 1,
+    borderColor: 'rgba(179,149,98,0.3)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    overflow: 'hidden',
+    backgroundColor: C.creamDark
   },
-  logo: { width: 72, height: 72, resizeMode: 'contain' },
-
+  logo: {
+    width: 72,
+    height: 72,
+    resizeMode: 'contain'
+  },
   // ── APP NAME ───────────────────────────────────────────────────────────────
   appName: {
-    fontSize: 30, fontWeight: '800',
-    color: C.goldLight, letterSpacing: 5,
-    textShadowColor: 'rgba(201,162,39,0.4)',
-    textShadowOffset: { width: 0, height: 0 },
-    textShadowRadius: 14,
-    marginBottom: 4,
+    fontSize: 30,
+    fontWeight: "600",
+    color: C.deepBrown,
+    letterSpacing: 5,
+    marginBottom: 4
   },
   appSub: {
-    fontSize: 14, color: C.gold,
-    letterSpacing: 2, fontStyle: 'italic', marginBottom: 12,
+    fontSize: 14,
+    color: C.warmBrown,
+    letterSpacing: 2,
+    marginBottom: 12
   },
   nameDivider: {
-    width: 80, height: 1.5,
-    backgroundColor: C.gold, borderRadius: 1,
-    opacity: 0.6, marginBottom: 20,
+    width: 80,
+    height: 1.5,
+    backgroundColor: hairline,
+    borderRadius: 1,
+    marginBottom: 20
   },
-
   // ── CARD ───────────────────────────────────────────────────────────────────
   card: {
     width: '100%',
-    backgroundColor: C.cream,
-    borderRadius: 24, overflow: 'hidden',
-    borderWidth: 1.5, borderColor: C.gold,
-    shadowColor: C.gold, shadowOpacity: 0.2,
-    shadowOffset: { width: 0, height: 8 },
-    shadowRadius: 20, elevation: 10,
+    backgroundColor: DESIGN.colors.surface,
+    borderRadius: 24,
+    overflow: 'hidden',
+    ...shadow.raised,
     position: 'relative',
+    borderColor: DESIGN.colors.border,
+    borderWidth: 1,
+    shadowOpacity: 0.045,
+    elevation: 2
   },
   cardTopStrip: {
-    backgroundColor: C.deepBrown,
-    paddingVertical: 10, alignItems: 'center',
-    borderBottomWidth: 1, borderBottomColor: C.gold,
+    backgroundColor: C.creamDark,
+    paddingVertical: 10,
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: hairline
   },
   cardTopStripText: {
-    fontSize: 9, fontWeight: '800',
-    color: C.goldLight, letterSpacing: 2.5,
+    fontSize: 12,
+    fontWeight: "600",
+    color: C.saffron,
+    letterSpacing: 2.5
   },
   cardBlob: {
-    position: 'absolute', width: 180, height: 180, borderRadius: 90,
-    backgroundColor: 'rgba(201,162,39,0.04)', top: -60, right: -40,
+    position: 'absolute',
+    width: 180,
+    height: 180,
+    borderRadius: 90,
+    backgroundColor: 'rgba(179,149,98,0.04)',
+    top: -60,
+    right: -40
   },
-  cardBody:     { padding: 22 },
-  cardGreeting: { fontSize: 20, fontWeight: '800', color: C.deepBrown, marginBottom: 4 },
+  cardBody: {
+    padding: 22
+  },
+  cardGreeting: {
+    fontSize: 20,
+    fontWeight: "600",
+    color: C.deepBrown,
+    marginBottom: 4
+  },
   cardDesc: {
-    fontSize: 12, color: C.warmBrown,
-    lineHeight: 18, fontStyle: 'italic', marginBottom: 20,
+    fontSize: 12,
+    color: C.warmBrown,
+    lineHeight: 18,
+    marginBottom: 20
   },
-
   // ── SOCIAL BUTTONS ─────────────────────────────────────────────────────────
-  socialRow:  { gap: 11, marginBottom: 20 },
-
+  socialRow: {
+    gap: 11,
+    marginBottom: 20
+  },
   googleBtn: {
-    flexDirection: 'row', alignItems: 'center',
-    justifyContent: 'center', gap: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
     backgroundColor: C.googleRed,
-    borderRadius: 14, paddingVertical: 14,
+    borderRadius: 14,
+    paddingVertical: 14,
     shadowColor: C.googleRed,
-    shadowOpacity: 0.25, shadowOffset: { width: 0, height: 4 },
-    shadowRadius: 8, elevation: 4,
+    shadowOpacity: 0.25,
+    shadowOffset: {
+      width: 0,
+      height: 4
+    },
+    shadowRadius: 8,
+    elevation: 4
   },
   googleBtnText: {
-    fontSize: 14, fontWeight: '800',
-    color: C.white, letterSpacing: 0.3,
+    fontSize: 14,
+    fontWeight: "600",
+    color: C.white,
+    letterSpacing: 0.3
   },
-
   appleBtn: {
-    flexDirection: 'row', alignItems: 'center',
-    justifyContent: 'center', gap: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
     backgroundColor: C.appleBlack,
-    borderRadius: 14, paddingVertical: 14,
-    borderWidth: 1, borderColor: 'rgba(255,255,255,0.1)',
+    borderRadius: 14,
+    paddingVertical: 14,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.1)',
     shadowColor: C.black,
-    shadowOpacity: 0.3, shadowOffset: { width: 0, height: 4 },
-    shadowRadius: 8, elevation: 4,
+    shadowOpacity: 0.3,
+    shadowOffset: {
+      width: 0,
+      height: 4
+    },
+    shadowRadius: 8,
+    elevation: 4
   },
   appleBtnText: {
-    fontSize: 14, fontWeight: '800',
-    color: C.white, letterSpacing: 0.3,
+    fontSize: 14,
+    fontWeight: "600",
+    color: C.white,
+    letterSpacing: 0.3
   },
-
   // ── OR DIVIDER ─────────────────────────────────────────────────────────────
   orRow: {
-    flexDirection: 'row', alignItems: 'center',
-    marginBottom: 18,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 18
   },
-  orLine: { flex: 1, height: 1, backgroundColor: C.goldBorder },
+  orLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: C.goldBorder
+  },
   orPill: {
     backgroundColor: C.creamDark,
-    borderWidth: 1, borderColor: C.goldBorder,
+    borderWidth: 1,
+    borderColor: C.goldBorder,
     borderRadius: 20,
-    paddingHorizontal: 12, paddingVertical: 4,
-    marginHorizontal: 10,
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    marginHorizontal: 10
   },
   orText: {
-    fontSize: 10, fontWeight: '800',
-    color: C.goldDark, letterSpacing: 1.5,
+    fontSize: 12,
+    fontWeight: "600",
+    color: C.goldDark,
+    letterSpacing: 1.5
   },
-
   // ── INPUTS ─────────────────────────────────────────────────────────────────
   inputLabel: {
-    fontSize: 11, fontWeight: '700',
-    color: C.goldDark, letterSpacing: 0.5,
-    marginBottom: 7,
+    fontSize: 12,
+    fontWeight: '700',
+    color: C.deepBrown,
+    letterSpacing: 0.5,
+    marginBottom: 7
   },
   inputWrap: {
-    flexDirection: 'row', alignItems: 'center',
-    borderWidth: 1.5, borderRadius: 14,
-    overflow: 'hidden', marginBottom: 14,
-    backgroundColor: C.white,
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderRadius: 14,
+    overflow: 'hidden',
+    marginBottom: 14,
+    backgroundColor: C.creamDark
   },
   inputIconBox: {
-    width: 44, paddingVertical: 14,
-    alignItems: 'center', justifyContent: 'center',
-    backgroundColor: 'rgba(201,162,39,0.07)',
-    borderRightWidth: 1, borderRightColor: C.goldBorder,
+    width: 44,
+    paddingVertical: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: C.cream,
+    borderRightWidth: 1,
+    borderRightColor: hairline
   },
   input: {
-    flex: 1, height: 50,
+    flex: 1,
+    height: 50,
     paddingHorizontal: 14,
-    fontSize: 14, color: C.deepBrown, fontWeight: '600',
+    fontSize: 15,
+    color: C.deepBrown,
+    fontWeight: '600'
   },
   eyeBtn: {
     paddingHorizontal: 14,
-    height: 50, alignItems: 'center', justifyContent: 'center',
+    height: 50,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
-
   // ── FORGOT PASSWORD ────────────────────────────────────────────────────────
-  forgotRow: { alignItems: 'flex-end', marginBottom: 18, marginTop: -6 },
-  forgotText: {
-    fontSize: 11, color: C.saffron,
-    fontWeight: '700', fontStyle: 'italic',
+  forgotRow: {
+    alignItems: 'flex-end',
+    marginBottom: 18,
+    marginTop: -6
   },
-
+  forgotText: {
+    fontSize: 12,
+    color: C.saffron,
+    fontWeight: '700'
+  },
   // ── LOGIN BUTTON ───────────────────────────────────────────────────────────
   loginBtn: {
-    backgroundColor: C.gold, borderRadius: 14,
-    height: 52, alignItems: 'center', justifyContent: 'center',
-    shadowColor: C.gold, shadowOpacity: 0.35,
-    shadowOffset: { width: 0, height: 5 },
-    shadowRadius: 12, elevation: 6,
+    backgroundColor: C.richBrown,
+    borderRadius: radii.md,
+    height: 52,
+    alignItems: 'center',
+    justifyContent: 'center',
+    ...shadow.card
   },
-  loginBtnDisabled: { opacity: 0.7 },
-  loginBtnInner: { flexDirection: 'row', alignItems: 'center' },
+  loginBtnDisabled: {
+    opacity: 0.7
+  },
+  loginBtnInner: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
   loginBtnText: {
-    fontSize: 16, fontWeight: '800',
-    color: C.deepBrown, letterSpacing: 0.5,
+    fontSize: 16,
+    fontWeight: "600",
+    color: C.white,
+    letterSpacing: 0.5
   },
-
   // ── ERROR & WELCOME ────────────────────────────────────────────────────────
   errorBox: {
-    flexDirection: 'row', alignItems: 'center', gap: 7,
-    backgroundColor: 'rgba(231,76,60,0.08)',
-    borderWidth: 1, borderColor: 'rgba(231,76,60,0.25)',
-    borderRadius: 10, paddingHorizontal: 12, paddingVertical: 9,
-    marginTop: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 7,
+    backgroundColor: `rgba(${RGB.dangerRed},0.08)`,
+    borderWidth: 1,
+    borderColor: `rgba(${RGB.dangerRed},0.25)`,
+    borderRadius: 10,
+    paddingHorizontal: 12,
+    paddingVertical: 9,
+    marginTop: 12
   },
-  errorText:  { color: C.error, fontSize: 12, fontWeight: '600', flex: 1 },
+  errorText: {
+    color: C.error,
+    fontSize: 12,
+    fontWeight: '600',
+    flex: 1
+  },
   welcomeBox: {
     backgroundColor: 'rgba(39,174,96,0.1)',
-    borderWidth: 1, borderColor: 'rgba(39,174,96,0.3)',
-    borderRadius: 10, paddingHorizontal: 14, paddingVertical: 10,
-    marginTop: 12, alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(39,174,96,0.3)',
+    borderRadius: 10,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    marginTop: 12,
+    alignItems: 'center'
   },
-  welcomeText: { fontSize: 14, fontWeight: '700', color: '#27AE60' },
-
+  welcomeText: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#27AE60'
+  },
   // ── CARD BOTTOM STRIP ─────────────────────────────────────────────────────
   cardBottomStrip: {
-    backgroundColor: C.warmBrown,
-    paddingVertical: 9, alignItems: 'center',
-    borderTopWidth: 1, borderTopColor: C.goldBorder,
+    backgroundColor: C.creamDark,
+    paddingVertical: 9,
+    alignItems: 'center',
+    borderTopWidth: 1,
+    borderTopColor: hairline
   },
   cardBottomText: {
-    fontSize: 9, color: C.goldDark,
-    letterSpacing: 1.5, fontStyle: 'italic',
+    fontSize: 12,
+    color: C.warmBrown,
+    letterSpacing: 1.5
   },
-
   // ── VERSE BOX ──────────────────────────────────────────────────────────────
   verseBox: {
-    width: '100%', backgroundColor: C.warmBrown,
-    borderRadius: 16, padding: 16, marginTop: 18,
-    borderWidth: 1, borderColor: C.goldBorder,
-    borderLeftWidth: 3, borderLeftColor: C.gold,
+    width: '100%',
+    backgroundColor: C.creamDark,
+    borderRadius: radii.lg,
+    padding: 16,
+    marginTop: 18,
+    borderWidth: 1,
+    borderColor: hairline,
+    borderLeftWidth: 3,
+    borderLeftColor: C.saffron
   },
   verseText: {
-    fontSize: 11, color: C.creamDark,
-    lineHeight: 18, fontStyle: 'italic', marginBottom: 6,
+    fontSize: 12,
+    color: C.warmBrown,
+    lineHeight: 18,
+    marginBottom: 6
   },
   verseRef: {
-    fontSize: 10, color: C.goldDark,
-    fontWeight: '700', letterSpacing: 0.5, textAlign: 'right',
+    fontSize: 12,
+    color: C.richBrown,
+    fontWeight: '700',
+    letterSpacing: 0.5,
+    textAlign: 'right'
   },
-
   // ── LEAF (original) ────────────────────────────────────────────────────────
   leaf: {
     position: 'absolute',
-    width: 80, height: 80,
-    resizeMode: 'contain',
-  },
+    width: 80,
+    height: 80,
+    resizeMode: 'contain'
+  }
 });
 
 // ─── ORIGINAL CONFIG (unchanged) ─────────────────────────────────────────────

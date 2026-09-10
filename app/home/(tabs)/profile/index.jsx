@@ -2,7 +2,6 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import {
   ActivityIndicator,
-  Alert,
   Animated,
   Easing,
   KeyboardAvoidingView,
@@ -26,26 +25,30 @@ import { useAuth } from '@/context/AuthContext';
 
 import userServices from '@/lib/services/userServices';
 
+import Card from '@/components/ui/Card';
+import { COLORS as BRAND, RGB } from '@/constants/brandColors';
+import { radii, shadow, spacing, type } from '@/constants/theme';
+
 const COLORS = {
-  primary: '#A55A12',
-  primaryDark: '#713907',
-  primaryLight: '#FBF1E5',
+  primary: BRAND.saffron,
+  primaryDark: BRAND.richBrown,
+  primaryLight: BRAND.creamDark,
 
-  background: '#F8F7F5',
-  white: '#FFFFFF',
+  background: BRAND.cream,
+  white: BRAND.white,
 
-  text: '#181818',
-  secondary: '#737373',
-  light: '#9A9A9A',
+  text: BRAND.deepBrown,
+  secondary: BRAND.warmBrown,
+  light: BRAND.warmBrown,
 
-  border: '#EAE7E3',
-  input: '#F5F4F2',
+  border: BRAND.creamDark,
+  input: BRAND.creamDark,
 
   success: '#188044',
   successLight: '#EAF7EF',
 
-  danger: '#C93434',
-  dangerLight: '#FFF0F0',
+  danger: BRAND.dangerRed,
+  dangerLight: BRAND.dangerLight,
 };
 
 export default function ProfileScreen() {
@@ -381,12 +384,16 @@ export default function ProfileScreen() {
 
   const handleSave = async () => {
     if (!access_token) {
-      Alert.alert('Session Expired', 'Please login again.', [
+      confirm(
+        'Session Expired',
+        'Please login again.',
+        () => router.replace('/login2'),
         {
-          text: 'OK',
-          onPress: () => router.replace('/login2'),
+          buttonText: 'OK',
+          secondaryButtonText: null,
+          icon: 'log-in-outline',
         },
-      ]);
+      );
 
       return;
     }
@@ -519,7 +526,7 @@ export default function ProfileScreen() {
   if (authLoading || profileLoading) {
     return (
       <View style={styles.loadingScreen}>
-        <ActivityIndicator size="large" color={COLORS.primary} />
+        <ActivityIndicator size="large" color={COLORS.primaryDark} />
 
         <Text style={styles.loadingText}>Loading your profile...</Text>
       </View>
@@ -535,50 +542,54 @@ export default function ProfileScreen() {
   if (!isAuthenticated || !access_token || !profile) {
     return (
       <View style={styles.screen}>
-        <View style={styles.guestProfileBackground}>
-          <View style={styles.guestHero}>
-            <View style={styles.guestTopBar}>
-              <View style={styles.iconButton}>
-                <Ionicons name="arrow-back" size={20} color={COLORS.text} />
-              </View>
-
-              <Text style={styles.pageTitle}>My Profile</Text>
-
-              <View style={styles.iconButton}>
-                <Ionicons name="person-outline" size={20} color={COLORS.text} />
-              </View>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.guestScrollContent}>
+          <View style={styles.hero}>
+            <View style={styles.heroBanner}>
+              <View style={styles.heroPatternOne} />
+              <View style={styles.heroPatternTwo} />
+              <Text style={styles.heroOm}>ॐ</Text>
             </View>
 
-            <View style={styles.guestAvatarContainer}>
-              <View style={styles.guestAvatar}>
+            <View style={styles.heroIconRing}>
+              <View style={styles.heroIcon}>
                 <Ionicons
                   name="person-outline"
-                  size={36}
-                  color={COLORS.primary}
+                  size={34}
+                  color={COLORS.primaryDark}
                 />
               </View>
             </View>
+
+            <Text style={styles.heroTitle}>My Profile</Text>
+            <View style={styles.heroDivider} />
           </View>
 
-          <View style={styles.guestCard} />
-          <View style={styles.guestCard} />
-          <View style={styles.guestCard} />
-        </View>
+          <Card radius={radii.xl} style={styles.guestCard}>
+            <View style={styles.guestIconRing}>
+              <Ionicons
+                name="lock-closed-outline"
+                size={26}
+                color={COLORS.primaryDark}
+              />
+            </View>
 
-        <View style={styles.loginOverlay}>
-          <View style={styles.loginButtonContainer}>
-            <Text style={{ marginBottom: 10 }}>
-              Please login to view your profile
+            <Text style={styles.guestTitle}>You&apos;re Not Logged In</Text>
+
+            <Text style={styles.guestText}>
+              Please login to view and manage your GIEO Gita profile.
             </Text>
+
             <TouchableOpacity
               style={styles.loginButton}
-              activeOpacity={0.8}
+              activeOpacity={0.85}
               onPress={() => router.push('/login2')}>
               <Ionicons name="log-in-outline" size={18} color={COLORS.white} />
               <Text style={styles.loginButtonText}>Login</Text>
             </TouchableOpacity>
-          </View>
-        </View>
+          </Card>
+        </ScrollView>
       </View>
     );
   }
@@ -621,11 +632,11 @@ export default function ProfileScreen() {
               <RefreshControl
                 refreshing={refreshing}
                 onRefresh={handleRefresh}
-                tintColor={COLORS.primary}
+                tintColor={COLORS.primaryDark}
               />
             }
             contentContainerStyle={styles.scrollContent}>
-            {/* HEADER */}
+            {/* HERO */}
 
             <Animated.View
               style={[
@@ -638,22 +649,24 @@ export default function ProfileScreen() {
                   ],
                 },
               ]}>
-              <View style={styles.topBar}>
+              <View style={styles.heroBanner}>
+                <View style={styles.heroPatternOne} />
+                <View style={styles.heroPatternTwo} />
+                <Text style={styles.heroOm}>ॐ</Text>
+
                 <TouchableOpacity
-                  style={styles.iconButton}
+                  style={styles.heroTopButton}
                   onPress={() => router.back()}>
-                  <Ionicons name="arrow-back" size={20} color={COLORS.text} />
+                  <Ionicons name="arrow-back" size={20} color={COLORS.white} />
                 </TouchableOpacity>
 
-                <Text style={styles.pageTitle}>My Profile</Text>
-
                 <TouchableOpacity
-                  style={styles.iconButton}
+                  style={[styles.heroTopButton, styles.heroTopButtonRight]}
                   onPress={editing ? handleCancel : handleEdit}>
                   <Ionicons
                     name={editing ? 'close-outline' : 'create-outline'}
                     size={20}
-                    color={COLORS.text}
+                    color={COLORS.white}
                   />
                 </TouchableOpacity>
               </View>
@@ -662,7 +675,7 @@ export default function ProfileScreen() {
 
               <Animated.View
                 style={[
-                  styles.avatarContainer,
+                  styles.avatarRing,
                   {
                     transform: [
                       {
@@ -692,7 +705,7 @@ export default function ProfileScreen() {
                 <Ionicons
                   name="shield-checkmark-outline"
                   size={13}
-                  color={COLORS.primary}
+                  color={COLORS.primaryDark}
                 />
 
                 <Text style={styles.roleText}>
@@ -701,48 +714,11 @@ export default function ProfileScreen() {
               </View>
             </Animated.View>
 
-            {/* SUMMARY */}
-
-            {/* <Animated.View
-              style={[
-                styles.summaryCard,
-                {
-                  opacity: cardsOpacity,
-                  transform: [
-                    {
-                      translateY: cardsTranslate,
-                    },
-                  ],
-                },
-              ]}>
-              <SummaryItem
-                icon="star-outline"
-                value={profile.points ?? 0}
-                label="Points"
-              />
-
-              <View style={styles.summaryDivider} />
-
-              <SummaryItem
-                icon="mail-outline"
-                value={emailVerified ? 'Verified' : 'Pending'}
-                label="Email"
-                valueColor={emailVerified ? COLORS.success : COLORS.warning}
-              />
-
-              <View style={styles.summaryDivider} />
-
-              <SummaryItem
-                icon="person-outline"
-                value={`#${profile.id}`}
-                label="Member ID"
-              />
-            </Animated.View> */}
-
             {/* PERSONAL DETAILS */}
 
             <Animated.View
               style={[
+                styles.section,
                 {
                   opacity: cardsOpacity,
                   transform: [
@@ -752,18 +728,17 @@ export default function ProfileScreen() {
                   ],
                 },
               ]}>
-              <View style={styles.sectionHeaderOutside}>
-                <SectionHeader
-                  icon="person-outline"
-                  title="Personal Details"
-                  subtitle={
-                    editing
-                      ? 'Update your information'
-                      : 'Your account information'
-                  }
-                />
-              </View>
-              <View style={styles.card}>
+              <SectionHeader
+                icon="person-outline"
+                title="Personal Details"
+                subtitle={
+                  editing
+                    ? 'Update your information'
+                    : 'Your account information'
+                }
+              />
+
+              <Card radius={radii.xl} style={styles.card}>
                 <ProfileInput
                   label="Name"
                   value={name}
@@ -783,16 +758,14 @@ export default function ProfileScreen() {
                 {/* EMAIL */}
 
                 <View style={styles.field}>
-                  <View style={styles.emailLabelRow}>
-                    {editing && <Text style={styles.label}>Email</Text>}
-                  </View>
+                  {editing && <Text style={styles.label}>Email</Text>}
 
                   {editing ? (
                     <View style={[styles.inputWrapper, styles.lockedInput]}>
                       <Ionicons
                         name="mail-outline"
                         size={17}
-                        color="#999999"
+                        color={COLORS.secondary}
                         style={styles.inputIcon}
                       />
 
@@ -805,24 +778,23 @@ export default function ProfileScreen() {
                       <Ionicons
                         name="lock-closed-outline"
                         size={15}
-                        color="#A0A0A0"
-                        style={{
-                          marginRight: 13,
-                        }}
+                        color={COLORS.secondary}
+                        style={styles.lockIcon}
                       />
                     </View>
                   ) : (
                     <View style={styles.displayRow}>
-                      <Ionicons
-                        name="mail-outline"
-                        size={17}
-                        color="#999999"
-                        style={styles.displayIcon}
-                      />
+                      <View style={styles.displayIconBadge}>
+                        <Ionicons
+                          name="mail-outline"
+                          size={15}
+                          color={COLORS.primaryDark}
+                        />
+                      </View>
 
-                      <Text style={styles.displayLabel}>Email:</Text>
+                      <Text style={styles.displayLabel}>Email</Text>
 
-                      <Text style={styles.displayValue}>
+                      <Text style={styles.displayValue} numberOfLines={1}>
                         {profile.email || '-'}
                       </Text>
 
@@ -861,7 +833,7 @@ export default function ProfileScreen() {
                       <Ionicons
                         name="calendar-outline"
                         size={16}
-                        color="#777777"
+                        color={COLORS.secondary}
                         style={styles.inputIcon}
                       />
 
@@ -902,27 +874,28 @@ export default function ProfileScreen() {
                     onChangeText={setDob}
                     editable={false}
                     icon="calendar-outline"
+                    isLast
                   />
                 )}
-              </View>
+              </Card>
             </Animated.View>
 
             {/* LOCATION */}
 
             <Animated.View
               style={[
+                styles.section,
                 {
                   opacity: cardsOpacity,
                 },
               ]}>
-              <View style={styles.sectionHeaderOutside}>
-                <SectionHeader
-                  icon="location-outline"
-                  title="Location"
-                  subtitle="Your address details"
-                />
-              </View>
-              <View style={styles.card}>
+              <SectionHeader
+                icon="location-outline"
+                title="Location"
+                subtitle="Your address details"
+              />
+
+              <Card radius={radii.xl} style={styles.card}>
                 <ProfileInput
                   label="Address"
                   value={address}
@@ -931,46 +904,39 @@ export default function ProfileScreen() {
                   icon="home-outline"
                 />
 
-                <View style={styles.column}>
-                  <ProfileInput
-                    label="City"
-                    value={city}
-                    onChangeText={setCity}
-                    editable={editing}
-                    icon="business-outline"
-                  />
-                </View>
+                <ProfileInput
+                  label="City"
+                  value={city}
+                  onChangeText={setCity}
+                  editable={editing}
+                  icon="business-outline"
+                />
 
-                <View style={styles.column}>
-                  <ProfileInput
-                    label="District"
-                    value={district}
-                    onChangeText={setDistrict}
-                    editable={editing}
-                    icon="map-outline"
-                  />
-                </View>
+                <ProfileInput
+                  label="District"
+                  value={district}
+                  onChangeText={setDistrict}
+                  editable={editing}
+                  icon="map-outline"
+                />
 
-                <View style={styles.column}>
-                  <ProfileInput
-                    label="State"
-                    value={state}
-                    onChangeText={setState}
-                    editable={editing}
-                    icon="navigate-outline"
-                  />
-                </View>
+                <ProfileInput
+                  label="State"
+                  value={state}
+                  onChangeText={setState}
+                  editable={editing}
+                  icon="navigate-outline"
+                />
 
-                <View style={styles.column}>
-                  <ProfileInput
-                    label="Country"
-                    value={country}
-                    onChangeText={setCountry}
-                    editable={editing}
-                    icon="globe-outline"
-                  />
-                </View>
-              </View>
+                <ProfileInput
+                  label="Country"
+                  value={country}
+                  onChangeText={setCountry}
+                  editable={editing}
+                  icon="globe-outline"
+                  isLast
+                />
+              </Card>
             </Animated.View>
 
             {/* SAVE */}
@@ -978,14 +944,18 @@ export default function ProfileScreen() {
             {editing && (
               <Animated.View style={styles.actions}>
                 <TouchableOpacity
-                  style={styles.saveButton}
+                  style={[styles.saveButton, saving && styles.disabledButton]}
                   onPress={handleSave}
                   disabled={saving}>
                   {saving ? (
-                    <ActivityIndicator color="#FFFFFF" />
+                    <ActivityIndicator color={COLORS.white} />
                   ) : (
                     <>
-                      <Ionicons name="checkmark" size={18} color="#FFFFFF" />
+                      <Ionicons
+                        name="checkmark"
+                        size={18}
+                        color={COLORS.white}
+                      />
 
                       <Text style={styles.saveText}>Save Changes</Text>
                     </>
@@ -1005,18 +975,18 @@ export default function ProfileScreen() {
 
             <Animated.View
               style={[
+                styles.section,
                 {
                   opacity: cardsOpacity,
                 },
               ]}>
-              <View style={styles.sectionHeaderOutside}>
-                <SectionHeader
-                  icon="settings-outline"
-                  title="Account & Security"
-                  subtitle="Manage your account"
-                />
-              </View>
-              <View style={styles.card}>
+              <SectionHeader
+                icon="settings-outline"
+                title="Account & Security"
+                subtitle="Manage your account"
+              />
+
+              <Card radius={radii.xl} style={styles.card}>
                 <AccountAction
                   icon="shield-checkmark-outline"
                   title="Security & Sessions"
@@ -1024,31 +994,34 @@ export default function ProfileScreen() {
                   onPress={() => router.push('/home/profile/security')}
                 />
 
+                <View style={styles.actionDivider} />
+
                 <AccountAction
                   icon="lock-closed-outline"
                   title="Change Password"
                   subtitle="Update your account password"
                   onPress={() => router.push('/home/profile/password')}
+                  isLast
                 />
-              </View>
+              </Card>
             </Animated.View>
 
             {/* LEGAL */}
 
             <Animated.View
               style={[
+                styles.section,
                 {
                   opacity: cardsOpacity,
                 },
               ]}>
-              <View style={styles.sectionHeaderOutside}>
-                <SectionHeader
-                  icon="information-circle-outline"
-                  title="Legal"
-                  subtitle="Policies and conditions"
-                />
-              </View>
-              <View style={styles.card}>
+              <SectionHeader
+                icon="information-circle-outline"
+                title="Legal"
+                subtitle="Policies and conditions"
+              />
+
+              <Card radius={radii.xl} style={styles.card}>
                 <AccountAction
                   icon="document-text-outline"
                   title="Privacy Policy"
@@ -1063,41 +1036,48 @@ export default function ProfileScreen() {
                   title="Terms & Conditions"
                   subtitle="Read our terms and conditions"
                   onPress={() => router.push('/terms')}
+                  isLast
                 />
-              </View>
+              </Card>
             </Animated.View>
 
             {/* LOGOUT */}
 
             <Animated.View
               style={[
-                styles.logoutCard,
+                styles.section,
                 {
                   opacity: cardsOpacity,
                 },
               ]}>
-              <TouchableOpacity
-                style={styles.logoutButton}
-                onPress={handleLogout}
-                activeOpacity={0.8}>
-                <View style={styles.logoutIcon}>
+              <Card radius={radii.xl} style={styles.logoutCard}>
+                <TouchableOpacity
+                  style={styles.logoutButton}
+                  onPress={handleLogout}
+                  activeOpacity={0.8}>
+                  <View style={styles.logoutIcon}>
+                    <Ionicons
+                      name="log-out-outline"
+                      size={19}
+                      color={COLORS.danger}
+                    />
+                  </View>
+
+                  <View style={styles.logoutContent}>
+                    <Text style={styles.logoutTitle}>Log Out</Text>
+
+                    <Text style={styles.logoutSubtitle}>
+                      Sign out from this device
+                    </Text>
+                  </View>
+
                   <Ionicons
-                    name="log-out-outline"
-                    size={19}
+                    name="chevron-forward"
+                    size={18}
                     color={COLORS.danger}
                   />
-                </View>
-
-                <View style={styles.logoutContent}>
-                  <Text style={styles.logoutTitle}>Log Out</Text>
-
-                  <Text style={styles.logoutSubtitle}>
-                    Sign out from this device
-                  </Text>
-                </View>
-
-                <Ionicons name="chevron-forward" size={18} color="#B0B0B0" />
-              </TouchableOpacity>
+                </TouchableOpacity>
+              </Card>
             </Animated.View>
 
             <View style={styles.bottomSpace} />
@@ -1110,50 +1090,18 @@ export default function ProfileScreen() {
 
 /*
 |--------------------------------------------------------------------------
-| SUMMARY ITEM
-|--------------------------------------------------------------------------
-*/
-
-function SummaryItem({ icon, value, label, valueColor }) {
-  return (
-    <View style={styles.summaryItem}>
-      <View style={styles.summaryIcon}>
-        <Ionicons name={icon} size={17} color={COLORS.primary} />
-      </View>
-
-      <Text
-        style={[
-          styles.summaryValue,
-          valueColor && {
-            color: valueColor,
-          },
-        ]}>
-        {value}
-      </Text>
-
-      <Text style={styles.summaryLabel}>{label}</Text>
-    </View>
-  );
-}
-
-/*
-|--------------------------------------------------------------------------
 | SECTION HEADER
 |--------------------------------------------------------------------------
 */
 
-function SectionHeader({ icon, title, subtitle }) {
+function SectionHeader({ icon, title }) {
   return (
     <View style={styles.sectionHeader}>
-      {/* <View style={styles.sectionIcon}>
-        <Ionicons name={icon} size={18} color={COLORS.primary} />
-      </View> */}
-
-      <View style={styles.sectionText}>
-        <Text style={styles.sectionTitle}>{title}</Text>
-
-        {/* <Text style={styles.sectionSubtitle}>{subtitle}</Text> */}
+      <View style={styles.sectionIcon}>
+        <Ionicons name={icon} size={16} color={COLORS.white} />
       </View>
+
+      <Text style={styles.sectionTitle}>{title}</Text>
     </View>
   );
 }
@@ -1171,9 +1119,10 @@ function ProfileInput({
   editable,
   icon,
   keyboardType = 'default',
+  isLast = false,
 }) {
   return (
-    <View style={styles.field}>
+    <View style={[styles.field, isLast && styles.fieldLast]}>
       {editable && <Text style={styles.label}>{label}</Text>}
 
       {editable ? (
@@ -1181,7 +1130,7 @@ function ProfileInput({
           <Ionicons
             name={icon}
             size={16}
-            color="#777777"
+            color={COLORS.secondary}
             style={styles.inputIcon}
           />
 
@@ -1191,22 +1140,21 @@ function ProfileInput({
             editable
             keyboardType={keyboardType}
             placeholder={label}
-            placeholderTextColor="#A1A1A1"
+            placeholderTextColor={COLORS.secondary}
             style={styles.input}
           />
         </View>
       ) : (
         <View style={styles.displayRow}>
-          <Ionicons
-            name={icon}
-            size={18}
-            color="#9C9C9C"
-            style={styles.displayIcon}
-          />
+          <View style={styles.displayIconBadge}>
+            <Ionicons name={icon} size={15} color={COLORS.primaryDark} />
+          </View>
 
-          <Text style={styles.displayLabel}>{label}:</Text>
+          <Text style={styles.displayLabel}>{label}</Text>
 
-          <Text style={styles.displayValue}>{value || '-'}</Text>
+          <Text style={styles.displayValue} numberOfLines={1}>
+            {value || '-'}
+          </Text>
         </View>
       )}
     </View>
@@ -1219,14 +1167,14 @@ function ProfileInput({
 |--------------------------------------------------------------------------
 */
 
-function AccountAction({ icon, title, subtitle, onPress }) {
+function AccountAction({ icon, title, subtitle, onPress, isLast = false }) {
   return (
     <TouchableOpacity
-      style={styles.accountAction}
+      style={[styles.accountAction, isLast && styles.accountActionLast]}
       onPress={onPress}
       activeOpacity={0.75}>
       <View style={styles.accountActionIcon}>
-        <Ionicons name={icon} size={18} color={COLORS.primary} />
+        <Ionicons name={icon} size={18} color={COLORS.primaryDark} />
       </View>
 
       <View style={styles.accountActionContent}>
@@ -1235,7 +1183,7 @@ function AccountAction({ icon, title, subtitle, onPress }) {
         <Text style={styles.accountActionSubtitle}>{subtitle}</Text>
       </View>
 
-      <Ionicons name="chevron-forward" size={18} color="#B0B0B0" />
+      <Ionicons name="chevron-forward" size={18} color={COLORS.secondary} />
     </TouchableOpacity>
   );
 }
@@ -1244,558 +1192,421 @@ const styles = StyleSheet.create({
   flex: {
     flex: 1,
   },
-
   screen: {
     flex: 1,
     backgroundColor: COLORS.background,
   },
-
   loadingScreen: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: COLORS.background,
   },
-
   loadingText: {
-    marginTop: 12,
-    fontSize: 11,
+    marginTop: spacing.sm,
+    ...type.footnote,
     color: COLORS.secondary,
   },
-
-  guestProfileBackground: {
-    flex: 1,
-    backgroundColor: COLORS.background,
-  },
-
-  guestHero: {
-    backgroundColor: COLORS.white,
-    paddingTop: 26,
-    paddingHorizontal: 20,
-    paddingBottom: 22,
-    borderBottomWidth: 1,
-    borderBottomColor: '#EEEDEA',
-  },
-
-  guestTopBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingTop: 15,
-  },
-
-  guestAvatarContainer: {
-    alignSelf: 'center',
-    marginTop: 22,
-  },
-
-  guestAvatar: {
-    width: 90,
-    height: 90,
-    borderRadius: 45,
-    backgroundColor: COLORS.primaryLight,
-    borderWidth: 5,
-    borderColor: COLORS.white,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
-  guestCard: {
-    height: 95,
-    marginHorizontal: 7,
-    marginTop: 7,
-    borderRadius: 17,
-    backgroundColor: COLORS.white,
-    borderWidth: 1,
-    borderColor: COLORS.border,
-  },
-
-  loginOverlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(255, 255, 255, 0.68)',
-    alignItems: 'center',
-    justifyContent: 'center',
-    zIndex: 100,
-  },
-
-  loginButtonContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
-  loginButton: {
-    minWidth: 150,
-    height: 46,
-    paddingHorizontal: 28,
-    borderRadius: 23,
-    backgroundColor: COLORS.primary,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 7,
-    elevation: 4,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.12,
-    shadowRadius: 8,
-  },
-
-  loginButtonText: {
-    color: COLORS.white,
-    fontSize: 13,
-    fontWeight: '700',
-  },
-
   scrollContent: {
-    paddingBottom: 28,
+    paddingBottom: spacing.xl,
+  },
+  guestScrollContent: {
+    paddingBottom: spacing.xl,
+    flexGrow: 1,
   },
 
+  /* HERO — same banner + overlapping badge pattern used across the app */
   hero: {
-    backgroundColor: COLORS.white,
-    paddingTop: 26,
-    paddingHorizontal: 20,
-    paddingBottom: 22,
-    borderBottomWidth: 1,
-    borderBottomColor: '#EEEDEA',
-  },
-
-  topBar: {
-    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingTop: 15,
+    paddingBottom: spacing.lg,
+    marginBottom: spacing.sm,
   },
-
-  iconButton: {
-    width: 39,
-    height: 39,
-    borderRadius: 20,
-    backgroundColor: '#F8F7F5',
+  heroBanner: {
+    width: '100%',
+    height: 150,
+    backgroundColor: COLORS.primaryDark,
+    overflow: 'hidden',
     alignItems: 'center',
     justifyContent: 'center',
   },
-
-  pageTitle: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: COLORS.text,
-  },
-
-  avatarContainer: {
-    alignSelf: 'center',
-    marginTop: 19,
-    position: 'relative',
-  },
-
-  avatar: {
-    width: 90,
-    height: 90,
-    borderRadius: 45,
-    backgroundColor: COLORS.primary,
-    borderWidth: 5,
-    borderColor: COLORS.primaryLight,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
-  avatarText: {
-    fontSize: 33,
-    fontWeight: '700',
-    color: COLORS.white,
-  },
-
-  verifiedCircle: {
+  heroPatternOne: {
     position: 'absolute',
-    right: 0,
-    bottom: 1,
-    width: 26,
-    height: 26,
-    borderRadius: 13,
-    borderWidth: 3,
-    borderColor: COLORS.white,
-    backgroundColor: COLORS.success,
+    width: 170,
+    height: 170,
+    borderRadius: 85,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.12)',
+    top: -70,
+    left: -50,
+  },
+  heroPatternTwo: {
+    position: 'absolute',
+    width: 210,
+    height: 210,
+    borderRadius: 105,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.09)',
+    right: -85,
+    top: -95,
+  },
+  heroOm: {
+    color: 'rgba(255,255,255,0.14)',
+    fontSize: 72,
+    fontWeight: '700',
+  },
+  heroTopButton: {
+    position: 'absolute',
+    top: spacing.md,
+    left: spacing.md,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(0,0,0,0.22)',
     alignItems: 'center',
     justifyContent: 'center',
   },
-
-  profileName: {
-    marginTop: 11,
-    fontSize: 21,
-    textAlign: 'center',
-    fontWeight: '700',
-    color: COLORS.text,
+  heroTopButtonRight: {
+    left: undefined,
+    right: spacing.md,
   },
-
-  username: {
-    marginTop: 2,
-    fontSize: 11.5,
-    textAlign: 'center',
-    color: COLORS.secondary,
-  },
-
-  roleBadge: {
-    alignSelf: 'center',
-    flexDirection: 'row',
+  avatarRing: {
+    width: 108,
+    height: 108,
+    borderRadius: 54,
+    backgroundColor: COLORS.background,
     alignItems: 'center',
-    gap: 4,
-    marginTop: 8,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderRadius: 18,
-    backgroundColor: COLORS.primaryLight,
+    justifyContent: 'center',
+    marginTop: -54,
+    ...shadow.raised,
+    shadowColor: COLORS.primaryDark,
   },
-
-  roleText: {
-    fontSize: 9,
+  avatar: {
+    width: 92,
+    height: 92,
+    borderRadius: 46,
+    backgroundColor: `rgba(${RGB.maroon},0.1)`,
+    borderWidth: 3,
+    borderColor: COLORS.background,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  avatarText: {
+    ...type.largeTitle,
+    fontFamily: undefined,
+    fontSize: 34,
     fontWeight: '700',
     color: COLORS.primaryDark,
-    letterSpacing: 0.5,
   },
-
-  summaryCard: {
-    marginHorizontal: 7,
-    marginTop: 7,
-    paddingVertical: 14,
-    backgroundColor: COLORS.white,
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    borderRadius: 17,
-    flexDirection: 'row',
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
-    shadowOpacity: 0.035,
-    shadowRadius: 7,
-    elevation: 2,
-  },
-
-  summaryItem: {
-    flex: 1,
-    alignItems: 'center',
-  },
-
-  summaryIcon: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: COLORS.primaryLight,
+  verifiedCircle: {
+    position: 'absolute',
+    bottom: 2,
+    right: 2,
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: COLORS.success,
+    borderWidth: 2,
+    borderColor: COLORS.background,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 4,
   },
-
-  summaryValue: {
-    fontSize: 11.5,
-    fontWeight: '700',
+  profileName: {
+    marginTop: spacing.sm,
+    ...type.title,
+    fontSize: 22,
     color: COLORS.text,
+    textAlign: 'center',
   },
-
-  summaryLabel: {
-    marginTop: 1,
-    fontSize: 8.5,
+  username: {
+    marginTop: 2,
+    ...type.subhead,
     color: COLORS.secondary,
   },
-
-  summaryDivider: {
-    width: 1,
-    height: 40,
-    backgroundColor: '#EEEEEE',
+  roleBadge: {
+    marginTop: spacing.sm,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    backgroundColor: `rgba(${RGB.maroon},0.08)`,
+    borderRadius: radii.pill,
+    paddingHorizontal: 12,
+    paddingVertical: 5,
+  },
+  roleText: {
+    ...type.caption,
+    fontSize: 10,
+    color: COLORS.primaryDark,
   },
 
-  card: {
-    marginHorizontal: 7,
-    marginTop: 7,
-    backgroundColor: COLORS.white,
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    borderRadius: 17,
-    padding: 16,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
-    shadowOpacity: 0.03,
-    shadowRadius: 7,
-    elevation: 1,
+  /* GUEST CARD */
+  guestCard: {
+    marginHorizontal: spacing.lg,
+    marginTop: spacing.md,
+    padding: spacing.lg,
+    alignItems: 'center',
+  },
+  guestIconRing: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    backgroundColor: `rgba(${RGB.maroon},0.08)`,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: spacing.md,
+  },
+  guestTitle: {
+    ...type.headline,
+    fontSize: 17,
+    color: COLORS.text,
+    marginBottom: spacing.xs,
+  },
+  guestText: {
+    ...type.body,
+    color: COLORS.secondary,
+    textAlign: 'center',
+    marginBottom: spacing.md,
+  },
+  loginButton: {
+    minWidth: 160,
+    paddingHorizontal: spacing.lg,
+    borderRadius: radii.pill,
+    backgroundColor: COLORS.primaryDark,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    minHeight: 52,
+    ...shadow.card,
+    shadowColor: COLORS.primaryDark,
+  },
+  loginButtonText: {
+    color: COLORS.white,
+    ...type.subhead,
+    fontWeight: '700',
   },
 
-  sectionHeaderOutside: {
-    marginHorizontal: 23,
-    marginTop: 10,
+  /* SECTIONS */
+  section: {
+    marginTop: spacing.md,
   },
-
   sectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: -5,
+    gap: spacing.sm,
+    paddingHorizontal: spacing.lg,
+    marginBottom: spacing.sm,
   },
-
   sectionIcon: {
-    width: 34,
-    height: 34,
-    borderRadius: 11,
-    backgroundColor: COLORS.primaryLight,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: COLORS.primaryDark,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 9,
+    ...shadow.card,
+    shadowColor: COLORS.primaryDark,
   },
-
-  sectionText: {
-    flex: 1,
-  },
-
   sectionTitle: {
-    fontSize: 13,
-    fontWeight: '700',
+    ...type.headline,
+    fontSize: 15.5,
     color: COLORS.text,
   },
+  card: {
+    marginHorizontal: spacing.lg,
+    padding: spacing.md,
+  },
 
-  sectionSubtitle: {
-    marginTop: 1,
+  /* FIELDS */
+  field: {
+    marginBottom: spacing.md,
+  },
+  fieldLast: {
+    marginBottom: 0,
+  },
+  label: {
+    ...type.caption,
     fontSize: 11,
     color: COLORS.secondary,
+    marginBottom: spacing.xs + 2,
+    letterSpacing: 0.4,
   },
-
-  field: {
-    marginBottom: 11,
-  },
-
-  label: {
-    fontSize: 10.5,
-    fontWeight: '600',
-    color: '#4B4B4B',
-    marginBottom: 1,
-  },
-
-  emailLabelRow: {
+  inputWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 5,
+    minHeight: 48,
+    borderRadius: radii.md,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    backgroundColor: COLORS.input,
+    paddingHorizontal: spacing.sm + 2,
   },
-
+  lockedInput: {
+    opacity: 0.7,
+  },
+  inputIcon: {
+    marginRight: spacing.sm,
+  },
+  lockIcon: {
+    marginLeft: spacing.sm,
+  },
+  input: {
+    flex: 1,
+    ...type.body,
+    fontSize: 14,
+    color: COLORS.text,
+    paddingVertical: spacing.sm,
+  },
+  displayRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    minHeight: 40,
+  },
+  displayIconBadge: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    backgroundColor: `rgba(${RGB.maroon},0.08)`,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: spacing.sm,
+  },
+  displayLabel: {
+    ...type.footnote,
+    color: COLORS.secondary,
+    marginRight: spacing.sm,
+  },
+  displayValue: {
+    flex: 1,
+    ...type.subhead,
+    fontWeight: '600',
+    color: COLORS.text,
+  },
   verifiedBadge: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 3,
-    paddingHorizontal: 7,
-    paddingVertical: 3,
-    borderRadius: 10,
     backgroundColor: COLORS.successLight,
+    borderRadius: radii.pill,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
   },
-
   verifiedText: {
-    fontSize: 8.5,
-    fontWeight: '700',
+    ...type.caption,
+    fontSize: 9,
     color: COLORS.success,
   },
 
-  inputWrapper: {
-    height: 35,
-    borderRadius: 11,
-    borderWidth: 1,
-    borderColor: '#ECEAE7',
-    backgroundColor: COLORS.input,
+  /* SAVE / CANCEL */
+  actions: {
+    marginHorizontal: spacing.lg,
+    marginTop: spacing.md,
+    gap: spacing.sm,
+  },
+  saveButton: {
     flexDirection: 'row',
-    alignItems: 'center',
-  },
-
-  readOnlyInput: {
-    backgroundColor: '#F3F2F0',
-  },
-
-  lockedInput: {
-    backgroundColor: '#F1F0EE',
-  },
-
-  inputIcon: {
-    marginLeft: 7,
-    marginRight: 1,
-  },
-
-  input: {
-    flex: 1,
-    height: '100%',
-    paddingHorizontal: 5,
-    fontSize: 11,
-    color: '#333333',
-  },
-
-  displayRow: {
-    minHeight: 15,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 5,
-    borderBottomColor: 'rgba(231, 231, 231, 0.5)',
-    borderBottomWidth: 1,
-  },
-
-  displayIcon: {
-    width: 22,
-    marginLeft: 7,
-    marginRight: 6,
-  },
-
-  displayLabel: {
-    fontSize: 11,
-    fontWeight: '600',
-    color: '#4B4B4B',
-    marginRight: 5,
-  },
-
-  displayValue: {
-    flex: 1,
-    paddingHorizontal: 5,
-    fontSize: 11,
-    color: '#333333',
-  },
-
-  helper: {
-    marginTop: 4,
-    fontSize: 8.5,
-    color: COLORS.light,
-  },
-
-  twoColumn: {
-    flexDirection: 'row',
-    gap: 5,
-  },
-
-  column: {
-    flex: 1,
-  },
-
-  accountAction: {
-    minHeight: 57,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-
-  accountActionIcon: {
-    width: 25,
-    height: 25,
-    borderRadius: 11,
-    backgroundColor: COLORS.primaryLight,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 10,
+    gap: spacing.sm,
+    minHeight: 52,
+    borderRadius: radii.pill,
+    backgroundColor: COLORS.primaryDark,
+    ...shadow.card,
+    shadowColor: COLORS.primaryDark,
+  },
+  disabledButton: {
+    opacity: 0.65,
+  },
+  saveText: {
+    color: COLORS.white,
+    ...type.subhead,
+    fontWeight: '700',
+  },
+  cancelButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: 48,
+    borderRadius: radii.pill,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+  },
+  cancelText: {
+    color: COLORS.secondary,
+    ...type.subhead,
+    fontWeight: '600',
   },
 
+  /* ACCOUNT ACTIONS */
+  accountAction: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm + 2,
+    paddingVertical: spacing.sm + 2,
+  },
+  accountActionLast: {
+    paddingBottom: 0,
+  },
+  accountActionIcon: {
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    backgroundColor: `rgba(${RGB.maroon},0.08)`,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   accountActionContent: {
     flex: 1,
   },
-
   accountActionTitle: {
-    fontSize: 11.5,
+    ...type.subhead,
     fontWeight: '700',
     color: COLORS.text,
   },
-
   accountActionSubtitle: {
-    marginTop: 2,
-    fontSize: 9,
+    ...type.footnote,
     color: COLORS.secondary,
+    marginTop: 2,
   },
-
   actionDivider: {
     height: 1,
-    backgroundColor: '#F1F0EE',
-    marginVertical: 2,
+    backgroundColor: COLORS.border,
   },
 
-  actions: {
-    marginHorizontal: 7,
-    marginTop: 13,
-  },
-
-  saveButton: {
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: COLORS.primary,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 7,
-    elevation: 4,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 5,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-  },
-
-  saveText: {
-    color: COLORS.white,
-    fontSize: 13,
-    fontWeight: '700',
-  },
-
-  cancelButton: {
-    height: 38,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
-  cancelText: {
-    color: COLORS.primaryDark,
-    fontSize: 10.5,
-    fontWeight: '600',
-    textDecorationLine: 'underline',
-  },
-
+  /* LOGOUT */
   logoutCard: {
-    marginHorizontal: 7,
-    marginTop: 7,
-    backgroundColor: COLORS.white,
+    marginHorizontal: spacing.lg,
+    padding: 0,
     borderWidth: 1,
-    borderColor: '#F0D8D8',
-    borderRadius: 17,
-    overflow: 'hidden',
+    borderColor: `rgba(${RGB.dangerRed},0.18)`,
   },
-
   logoutButton: {
-    minHeight: 61,
-    paddingHorizontal: 15,
     flexDirection: 'row',
     alignItems: 'center',
+    gap: spacing.sm + 2,
+    padding: spacing.md,
   },
-
   logoutIcon: {
-    width: 35,
-    height: 35,
-    borderRadius: 11,
-    backgroundColor: COLORS.dangerLight,
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    backgroundColor: `rgba(${RGB.dangerRed},0.1)`,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 10,
   },
-
   logoutContent: {
     flex: 1,
   },
-
   logoutTitle: {
-    fontSize: 11.5,
+    ...type.subhead,
     fontWeight: '700',
     color: COLORS.danger,
   },
-
   logoutSubtitle: {
-    marginTop: 2,
-    fontSize: 9,
+    ...type.footnote,
     color: COLORS.secondary,
+    marginTop: 2,
   },
 
   bottomSpace: {
-    height: 15,
+    height: spacing.lg,
   },
 });

@@ -1,4 +1,5 @@
 // app/_layout.tsx
+import '../global.css';
 
 import store from '@/components/redux/store';
 import { AppAlertProvider } from '@/context/AppAlertContext';

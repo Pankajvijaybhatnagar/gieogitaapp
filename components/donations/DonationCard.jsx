@@ -2,6 +2,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import DonationReceiptButton from './DonationReceiptButton';
+import { COLORS } from '@/constants/brandColors';
+import { hairline, radii, shadow } from '@/constants/theme';
 
 const DonationCard = ({ donation }) => {
   const router = useRouter();
@@ -101,7 +103,7 @@ const DonationCard = ({ donation }) => {
     <View style={styles.card}>
       <View style={styles.topRow}>
         <View style={styles.iconBox}>
-          <Ionicons name="heart" size={17} color="#8B4F2D" />
+          <Ionicons name="heart" size={17} color={COLORS.saffron} />
         </View>
 
         <View style={styles.headingArea}>
@@ -159,7 +161,7 @@ const DonationCard = ({ donation }) => {
               height: 32,
               paddingHorizontal: 13,
               borderRadius: 16,
-              backgroundColor: '#6A3C25',
+              backgroundColor: COLORS.saffron,
               flexDirection: 'row',
               alignItems: 'center',
               justifyContent: 'center',
@@ -194,7 +196,7 @@ const DonationCard = ({ donation }) => {
 
       <View style={styles.detailRow}>
         <View style={styles.detailItem}>
-          <Ionicons name="person-outline" size={13} color="#9A765D" />
+          <Ionicons name="person-outline" size={13} color={COLORS.warmBrown} />
 
           <View style={styles.detailContent}>
             <Text style={styles.detailLabel}>Donated By</Text>
@@ -206,7 +208,7 @@ const DonationCard = ({ donation }) => {
         </View>
 
         <View style={styles.detailItem}>
-          <Ionicons name="location-outline" size={13} color="#9A765D" />
+          <Ionicons name="location-outline" size={13} color={COLORS.warmBrown} />
 
           <View style={styles.detailContent}>
             <Text style={styles.detailLabel}>Location</Text>
@@ -227,7 +229,7 @@ const DonationCard = ({ donation }) => {
           </Text>
         </View>
 
-        <Ionicons name="shield-checkmark-outline" size={16} color="#8C6045" />
+        <Ionicons name="shield-checkmark-outline" size={16} color={COLORS.warmBrown} />
       </View>
     </View>
   );
@@ -237,156 +239,125 @@ export default DonationCard;
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
+    backgroundColor: COLORS.white,
+    borderRadius: 24,
     padding: 12,
     marginBottom: 9,
-
     borderWidth: 1,
-    borderColor: '#EFE2D6',
-
-    shadowColor: '#63381F',
+    borderColor: hairline,
+    ...shadow.card,
     shadowOpacity: 0.045,
-    shadowRadius: 7,
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
-
-    elevation: 1,
+    elevation: 2
   },
-
   topRow: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   },
-
   iconBox: {
     width: 34,
     height: 34,
     borderRadius: 11,
-    backgroundColor: '#F5E8DC',
+    backgroundColor: COLORS.creamDark,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-
   headingArea: {
     flex: 1,
     marginLeft: 9,
-    marginRight: 6,
+    marginRight: 6
   },
-
   type: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#4D2D1A',
+    color: COLORS.deepBrown
   },
-
   date: {
-    fontSize: 9.5,
-    color: '#9A7A64',
-    marginTop: 2,
+    fontSize: 12,
+    color: COLORS.warmBrown,
+    marginTop: 2
   },
-
   statusBadge: {
     minHeight: 23,
     paddingHorizontal: 7,
     borderRadius: 12,
-
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 3,
+    gap: 3
   },
-
   statusText: {
-    fontSize: 8.5,
+    fontSize: 12,
     fontWeight: '700',
-    textTransform: 'capitalize',
+    textTransform: 'capitalize'
   },
-
   amountContainer: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    marginTop: 11,
+    marginTop: 11
   },
-
   currency: {
-    color: '#75503A',
+    color: COLORS.warmBrown,
     fontSize: 14,
     fontWeight: '600',
     marginTop: 2,
-    marginRight: 1,
+    marginRight: 1
   },
-
   amount: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#4D2D1A',
-    lineHeight: 28,
+    color: COLORS.deepBrown,
+    lineHeight: 28
   },
-
   divider: {
     height: 1,
-    backgroundColor: '#F2E8DF',
-    marginVertical: 10,
+    backgroundColor: hairline,
+    marginVertical: 10
   },
-
   detailRow: {
     flexDirection: 'row',
-    gap: 8,
+    gap: 8
   },
-
   detailItem: {
     flex: 1,
     flexDirection: 'row',
-    alignItems: 'flex-start',
+    alignItems: 'flex-start'
   },
-
   detailContent: {
     flex: 1,
-    marginLeft: 5,
+    marginLeft: 5
   },
-
   detailLabel: {
-    fontSize: 8.5,
-    color: '#A18470',
-    marginBottom: 1,
+    fontSize: 12,
+    color: COLORS.warmBrown,
+    marginBottom: 1
   },
-
   detailValue: {
-    color: '#62422F',
-    fontSize: 10.5,
-    fontWeight: '600',
+    color: COLORS.deepBrown,
+    fontSize: 12,
+    fontWeight: '600'
   },
-
   transactionBox: {
     marginTop: 10,
-    borderRadius: 10,
-    backgroundColor: '#FAF4ED',
-
+    borderRadius: radii.sm,
+    backgroundColor: COLORS.creamDark,
     paddingHorizontal: 10,
     paddingVertical: 7,
-
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   },
-
   transactionTextContainer: {
     flex: 1,
-    paddingRight: 8,
+    paddingRight: 8
   },
-
   transactionLabel: {
-    fontSize: 7.5,
-    color: '#A58A77',
+    fontSize: 12,
+    color: COLORS.warmBrown,
     textTransform: 'uppercase',
-    letterSpacing: 0.5,
+    letterSpacing: 0.5
   },
-
   transactionValue: {
-    fontSize: 9.5,
-    color: '#674A37',
+    fontSize: 12,
+    color: COLORS.deepBrown,
     fontWeight: '600',
-    marginTop: 2,
-  },
+    marginTop: 2
+  }
 });

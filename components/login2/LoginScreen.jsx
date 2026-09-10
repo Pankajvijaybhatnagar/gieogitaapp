@@ -1,3 +1,4 @@
+import { DESIGN } from '@/constants/design';
 import { Ionicons } from '@expo/vector-icons';
 import SocialLogin from './SocialLogin';
 
@@ -19,17 +20,20 @@ import {
   View,
 } from 'react-native';
 
-const PRIMARY_BROWN = '#A55A12';
+import { COLORS } from '@/constants/brandColors';
+import { hairline, radii } from '@/constants/theme';
 
-const DARK_BROWN = '#6D3B0D';
+const PRIMARY_BROWN = COLORS.richBrown;
 
-const TEXT_COLOR = '#171717';
+const DARK_BROWN = COLORS.richBrown;
 
-const MUTED_COLOR = '#868686';
+const TEXT_COLOR = COLORS.deepBrown;
 
-const INPUT_BG = '#F6F6F6';
+const MUTED_COLOR = COLORS.warmBrown;
 
-const BORDER_COLOR = '#E6E6E6';
+const INPUT_BG = COLORS.creamDark;
+
+const BORDER_COLOR = hairline;
 
 export default function LoginScreen({
   onSignIn,
@@ -239,7 +243,7 @@ export default function LoginScreen({
               <Text style={styles.title}>Sign In</Text>
 
               <Text style={styles.subtitle}>
-                Hi! Welcome back, you've been missed
+                Hi! Welcome back, you&apos;ve been missed
               </Text>
             </Animated.View>
 
@@ -265,7 +269,7 @@ export default function LoginScreen({
                 <Ionicons
                   name="mail-outline"
                   size={17}
-                  color="#999"
+                  color={COLORS.warmBrown}
                   style={styles.inputIcon}
                 />
 
@@ -273,7 +277,7 @@ export default function LoginScreen({
                   value={email}
                   onChangeText={setEmail}
                   placeholder="example@gmail.com"
-                  placeholderTextColor="#A6A6A6"
+                  placeholderTextColor={COLORS.warmBrown}
                   keyboardType="email-address"
                   autoCapitalize="none"
                   editable={!loading}
@@ -289,7 +293,7 @@ export default function LoginScreen({
                 <Ionicons
                   name="lock-closed-outline"
                   size={17}
-                  color="#999"
+                  color={COLORS.warmBrown}
                   style={styles.inputIcon}
                 />
 
@@ -297,7 +301,7 @@ export default function LoginScreen({
                   value={password}
                   onChangeText={setPassword}
                   placeholder="****************"
-                  placeholderTextColor="#A6A6A6"
+                  placeholderTextColor={COLORS.warmBrown}
                   secureTextEntry={!showPassword}
                   editable={!loading}
                   style={styles.input}
@@ -310,7 +314,7 @@ export default function LoginScreen({
                   <Ionicons
                     name={showPassword ? 'eye-outline' : 'eye-off-outline'}
                     size={21}
-                    color="#444"
+                    color={COLORS.warmBrown}
                   />
                 </TouchableOpacity>
               </View>
@@ -344,7 +348,7 @@ export default function LoginScreen({
                   disabled={loading}
                   activeOpacity={0.88}>
                   {loading ? (
-                    <ActivityIndicator color="#FFFFFF" />
+                    <ActivityIndicator color={COLORS.white} />
                   ) : (
                     <>
                       <Text style={styles.primaryButtonText}>Sign In</Text>
@@ -352,7 +356,7 @@ export default function LoginScreen({
                       <Ionicons
                         name="arrow-forward"
                         size={18}
-                        color="#FFFFFF"
+                        color={COLORS.white}
                         style={styles.buttonIcon}
                       />
                     </>
@@ -377,7 +381,7 @@ export default function LoginScreen({
                         : 'alert-circle-outline'
                     }
                     size={17}
-                    color={messageType === 'success' ? '#15803D' : '#DC2626'}
+                    color={messageType === 'success' ? '#15803D' : COLORS.dangerRed}
                   />
 
                   <Text
@@ -385,7 +389,7 @@ export default function LoginScreen({
                       styles.message,
                       {
                         color:
-                          messageType === 'success' ? '#15803D' : '#DC2626',
+                          messageType === 'success' ? '#15803D' : COLORS.dangerRed,
                       },
                     ]}>
                     {message}
@@ -433,7 +437,7 @@ export default function LoginScreen({
                     opacity: socialOpacity,
                   },
                 ]}>
-                <Text style={styles.bottomText}>Don't have an account?</Text>
+                <Text style={styles.bottomText}>Don&apos;t have an account?</Text>
 
                 <TouchableOpacity onPress={onCreateAccount} disabled={loading}>
                   <Text style={styles.linkText}> Sign Up</Text>
@@ -450,20 +454,17 @@ export default function LoginScreen({
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.cream
   },
-
   scrollContent: {
-    flexGrow: 1,
+    flexGrow: 1
   },
-
   container: {
     flex: 1,
     paddingHorizontal: 28,
     paddingTop: 55,
-    paddingBottom: 30,
+    paddingBottom: 30
   },
-
   topGlow: {
     position: 'absolute',
     top: 10,
@@ -471,104 +472,89 @@ const styles = StyleSheet.create({
     width: 160,
     height: 160,
     borderRadius: 80,
-    backgroundColor: '#F7E2C4',
-    opacity: 0.28,
+    backgroundColor: COLORS.creamDark,
+    opacity: 0.6
   },
-
   header: {
     alignItems: 'center',
-    marginBottom: 33,
+    marginBottom: 33
   },
-
   logoCircle: {
     width: 47,
     height: 47,
     borderRadius: 24,
-    backgroundColor: '#FBF1E5',
+    backgroundColor: COLORS.creamDark,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 13,
+    marginBottom: 13
   },
-
   logoText: {
     fontSize: 23,
-    color: PRIMARY_BROWN,
+    color: PRIMARY_BROWN
   },
-
   title: {
     fontSize: 27,
-    fontWeight: '700',
+    fontWeight: "400",
     color: TEXT_COLOR,
-    letterSpacing: -0.6,
+    letterSpacing: -0.4,
+    fontFamily: DESIGN.fonts.editorial
   },
-
   subtitle: {
     marginTop: 9,
     fontSize: 12,
     color: MUTED_COLOR,
-    textAlign: 'center',
+    textAlign: 'center'
   },
-
   form: {
-    width: '100%',
+    width: '100%'
   },
-
   label: {
     fontSize: 12,
-    color: '#333333',
+    color: COLORS.deepBrown,
     marginBottom: 8,
-    fontWeight: '600',
+    fontWeight: '600'
   },
-
   passwordLabel: {
-    marginTop: 20,
+    marginTop: 20
   },
-
   inputWrapper: {
-    height: 50,
+    height: 52,
     width: '100%',
     borderRadius: 14,
     backgroundColor: INPUT_BG,
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#EFEFEF',
+    borderColor: BORDER_COLOR
   },
-
   inputIcon: {
-    marginLeft: 14,
+    marginLeft: 14
   },
-
   input: {
     flex: 1,
     height: '100%',
     paddingHorizontal: 12,
-    fontSize: 12,
-    color: '#333333',
+    fontSize: 15,
+    color: COLORS.deepBrown
   },
-
   eyeButton: {
     width: 46,
     height: '100%',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-
   forgotWrapper: {
     alignSelf: 'flex-end',
-    marginTop: 10,
+    marginTop: 10
   },
-
   forgotText: {
     color: DARK_BROWN,
-    fontSize: 11,
+    fontSize: 12,
     textDecorationLine: 'underline',
-    fontWeight: '600',
+    fontWeight: '600'
   },
-
   primaryButton: {
-    height: 50,
-    borderRadius: 25,
+    borderRadius: 16,
     backgroundColor: PRIMARY_BROWN,
     alignItems: 'center',
     justifyContent: 'center',
@@ -577,85 +563,74 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 7,
+      height: 7
     },
-    shadowOpacity: 0.13,
+    shadowOpacity: 0.06,
     shadowRadius: 12,
-    elevation: 5,
+    elevation: 2,
+    minHeight: 52
   },
-
   disabledButton: {
-    opacity: 0.68,
+    opacity: 0.68
   },
-
   primaryButtonText: {
-    color: '#FFFFFF',
+    color: COLORS.white,
     fontSize: 14,
-    fontWeight: '700',
+    fontWeight: '700'
   },
-
   buttonIcon: {
-    marginLeft: 9,
+    marginLeft: 9
   },
-
   messageBox: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 14,
-    paddingHorizontal: 8,
+    paddingHorizontal: 8
   },
-
   message: {
-    fontSize: 11,
-    lineHeight: 17,
+    fontSize: 12,
+    lineHeight: 18,
     marginLeft: 5,
     textAlign: 'center',
-    flex: 1,
+    flex: 1
   },
-
   dividerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 31,
+    marginTop: 31
   },
-
   dividerLine: {
     flex: 1,
     height: 1,
-    backgroundColor: '#E9E9E9',
+    backgroundColor: hairline
   },
-
   dividerText: {
     marginHorizontal: 12,
-    fontSize: 10.5,
-    color: '#999999',
+    fontSize: 12,
+    color: COLORS.warmBrown
   },
-
   socialContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     gap: 14,
-    marginTop: 21,
+    marginTop: 21
   },
-
   bottomAccount: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 25,
+    marginTop: 25
   },
-
   bottomText: {
-    fontSize: 11,
-    color: '#444444',
+    fontSize: 12,
+    color: COLORS.warmBrown
   },
-
   linkText: {
-    fontSize: 11,
+    fontSize: 12,
     color: DARK_BROWN,
     fontWeight: '700',
-    textDecorationLine: 'underline',
-  },
+    textDecorationLine: 'underline'
+  }
 });

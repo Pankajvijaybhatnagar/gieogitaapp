@@ -41,36 +41,38 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 18,
     borderWidth: 1,
-    borderColor: 'rgba(201,162,39,0.45)',
+    borderColor: 'rgba(179,149,98,0.45)',
     position: 'relative',
-    overflow: 'hidden',
+    overflow: 'hidden'
   },
   sevaOverlayText: {
     position: 'absolute',
     right: 14,
     top: 6,
     fontSize: 72,
-    color: 'rgba(201,162,39,0.1)',
-    lineHeight: 80,
+    color: 'rgba(179,149,98,0.1)',
+    lineHeight: 80
   },
   sevaLabel: {
-    fontSize: 9,
+    fontSize: 12,
     letterSpacing: 2,
     color: COLORS.saffron,
-    fontWeight: '800',
-    marginBottom: 4,
+    fontWeight: "600",
+    marginBottom: 4
   },
   sevaTitle: {
     fontSize: 17,
-    fontWeight: '800',
+    fontWeight: "600",
     color: COLORS.deepBrown,
-    marginBottom: 12,
+    marginBottom: 12
   },
-  sevaTitleAccent: { color: COLORS.goldDark },
+  sevaTitleAccent: {
+    color: COLORS.goldDark
+  },
   sevaChips: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 8,
+    gap: 8
   },
   sevaChip: {
     flexDirection: 'row',
@@ -78,15 +80,17 @@ const styles = StyleSheet.create({
     gap: 5,
     backgroundColor: 'rgba(44,26,10,0.08)',
     borderWidth: 1,
-    borderColor: 'rgba(201,162,39,0.5)',
+    borderColor: 'rgba(179,149,98,0.5)',
     borderRadius: 20,
     paddingHorizontal: 12,
-    paddingVertical: 5,
+    paddingVertical: 5
   },
-  sevaChipIcon: { fontSize: 12 },
+  sevaChipIcon: {
+    fontSize: 12
+  },
   sevaChipText: {
-    fontSize: 11,
+    fontSize: 12,
     color: COLORS.warmBrown,
-    fontWeight: '600',
-  },
+    fontWeight: '600'
+  }
 });

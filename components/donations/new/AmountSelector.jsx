@@ -6,6 +6,8 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native';
+import { COLORS } from '@/constants/brandColors';
+import { hairline, radii } from '@/constants/theme';
 
 const AMOUNTS = [101, 501, 1100, 2100, 5100];
 
@@ -63,7 +65,7 @@ const AmountSelector = ({ amount, onChange }) => {
           }}
           keyboardType="decimal-pad"
           placeholder="Enter custom amount"
-          placeholderTextColor="#AF9987"
+          placeholderTextColor={COLORS.warmBrown}
           style={styles.customInput}
         />
       </View>
@@ -79,81 +81,70 @@ export default AmountSelector;
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 14,
+    marginBottom: 14
   },
-
   label: {
     marginLeft: 2,
     marginBottom: 7,
-    fontSize: 10.5,
+    fontSize: 12,
     fontWeight: '600',
-    color: '#634735',
+    color: COLORS.deepBrown
   },
-
   required: {
-    color: '#B54E3F',
+    color: COLORS.dangerRed
   },
-
   presetRow: {
     gap: 6,
-    paddingRight: 4,
+    paddingRight: 4
   },
-
   presetButton: {
     height: 32,
     paddingHorizontal: 12,
-    borderRadius: 16,
+    borderRadius: radii.pill,
     borderWidth: 1,
-    borderColor: '#E6D5C6',
-    backgroundColor: '#FFFDFC',
+    borderColor: hairline,
+    backgroundColor: COLORS.creamDark,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
-
   presetButtonSelected: {
-    backgroundColor: '#704025',
-    borderColor: '#704025',
+    backgroundColor: COLORS.richBrown,
+    borderColor: COLORS.saffron
   },
-
   presetText: {
-    fontSize: 10.5,
+    fontSize: 12,
     fontWeight: '700',
-    color: '#704025',
+    color: COLORS.saffron
   },
-
   presetTextSelected: {
-    color: '#FFFFFF',
+    color: COLORS.white
   },
-
   customWrapper: {
     height: 44,
     marginTop: 9,
-    borderRadius: 12,
+    borderRadius: radii.md,
     borderWidth: 1,
-    borderColor: '#E6D8CA',
-    backgroundColor: '#FFFFFF',
+    borderColor: hairline,
+    backgroundColor: COLORS.creamDark,
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   },
-
   currency: {
     marginLeft: 13,
     fontSize: 16,
     fontWeight: '700',
-    color: '#704025',
+    color: COLORS.saffron
   },
-
   customInput: {
     flex: 1,
     paddingHorizontal: 9,
     fontSize: 13,
-    color: '#40281A',
+    color: COLORS.deepBrown
   },
-
   helper: {
     marginTop: 5,
     marginLeft: 2,
-    fontSize: 9,
-    color: '#9A806C',
-  },
+    fontSize: 12,
+    color: COLORS.warmBrown
+  }
 });

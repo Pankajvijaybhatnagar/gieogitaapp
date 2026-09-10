@@ -1,9 +1,12 @@
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 
+import { COLORS } from '@/constants/brandColors';
+import { spacing, type } from '@/constants/theme';
+
 export default function PaymentLoading() {
   return (
     <View style={styles.container}>
-      <ActivityIndicator size="small" color="#704025" />
+      <ActivityIndicator size="small" color={COLORS.saffron} />
 
       <Text style={styles.text}>Connecting to secure payment gateway...</Text>
     </View>
@@ -13,18 +16,14 @@ export default function PaymentLoading() {
 const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
-
     zIndex: 10,
-
-    backgroundColor: '#FFF9F3',
-
+    backgroundColor: COLORS.cream,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-
   text: {
-    marginTop: 11,
-    fontSize: 11,
-    color: '#856D5B',
-  },
+    marginTop: spacing.sm,
+    ...type.footnote,
+    color: COLORS.warmBrown
+  }
 });

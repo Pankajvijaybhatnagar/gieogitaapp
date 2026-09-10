@@ -10,6 +10,7 @@ import LoginScreen from '@/components/login2/LoginScreen';
 import VerifyCodeScreen from '@/components/login2/VerifyCodeScreen';
 
 import { useAuth } from '@/context/AuthContext';
+import { RGB } from '@/constants/brandColors';
 import {
   Animated,
   Dimensions,
@@ -932,40 +933,35 @@ const Login2 = () => {
 const styles = StyleSheet.create({
   modalRoot: {
     flex: 1,
-    backgroundColor: 'transparent',
+    backgroundColor: 'transparent'
   },
-
   glassTint: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(248, 247, 245, 0.25)',
+    backgroundColor: `rgba(${RGB.cream},0.25)`
   },
-
   sheet: {
     position: 'absolute',
     left: 0,
     right: 0,
     bottom: 0,
     height: '92%',
-    backgroundColor: 'rgba(255, 255, 255, 0.94)',
+    backgroundColor: `rgba(${RGB.cream},0.94)`,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     overflow: 'hidden',
-
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: -10,
+      height: -10
     },
     shadowOpacity: 0.16,
     shadowRadius: 24,
-    elevation: 20,
+    elevation: 20
   },
-
   sheetGlass: {
     flex: 1,
-    backgroundColor: 'rgba(255,255,255,0.72)',
+    backgroundColor: `rgba(${RGB.cream},0.72)`
   },
-
   grabberTouchArea: {
     position: 'absolute',
     top: 0,
@@ -974,16 +970,15 @@ const styles = StyleSheet.create({
     height: 48,
     alignItems: 'center',
     justifyContent: 'flex-start',
-    zIndex: 100,
+    zIndex: 100
   },
-
   grabber: {
     marginTop: 10,
     width: 46,
     height: 5,
     borderRadius: 4,
-    backgroundColor: 'rgba(70,70,70,0.24)',
-  },
+    backgroundColor: 'rgba(70,70,70,0.24)'
+  }
 });
 
 export default Login2;

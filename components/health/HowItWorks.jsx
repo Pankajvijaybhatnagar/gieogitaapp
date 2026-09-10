@@ -1,3 +1,4 @@
+import { DESIGN } from '@/constants/design';
 import { StyleSheet, Text, View } from 'react-native';
 import { C, HOW_STEPS } from './constants';
 import { SectionHead } from './SharedUI';
@@ -32,25 +33,73 @@ export default function HowItWorks() {
 }
 
 const styles = StyleSheet.create({
-  howSection:  { paddingHorizontal: 20 },
-  howStepsCol: { gap: 0 },
-  howStep:     { flexDirection: 'row', gap: 14 },
-  howStepLeft: { alignItems: 'center', width: 36 },
+  howSection: {
+    paddingHorizontal: 20
+  },
+  howStepsCol: {
+    gap: 0
+  },
+  howStep: {
+    flexDirection: 'row',
+    gap: 14
+  },
+  howStepLeft: {
+    alignItems: 'center',
+    width: 36
+  },
   howNumBadge: {
-    width: 36, height: 36, borderRadius: 18,
-    backgroundColor: C.deepBrown, borderWidth: 1.5, borderColor: C.gold,
-    alignItems: 'center', justifyContent: 'center',
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: C.richBrown,
+    borderWidth: 1.5,
+    borderColor: C.gold,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
-  howNum:        { fontSize: 11, fontWeight: '800', color: C.goldLight },
-  howConnector:  { width: 2, flex: 1, backgroundColor: C.goldBorder, marginVertical: 4, minHeight: 16 },
-  howStepContent:{ flex: 1, paddingBottom: 14 },
+  howNum: {
+    fontSize: 12,
+    fontWeight: "600",
+    color: C.white
+  },
+  howConnector: {
+    width: 2,
+    flex: 1,
+    backgroundColor: C.goldBorder,
+    marginVertical: 4,
+    minHeight: 16
+  },
+  howStepContent: {
+    flex: 1,
+    paddingBottom: 14
+  },
   howStepCard: {
-    flexDirection: 'row', alignItems: 'flex-start', gap: 12,
-    backgroundColor: C.white, borderRadius: 14, padding: 14,
-    borderWidth: 1, borderColor: C.goldBorder,
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 12,
+    backgroundColor: DESIGN.colors.surface,
+    borderRadius: 24,
+    padding: 14,
+    borderWidth: 1,
+    borderColor: DESIGN.colors.border,
+    shadowOpacity: 0.045,
+    elevation: 2
   },
-  howStepIcon:    { fontSize: 22 },
-  howStepTextCol: { flex: 1 },
-  howStepTitle:   { fontSize: 13, fontWeight: '800', color: C.deepBrown, marginBottom: 3 },
-  howStepDesc:    { fontSize: 11, color: '#666', lineHeight: 16 },
+  howStepIcon: {
+    fontSize: 22
+  },
+  howStepTextCol: {
+    flex: 1
+  },
+  howStepTitle: {
+    fontSize: 13,
+    fontWeight: "600",
+    color: C.deepBrown,
+    marginBottom: 3
+  },
+  howStepDesc: {
+    fontSize: 12,
+    color: C.warmBrown,
+    lineHeight: 18
+  }
 });

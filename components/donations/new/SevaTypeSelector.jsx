@@ -1,3 +1,4 @@
+import { DESIGN } from '@/constants/design';
 import { Ionicons } from '@expo/vector-icons';
 import { useState } from 'react';
 import {
@@ -9,6 +10,8 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native';
+import { COLORS, RGB } from '@/constants/brandColors';
+import { hairline, radii, shadow } from '@/constants/theme';
 
 export const SEVA_TYPES = [
   {
@@ -59,12 +62,12 @@ const SevaTypeSelector = ({ value, onChange }) => {
         onPress={() => setVisible(true)}
         activeOpacity={0.8}>
         <View style={styles.icon}>
-          <Ionicons name="heart-outline" size={16} color="#7A4527" />
+          <Ionicons name="heart-outline" size={16} color={COLORS.saffron} />
         </View>
 
         <Text style={styles.selectorText}>{selected.label}</Text>
 
-        <Ionicons name="chevron-down" size={16} color="#93735D" />
+        <Ionicons name="chevron-down" size={16} color={COLORS.warmBrown} />
       </TouchableOpacity>
 
       <Modal
@@ -86,7 +89,7 @@ const SevaTypeSelector = ({ value, onChange }) => {
               <TouchableOpacity
                 style={styles.closeButton}
                 onPress={() => setVisible(false)}>
-                <Ionicons name="close" size={18} color="#563A28" />
+                <Ionicons name="close" size={18} color={COLORS.deepBrown} />
               </TouchableOpacity>
             </View>
 
@@ -115,7 +118,7 @@ const SevaTypeSelector = ({ value, onChange }) => {
                       <Ionicons
                         name="checkmark-circle"
                         size={18}
-                        color="#704025"
+                        color={COLORS.saffron}
                       />
                     )}
                   </TouchableOpacity>
@@ -133,111 +136,99 @@ export default SevaTypeSelector;
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 11,
+    marginBottom: 11
   },
-
   label: {
     marginLeft: 2,
     marginBottom: 5,
-    fontSize: 10.5,
+    fontSize: 12,
     fontWeight: '600',
-    color: '#634735',
+    color: COLORS.deepBrown
   },
-
   required: {
-    color: '#B54E3F',
+    color: COLORS.dangerRed
   },
-
   selector: {
     height: 44,
-    borderRadius: 12,
+    borderRadius: radii.md,
     borderWidth: 1,
-    borderColor: '#E9DCCE',
-    backgroundColor: '#FFFFFF',
+    borderColor: hairline,
+    backgroundColor: COLORS.creamDark,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 11,
+    paddingHorizontal: 11
   },
-
   icon: {
     width: 28,
     height: 28,
     borderRadius: 9,
-    backgroundColor: '#F5E7DB',
+    backgroundColor: COLORS.cream,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-
   selectorText: {
     flex: 1,
     marginLeft: 9,
     fontSize: 12,
     fontWeight: '600',
-    color: '#4C3120',
+    color: COLORS.deepBrown
   },
-
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(40, 24, 15, 0.35)',
-    justifyContent: 'flex-end',
+    backgroundColor: `rgba(${RGB.deepBrown},0.35)`,
+    justifyContent: 'flex-end'
   },
-
   sheet: {
     maxHeight: '65%',
-    backgroundColor: '#FFFDFC',
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
+    backgroundColor: COLORS.cream,
+    borderTopLeftRadius: radii.xl,
+    borderTopRightRadius: radii.xl,
     padding: 18,
+    ...shadow.raised
   },
-
   sheetHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 14,
+    marginBottom: 14
   },
-
   sheetTitle: {
     fontSize: 18,
-    fontWeight: '700',
-    color: '#472B1A',
+    fontWeight: "400",
+    color: COLORS.deepBrown,
+    fontFamily: DESIGN.fonts.editorial,
+    letterSpacing: -0.4
   },
-
   sheetSubtitle: {
     marginTop: 2,
-    fontSize: 10.5,
-    color: '#987C67',
+    fontSize: 12,
+    color: COLORS.warmBrown
   },
-
   closeButton: {
     marginLeft: 'auto',
     width: 34,
     height: 34,
     borderRadius: 17,
-    backgroundColor: '#F5EAE1',
+    backgroundColor: COLORS.creamDark,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-
   option: {
     minHeight: 48,
     paddingHorizontal: 12,
-    borderRadius: 12,
+    borderRadius: radii.md,
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   },
-
   optionActive: {
-    backgroundColor: '#F5E7DB',
+    backgroundColor: COLORS.creamDark
   },
-
   optionText: {
     flex: 1,
     fontSize: 12,
-    color: '#654A37',
+    color: COLORS.warmBrown
   },
-
   optionTextActive: {
     fontWeight: '700',
-    color: '#60371F',
-  },
+    color: COLORS.deepBrown
+  }
 });

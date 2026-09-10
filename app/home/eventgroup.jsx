@@ -1,7 +1,7 @@
+import { DESIGN } from '@/constants/design';
 import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRef, useState } from 'react';
 import {
-  Animated,
   Dimensions,
   ScrollView,
   StyleSheet,
@@ -10,20 +10,10 @@ import {
   View,
 } from 'react-native';
 
-const { width } = Dimensions.get('window');
+import { COLORS, RGB } from '@/constants/brandColors';
+import { hairline, radii, shadow, spacing, type } from '@/constants/theme';
 
-const COLORS = {
-  deepBrown:  '#2C1A0A',
-  warmBrown:  '#4A2C0D',
-  richBrown:  '#3D2010',
-  gold:       '#C9A227',
-  goldLight:  '#E8C55A',
-  goldDark:   '#8B6914',
-  cream:      '#FDF6E3',
-  saffron:    '#E8721C',
-  saffronLight:'#F4A44A',
-  liveRed:    '#E53935',
-};
+const { width } = Dimensions.get('window');
 
 const CATEGORIES = ['All', 'Upcoming', 'Live', 'Satsang', 'Aarti', 'Pravachan', 'Festival'];
 
@@ -183,7 +173,7 @@ function EventCard({ item, onRegister }) {
     <View style={[styles.eventCard, item.highlight && styles.eventCardHighlight]}>
       {item.highlight && (
         <View style={styles.featuredBanner}>
-          <MaterialCommunityIcons name="star-four-points" size={10} color={COLORS.deepBrown} />
+          <MaterialCommunityIcons name="star-four-points" size={10} color={COLORS.white} />
           <Text style={styles.featuredBannerText}>FEATURED EVENT</Text>
         </View>
       )}
@@ -211,15 +201,15 @@ function EventCard({ item, onRegister }) {
       {/* Date / time / location row */}
       <View style={styles.eventMetaGrid}>
         <View style={styles.eventMetaItem}>
-          <MaterialCommunityIcons name="calendar-outline" size={13} color={COLORS.goldLight} />
+          <MaterialCommunityIcons name="calendar-outline" size={13} color={COLORS.saffron} />
           <Text style={styles.eventMetaText}>{item.date}</Text>
         </View>
         <View style={styles.eventMetaItem}>
-          <MaterialCommunityIcons name="clock-outline" size={13} color={COLORS.goldLight} />
+          <MaterialCommunityIcons name="clock-outline" size={13} color={COLORS.saffron} />
           <Text style={styles.eventMetaText}>{item.time}</Text>
         </View>
         <View style={[styles.eventMetaItem, { flex: 1 }]}>
-          <MaterialCommunityIcons name="map-marker-outline" size={13} color={COLORS.goldLight} />
+          <MaterialCommunityIcons name="map-marker-outline" size={13} color={COLORS.saffron} />
           <Text style={styles.eventMetaText} numberOfLines={1}>{item.location}</Text>
         </View>
       </View>
@@ -242,7 +232,7 @@ function EventCard({ item, onRegister }) {
 
           {/* Speakers */}
           <View style={styles.speakersRow}>
-            <MaterialCommunityIcons name="microphone-variant" size={13} color={COLORS.goldLight} />
+            <MaterialCommunityIcons name="microphone-variant" size={13} color={COLORS.saffron} />
             <Text style={styles.speakersLabel}>Speakers: </Text>
             <Text style={styles.speakersNames}>{item.speakers.join(' • ')}</Text>
           </View>
@@ -275,9 +265,9 @@ function EventCard({ item, onRegister }) {
           <FontAwesome
             name={item.status === 'live' ? 'play-circle' : 'calendar-check-o'}
             size={13}
-            color={item.status === 'live' ? '#fff' : COLORS.deepBrown}
+            color={COLORS.white}
           />
-          <Text style={[styles.registerBtnText, item.status === 'live' && { color: '#fff' }]}>
+          <Text style={styles.registerBtnText}>
             {item.status === 'live' ? 'Join Live Now' : 'Register Free'}
           </Text>
         </TouchableOpacity>
@@ -317,13 +307,13 @@ function RegisterModal({ event, onClose }) {
         </View>
 
         <View style={styles.modalInfoRow}>
-          <MaterialCommunityIcons name="calendar-check" size={14} color={COLORS.goldLight} />
+          <MaterialCommunityIcons name="calendar-check" size={14} color={COLORS.saffron} />
           <Text style={styles.modalInfoText}>
             {event.date} at {event.time.split('–')[0].trim()}
           </Text>
         </View>
         <View style={styles.modalInfoRow}>
-          <MaterialCommunityIcons name="map-marker" size={14} color={COLORS.goldLight} />
+          <MaterialCommunityIcons name="map-marker" size={14} color={COLORS.saffron} />
           <Text style={styles.modalInfoText}>{event.location}</Text>
         </View>
 
@@ -361,7 +351,7 @@ export default function EventGroupScreen() {
         {/* ── Hero ── */}
         <View style={styles.hero}>
           <View style={styles.heroBadge}>
-            <MaterialCommunityIcons name="calendar-star" size={12} color={COLORS.goldLight} />
+            <MaterialCommunityIcons name="calendar-star" size={12} color={COLORS.saffron} />
             <Text style={styles.heroBadgeText}>Events & Satsangs</Text>
           </View>
           <Text style={styles.heroHeading}>
@@ -411,7 +401,7 @@ export default function EventGroupScreen() {
               activeOpacity={0.85}
               onPress={() => setSelectedEvent(liveEvents[0])}
             >
-              <FontAwesome name="play-circle" size={14} color="#fff" />
+              <FontAwesome name="play-circle" size={14} color={COLORS.white} />
               <Text style={styles.joinLiveBtnText}>Join</Text>
             </TouchableOpacity>
           </View>
@@ -462,7 +452,7 @@ export default function EventGroupScreen() {
         {/* ── Past Events ── */}
         <View style={styles.pastSection}>
           <View style={styles.pastHeader}>
-            <MaterialCommunityIcons name="history" size={16} color={COLORS.richBrown} />
+            <MaterialCommunityIcons name="history" size={16} color={COLORS.warmBrown} />
             <Text style={styles.pastHeaderTitle}>Past Events</Text>
           </View>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.pastRow}>
@@ -489,7 +479,7 @@ export default function EventGroupScreen() {
             by Maharaj Ji directly on your device.
           </Text>
           <TouchableOpacity style={styles.ctaBtn} activeOpacity={0.85}>
-            <MaterialCommunityIcons name="bell-ring-outline" size={15} color={COLORS.deepBrown} />
+            <MaterialCommunityIcons name="bell-ring-outline" size={15} color={COLORS.white} />
             <Text style={styles.ctaBtnText}>Enable Event Notifications</Text>
           </TouchableOpacity>
           <Text style={styles.ctaNote}>🕉️  Jai Shri Krishna • GIEO Gita</Text>
@@ -511,253 +501,641 @@ export default function EventGroupScreen() {
 
 // ── STYLES ────────────────────────────────────────────────────────────────────
 const styles = StyleSheet.create({
-  root:   { flex: 1, backgroundColor: COLORS.cream },
-  scroll: { flex: 1 },
-
+  root: {
+    flex: 1,
+    backgroundColor: COLORS.cream
+  },
+  scroll: {
+    flex: 1
+  },
   /* Hero */
   hero: {
-    backgroundColor: COLORS.richBrown,
-    margin: 20, borderRadius: 18, padding: 18,
-    borderWidth: 1, borderColor: 'rgba(201,162,39,0.35)',
+    backgroundColor: COLORS.creamDark,
+    margin: spacing.lg,
+    borderRadius: radii.lg,
+    padding: spacing.md
   },
   heroBadge: {
-    alignSelf: 'flex-start', flexDirection: 'row', alignItems: 'center', gap: 6,
-    backgroundColor: 'rgba(201,162,39,0.15)', borderRadius: 20,
-    paddingHorizontal: 12, paddingVertical: 5,
-    borderWidth: 1, borderColor: 'rgba(201,162,39,0.35)', marginBottom: 12,
+    alignSelf: 'flex-start',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    backgroundColor: `rgba(${RGB.saffron},0.1)`,
+    borderRadius: radii.pill,
+    paddingHorizontal: 12,
+    paddingVertical: 5,
+    marginBottom: spacing.sm
   },
-  heroBadgeText: { color: COLORS.goldLight, fontSize: 10, fontWeight: '700' },
-  heroHeading:   { color: COLORS.cream, fontSize: 22, fontWeight: '800', lineHeight: 30, marginBottom: 10 },
-  heroAccent:    { color: COLORS.goldLight },
-  heroDesc:      { color: 'rgba(253,246,227,0.65)', fontSize: 12, lineHeight: 18, fontStyle: 'italic', marginBottom: 16 },
+  heroBadgeText: {
+    color: COLORS.saffron,
+    fontSize: 10,
+    fontWeight: '700'
+  },
+  heroHeading: {
+    color: COLORS.deepBrown,
+    fontSize: 22,
+    fontWeight: "400",
+    lineHeight: 30,
+    marginBottom: spacing.sm,
+    fontFamily: DESIGN.fonts.editorial,
+    letterSpacing: -0.4
+  },
+  heroAccent: {
+    color: COLORS.saffron
+  },
+  heroDesc: {
+    color: COLORS.warmBrown,
+    fontSize: 12,
+    lineHeight: 18,
+    marginBottom: spacing.md
+  },
   heroStatsRow: {
-    flexDirection: 'row', backgroundColor: 'rgba(201,162,39,0.1)',
-    borderRadius: 12, paddingVertical: 12,
-    borderWidth: 1, borderColor: 'rgba(201,162,39,0.2)',
+    flexDirection: 'row',
+    backgroundColor: COLORS.cream,
+    borderRadius: radii.md,
+    paddingVertical: spacing.sm,
+    ...shadow.card
   },
-  heroStat:       { flex: 1, alignItems: 'center' },
-  heroStatBorder: { borderLeftWidth: 1, borderLeftColor: 'rgba(201,162,39,0.25)' },
-  heroStatVal:    { color: COLORS.goldLight, fontSize: 16, fontWeight: '800' },
-  heroStatLabel:  { color: 'rgba(253,246,227,0.5)', fontSize: 9, marginTop: 2, fontStyle: 'italic' },
-
+  heroStat: {
+    flex: 1,
+    alignItems: 'center'
+  },
+  heroStatBorder: {
+    borderLeftWidth: 1,
+    borderLeftColor: hairline
+  },
+  heroStatVal: {
+    color: COLORS.saffron,
+    fontSize: 16,
+    fontWeight: "600"
+  },
+  heroStatLabel: {
+    color: COLORS.warmBrown,
+    fontSize: 12,
+    marginTop: 2
+  },
   /* Live banner */
   liveBanner: {
-    flexDirection: 'row', alignItems: 'center',
-    backgroundColor: COLORS.richBrown,
-    marginHorizontal: 20, marginBottom: 12, borderRadius: 14, padding: 14,
-    borderWidth: 1.5, borderColor: COLORS.liveRed,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: COLORS.cream,
+    marginHorizontal: spacing.lg,
+    marginBottom: spacing.sm,
+    borderRadius: radii.md,
+    padding: spacing.md,
+    borderWidth: 1.5,
+    borderColor: COLORS.liveRed,
     gap: 12,
+    ...shadow.card
   },
-  liveBannerLeft: { flex: 1 },
+  liveBannerLeft: {
+    flex: 1
+  },
   livePillLarge: {
-    flexDirection: 'row', alignItems: 'center', gap: 5,
-    backgroundColor: 'rgba(229,57,53,0.2)', borderRadius: 20,
-    alignSelf: 'flex-start', paddingHorizontal: 9, paddingVertical: 3,
-    borderWidth: 1, borderColor: 'rgba(229,57,53,0.5)', marginBottom: 6,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    backgroundColor: 'rgba(214,72,58,0.12)',
+    borderRadius: radii.pill,
+    alignSelf: 'flex-start',
+    paddingHorizontal: 9,
+    paddingVertical: 3,
+    marginBottom: 6
   },
-  liveDotLarge:      { width: 7, height: 7, borderRadius: 4, backgroundColor: COLORS.liveRed },
-  livePillLargeText: { color: COLORS.liveRed, fontSize: 9, fontWeight: '800', letterSpacing: 1 },
-  liveBannerTitle:   { color: COLORS.cream, fontSize: 13, fontWeight: '700', marginBottom: 3 },
-  liveBannerSub:     { color: 'rgba(253,246,227,0.5)', fontSize: 10, fontStyle: 'italic' },
+  liveDotLarge: {
+    width: 7,
+    height: 7,
+    borderRadius: 4,
+    backgroundColor: COLORS.liveRed
+  },
+  livePillLargeText: {
+    color: COLORS.liveRed,
+    fontSize: 10,
+    fontWeight: "600",
+    letterSpacing: 1
+  },
+  liveBannerTitle: {
+    color: COLORS.deepBrown,
+    fontSize: 13,
+    fontWeight: '700',
+    marginBottom: 3
+  },
+  liveBannerSub: {
+    color: COLORS.warmBrown,
+    fontSize: 12
+  },
   joinLiveBtn: {
-    flexDirection: 'row', alignItems: 'center', gap: 6,
-    backgroundColor: COLORS.liveRed, borderRadius: 10,
-    paddingVertical: 10, paddingHorizontal: 14,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    backgroundColor: COLORS.liveRed,
+    borderRadius: radii.sm,
+    paddingVertical: 10,
+    paddingHorizontal: 14
   },
-  joinLiveBtnText: { color: '#fff', fontSize: 12, fontWeight: '800' },
-
+  joinLiveBtnText: {
+    color: COLORS.white,
+    fontSize: 12,
+    fontWeight: "600"
+  },
   /* Categories */
-  categoriesRow: { paddingHorizontal: 20, gap: 8, marginBottom: 4, paddingBottom: 4 },
-  categoryChip: {
-    backgroundColor: COLORS.richBrown, borderRadius: 20,
-    paddingHorizontal: 14, paddingVertical: 7,
-    borderWidth: 1, borderColor: 'rgba(201,162,39,0.25)',
+  categoriesRow: {
+    paddingHorizontal: spacing.lg,
+    gap: 8,
+    marginBottom: 4,
+    paddingBottom: 4
   },
-  categoryChipActive: { backgroundColor: COLORS.goldLight, borderColor: COLORS.goldDark },
-  categoryChipText:   { color: 'rgba(253,246,227,0.6)', fontSize: 11, fontWeight: '600' },
-  categoryChipTextActive: { color: COLORS.deepBrown, fontWeight: '800' },
-
+  categoryChip: {
+    backgroundColor: COLORS.creamDark,
+    borderRadius: radii.pill,
+    paddingHorizontal: 14,
+    paddingVertical: 7
+  },
+  categoryChipActive: {
+    backgroundColor: COLORS.saffron
+  },
+  categoryChipText: {
+    color: COLORS.warmBrown,
+    fontSize: 12,
+    fontWeight: '600'
+  },
+  categoryChipTextActive: {
+    color: COLORS.white,
+    fontWeight: "600"
+  },
   /* Count row */
   countRow: {
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
-    marginHorizontal: 20, marginTop: 12, marginBottom: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginHorizontal: spacing.lg,
+    marginTop: spacing.sm,
+    marginBottom: spacing.sm
   },
-  countText: { color: COLORS.richBrown, fontSize: 12, fontWeight: '700' },
-  sortBtn:   { flexDirection: 'row', alignItems: 'center', gap: 5 },
-  sortText:  { color: COLORS.goldDark, fontSize: 11, fontWeight: '600' },
-
+  countText: {
+    color: COLORS.deepBrown,
+    fontSize: 12,
+    fontWeight: '700'
+  },
+  sortBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5
+  },
+  sortText: {
+    color: COLORS.goldDark,
+    fontSize: 12,
+    fontWeight: '600'
+  },
   /* Event cards */
-  eventsList: { marginHorizontal: 20, gap: 14, marginBottom: 8 },
+  eventsList: {
+    marginHorizontal: spacing.lg,
+    gap: 14,
+    marginBottom: spacing.sm
+  },
   eventCard: {
-    backgroundColor: COLORS.richBrown, borderRadius: 16,
-    borderWidth: 1, borderColor: 'rgba(201,162,39,0.25)',
+    backgroundColor: DESIGN.colors.surface,
+    borderRadius: 24,
     overflow: 'hidden',
+    ...shadow.card,
+    borderColor: DESIGN.colors.border,
+    borderWidth: 1,
+    shadowOpacity: 0.045,
+    elevation: 2
   },
   eventCardHighlight: {
-    borderColor: COLORS.goldLight, borderWidth: 1.5,
+    borderColor: COLORS.saffron,
+    borderWidth: 1.5
   },
   featuredBanner: {
-    flexDirection: 'row', alignItems: 'center', gap: 5,
-    backgroundColor: COLORS.goldLight,
-    paddingHorizontal: 12, paddingVertical: 5, justifyContent: 'center',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    backgroundColor: COLORS.saffron,
+    paddingHorizontal: 12,
+    paddingVertical: 5,
+    justifyContent: 'center'
   },
-  featuredBannerText: { color: COLORS.deepBrown, fontSize: 9, fontWeight: '800', letterSpacing: 1.5 },
-
-  eventTop: { flexDirection: 'row', alignItems: 'center', gap: 10, padding: 14, paddingBottom: 8 },
+  featuredBannerText: {
+    color: COLORS.white,
+    fontSize: 12,
+    fontWeight: "600",
+    letterSpacing: 1.5
+  },
+  eventTop: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    padding: 14,
+    paddingBottom: 8
+  },
   eventIconBox: {
-    width: 44, height: 44, borderRadius: 22,
-    backgroundColor: 'rgba(201,162,39,0.15)',
-    alignItems: 'center', justifyContent: 'center',
-    borderWidth: 1, borderColor: 'rgba(201,162,39,0.3)',
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: COLORS.creamDark,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
-  eventIconText: { fontSize: 22 },
-  eventTopMid:   { flex: 1, gap: 4 },
-
+  eventIconText: {
+    fontSize: 22
+  },
+  eventTopMid: {
+    flex: 1,
+    gap: 4
+  },
   livePill: {
-    flexDirection: 'row', alignItems: 'center', gap: 5,
-    backgroundColor: 'rgba(229,57,53,0.18)', borderRadius: 20,
-    alignSelf: 'flex-start', paddingHorizontal: 8, paddingVertical: 3,
-    borderWidth: 1, borderColor: 'rgba(229,57,53,0.45)',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    backgroundColor: 'rgba(214,72,58,0.1)',
+    borderRadius: radii.pill,
+    alignSelf: 'flex-start',
+    paddingHorizontal: 8,
+    paddingVertical: 3
   },
-  liveDot:      { width: 6, height: 6, borderRadius: 3, backgroundColor: COLORS.liveRed },
-  livePillText: { color: COLORS.liveRed, fontSize: 8, fontWeight: '800', letterSpacing: 1 },
-
+  liveDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: COLORS.liveRed
+  },
+  livePillText: {
+    color: COLORS.liveRed,
+    fontSize: 10,
+    fontWeight: "600",
+    letterSpacing: 1
+  },
   upcomingPill: {
     alignSelf: 'flex-start',
-    backgroundColor: 'rgba(201,162,39,0.15)', borderRadius: 20,
-    paddingHorizontal: 8, paddingVertical: 3,
-    borderWidth: 1, borderColor: 'rgba(201,162,39,0.3)',
+    backgroundColor: `rgba(${RGB.saffron},0.1)`,
+    borderRadius: radii.pill,
+    paddingHorizontal: 8,
+    paddingVertical: 3
   },
-  upcomingPillText: { color: COLORS.goldLight, fontSize: 8, fontWeight: '700', letterSpacing: 0.5 },
-
-  eventCategory: { color: 'rgba(253,246,227,0.45)', fontSize: 9, fontStyle: 'italic' },
-  expandBtn: { padding: 4 },
-
-  eventTitle: { color: COLORS.cream, fontSize: 15, fontWeight: '800', paddingHorizontal: 14, marginBottom: 10, lineHeight: 20 },
-
-  eventMetaGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, paddingHorizontal: 14, marginBottom: 10 },
-  eventMetaItem: { flexDirection: 'row', alignItems: 'center', gap: 4 },
-  eventMetaText: { color: 'rgba(253,246,227,0.6)', fontSize: 10 },
-
-  tagsRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, paddingHorizontal: 14, marginBottom: 12 },
+  upcomingPillText: {
+    color: COLORS.saffron,
+    fontSize: 10,
+    fontWeight: '700',
+    letterSpacing: 0.5
+  },
+  eventCategory: {
+    color: COLORS.warmBrown,
+    fontSize: 12
+  },
+  expandBtn: {
+    padding: 4
+  },
+  eventTitle: {
+    color: COLORS.deepBrown,
+    fontSize: 15,
+    fontWeight: "600",
+    paddingHorizontal: 14,
+    marginBottom: 10,
+    lineHeight: 20
+  },
+  eventMetaGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 6,
+    paddingHorizontal: 14,
+    marginBottom: 10
+  },
+  eventMetaItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4
+  },
+  eventMetaText: {
+    color: COLORS.warmBrown,
+    fontSize: 12
+  },
+  tagsRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 6,
+    paddingHorizontal: 14,
+    marginBottom: 12
+  },
   tag: {
-    backgroundColor: 'rgba(201,162,39,0.1)', borderRadius: 6,
-    paddingHorizontal: 8, paddingVertical: 3,
-    borderWidth: 1, borderColor: 'rgba(201,162,39,0.2)',
+    backgroundColor: COLORS.creamDark,
+    borderRadius: 6,
+    paddingHorizontal: 8,
+    paddingVertical: 3
   },
-  tagText: { color: COLORS.goldLight, fontSize: 9, fontWeight: '600' },
-
-  expandedSection: { paddingHorizontal: 14, paddingBottom: 4 },
-  expandDivider:   { height: 1, backgroundColor: 'rgba(201,162,39,0.15)', marginBottom: 12 },
-  eventDesc: { color: 'rgba(253,246,227,0.6)', fontSize: 11, lineHeight: 17, fontStyle: 'italic', marginBottom: 12 },
-
-  speakersRow: { flexDirection: 'row', alignItems: 'center', gap: 5, marginBottom: 12, flexWrap: 'wrap' },
-  speakersLabel: { color: 'rgba(253,246,227,0.45)', fontSize: 10 },
-  speakersNames: { color: COLORS.goldLight, fontSize: 10, fontWeight: '700', flex: 1 },
-
-  seatsBox: { backgroundColor: 'rgba(201,162,39,0.08)', borderRadius: 10, padding: 10, marginBottom: 10 },
-  seatsTopRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 6 },
-  seatsLabel:  { color: 'rgba(253,246,227,0.5)', fontSize: 10 },
-  seatsCount:  { color: COLORS.goldLight, fontSize: 10, fontWeight: '700' },
-  progressBg:  { height: 6, backgroundColor: 'rgba(201,162,39,0.15)', borderRadius: 3, marginBottom: 5 },
-  progressFill: { height: 6, backgroundColor: COLORS.goldLight, borderRadius: 3 },
-  seatsHint:   { color: 'rgba(253,246,227,0.4)', fontSize: 9, fontStyle: 'italic' },
-
+  tagText: {
+    color: COLORS.warmBrown,
+    fontSize: 10,
+    fontWeight: '600'
+  },
+  expandedSection: {
+    paddingHorizontal: 14,
+    paddingBottom: 4
+  },
+  expandDivider: {
+    height: 1,
+    backgroundColor: hairline,
+    marginBottom: 12
+  },
+  eventDesc: {
+    color: COLORS.warmBrown,
+    fontSize: 12,
+    lineHeight: 18,
+    marginBottom: 12
+  },
+  speakersRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    marginBottom: 12,
+    flexWrap: 'wrap'
+  },
+  speakersLabel: {
+    color: COLORS.warmBrown,
+    fontSize: 12
+  },
+  speakersNames: {
+    color: COLORS.deepBrown,
+    fontSize: 12,
+    fontWeight: '700',
+    flex: 1
+  },
+  seatsBox: {
+    backgroundColor: COLORS.creamDark,
+    borderRadius: radii.sm,
+    padding: 10,
+    marginBottom: 10
+  },
+  seatsTopRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 6
+  },
+  seatsLabel: {
+    color: COLORS.warmBrown,
+    fontSize: 12
+  },
+  seatsCount: {
+    color: COLORS.deepBrown,
+    fontSize: 12,
+    fontWeight: '700'
+  },
+  progressBg: {
+    height: 6,
+    backgroundColor: hairline,
+    borderRadius: 3,
+    marginBottom: 5
+  },
+  progressFill: {
+    height: 6,
+    backgroundColor: COLORS.saffron,
+    borderRadius: 3
+  },
+  seatsHint: {
+    color: COLORS.warmBrown,
+    fontSize: 12
+  },
   eventFooter: {
-    flexDirection: 'row', alignItems: 'center', gap: 10,
-    padding: 14, paddingTop: 10,
-    borderTopWidth: 1, borderTopColor: 'rgba(201,162,39,0.12)',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    padding: 14,
+    paddingTop: 10,
+    borderTopWidth: 1,
+    borderTopColor: hairline
   },
   registerBtn: {
-    flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 7,
-    backgroundColor: COLORS.goldLight, borderRadius: 10, paddingVertical: 11,
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 7,
+    backgroundColor: COLORS.richBrown,
+    borderRadius: radii.sm,
+    paddingVertical: 11
   },
-  registerBtnLive: { backgroundColor: COLORS.liveRed },
-  registerBtnText: { color: COLORS.deepBrown, fontSize: 12, fontWeight: '800' },
+  registerBtnLive: {
+    backgroundColor: COLORS.liveRed
+  },
+  registerBtnText: {
+    color: COLORS.white,
+    fontSize: 12,
+    fontWeight: "600"
+  },
   shareBtn: {
-    width: 40, height: 40, borderRadius: 10,
-    backgroundColor: 'rgba(201,162,39,0.1)',
-    alignItems: 'center', justifyContent: 'center',
-    borderWidth: 1, borderColor: 'rgba(201,162,39,0.2)',
+    width: 40,
+    height: 40,
+    borderRadius: radii.sm,
+    backgroundColor: COLORS.creamDark,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
-
   /* Past events */
-  pastSection: { marginTop: 16, marginBottom: 8 },
+  pastSection: {
+    marginTop: spacing.md,
+    marginBottom: spacing.sm
+  },
   pastHeader: {
-    flexDirection: 'row', alignItems: 'center', gap: 8,
-    marginHorizontal: 20, marginBottom: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginHorizontal: spacing.lg,
+    marginBottom: spacing.sm
   },
-  pastHeaderTitle: { color: COLORS.richBrown, fontSize: 15, fontWeight: '800' },
-  pastRow: { paddingHorizontal: 20, gap: 10 },
+  pastHeaderTitle: {
+    color: COLORS.deepBrown,
+    fontSize: 15,
+    fontWeight: "600"
+  },
+  pastRow: {
+    paddingHorizontal: spacing.lg,
+    gap: 10
+  },
   pastCard: {
-    width: 140, backgroundColor: COLORS.richBrown, borderRadius: 14, padding: 14,
-    borderWidth: 1, borderColor: 'rgba(201,162,39,0.25)',
+    width: 140,
+    backgroundColor: DESIGN.colors.surface,
+    borderRadius: 24,
+    padding: spacing.md,
+    ...shadow.card,
+    borderColor: DESIGN.colors.border,
+    borderWidth: 1,
+    shadowOpacity: 0.045,
+    elevation: 2
   },
-  pastCardIcon:  { fontSize: 26, marginBottom: 8 },
-  pastCardTitle: { color: COLORS.cream, fontSize: 11, fontWeight: '700', marginBottom: 4, lineHeight: 15 },
-  pastCardDate:  { color: 'rgba(253,246,227,0.45)', fontSize: 9, fontStyle: 'italic', marginBottom: 6 },
-  pastCardAttendees: { flexDirection: 'row', alignItems: 'center', gap: 5 },
-  pastCardAttendeesText: { color: COLORS.goldLight, fontSize: 9, fontWeight: '700' },
-
+  pastCardIcon: {
+    fontSize: 26,
+    marginBottom: spacing.sm
+  },
+  pastCardTitle: {
+    color: COLORS.deepBrown,
+    fontSize: 12,
+    fontWeight: '700',
+    marginBottom: 4,
+    lineHeight: 18
+  },
+  pastCardDate: {
+    color: COLORS.warmBrown,
+    fontSize: 12,
+    marginBottom: 6
+  },
+  pastCardAttendees: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5
+  },
+  pastCardAttendeesText: {
+    color: COLORS.goldDark,
+    fontSize: 12,
+    fontWeight: '700'
+  },
   /* CTA */
   ctaCard: {
-    backgroundColor: COLORS.richBrown, margin: 20, borderRadius: 18, padding: 20,
-    alignItems: 'center', borderWidth: 1, borderColor: 'rgba(201,162,39,0.4)',
+    backgroundColor: DESIGN.colors.surface,
+    margin: spacing.lg,
+    borderRadius: 24,
+    padding: spacing.lg,
+    alignItems: 'center',
+    ...shadow.card,
+    borderColor: DESIGN.colors.border,
+    borderWidth: 1,
+    shadowOpacity: 0.045,
+    elevation: 2
   },
-  ctaEmoji:   { fontSize: 36, marginBottom: 10 },
-  ctaHeading: { color: COLORS.cream, fontSize: 17, fontWeight: '800', textAlign: 'center', marginBottom: 8 },
+  ctaEmoji: {
+    fontSize: 36,
+    marginBottom: spacing.sm
+  },
+  ctaHeading: {
+    color: COLORS.deepBrown,
+    fontSize: 17,
+    fontWeight: "600",
+    textAlign: 'center',
+    marginBottom: spacing.sm
+  },
   ctaDesc: {
-    color: 'rgba(253,246,227,0.6)', fontSize: 11, fontStyle: 'italic',
-    textAlign: 'center', lineHeight: 17, marginBottom: 16,
+    color: COLORS.warmBrown,
+    fontSize: 12,
+    textAlign: 'center',
+    lineHeight: 18,
+    marginBottom: spacing.md
   },
   ctaBtn: {
-    flexDirection: 'row', alignItems: 'center', gap: 8,
-    backgroundColor: COLORS.goldLight, borderRadius: 10,
-    paddingVertical: 13, paddingHorizontal: 24, marginBottom: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    backgroundColor: COLORS.saffron,
+    borderRadius: radii.sm,
+    paddingVertical: 13,
+    paddingHorizontal: 24,
+    marginBottom: spacing.sm
   },
-  ctaBtnText: { color: COLORS.deepBrown, fontSize: 13, fontWeight: '800' },
-  ctaNote:    { color: 'rgba(253,246,227,0.35)', fontSize: 10, fontStyle: 'italic' },
-
+  ctaBtnText: {
+    color: COLORS.white,
+    fontSize: 13,
+    fontWeight: "600"
+  },
+  ctaNote: {
+    color: COLORS.warmBrown,
+    fontSize: 12
+  },
   /* Modal */
   modalOverlay: {
-    position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
-    backgroundColor: 'rgba(0,0,0,0.65)', justifyContent: 'flex-end',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'flex-end'
   },
   modalSheet: {
-    backgroundColor: COLORS.richBrown, borderTopLeftRadius: 24, borderTopRightRadius: 24,
-    padding: 20, paddingBottom: 36,
-    borderTopWidth: 1, borderTopColor: 'rgba(201,162,39,0.4)',
+    backgroundColor: COLORS.cream,
+    borderTopLeftRadius: radii.xl,
+    borderTopRightRadius: radii.xl,
+    padding: spacing.lg,
+    paddingBottom: 36,
+    ...shadow.raised
   },
   modalHandle: {
-    width: 40, height: 4, borderRadius: 2,
-    backgroundColor: 'rgba(201,162,39,0.4)', alignSelf: 'center', marginBottom: 16,
+    width: 40,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: hairline,
+    alignSelf: 'center',
+    marginBottom: spacing.md
   },
-  modalHeader: { flexDirection: 'row', alignItems: 'flex-start', gap: 12, marginBottom: 20 },
-  modalIcon:   { fontSize: 32 },
-  modalTitle:  { color: COLORS.cream, fontSize: 15, fontWeight: '800', lineHeight: 20, marginBottom: 4 },
-  modalDate:   { color: 'rgba(253,246,227,0.5)', fontSize: 10, fontStyle: 'italic' },
+  modalHeader: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 12,
+    marginBottom: spacing.lg
+  },
+  modalIcon: {
+    fontSize: 32
+  },
+  modalTitle: {
+    color: COLORS.deepBrown,
+    fontSize: 15,
+    fontWeight: "600",
+    lineHeight: 20,
+    marginBottom: 4
+  },
+  modalDate: {
+    color: COLORS.warmBrown,
+    fontSize: 12
+  },
   modalCloseBtn: {
-    width: 32, height: 32, borderRadius: 16,
-    backgroundColor: 'rgba(201,162,39,0.12)',
-    alignItems: 'center', justifyContent: 'center',
-    borderWidth: 1, borderColor: 'rgba(201,162,39,0.25)',
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: COLORS.creamDark,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   modalSuccessBox: {
-    alignItems: 'center', backgroundColor: 'rgba(76,175,80,0.1)',
-    borderRadius: 14, padding: 18, marginBottom: 16,
-    borderWidth: 1, borderColor: 'rgba(76,175,80,0.25)',
+    alignItems: 'center',
+    backgroundColor: 'rgba(76,175,80,0.08)',
+    borderRadius: radii.md,
+    padding: spacing.md,
+    marginBottom: spacing.md
   },
-  modalSuccessTitle: { color: COLORS.cream, fontSize: 16, fontWeight: '800', marginTop: 10, marginBottom: 8 },
-  modalSuccessDesc:  { color: 'rgba(253,246,227,0.6)', fontSize: 11, fontStyle: 'italic', textAlign: 'center', lineHeight: 17 },
+  modalSuccessTitle: {
+    color: COLORS.deepBrown,
+    fontSize: 16,
+    fontWeight: "600",
+    marginTop: spacing.sm,
+    marginBottom: spacing.sm
+  },
+  modalSuccessDesc: {
+    color: COLORS.warmBrown,
+    fontSize: 12,
+    textAlign: 'center',
+    lineHeight: 18
+  },
   modalInfoRow: {
-    flexDirection: 'row', alignItems: 'center', gap: 8,
-    paddingVertical: 8, borderBottomWidth: 1, borderBottomColor: 'rgba(201,162,39,0.12)',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    paddingVertical: spacing.sm,
+    borderBottomWidth: 1,
+    borderBottomColor: hairline
   },
-  modalInfoText: { color: 'rgba(253,246,227,0.65)', fontSize: 11 },
+  modalInfoText: {
+    color: COLORS.warmBrown,
+    fontSize: 12
+  },
   modalDoneBtn: {
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
-    backgroundColor: COLORS.goldLight, borderRadius: 12,
-    paddingVertical: 14, marginTop: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: COLORS.richBrown,
+    borderRadius: radii.md,
+    paddingVertical: spacing.md,
+    marginTop: spacing.md
   },
-  modalDoneBtnText: { color: COLORS.deepBrown, fontSize: 13, fontWeight: '800' },
+  modalDoneBtnText: {
+    color: COLORS.white,
+    fontSize: 13,
+    fontWeight: "600"
+  }
 });

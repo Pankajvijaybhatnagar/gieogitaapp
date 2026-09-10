@@ -1,3 +1,4 @@
+import { DESIGN } from '@/constants/design';
 import { useState } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { CATEGORIES, C, SEVA_LIST } from './constants';
@@ -44,17 +45,47 @@ export default function SevaList({ onDonate }) {
 }
 
 const styles = StyleSheet.create({
-  categorySection: { paddingHorizontal: 16, paddingTop: 4 },
-  categoryTitle:   { fontSize: 18, fontWeight: '800', color: C.deepBrown, marginBottom: 12 },
-  categoryTitleAccent: { color: C.goldDark },
-  categoryScroll:  { marginBottom: 16 },
-  categoryChip: {
-    backgroundColor: C.creamDark, borderWidth: 1, borderColor: C.goldBorder,
-    borderRadius: 20, paddingHorizontal: 16, paddingVertical: 8, marginRight: 8,
+  categorySection: {
+    paddingHorizontal: 16,
+    paddingTop: 4
   },
-  categoryChipActive:     { backgroundColor: C.deepBrown, borderColor: C.gold },
-  categoryChipText:       { fontSize: 12, color: C.warmBrown, fontWeight: '600' },
-  categoryChipTextActive: { color: C.goldLight },
-
-  sevaList: { paddingHorizontal: 16, gap: 12 },
+  categoryTitle: {
+    fontSize: 18,
+    fontWeight: "400",
+    color: C.deepBrown,
+    marginBottom: 12,
+    fontFamily: DESIGN.fonts.editorial,
+    letterSpacing: -0.4
+  },
+  categoryTitleAccent: {
+    color: C.goldDark
+  },
+  categoryScroll: {
+    marginBottom: 16
+  },
+  categoryChip: {
+    backgroundColor: C.creamDark,
+    borderWidth: 1,
+    borderColor: C.goldBorder,
+    borderRadius: 20,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    marginRight: 8
+  },
+  categoryChipActive: {
+    backgroundColor: C.saffron,
+    borderColor: C.saffron
+  },
+  categoryChipText: {
+    fontSize: 12,
+    color: C.warmBrown,
+    fontWeight: '600'
+  },
+  categoryChipTextActive: {
+    color: C.white
+  },
+  sevaList: {
+    paddingHorizontal: 16,
+    gap: 12
+  }
 });

@@ -58,6 +58,11 @@ export default function SevaScreen() {
 }
 
 const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: C.cream },
-  scroll: { flex: 1 },
+  root: {
+    flex: 1,
+    backgroundColor: C.cream
+  },
+  scroll: {
+    flex: 1
+  }
 });

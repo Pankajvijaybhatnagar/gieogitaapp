@@ -2,14 +2,10 @@ import { Ionicons } from '@expo/vector-icons';
 import { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
+import Card from '@/components/ui/Card';
+import { COLORS, RGB } from '@/constants/brandColors';
+import { hairline, radii, spacing, type } from '@/constants/theme';
 import EditProfileModal from './EditProfileModal';
-
-const COLORS = {
-  primary: '#6E3F1F',
-  secondary: '#A8692D',
-  text: '#3E2A1F',
-  muted: '#867366',
-};
 
 const InfoRow = ({ icon, title, value, last = false }) => {
   if (!value) return null;
@@ -17,7 +13,7 @@ const InfoRow = ({ icon, title, value, last = false }) => {
   return (
     <View style={[styles.row, last && styles.rowLast]}>
       <View style={styles.iconBox}>
-        <Ionicons name={icon} size={19} color={COLORS.secondary} />
+        <Ionicons name={icon} size={19} color={COLORS.goldDark} />
       </View>
 
       <View style={styles.rowContent}>
@@ -36,7 +32,7 @@ export default function ProfileInfoCard({ profile, onUpdated }) {
 
   return (
     <>
-      <View style={styles.card}>
+      <Card radius={radii.xl} style={styles.card}>
         <View style={styles.headingRow}>
           <View>
             <Text style={styles.eyebrow}>MEMBER DETAILS</Text>
@@ -47,7 +43,11 @@ export default function ProfileInfoCard({ profile, onUpdated }) {
           <Pressable
             onPress={() => setEditVisible(true)}
             style={styles.editButton}>
-            <Ionicons name="create-outline" size={17} color={COLORS.primary} />
+            <Ionicons
+              name="create-outline"
+              size={17}
+              color={COLORS.deepBrown}
+            />
 
             <Text style={styles.editText}>Edit</Text>
           </Pressable>
@@ -83,7 +83,7 @@ export default function ProfileInfoCard({ profile, onUpdated }) {
           value={profile?.interest}
           last
         />
-      </View>
+      </Card>
 
       <EditProfileModal
         visible={editVisible}
@@ -97,100 +97,77 @@ export default function ProfileInfoCard({ profile, onUpdated }) {
 
 const styles = StyleSheet.create({
   card: {
-    marginHorizontal: 16,
-    marginTop: 5,
-    padding: 18,
-    borderRadius: 24,
-    backgroundColor: '#FFF',
-    elevation: 2,
-    shadowColor: '#5B3B28',
-    shadowOpacity: 0.06,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowRadius: 8,
+    marginHorizontal: spacing.md,
+    marginTop: spacing.xs + 1,
+    padding: spacing.lg - 6
   },
-
   headingRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
-
   eyebrow: {
-    color: COLORS.secondary,
-    fontSize: 9,
-    fontWeight: '800',
-    letterSpacing: 1.5,
+    color: COLORS.goldDark,
+    fontSize: 10,
+    fontWeight: "600",
+    letterSpacing: 1.5
   },
-
   heading: {
-    color: COLORS.text,
+    ...type.headline,
     fontSize: 19,
-    fontWeight: '800',
-    marginTop: 3,
+    color: COLORS.deepBrown,
+    marginTop: 3
   },
-
   editButton: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 5,
-    backgroundColor: '#F6E9DD',
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 12,
+    backgroundColor: COLORS.creamDark,
+    paddingHorizontal: spacing.sm + 4,
+    paddingVertical: spacing.sm,
+    borderRadius: radii.md - 2
   },
-
   editText: {
-    color: COLORS.primary,
+    color: COLORS.deepBrown,
     fontSize: 12,
-    fontWeight: '800',
+    fontWeight: "600"
   },
-
   divider: {
     height: 1,
-    backgroundColor: '#F0E6DC',
-    marginTop: 15,
+    backgroundColor: hairline,
+    marginTop: spacing.md - 1
   },
-
   row: {
     flexDirection: 'row',
-    paddingVertical: 13,
+    paddingVertical: spacing.sm + 5,
     borderBottomWidth: 1,
-    borderBottomColor: '#F4ECE4',
+    borderBottomColor: hairline
   },
-
   rowLast: {
-    borderBottomWidth: 0,
+    borderBottomWidth: 0
   },
-
   iconBox: {
     width: 39,
     height: 39,
-    borderRadius: 12,
-    backgroundColor: '#FBF3EA',
+    borderRadius: radii.md - 2,
+    backgroundColor: `rgba(${RGB.gold}, 0.14)`,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-
   rowContent: {
     flex: 1,
-    marginLeft: 12,
+    marginLeft: spacing.sm + 4
   },
-
   rowTitle: {
-    color: COLORS.muted,
-    fontSize: 10,
-    fontWeight: '700',
-    textTransform: 'uppercase',
-    letterSpacing: 0.6,
+    ...type.caption,
+    fontSize: 12,
+    color: COLORS.warmBrown,
+    textTransform: 'uppercase'
   },
-
   rowValue: {
     marginTop: 3,
-    color: COLORS.text,
+    color: COLORS.deepBrown,
     fontSize: 14,
-    fontWeight: '600',
-  },
+    fontWeight: '600'
+  }
 });

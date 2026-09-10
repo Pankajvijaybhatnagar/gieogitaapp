@@ -5,12 +5,14 @@ import { useState } from 'react';
 
 import {
     ActivityIndicator,
-    Alert,
     StyleSheet,
     TouchableOpacity,
 } from 'react-native';
+import { useAppAlert } from '@/context/AppAlertContext';
+import { COLORS } from '@/constants/brandColors';
 
 const DonationReceiptButton = ({ donation }) => {
+  const { success, error } = useAppAlert();
   const [generating, setGenerating] = useState(false);
 
   const escapeHtml = value => {
@@ -396,7 +398,7 @@ const DonationReceiptButton = ({ donation }) => {
       const sharingAvailable = await Sharing.isAvailableAsync();
 
       if (!sharingAvailable) {
-        Alert.alert(
+        success(
           'Receipt Generated',
           `Receipt created successfully at:\n${uri}`,
         );
@@ -409,10 +411,10 @@ const DonationReceiptButton = ({ donation }) => {
         dialogTitle: 'Donation Receipt',
         UTI: 'com.adobe.pdf',
       });
-    } catch (error) {
-      console.log('Receipt generation error:', error);
+    } catch (err) {
+      console.log('Receipt generation error:', err);
 
-      Alert.alert(
+      error(
         'Unable to Generate Receipt',
         'Something went wrong while generating the donation receipt.',
       );
@@ -445,27 +447,21 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     borderRadius: 17,
-
-    backgroundColor: '#6A3C25',
-
+    backgroundColor: COLORS.richBrown,
     alignItems: 'center',
     justifyContent: 'center',
-
     // marginTop: 10,
 
-    shadowColor: '#5A321F',
+    shadowColor: COLORS.deepBrown,
     shadowOpacity: 0.14,
     shadowRadius: 5,
-
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 2
     },
-
-    elevation: 2,
+    elevation: 2
   },
-
   buttonDisabled: {
-    opacity: 0.65,
-  },
+    opacity: 0.65
+  }
 });

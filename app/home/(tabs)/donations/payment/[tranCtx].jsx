@@ -15,6 +15,9 @@ import {
   View,
 } from 'react-native';
 
+import { COLORS } from '@/constants/brandColors';
+import { spacing, type } from '@/constants/theme';
+
 const PAYMENT_BASE_URL =
   'https://pgpay.icici.bank.in/pg/api/v2/authRedirect';
 
@@ -377,7 +380,7 @@ export default function DonationPaymentScreen() {
         <View style={styles.center}>
           <ActivityIndicator
             size="small"
-            color="#704025"
+            color={COLORS.saffron}
           />
 
           <Text style={styles.loadingText}>
@@ -403,7 +406,7 @@ export default function DonationPaymentScreen() {
         <View style={styles.center}>
           <ActivityIndicator
             size="small"
-            color="#704025"
+            color={COLORS.saffron}
           />
 
           <Text style={styles.loadingText}>
@@ -446,7 +449,7 @@ export default function DonationPaymentScreen() {
           <View style={styles.verifyIcon}>
             <ActivityIndicator
               size="small"
-              color="#704025"
+              color={COLORS.saffron}
             />
           </View>
 
@@ -526,43 +529,37 @@ export default function DonationPaymentScreen() {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: '#FFF9F3',
+    backgroundColor: COLORS.cream
   },
-
   center: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 30,
+    paddingHorizontal: spacing.xl
   },
-
   loadingText: {
-    marginTop: 10,
-    fontSize: 12,
-    color: '#846B58',
+    marginTop: spacing.sm,
+    ...type.footnote,
+    color: COLORS.warmBrown
   },
-
   verifyIcon: {
     width: 60,
     height: 60,
     borderRadius: 20,
-    backgroundColor: '#F3E5D8',
+    backgroundColor: COLORS.creamDark,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-
   verifyTitle: {
-    marginTop: 17,
-    fontSize: 19,
-    fontWeight: '700',
-    color: '#4E3020',
+    marginTop: spacing.lg,
+    ...type.title,
+    color: COLORS.deepBrown
   },
-
   verifyDescription: {
-    marginTop: 7,
+    marginTop: spacing.sm,
     textAlign: 'center',
-    fontSize: 11,
+    ...type.footnote,
     lineHeight: 17,
-    color: '#89715F',
-  },
+    color: COLORS.warmBrown
+  }
 });

@@ -6,10 +6,9 @@ import { Image } from 'expo-image';
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 
-const COLORS = {
-  primary: '#6E3F1F',
-  secondary: '#A8692D',
-};
+import Card from '@/components/ui/Card';
+import { COLORS, RGB } from '@/constants/brandColors';
+import { radii, spacing, type } from '@/constants/theme';
 
 const LatestMasikParwas = () => {
   const [image, setImage] = useState(null);
@@ -47,7 +46,7 @@ const LatestMasikParwas = () => {
           <Ionicons
             name="calendar-outline"
             size={20}
-            color={COLORS.secondary}
+            color={COLORS.goldDark}
           />
         </View>
 
@@ -58,10 +57,10 @@ const LatestMasikParwas = () => {
         </View>
       </View>
 
-      <View style={styles.card}>
+      <Card radius={radii.xl} style={styles.card}>
         {loading ? (
           <View style={styles.loader}>
-            <ActivityIndicator size="small" color={COLORS.primary} />
+            <ActivityIndicator size="small" color={COLORS.saffron} />
           </View>
         ) : (
           <Image
@@ -71,66 +70,56 @@ const LatestMasikParwas = () => {
             transition={300}
           />
         )}
-      </View>
+      </Card>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   wrapper: {
-    marginHorizontal: 16,
-    marginTop: 25,
+    marginHorizontal: spacing.md,
+    marginTop: spacing.lg + 1
   },
-
   headingRow: {
-    marginBottom: 12,
+    marginBottom: spacing.sm + 4,
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   },
-
   icon: {
     width: 40,
     height: 40,
-    borderRadius: 13,
-    backgroundColor: '#F1DFCE',
+    borderRadius: radii.md - 1,
+    backgroundColor: `rgba(${RGB.gold}, 0.14)`,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 10,
+    marginRight: spacing.sm + 2
   },
-
   eyebrow: {
-    color: COLORS.secondary,
-    fontSize: 8,
-    fontWeight: '800',
-    letterSpacing: 1.4,
+    color: COLORS.goldDark,
+    fontSize: 10,
+    fontWeight: "600",
+    letterSpacing: 1.4
   },
-
   title: {
-    color: COLORS.primary,
+    ...type.title,
     fontSize: 20,
-    fontWeight: '800',
-    marginTop: 2,
+    color: COLORS.deepBrown,
+    marginTop: 2
   },
-
   card: {
     minHeight: 220,
-    borderRadius: 23,
-    backgroundColor: '#FFF',
-    overflow: 'hidden',
-    padding: 8,
+    padding: spacing.sm
   },
-
   image: {
     width: '100%',
     height: 460,
-    borderRadius: 17,
+    borderRadius: radii.lg - 1
   },
-
   loader: {
     height: 220,
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center'
+  }
 });
 
 export default LatestMasikParwas;

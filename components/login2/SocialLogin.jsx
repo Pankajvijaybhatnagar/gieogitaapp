@@ -10,7 +10,6 @@ import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import {
   ActivityIndicator,
-  Alert,
   Platform,
   StyleSheet,
   TouchableOpacity,
@@ -21,8 +20,10 @@ import { Logos } from '@/assets/images';
 import AppAlertContext from '@/context/AppAlertContext';
 import AuthServices from '@/lib/api/AuthServices';
 import { conf } from '@/lib/conf';
+import { COLORS } from '@/constants/brandColors';
+import { hairline } from '@/constants/theme';
 
-const BORDER_COLOR = '#E6E6E6';
+const BORDER_COLOR = hairline;
 
 /*
 |--------------------------------------------------------------------------
@@ -91,12 +92,12 @@ export default function SocialLogin({ disabled = false, onGoogleLogin }) {
       }
 
       if (error?.code === statusCodes.IN_PROGRESS) {
-        Alert.alert('Please wait', 'Google sign-in is already in progress.');
+        alert('Please wait', 'Google sign-in is already in progress.');
         return;
       }
 
       if (error?.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-        Alert.alert(
+        alert(
           'Google Play Services',
           'Google Play Services is unavailable or needs to be updated.',
         );
@@ -131,7 +132,7 @@ export default function SocialLogin({ disabled = false, onGoogleLogin }) {
       const isAvailable = await AppleAuthentication.isAvailableAsync();
 
       if (!isAvailable) {
-        Alert.alert(
+        alert(
           'Apple login unavailable',
           'Sign in with Apple is not available on this device.',
         );
@@ -177,7 +178,7 @@ export default function SocialLogin({ disabled = false, onGoogleLogin }) {
 
       console.error('Apple login error:', error);
 
-      Alert.alert(
+      alert(
         'Apple login failed',
         error?.message || 'Unable to continue with Apple.',
       );
@@ -208,7 +209,7 @@ export default function SocialLogin({ disabled = false, onGoogleLogin }) {
         disabled={isLoading}
         activeOpacity={0.8}>
         {isGoogleLoading ? (
-          <ActivityIndicator size="small" color="#6E3F1F" />
+          <ActivityIndicator size="small" color={COLORS.warmBrown} />
         ) : (
           <Image
             source={Logos.google}
@@ -227,34 +228,31 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     gap: 14,
-    marginTop: 11,
+    marginTop: 11
   },
-
   socialButton: {
     width: 52,
     height: 52,
     borderRadius: 26,
     borderWidth: 1,
     borderColor: BORDER_COLOR,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.cream,
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: '#000000',
     shadowOffset: {
       width: 0,
-      height: 3,
+      height: 3
     },
     shadowOpacity: 0.05,
     shadowRadius: 7,
-    elevation: 2,
+    elevation: 2
   },
-
   disabledButton: {
-    opacity: 0.6,
+    opacity: 0.6
   },
-
   googleLogo: {
     width: 22,
-    height: 22,
-  },
+    height: 22
+  }
 });

@@ -1,6 +1,7 @@
+import { DESIGN } from '@/constants/design';
 import { Dimensions, StyleSheet, Text, View } from 'react-native';
 
-import { FREE_SERVICES } from './constants';
+import { C, FREE_SERVICES } from './constants';
 
 import { SectionHead } from './SharedUI';
 
@@ -47,9 +48,8 @@ const styles = StyleSheet.create({
 
   servicesSection: {
     paddingHorizontal: 18,
-    paddingBottom: 8,
+    paddingBottom: 8
   },
-
   // =========================================================
   // GRID
   // =========================================================
@@ -58,42 +58,30 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
-    rowGap: 12,
+    rowGap: 12
   },
-
   // =========================================================
   // CARD
   // =========================================================
 
   serviceCard: {
     width: '48.4%',
-
     minHeight: isSmallScreen ? 155 : 165,
-
     paddingHorizontal: 13,
     paddingVertical: 14,
-
-    borderRadius: 16,
-
-    backgroundColor: '#FFFDF8',
-
+    borderRadius: 24,
+    backgroundColor: DESIGN.colors.surface,
     borderWidth: 1,
-    borderColor: '#DFCCAF',
-
-    shadowColor: '#3a2c16',
-
-    shadowOpacity: 0.08,
-
+    borderColor: DESIGN.colors.border,
+    shadowColor: C.deepBrown,
+    shadowOpacity: 0.045,
     shadowOffset: {
       width: 0,
-      height: 4,
+      height: 4
     },
-
     shadowRadius: 8,
-
-    elevation: 3,
+    elevation: 2
   },
-
   // =========================================================
   // ICON
   // =========================================================
@@ -101,40 +89,28 @@ const styles = StyleSheet.create({
   iconContainer: {
     width: 45,
     height: 45,
-
     borderRadius: 14,
-
     alignItems: 'center',
     justifyContent: 'center',
-
     marginBottom: 11,
-
-    backgroundColor: '#F3E7D6',
-
+    backgroundColor: C.creamDark,
     borderWidth: 1,
-    borderColor: '#E1CFB5',
+    borderColor: C.goldBorder
   },
-
   serviceCardIcon: {
-    fontSize: 23,
+    fontSize: 23
   },
-
   // =========================================================
   // TITLE
   // =========================================================
 
   serviceCardTitle: {
-    color: '#3a2c16',
-
+    color: C.deepBrown,
     fontSize: isSmallScreen ? 11.5 : 12,
-
-    fontWeight: '800',
-
+    fontWeight: "600",
     lineHeight: 16,
-
-    marginBottom: 7,
+    marginBottom: 7
   },
-
   // =========================================================
   // SMALL ACCENT
   // =========================================================
@@ -142,27 +118,19 @@ const styles = StyleSheet.create({
   smallLine: {
     width: 26,
     height: 2,
-
     borderRadius: 2,
-
     marginBottom: 7,
-
-    backgroundColor: '#5a3816',
+    backgroundColor: C.saffron
   },
-
   // =========================================================
   // DESCRIPTION
   // =========================================================
 
   serviceCardDesc: {
     flexShrink: 1,
-
-    color: '#7C6952',
-
+    color: C.warmBrown,
     fontSize: isSmallScreen ? 9 : 9.5,
-
     lineHeight: isSmallScreen ? 13 : 14,
-
-    fontWeight: '500',
-  },
+    fontWeight: '500'
+  }
 });

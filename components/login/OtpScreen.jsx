@@ -1,8 +1,11 @@
+import { DESIGN } from '@/constants/design';
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ActivityIndicator } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { verifyOtpRequest, verifyOtpSuccess, verifyOtpFailure } from '../redux/authSlice';
 import { router, useLocalSearchParams } from 'expo-router'; // Using Expo Router for navigation
+import { COLORS } from '@/constants/brandColors';
+import { hairline, radii } from '@/constants/theme';
 
 const OtpScreen = () => {
   const { phoneNumber } = useLocalSearchParams(); // Get phone number from navigation params
@@ -84,50 +87,55 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 20,
-    backgroundColor: '#fff',
+    backgroundColor: COLORS.cream
   },
   logo: {
     width: 150,
     height: 150,
-    marginBottom: 20,
+    marginBottom: 20
   },
   title: {
     fontSize: 22,
-    fontWeight: 'bold',
-    color: '#8B3E2F',
+    fontWeight: "400",
+    color: COLORS.deepBrown,
     marginBottom: 20,
+    fontFamily: DESIGN.fonts.editorial,
+    letterSpacing: -0.4
   },
   input: {
     width: '100%',
     height: 50,
-    borderColor: '#e0e0e0',
+    borderColor: hairline,
     borderWidth: 1,
-    borderRadius: 8,
+    borderRadius: radii.md,
+    backgroundColor: COLORS.creamDark,
     paddingHorizontal: 10,
+    color: COLORS.deepBrown,
     marginBottom: 20,
+    fontSize: 15
   },
   countdown: {
     marginBottom: 20,
-    color: '#FF8C00',
+    color: COLORS.warmBrown
   },
   submitButton: {
     width: '100%',
-    height: 50,
-    backgroundColor: '#FF8C00',
+    backgroundColor: COLORS.richBrown,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 8,
+    borderRadius: 16,
     marginBottom: 20,
+    minHeight: 52
   },
   submitButtonText: {
-    color: '#fff',
+    color: COLORS.white,
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: 'bold'
   },
   error: {
-    color: 'red',
-    marginTop: 10,
-  },
+    color: COLORS.dangerRed,
+    marginTop: 10
+  }
 });
 
 // Expo Router configuration to hide the header

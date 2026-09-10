@@ -1,3 +1,4 @@
+import { DESIGN } from '@/constants/design';
 import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { useEffect, useRef } from 'react';
@@ -16,46 +17,16 @@ import {
 
 import { WebView } from 'react-native-webview';
 
+import { COLORS } from '@/constants/brandColors';
+import { hairline, radii, shadow, spacing, type } from '@/constants/theme';
+
 const { width } = Dimensions.get('window');
 
 // ============================================================
-// BRAND COLOR SYSTEM
+// YOUTUBE BRAND RED — kept separate from the app palette since it
+// identifies the YouTube platform, not a themed surface.
 // ============================================================
-
-const COLORS = {
-  // Your main colors
-  deepBrown: '#3a2c16',
-  primaryBrown: '#5a3816',
-
-  // Supporting browns
-  mediumBrown: '#72502C',
-  lightBrown: '#9A7953',
-
-  // Biscuit / cream
-  background: '#F4E9D8',
-  biscuit: '#EADAC3',
-  biscuitLight: '#F8F1E7',
-  cream: '#FFFDF8',
-  warmWhite: '#FFFBF4',
-
-  // Borders
-  border: '#DCC8AA',
-  borderSoft: '#E8D9C5',
-
-  // Text
-  textPrimary: '#3a2c16',
-  textSecondary: '#725F48',
-  textMuted: '#9A8872',
-
-  // Soft accent
-  accent: '#B89462',
-  accentLight: '#D7BE97',
-
-  // Keep YouTube red only for YouTube identity
-  youtube: '#FF0033',
-
-  white: '#FFFFFF',
-};
+const YOUTUBE_RED = '#FF0033';
 
 // ============================================================
 // YOUTUBE SETTINGS
@@ -243,7 +214,7 @@ function SectionHead({ icon, title, accent, onAction, actionLabel }) {
           <MaterialCommunityIcons
             name="chevron-right"
             size={15}
-            color={COLORS.primaryBrown}
+            color={COLORS.saffron}
           />
         </TouchableOpacity>
       )}
@@ -354,7 +325,7 @@ function YTVideoCard({ item }) {
         {/* YOUTUBE */}
 
         <View style={styles.videoYTBadge}>
-          <FontAwesome name="youtube-play" size={13} color={COLORS.youtube} />
+          <FontAwesome name="youtube-play" size={13} color={YOUTUBE_RED} />
 
           <Text style={styles.videoYTBadgeText}>YouTube</Text>
         </View>
@@ -375,7 +346,7 @@ function YTVideoCard({ item }) {
           <MaterialCommunityIcons
             name="eye-outline"
             size={13}
-            color={COLORS.lightBrown}
+            color={COLORS.warmBrown}
           />
 
           <Text style={styles.videoViews}>{item.views} views</Text>
@@ -385,7 +356,7 @@ function YTVideoCard({ item }) {
           <MaterialCommunityIcons
             name="clock-outline"
             size={12}
-            color={COLORS.lightBrown}
+            color={COLORS.warmBrown}
           />
 
           <Text style={styles.videoDurationMeta}>{item.duration}</Text>
@@ -397,7 +368,7 @@ function YTVideoCard({ item }) {
           <MaterialCommunityIcons
             name="open-in-new"
             size={11}
-            color={COLORS.primaryBrown}
+            color={COLORS.saffron}
           />
         </View>
       </View>
@@ -427,7 +398,7 @@ function YTShortCard({ item }) {
         <View style={styles.shortThumbOverlay} />
 
         <View style={styles.shortTopBadge}>
-          <FontAwesome name="youtube-play" size={11} color={COLORS.youtube} />
+          <FontAwesome name="youtube-play" size={11} color={YOUTUBE_RED} />
 
           <Text style={styles.shortTopBadgeText}>SHORTS</Text>
         </View>
@@ -449,7 +420,7 @@ function YTShortCard({ item }) {
         <MaterialCommunityIcons
           name="chevron-right"
           size={16}
-          color={COLORS.primaryBrown}
+          color={COLORS.saffron}
         />
       </View>
     </TouchableOpacity>
@@ -478,7 +449,7 @@ export default function PromotionalScreen() {
               <FontAwesome
                 name="youtube-play"
                 size={13}
-                color={COLORS.youtube}
+                color={YOUTUBE_RED}
               />
 
               <Text style={styles.heroBadgeText}>{YT_HANDLE}</Text>
@@ -568,7 +539,7 @@ export default function PromotionalScreen() {
               Swami Giananand
             </Text>
 
-            <FontAwesome name="youtube-play" size={17} color={COLORS.youtube} />
+            <FontAwesome name="youtube-play" size={17} color={YOUTUBE_RED} />
           </View>
 
           <YTPlaylistEmbed />
@@ -580,7 +551,7 @@ export default function PromotionalScreen() {
             <MaterialCommunityIcons
               name="playlist-play"
               size={18}
-              color={COLORS.primaryBrown}
+              color={COLORS.saffron}
             />
 
             <Text style={styles.embedCardFooterText}>
@@ -590,7 +561,7 @@ export default function PromotionalScreen() {
             <MaterialCommunityIcons
               name="chevron-right"
               size={18}
-              color={COLORS.primaryBrown}
+              color={COLORS.saffron}
             />
           </TouchableOpacity>
         </View>
@@ -646,7 +617,7 @@ export default function PromotionalScreen() {
             <MaterialCommunityIcons
               name="information-outline"
               size={17}
-              color={COLORS.primaryBrown}
+              color={COLORS.saffron}
             />
           </View>
 
@@ -662,7 +633,7 @@ export default function PromotionalScreen() {
 
         <View style={styles.ctaCard}>
           <View style={styles.ctaIcon}>
-            <FontAwesome name="youtube-play" size={28} color={COLORS.youtube} />
+            <FontAwesome name="youtube-play" size={28} color={YOUTUBE_RED} />
           </View>
 
           <Text style={styles.ctaHeading}>Never Miss a Pravachan</Text>
@@ -685,7 +656,7 @@ export default function PromotionalScreen() {
             <MaterialCommunityIcons
               name="bell-outline"
               size={14}
-              color={COLORS.primaryBrown}
+              color={COLORS.saffron}
             />
 
             <Text style={styles.ctaBellText}>
@@ -715,24 +686,20 @@ const styles = StyleSheet.create({
 
   root: {
     flex: 1,
-    backgroundColor: COLORS.background,
+    backgroundColor: COLORS.cream
   },
-
   scroll: {
-    flex: 1,
+    flex: 1
   },
-
   scrollContent: {
-    paddingBottom: 10,
+    paddingBottom: 10
   },
-
   pulseDot: {
     width: 7,
     height: 7,
     borderRadius: 4,
-    backgroundColor: COLORS.youtube,
+    backgroundColor: YOUTUBE_RED
   },
-
   // =========================================================
   // SECTION HEADER
   // =========================================================
@@ -741,88 +708,57 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-
     marginHorizontal: 18,
     marginTop: 24,
-    marginBottom: 11,
+    marginBottom: 11
   },
-
   sectionHeadLeft: {
     flex: 1,
-
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   },
-
   sectionIconBox: {
     width: 38,
     height: 38,
-
-    borderRadius: 11,
-
+    borderRadius: radii.sm,
     alignItems: 'center',
     justifyContent: 'center',
-
     marginRight: 10,
-
-    backgroundColor: COLORS.biscuitLight,
-
-    borderWidth: 1,
-    borderColor: COLORS.border,
+    backgroundColor: COLORS.creamDark
   },
-
   sectionIcon: {
-    color: COLORS.primaryBrown,
-
+    color: COLORS.saffron,
     fontSize: 16,
-    fontWeight: '800',
+    fontWeight: "600"
   },
-
   sectionHeadingText: {
-    flex: 1,
+    flex: 1
   },
-
   sectionTitle: {
-    color: COLORS.textPrimary,
-
+    color: COLORS.deepBrown,
     fontSize: 15,
-    fontWeight: '800',
+    fontWeight: "600"
   },
-
   sectionAccent: {
-    color: COLORS.textMuted,
-
-    fontSize: 9.5,
+    color: COLORS.warmBrown,
+    fontSize: 12,
     fontWeight: '600',
-
-    marginTop: 1,
+    marginTop: 1
   },
-
   sectionActionBtn: {
     flexDirection: 'row',
-
     alignItems: 'center',
-
     paddingHorizontal: 10,
     paddingVertical: 6,
-
-    borderRadius: 20,
-
-    backgroundColor: COLORS.biscuitLight,
-
-    borderWidth: 1,
-    borderColor: COLORS.border,
+    borderRadius: radii.pill,
+    backgroundColor: COLORS.creamDark
   },
-
   sectionActionText: {
-    color: COLORS.primaryBrown,
-
-    fontSize: 9.5,
-    fontWeight: '800',
-
-    marginRight: 2,
+    color: COLORS.saffron,
+    fontSize: 12,
+    fontWeight: "600",
+    marginRight: 2
   },
-
   // =========================================================
   // HERO
   // =========================================================
@@ -830,221 +766,124 @@ const styles = StyleSheet.create({
   hero: {
     marginHorizontal: 18,
     marginTop: 18,
-
     paddingHorizontal: 18,
     paddingTop: 17,
     paddingBottom: 18,
-
-    borderRadius: 22,
-
-    backgroundColor: COLORS.deepBrown,
-
-    borderWidth: 1,
-    borderColor: COLORS.primaryBrown,
-
-    shadowColor: COLORS.deepBrown,
-
-    shadowOffset: {
-      width: 0,
-      height: 8,
-    },
-
-    shadowOpacity: 0.18,
-    shadowRadius: 14,
-
-    elevation: 7,
+    borderRadius: radii.xl,
+    backgroundColor: COLORS.cream,
+    ...shadow.raised
   },
-
   heroTopRow: {
     flexDirection: 'row',
-
     justifyContent: 'space-between',
-
     alignItems: 'center',
-
-    marginBottom: 18,
+    marginBottom: 18
   },
-
   heroBadge: {
     flexDirection: 'row',
-
     alignItems: 'center',
-
     paddingHorizontal: 10,
     paddingVertical: 6,
-
-    borderRadius: 20,
-
-    backgroundColor: 'rgba(255,255,255,0.08)',
-
-    borderWidth: 1,
-
-    borderColor: 'rgba(255,255,255,0.12)',
+    borderRadius: radii.pill,
+    backgroundColor: COLORS.creamDark
   },
-
   heroBadgeText: {
-    color: COLORS.warmWhite,
-
+    color: COLORS.warmBrown,
     marginLeft: 6,
-
-    fontSize: 9.5,
-    fontWeight: '700',
+    fontSize: 10,
+    fontWeight: '700'
   },
-
   officialBadge: {
     flexDirection: 'row',
-
     alignItems: 'center',
-
     paddingHorizontal: 9,
     paddingVertical: 5,
-
-    borderRadius: 20,
-
-    backgroundColor: 'rgba(234,218,195,0.10)',
+    borderRadius: radii.pill,
+    backgroundColor: COLORS.creamDark
   },
-
   officialDot: {
     width: 5,
     height: 5,
-
     borderRadius: 3,
-
     marginRight: 5,
-
-    backgroundColor: COLORS.accentLight,
+    backgroundColor: COLORS.saffron
   },
-
   officialBadgeText: {
-    color: COLORS.accentLight,
-
-    fontSize: 8,
-    fontWeight: '800',
-
-    letterSpacing: 1,
+    color: COLORS.saffron,
+    fontSize: 10,
+    fontWeight: "600",
+    letterSpacing: 1
   },
-
   heroSmallTitle: {
-    color: COLORS.accentLight,
-
-    fontSize: 9,
-
-    fontWeight: '800',
-
+    color: COLORS.saffron,
+    fontSize: 12,
+    fontWeight: "600",
     letterSpacing: 1.8,
-
-    marginBottom: 7,
+    marginBottom: 7
   },
-
   heroHeading: {
-    color: COLORS.white,
-
+    color: COLORS.deepBrown,
     fontSize: 25,
-
-    fontWeight: '800',
-
+    fontWeight: "400",
     lineHeight: 31,
+    fontFamily: DESIGN.fonts.editorial,
+    letterSpacing: -0.4
   },
-
   heroAccent: {
-    color: COLORS.accentLight,
-
+    color: COLORS.saffron,
     fontSize: 23,
-
     lineHeight: 30,
-
     fontWeight: '700',
-
-    marginBottom: 11,
+    marginBottom: 11
   },
-
   heroDesc: {
     maxWidth: 360,
-
-    color: 'rgba(255,253,248,0.68)',
-
-    fontSize: 11.5,
-
+    color: COLORS.warmBrown,
+    fontSize: 12,
     lineHeight: 18,
-
-    marginBottom: 17,
+    marginBottom: 17
   },
-
   heroStats: {
     flexDirection: 'row',
-
     marginBottom: 16,
-
-    borderRadius: 13,
-
+    borderRadius: radii.md,
     overflow: 'hidden',
-
-    backgroundColor: 'rgba(255,255,255,0.06)',
-
-    borderWidth: 1,
-
-    borderColor: 'rgba(255,255,255,0.09)',
+    backgroundColor: COLORS.creamDark
   },
-
   heroStat: {
     flex: 1,
-
     alignItems: 'center',
-
-    paddingVertical: 12,
+    paddingVertical: 12
   },
-
   heroStatMiddle: {
     borderLeftWidth: 1,
     borderRightWidth: 1,
-
-    borderColor: 'rgba(255,255,255,0.10)',
+    borderColor: hairline
   },
-
   heroStatVal: {
-    color: COLORS.accentLight,
-
+    color: COLORS.saffron,
     fontSize: 15,
-
-    fontWeight: '800',
+    fontWeight: "600"
   },
-
   heroStatLabel: {
-    color: 'rgba(255,253,248,0.50)',
-
-    fontSize: 8.5,
-
-    marginTop: 3,
+    color: COLORS.warmBrown,
+    fontSize: 12,
+    marginTop: 3
   },
-
   heroBtn: {
     minHeight: 48,
-
     flexDirection: 'row',
-
     alignItems: 'center',
-
     justifyContent: 'center',
-
-    borderRadius: 12,
-
-    backgroundColor: COLORS.primaryBrown,
-
-    borderWidth: 1,
-
-    borderColor: 'rgba(255,255,255,0.12)',
+    borderRadius: radii.md,
+    backgroundColor: COLORS.richBrown
   },
-
   heroBtnText: {
     color: COLORS.white,
-
     marginHorizontal: 8,
-
     fontSize: 12.5,
-
-    fontWeight: '800',
+    fontWeight: "600"
   },
-
   // =========================================================
   // WEBVIEW / PLAYLIST
   // =========================================================
@@ -1052,523 +891,306 @@ const styles = StyleSheet.create({
   webView: {
     width: '100%',
     height: 212,
-
-    backgroundColor: '#000',
+    backgroundColor: '#000'
   },
-
   embedCard: {
     marginHorizontal: 18,
-
     overflow: 'hidden',
-
-    borderRadius: 17,
-
-    backgroundColor: COLORS.cream,
-
+    borderRadius: 24,
+    backgroundColor: DESIGN.colors.surface,
+    ...shadow.card,
+    borderColor: DESIGN.colors.border,
     borderWidth: 1,
-
-    borderColor: COLORS.border,
-
-    elevation: 4,
-
-    shadowColor: COLORS.deepBrown,
-
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-
-    shadowOpacity: 0.1,
-
-    shadowRadius: 9,
+    shadowOpacity: 0.045,
+    elevation: 2
   },
-
   embedCardHeader: {
     minHeight: 49,
-
     flexDirection: 'row',
-
     alignItems: 'center',
-
     paddingHorizontal: 13,
-
     borderBottomWidth: 1,
-
-    borderBottomColor: COLORS.borderSoft,
+    borderBottomColor: hairline
   },
-
   embedLivePill: {
     flexDirection: 'row',
-
     alignItems: 'center',
-
     marginRight: 9,
-
     paddingHorizontal: 8,
-
     paddingVertical: 4,
-
-    borderRadius: 20,
-
-    backgroundColor: '#FFF0F2',
+    borderRadius: radii.pill,
+    backgroundColor: '#FFF0F2'
   },
-
   embedLivePillText: {
-    color: COLORS.youtube,
-
+    color: YOUTUBE_RED,
     marginLeft: 5,
-
-    fontSize: 7.5,
-
-    fontWeight: '800',
-
-    letterSpacing: 0.5,
+    fontSize: 10,
+    fontWeight: "600",
+    letterSpacing: 0.5
   },
-
   embedCardTitle: {
     flex: 1,
-
-    color: COLORS.textPrimary,
-
-    fontSize: 11,
-
+    color: COLORS.deepBrown,
+    fontSize: 12,
     fontWeight: '700',
-
-    marginRight: 7,
+    marginRight: 7
   },
-
   embedCardFooter: {
     minHeight: 44,
-
     flexDirection: 'row',
-
     alignItems: 'center',
-
     paddingHorizontal: 13,
-
-    backgroundColor: COLORS.biscuitLight,
-
+    backgroundColor: COLORS.creamDark,
     borderTopWidth: 1,
-
-    borderTopColor: COLORS.borderSoft,
+    borderTopColor: hairline
   },
-
   embedCardFooterText: {
     flex: 1,
-
-    color: COLORS.textSecondary,
-
-    fontSize: 10,
-
-    marginLeft: 7,
+    color: COLORS.warmBrown,
+    fontSize: 12,
+    marginLeft: 7
   },
-
   // =========================================================
   // VIDEOS
   // =========================================================
 
   videosList: {
-    marginHorizontal: 18,
+    marginHorizontal: 18
   },
-
   videoCard: {
     marginBottom: 13,
-
     overflow: 'hidden',
-
-    borderRadius: 16,
-
+    borderRadius: radii.md,
     backgroundColor: COLORS.cream,
-
-    borderWidth: 1,
-
-    borderColor: COLORS.borderSoft,
-
-    elevation: 3,
-
-    shadowColor: COLORS.deepBrown,
-
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
-
-    shadowOpacity: 0.08,
-
-    shadowRadius: 7,
+    ...shadow.card
   },
-
   videoThumbWrap: {
     width: '100%',
-
     height: width > 500 ? 240 : 188,
-
     position: 'relative',
-
-    backgroundColor: '#000',
+    backgroundColor: '#000'
   },
-
   videoThumbImg: {
     width: '100%',
-    height: '100%',
+    height: '100%'
   },
-
   videoThumbOverlay: {
     ...StyleSheet.absoluteFillObject,
-
-    backgroundColor: 'rgba(20,12,5,0.24)',
+    backgroundColor: 'rgba(20,12,5,0.24)'
   },
-
   videoPlayBtn: {
     position: 'absolute',
-
     alignSelf: 'center',
-
     top: '36%',
-
     width: 52,
     height: 52,
-
     borderRadius: 26,
-
     alignItems: 'center',
-
     justifyContent: 'center',
-
-    backgroundColor: COLORS.primaryBrown,
-
+    backgroundColor: COLORS.richBrown,
     borderWidth: 2,
-
-    borderColor: 'rgba(255,255,255,0.80)',
+    borderColor: 'rgba(255,255,255,0.80)'
   },
-
   videoDurationBadge: {
     position: 'absolute',
-
     bottom: 8,
     right: 8,
-
     paddingHorizontal: 7,
     paddingVertical: 4,
-
     borderRadius: 5,
-
-    backgroundColor: 'rgba(20,12,5,0.86)',
+    backgroundColor: 'rgba(20,12,5,0.86)'
   },
-
   videoDurationText: {
     color: COLORS.white,
-
-    fontSize: 9.5,
-
-    fontWeight: '700',
+    fontSize: 12,
+    fontWeight: '700'
   },
-
   videoYTBadge: {
     position: 'absolute',
-
     top: 9,
     left: 9,
-
     flexDirection: 'row',
-
     alignItems: 'center',
-
     paddingHorizontal: 8,
     paddingVertical: 5,
-
-    borderRadius: 20,
-
-    backgroundColor: 'rgba(255,255,255,0.94)',
+    borderRadius: radii.pill,
+    backgroundColor: 'rgba(255,255,255,0.94)'
   },
-
   videoYTBadgeText: {
     color: COLORS.deepBrown,
-
-    fontSize: 8.5,
-
-    fontWeight: '800',
-
-    marginLeft: 4,
+    fontSize: 10,
+    fontWeight: "600",
+    marginLeft: 4
   },
-
   videoMeta: {
     paddingHorizontal: 13,
-    paddingVertical: 12,
+    paddingVertical: 12
   },
-
   videoTitle: {
-    color: COLORS.textPrimary,
-
+    color: COLORS.deepBrown,
     fontSize: 13,
-
-    fontWeight: '800',
-
-    lineHeight: 18,
-
-    marginBottom: 8,
+    fontWeight: "600",
+    lineHeight: 20,
+    marginBottom: 8
   },
-
   videoMetaRow: {
     flexDirection: 'row',
-
     alignItems: 'center',
-
-    marginBottom: 8,
+    marginBottom: 8
   },
-
   videoViews: {
-    color: COLORS.textMuted,
-
+    color: COLORS.warmBrown,
     marginLeft: 4,
-
-    fontSize: 9.5,
+    fontSize: 12
   },
-
   metaDot: {
     width: 3,
     height: 3,
-
     borderRadius: 2,
-
     marginHorizontal: 7,
-
-    backgroundColor: COLORS.border,
+    backgroundColor: hairline
   },
-
   videoDurationMeta: {
-    color: COLORS.textMuted,
-
+    color: COLORS.warmBrown,
     marginLeft: 4,
-
-    fontSize: 9.5,
+    fontSize: 12
   },
-
   videoOpenRow: {
     flexDirection: 'row',
-
-    alignItems: 'center',
+    alignItems: 'center'
   },
-
   videoOpenText: {
-    color: COLORS.primaryBrown,
-
+    color: COLORS.saffron,
     marginRight: 4,
-
-    fontSize: 9,
-
-    fontWeight: '700',
+    fontSize: 12,
+    fontWeight: '700'
   },
-
   // =========================================================
   // SHORTS
   // =========================================================
 
   shortsRow: {
     paddingHorizontal: 18,
-    paddingBottom: 3,
+    paddingBottom: 3
   },
-
   shortCard: {
     width: 145,
-
     marginRight: 11,
-
     overflow: 'hidden',
-
-    borderRadius: 15,
-
-    backgroundColor: COLORS.cream,
-
+    borderRadius: 24,
+    backgroundColor: DESIGN.colors.surface,
+    ...shadow.card,
+    borderColor: DESIGN.colors.border,
     borderWidth: 1,
-
-    borderColor: COLORS.borderSoft,
-
-    elevation: 3,
-
-    shadowColor: COLORS.deepBrown,
-
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
-
-    shadowOpacity: 0.08,
-
-    shadowRadius: 6,
+    shadowOpacity: 0.045,
+    elevation: 2
   },
-
   shortThumbWrap: {
     width: '100%',
-
     height: 228,
-
     position: 'relative',
-
-    backgroundColor: '#000',
+    backgroundColor: '#000'
   },
-
   shortThumbImg: {
     width: '100%',
-    height: '100%',
+    height: '100%'
   },
-
   shortThumbOverlay: {
     ...StyleSheet.absoluteFillObject,
-
-    backgroundColor: 'rgba(24,14,6,0.20)',
+    backgroundColor: 'rgba(24,14,6,0.20)'
   },
-
   shortTopBadge: {
     position: 'absolute',
-
     top: 8,
     left: 8,
-
     flexDirection: 'row',
-
     alignItems: 'center',
-
     paddingHorizontal: 7,
     paddingVertical: 4,
-
-    borderRadius: 20,
-
-    backgroundColor: 'rgba(255,255,255,0.94)',
+    borderRadius: radii.pill,
+    backgroundColor: 'rgba(255,255,255,0.94)'
   },
-
   shortTopBadgeText: {
     color: COLORS.deepBrown,
-
     marginLeft: 4,
-
-    fontSize: 7,
-
-    fontWeight: '800',
+    fontSize: 10,
+    fontWeight: "600"
   },
-
   shortPlayBtn: {
     position: 'absolute',
-
     alignSelf: 'center',
-
     top: '42%',
-
     width: 42,
     height: 42,
-
     borderRadius: 21,
-
     alignItems: 'center',
-
     justifyContent: 'center',
-
-    backgroundColor: 'rgba(90,56,22,0.92)',
-
+    backgroundColor: 'rgba(41,35,40,0.7)',
     borderWidth: 1.5,
-
-    borderColor: 'rgba(255,255,255,0.8)',
+    borderColor: 'rgba(255,255,255,0.8)'
   },
-
   shortDurationBadge: {
     position: 'absolute',
-
     bottom: 8,
     right: 8,
-
     paddingHorizontal: 6,
     paddingVertical: 3,
-
     borderRadius: 4,
-
-    backgroundColor: 'rgba(20,12,5,0.84)',
+    backgroundColor: 'rgba(20,12,5,0.84)'
   },
-
   shortDurationText: {
     color: COLORS.white,
-
-    fontSize: 8.5,
-
-    fontWeight: '700',
+    fontSize: 12,
+    fontWeight: '700'
   },
-
   shortBottom: {
     minHeight: 50,
-
     flexDirection: 'row',
-
     alignItems: 'center',
-
     paddingHorizontal: 9,
-
-    paddingVertical: 8,
+    paddingVertical: 8
   },
-
   shortTitle: {
     flex: 1,
-
-    color: COLORS.textPrimary,
-
-    fontSize: 9.5,
-
+    color: COLORS.deepBrown,
+    fontSize: 12,
     fontWeight: '700',
-
-    lineHeight: 13,
-
-    marginRight: 3,
+    lineHeight: 18,
+    marginRight: 3
   },
-
   // =========================================================
   // NOTE
   // =========================================================
 
   noteCard: {
     flexDirection: 'row',
-
     alignItems: 'center',
-
     marginHorizontal: 18,
-
     marginTop: 18,
-
     paddingHorizontal: 12,
-
     paddingVertical: 11,
-
-    borderRadius: 13,
-
-    backgroundColor: COLORS.biscuitLight,
-
+    borderRadius: 24,
+    backgroundColor: DESIGN.colors.surface,
+    borderColor: DESIGN.colors.border,
     borderWidth: 1,
-
-    borderColor: COLORS.border,
+    shadowOpacity: 0.045,
+    elevation: 2
   },
-
   noteIconBox: {
     width: 31,
     height: 31,
-
     borderRadius: 16,
-
     alignItems: 'center',
-
     justifyContent: 'center',
-
     marginRight: 9,
-
-    backgroundColor: COLORS.biscuit,
+    backgroundColor: COLORS.cream
   },
-
   noteText: {
     flex: 1,
-
-    color: COLORS.textSecondary,
-
-    fontSize: 9.5,
-
-    lineHeight: 14,
+    color: COLORS.warmBrown,
+    fontSize: 12,
+    lineHeight: 18
   },
-
   // =========================================================
   // CTA
   // =========================================================
@@ -1576,173 +1198,91 @@ const styles = StyleSheet.create({
   ctaCard: {
     marginHorizontal: 18,
     marginTop: 20,
-
     paddingHorizontal: 20,
     paddingVertical: 22,
-
     alignItems: 'center',
-
-    borderRadius: 20,
-
-    backgroundColor: COLORS.cream,
-
+    borderRadius: 24,
+    backgroundColor: DESIGN.colors.surface,
+    ...shadow.card,
+    borderColor: DESIGN.colors.border,
     borderWidth: 1,
-
-    borderColor: COLORS.border,
-
-    elevation: 4,
-
-    shadowColor: COLORS.deepBrown,
-
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-
-    shadowOpacity: 0.1,
-
-    shadowRadius: 8,
+    shadowOpacity: 0.045,
+    elevation: 2
   },
-
   ctaIcon: {
     width: 58,
     height: 58,
-
     borderRadius: 29,
-
     alignItems: 'center',
-
     justifyContent: 'center',
-
     marginBottom: 13,
-
-    backgroundColor: COLORS.biscuitLight,
-
-    borderWidth: 1,
-
-    borderColor: COLORS.border,
+    backgroundColor: COLORS.creamDark
   },
-
   ctaHeading: {
-    color: COLORS.textPrimary,
-
+    color: COLORS.deepBrown,
     fontSize: 18,
-
-    fontWeight: '800',
-
+    fontWeight: "400",
     textAlign: 'center',
-
     marginBottom: 7,
+    fontFamily: DESIGN.fonts.editorial,
+    letterSpacing: -0.4
   },
-
   ctaDesc: {
     maxWidth: 320,
-
-    color: COLORS.textSecondary,
-
-    fontSize: 10.5,
-
-    lineHeight: 16,
-
+    color: COLORS.warmBrown,
+    fontSize: 12,
+    lineHeight: 18,
     textAlign: 'center',
-
-    marginBottom: 17,
+    marginBottom: 17
   },
-
   ctaBtn: {
     width: '100%',
-
     minHeight: 48,
-
     flexDirection: 'row',
-
     alignItems: 'center',
-
     justifyContent: 'center',
-
-    borderRadius: 12,
-
-    backgroundColor: COLORS.primaryBrown,
-
-    borderWidth: 1,
-
-    borderColor: COLORS.deepBrown,
-
-    elevation: 3,
-
-    shadowColor: COLORS.deepBrown,
-
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
-
-    shadowOpacity: 0.16,
-
-    shadowRadius: 5,
+    borderRadius: radii.md,
+    backgroundColor: COLORS.saffron
   },
-
   ctaBtnText: {
     color: COLORS.white,
-
     marginLeft: 8,
-
     fontSize: 12.5,
-
-    fontWeight: '800',
+    fontWeight: "600"
   },
-
   ctaBellRow: {
     flexDirection: 'row',
-
     alignItems: 'center',
-
     marginTop: 12,
-
     paddingHorizontal: 11,
     paddingVertical: 7,
-
-    borderRadius: 20,
-
-    backgroundColor: COLORS.biscuitLight,
+    borderRadius: radii.pill,
+    backgroundColor: COLORS.creamDark
   },
-
   ctaBellText: {
-    color: COLORS.primaryBrown,
-
-    fontSize: 9,
-
+    color: COLORS.saffron,
+    fontSize: 12,
     fontWeight: '600',
-
-    marginLeft: 6,
+    marginLeft: 6
   },
-
   ctaDivider: {
     width: 40,
-
     height: 1,
-
     marginTop: 17,
     marginBottom: 9,
-
-    backgroundColor: COLORS.border,
+    backgroundColor: hairline
   },
-
   ctaBrand: {
-    color: COLORS.lightBrown,
-
-    fontSize: 8,
-
-    fontWeight: '800',
-
-    letterSpacing: 2,
+    color: COLORS.warmBrown,
+    fontSize: 12,
+    fontWeight: "600",
+    letterSpacing: 2
   },
-
   // =========================================================
   // END SPACE
   // =========================================================
 
   bottomSpace: {
-    height: 28,
-  },
+    height: 28
+  }
 });

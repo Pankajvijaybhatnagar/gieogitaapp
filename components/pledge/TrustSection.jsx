@@ -22,14 +22,39 @@ export default function TrustSection() {
 }
 
 const styles = StyleSheet.create({
-  trustSection: { paddingHorizontal: 16, paddingTop: 4 },
-  trustGrid:    { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
+  trustSection: {
+    paddingHorizontal: 16,
+    paddingTop: 4
+  },
+  trustGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 10
+  },
   trustCard: {
     width: (width - 52) / 2,
-    backgroundColor: C.deepBrown, borderRadius: 16, padding: 16,
-    borderWidth: 1, borderColor: C.goldBorder, alignItems: 'center',
+    backgroundColor: C.cream,
+    borderRadius: 16,
+    padding: 16,
+    borderWidth: 1,
+    borderColor: C.goldBorder,
+    alignItems: 'center'
   },
-  trustIcon:  { fontSize: 26, marginBottom: 8 },
-  trustTitle: { fontSize: 12, fontWeight: '800', color: C.goldLight, textAlign: 'center', marginBottom: 4 },
-  trustDesc:  { fontSize: 10, color: 'rgba(253,246,227,0.6)', textAlign: 'center', lineHeight: 14, fontStyle: 'italic' },
+  trustIcon: {
+    fontSize: 26,
+    marginBottom: 8
+  },
+  trustTitle: {
+    fontSize: 12,
+    fontWeight: "600",
+    color: C.deepBrown,
+    textAlign: 'center',
+    marginBottom: 4
+  },
+  trustDesc: {
+    fontSize: 12,
+    color: C.warmBrown,
+    textAlign: 'center',
+    lineHeight: 18
+  }
 });

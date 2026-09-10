@@ -1,10 +1,10 @@
+import { DESIGN } from '@/constants/design';
 // app/join-gieo-gita/index.jsx
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import {
   ActivityIndicator,
-  Alert,
   Animated,
   Dimensions,
   Easing,
@@ -21,9 +21,14 @@ import {
 
 import { Ionicons } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import * as Haptics from 'expo-haptics';
+import { LinearGradient } from 'expo-linear-gradient';
 import { Link, Stack, useRouter } from 'expo-router';
 
 import joinGieoGitaServices from '@/lib/services/joinGieoGitaServices';
+import { useAppAlert } from '@/context/AppAlertContext';
+import { COLORS as BASE, RGB } from '@/constants/brandColors';
+import { hairline, radii, shadow, spacing } from '@/constants/theme';
 
 /* ============================================================
    SCREEN
@@ -31,39 +36,50 @@ import joinGieoGitaServices from '@/lib/services/joinGieoGitaServices';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 
-const SHEET_MIN_HEIGHT = SCREEN_HEIGHT * 0.4;
+// A short list (Marital Status, Dikshit, Wing) shouldn't open into a
+// half-empty sheet with a pointless search box — the sheet now sizes
+// itself to its content instead of always claiming ~40-75% of the screen.
+const SHEET_MIN_HEIGHT = 230;
 
 const SHEET_MAX_HEIGHT = SCREEN_HEIGHT * 0.75;
+
+const SHEET_ROW_HEIGHT = 52;
+
+const SHEET_CHROME_HEIGHT = 150;
+
+const SHEET_SEARCH_HEIGHT = 62;
+
+const SHEET_SEARCH_THRESHOLD = 6;
 
 /* ============================================================
    COLORS
 ============================================================ */
 
 const COLORS = {
-  background: '#F5EEE6',
-  card: '#FFFDF9',
-  input: '#FFFBF6',
+  background: BASE.creamDark,
+  card: BASE.cream,
+  input: BASE.creamDark,
 
-  brown: '#5A321F',
-  darkBrown: '#3B2115',
-  mediumBrown: '#795039',
+  brown: BASE.richBrown,
+  darkBrown: BASE.deepBrown,
+  mediumBrown: BASE.warmBrown,
 
-  gold: '#B68A4A',
-  goldLight: '#E9D5B7',
+  gold: BASE.gold,
+  goldLight: BASE.goldLight,
 
-  text: '#3D2B21',
-  muted: '#8D7A6E',
+  text: BASE.deepBrown,
+  muted: BASE.warmBrown,
 
-  border: '#DCC9B7',
-  lightBorder: '#EAE0D7',
+  border: hairline,
+  lightBorder: hairline,
 
-  white: '#FFFFFF',
+  white: BASE.white,
 
   green: '#3F7C4D',
   greenBg: '#EDF7EF',
 
-  red: '#B63D3D',
-  redBg: '#FCEEEE',
+  red: BASE.dangerRed,
+  redBg: `rgba(${RGB.dangerRed},0.08)`,
 };
 
 /* ============================================================
@@ -393,7 +409,7 @@ function Section({ title, icon, children, delay = 0 }) {
       ]}>
       <View style={styles.sectionHeader}>
         <View style={styles.sectionIcon}>
-          <Ionicons name={icon} size={16} color={COLORS.gold} />
+          <Ionicons name={icon} size={17} color={COLORS.white} />
         </View>
 
         <Text style={styles.sectionTitle}>{title}</Text>
@@ -480,9 +496,15 @@ function OptionSheet({
 
   const [search, setSearch] = useState('');
 
+  const searchInputRef = useRef(null);
+
+  const willShowSearch = (options?.length || 0) > SHEET_SEARCH_THRESHOLD;
+
   useEffect(() => {
     if (visible) {
       setSearch('');
+
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
 
       Animated.parallel([
         Animated.timing(translateY, {
@@ -497,7 +519,13 @@ function OptionSheet({
           duration: 220,
           useNativeDriver: true,
         }),
-      ]).start();
+      ]).start(() => {
+        // Autofocus the search box once the sheet has finished opening —
+        // saves a tap on lists long enough to actually need searching.
+        if (willShowSearch) {
+          searchInputRef.current?.focus();
+        }
+      });
     } else {
       Animated.parallel([
         Animated.timing(translateY, {
@@ -525,6 +553,27 @@ function OptionSheet({
 
     return (options || []).filter(item => item.toLowerCase().includes(q));
   }, [options, search]);
+
+  // Short lists (Marital Status, Dikshit, Wing...) don't need a search box —
+  // it's just extra chrome for something you can scan in one glance.
+  const showSearch = (options?.length || 0) > SHEET_SEARCH_THRESHOLD;
+
+  // Size the sheet to what it actually holds instead of always opening to
+  // ~40-75% of the screen, which left short lists floating in a mostly
+  // empty sheet.
+  const rowsHeight = loading
+    ? 140
+    : filteredOptions.length === 0
+      ? 160
+      : filteredOptions.length * SHEET_ROW_HEIGHT;
+
+  const naturalHeight =
+    SHEET_CHROME_HEIGHT + (showSearch ? SHEET_SEARCH_HEIGHT : 0) + rowsHeight;
+
+  const sheetHeight = Math.min(
+    Math.max(naturalHeight, SHEET_MIN_HEIGHT),
+    SHEET_MAX_HEIGHT,
+  );
 
   const close = () => {
     Animated.parallel([
@@ -568,10 +617,7 @@ function OptionSheet({
           style={[
             styles.bottomSheet,
             {
-              height: Math.min(
-                Math.max(SHEET_MIN_HEIGHT, SCREEN_HEIGHT * 0.55),
-                SHEET_MAX_HEIGHT,
-              ),
+              height: sheetHeight,
 
               transform: [
                 {
@@ -587,6 +633,10 @@ function OptionSheet({
           {/* HEADER */}
 
           <View style={styles.sheetHeader}>
+            <View style={styles.sheetTitleIcon}>
+              <Ionicons name="list" size={17} color={COLORS.white} />
+            </View>
+
             <View
               style={{
                 flex: 1,
@@ -603,31 +653,35 @@ function OptionSheet({
             </Pressable>
           </View>
 
-          {/* SEARCH */}
+          {/* SEARCH — only shown for lists long enough to need it */}
 
-          <View style={styles.searchContainer}>
-            <Ionicons name="search-outline" size={17} color={COLORS.muted} />
+          {showSearch && (
+            <View style={styles.searchContainer}>
+              <Ionicons name="search-outline" size={17} color={COLORS.muted} />
 
-            <TextInput
-              value={search}
-              onChangeText={setSearch}
-              placeholder={`Search ${title.toLowerCase()}`}
-              placeholderTextColor={COLORS.muted}
-              style={styles.searchInput}
-            />
+              <TextInput
+                ref={searchInputRef}
+                value={search}
+                onChangeText={setSearch}
+                placeholder={`Search ${title.toLowerCase()}`}
+                placeholderTextColor={COLORS.muted}
+                returnKeyType="search"
+                style={styles.searchInput}
+              />
 
-            {search.length > 0 && (
-              <Pressable onPress={() => setSearch('')}>
-                <Ionicons name="close-circle" size={17} color={COLORS.muted} />
-              </Pressable>
-            )}
-          </View>
+              {search.length > 0 && (
+                <Pressable onPress={() => setSearch('')}>
+                  <Ionicons name="close-circle" size={17} color={COLORS.muted} />
+                </Pressable>
+              )}
+            </View>
+          )}
 
           {/* OPTIONS */}
 
           {loading ? (
             <View style={styles.loadingView}>
-              <ActivityIndicator size="small" color={COLORS.gold} />
+              <ActivityIndicator size="small" color={COLORS.brown} />
 
               <Text style={styles.loadingText}>Loading options...</Text>
             </View>
@@ -654,7 +708,10 @@ function OptionSheet({
                   return (
                     <Pressable
                       key={`${item}-${index}`}
-                      onPress={() => onSelect(item)}
+                      onPress={() => {
+                        Haptics.selectionAsync();
+                        onSelect(item);
+                      }}
                       style={({ pressed }) => [
                         styles.optionRow,
 
@@ -674,7 +731,7 @@ function OptionSheet({
                         <Ionicons
                           name="checkmark-circle"
                           size={19}
-                          color={COLORS.gold}
+                          color={COLORS.white}
                         />
                       )}
                     </Pressable>
@@ -702,6 +759,7 @@ function SelectField({
   disabled = false,
   loading = false,
   required = true,
+  hint,
 }) {
   const [visible, setVisible] = useState(false);
 
@@ -712,7 +770,10 @@ function SelectField({
 
         <Pressable
           disabled={disabled || loading}
-          onPress={() => setVisible(true)}
+          onPress={() => {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            setVisible(true);
+          }}
           style={({ pressed }) => [
             styles.inputContainer,
             styles.selectContainer,
@@ -727,16 +788,25 @@ function SelectField({
             {value || placeholder}
           </Text>
 
-          {loading ? (
-            <ActivityIndicator size="small" color={COLORS.gold} />
-          ) : (
-            <Ionicons
-              name="chevron-down"
-              size={17}
-              color={disabled ? COLORS.muted : COLORS.brown}
-            />
-          )}
+          <View style={styles.fieldTrailingBadge}>
+            {loading ? (
+              <ActivityIndicator size="small" color={COLORS.brown} />
+            ) : (
+              <Ionicons
+                name="chevron-down"
+                size={15}
+                color={disabled ? COLORS.muted : COLORS.brown}
+              />
+            )}
+          </View>
         </Pressable>
+
+        {disabled && hint ? (
+          <View style={styles.fieldHintRow}>
+            <Ionicons name="information-circle" size={13} color={COLORS.muted} />
+            <Text style={styles.fieldHintText}>{hint}</Text>
+          </View>
+        ) : null}
       </View>
 
       <OptionSheet
@@ -778,7 +848,9 @@ function DateField({ label, value, onChange, maximumDate }) {
           {value || `Select ${label}`}
         </Text>
 
-        <Ionicons name="calendar-outline" size={18} color={COLORS.brown} />
+        <View style={styles.fieldTrailingBadge}>
+          <Ionicons name="calendar-outline" size={15} color={COLORS.brown} />
+        </View>
       </Pressable>
 
       {showPicker && (
@@ -853,6 +925,7 @@ function Checkbox({ checked, onPress }) {
 
 export default function JoinGieoGitaScreen() {
   const router = useRouter();
+  const { success: showSuccessAlert } = useAppAlert();
 
   /* ----------------------------------------------------------
      FORM
@@ -1395,7 +1468,7 @@ export default function JoinGieoGitaScreen() {
       if (hashId) {
         router.push(`/home/(tabs)/join-gieo-gita/${hashId}`);
       } else {
-        Alert.alert(
+        showSuccessAlert(
           'Success',
           'Your GIEO Gita profile has been created successfully.',
         );
@@ -1421,10 +1494,10 @@ export default function JoinGieoGitaScreen() {
           headerShown: true,
 
           headerStyle: {
-            backgroundColor: COLORS.darkBrown,
+            backgroundColor: COLORS.card,
           },
 
-          headerTintColor: COLORS.white,
+          headerTintColor: COLORS.darkBrown,
 
           headerTitleStyle: {
             fontSize: 17,
@@ -1445,11 +1518,21 @@ export default function JoinGieoGitaScreen() {
           {/* HERO */}
 
           <View style={styles.hero}>
-            <View style={styles.heroIcon}>
-              <Ionicons name="people-outline" size={25} color={COLORS.gold} />
+            <View style={styles.heroBanner}>
+              <View style={styles.heroPatternOne} />
+              <View style={styles.heroPatternTwo} />
+              <Text style={styles.heroOm}>ॐ</Text>
+            </View>
+
+            <View style={styles.heroIconRing}>
+              <View style={styles.heroIcon}>
+                <Ionicons name="people-outline" size={28} color={COLORS.white} />
+              </View>
             </View>
 
             <Text style={styles.heroTitle}>Join GIEO Gita</Text>
+
+            <View style={styles.heroDivider} />
 
             <Text style={styles.heroSubtitle}>
               Become a part of the GIEO Gita family
@@ -1488,7 +1571,9 @@ export default function JoinGieoGitaScreen() {
               autoCapitalize="none"
               right={
                 checkingPhone ? (
-                  <ActivityIndicator size="small" color={COLORS.gold} />
+                  <View style={styles.fieldTrailingBadge}>
+                    <ActivityIndicator size="small" color={COLORS.brown} />
+                  </View>
                 ) : null
               }
             />
@@ -1567,6 +1652,7 @@ export default function JoinGieoGitaScreen() {
               options={states}
               loading={loadingStates}
               disabled={!formData.country}
+              hint="Select Country first"
               onSelect={handleStateChange}
             />
 
@@ -1576,6 +1662,7 @@ export default function JoinGieoGitaScreen() {
               options={districts}
               loading={loadingDistricts}
               disabled={!formData.state}
+              hint="Select State first"
               onSelect={handleDistrictChange}
             />
 
@@ -1585,6 +1672,7 @@ export default function JoinGieoGitaScreen() {
               options={tehsils}
               loading={loadingTehsils}
               disabled={!formData.district}
+              hint="Select District first"
               onSelect={value => updateField('tehsil', value)}
             />
 
@@ -1668,19 +1756,27 @@ export default function JoinGieoGitaScreen() {
 
               submitting && styles.submitDisabled,
             ]}>
-            {submitting ? (
-              <>
-                <ActivityIndicator size="small" color={COLORS.white} />
+            <LinearGradient
+              colors={[COLORS.mediumBrown, COLORS.brown, COLORS.darkBrown]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.submitGradient}>
+              {submitting ? (
+                <>
+                  <ActivityIndicator size="small" color={COLORS.white} />
 
-                <Text style={styles.submitText}>Submitting...</Text>
-              </>
-            ) : (
-              <>
-                <Text style={styles.submitText}>Join GIEO Gita</Text>
+                  <Text style={styles.submitText}>Submitting...</Text>
+                </>
+              ) : (
+                <>
+                  <Text style={styles.submitText}>Join GIEO Gita</Text>
 
-                <Ionicons name="arrow-forward" size={18} color={COLORS.white} />
-              </>
-            )}
+                  <View style={styles.submitArrowBadge}>
+                    <Ionicons name="arrow-forward" size={16} color={COLORS.brown} />
+                  </View>
+                </>
+              )}
+            </LinearGradient>
           </Pressable>
 
           <Text style={styles.footer}>
@@ -1699,179 +1795,238 @@ export default function JoinGieoGitaScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.background,
+    backgroundColor: COLORS.background
   },
-
   content: {
-    paddingHorizontal: 13,
-    paddingTop: 7,
-    paddingBottom: 35,
+    paddingHorizontal: spacing.md,
+    paddingTop: spacing.sm,
+    paddingBottom: spacing.xl
   },
-
   /* HERO */
 
   hero: {
     alignItems: 'center',
-    paddingTop: 3,
-    paddingBottom: 10,
+    // Cancels the scroll content's own horizontal padding so the banner
+    // can bleed edge-to-edge instead of sitting as an inset rectangle.
+    marginHorizontal: -spacing.md,
+    paddingBottom: spacing.lg,
+    marginBottom: spacing.sm
   },
-
-  heroIcon: {
-    width: 45,
-    height: 45,
-    borderRadius: 23,
-    backgroundColor: COLORS.darkBrown,
+  heroBanner: {
+    width: '100%',
+    height: 118,
+    backgroundColor: COLORS.brown,
+    overflow: 'hidden',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  heroPatternOne: {
+    position: 'absolute',
+    width: 150,
+    height: 150,
+    borderRadius: 75,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.12)',
+    top: -60,
+    left: -45
+  },
+  heroPatternTwo: {
+    position: 'absolute',
+    width: 190,
+    height: 190,
+    borderRadius: 95,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.09)',
+    right: -75,
+    top: -85
+  },
+  heroOm: {
+    color: 'rgba(255,255,255,0.14)',
+    fontSize: 64,
+    fontWeight: '700'
+  },
+  heroIconRing: {
+    width: 88,
+    height: 88,
+    borderRadius: 44,
+    backgroundColor: COLORS.card,
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: COLORS.gold,
-    marginBottom: 5,
+    marginTop: -44,
+    ...shadow.raised,
+    shadowColor: COLORS.brown
   },
-
+  heroIcon: {
+    width: 68,
+    height: 68,
+    borderRadius: 34,
+    backgroundColor: COLORS.brown,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 3,
+    borderColor: COLORS.card
+  },
   heroTitle: {
-    fontSize: 20,
-    fontWeight: '800',
+    marginTop: spacing.sm,
+    fontSize: 24,
+    fontWeight: "400",
     color: COLORS.darkBrown,
+    fontFamily: DESIGN.fonts.editorial,
+    letterSpacing: -0.4
   },
-
+  heroDivider: {
+    width: 40,
+    height: 3,
+    borderRadius: radii.pill,
+    backgroundColor: COLORS.gold,
+    marginTop: spacing.sm,
+    marginBottom: spacing.xs
+  },
   heroSubtitle: {
-    fontSize: 10.5,
+    fontSize: 13,
     color: COLORS.muted,
     marginTop: 2,
+    paddingHorizontal: spacing.lg,
+    textAlign: 'center'
   },
-
   /* SECTION */
 
   sectionCard: {
     backgroundColor: COLORS.card,
-    borderRadius: 15,
+    borderRadius: radii.xl,
     borderWidth: 1,
     borderColor: COLORS.border,
-    paddingHorizontal: 11,
-    paddingTop: 10,
-    paddingBottom: 3,
-    marginBottom: 8,
-
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.045,
-    shadowRadius: 5,
-    elevation: 2,
+    paddingHorizontal: spacing.md,
+    paddingTop: spacing.md,
+    paddingBottom: spacing.xs,
+    marginBottom: spacing.md,
+    ...shadow.card
   },
-
   sectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 7,
+    marginBottom: spacing.sm,
+    paddingBottom: spacing.sm,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.border
   },
-
   sectionIcon: {
-    width: 28,
-    height: 28,
-    borderRadius: 8,
-    backgroundColor: '#F3E7D9',
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: COLORS.brown,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 8,
+    marginRight: spacing.sm,
+    ...shadow.card,
+    shadowColor: COLORS.brown
   },
-
   sectionTitle: {
-    fontSize: 14.5,
-    fontWeight: '800',
-    color: COLORS.darkBrown,
+    fontSize: 15.5,
+    fontWeight: "700",
+    color: COLORS.darkBrown
   },
-
   /* FIELDS */
 
   field: {
-    marginBottom: 6,
+    marginBottom: spacing.sm
   },
-
   label: {
-    fontSize: 10.5,
+    fontSize: 12,
     fontWeight: '700',
     color: COLORS.text,
-    marginBottom: 3,
-    paddingLeft: 1,
+    marginBottom: 5,
+    paddingLeft: 1
   },
-
   required: {
-    color: COLORS.red,
+    color: COLORS.red
   },
-
   inputContainer: {
-    minHeight: 39,
+    minHeight: 52,
     borderWidth: 1,
     borderColor: COLORS.border,
-    borderRadius: 9,
-    backgroundColor: COLORS.input,
-    paddingHorizontal: 10,
+    borderRadius: radii.lg,
+    backgroundColor: COLORS.card,
+    paddingHorizontal: spacing.sm + 2,
     flexDirection: 'row',
     alignItems: 'center',
+    shadowColor: COLORS.darkBrown,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 6,
+    elevation: 1
   },
-
   textInput: {
     flex: 1,
-    minHeight: 37,
-    fontSize: 12.5,
+    minHeight: 46,
+    fontSize: 15,
     color: COLORS.text,
-    paddingVertical: 4,
+    paddingVertical: 4
   },
-
   multilineContainer: {
     minHeight: 67,
-    alignItems: 'flex-start',
+    alignItems: 'flex-start'
   },
-
   multilineInput: {
     minHeight: 60,
     textAlignVertical: 'top',
-    paddingTop: 7,
+    paddingTop: 7
   },
-
   /* SELECT */
 
   selectContainer: {
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
-
+  fieldTrailingBadge: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    backgroundColor: `rgba(${RGB.maroon},0.12)`,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
   selectText: {
     flex: 1,
-    fontSize: 12.5,
+    fontSize: 13.5,
+    fontWeight: '600',
     color: COLORS.text,
-    paddingVertical: 5,
+    paddingVertical: 5
   },
-
   placeholder: {
     color: COLORS.muted,
+    fontWeight: '400'
   },
-
+  fieldHintRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    marginTop: 5,
+    paddingLeft: 1
+  },
+  fieldHintText: {
+    fontSize: 11,
+    color: COLORS.muted
+  },
   disabledInput: {
-    backgroundColor: '#F0EBE6',
-    opacity: 0.62,
+    backgroundColor: COLORS.background,
+    opacity: 0.62
   },
-
   pressedInput: {
-    borderColor: COLORS.gold,
-    backgroundColor: '#FFF8EE',
+    borderColor: COLORS.brown,
+    borderWidth: 1.5,
+    backgroundColor: COLORS.background
   },
-
   /* DATE */
 
   dateContainer: {
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
-
   dateText: {
     flex: 1,
     fontSize: 12.5,
     color: COLORS.text,
-    paddingVertical: 5,
+    paddingVertical: 5
   },
-
   /* PROFILE */
 
   profileExists: {
@@ -1880,19 +2035,19 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.greenBg,
     borderWidth: 1,
     borderColor: '#CDE1D1',
-    borderRadius: 9,
-    paddingHorizontal: 8,
-    paddingVertical: 6,
-    marginBottom: 6,
+    borderRadius: radii.md,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.sm,
+    marginBottom: spacing.sm
   },
-
   profileExistsText: {
-    marginLeft: 6,
-    fontSize: 10.5,
+    flex: 1,
+    marginLeft: spacing.sm,
+    fontSize: 12,
     color: COLORS.green,
     fontWeight: '700',
+    lineHeight: 18
   },
-
   /* ERROR */
 
   errorBox: {
@@ -1900,266 +2055,262 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: COLORS.redBg,
     borderWidth: 1,
-    borderColor: '#E7C1C1',
-    borderRadius: 9,
-    paddingHorizontal: 9,
-    paddingVertical: 8,
-    marginBottom: 8,
+    borderColor: `rgba(${RGB.dangerRed},0.3)`,
+    borderRadius: radii.md,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.sm,
+    marginBottom: spacing.md
   },
-
   errorText: {
     flex: 1,
-    marginLeft: 6,
+    marginLeft: spacing.sm,
     color: COLORS.red,
-    fontSize: 10.5,
-    lineHeight: 15,
+    fontSize: 12,
+    lineHeight: 18
   },
-
   /* ========================================================
        BOTTOM SHEET
     ======================================================== */
 
   sheetRoot: {
     flex: 1,
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-end'
   },
-
   sheetBackdrop: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(37, 20, 12, 0.58)',
+    backgroundColor: `rgba(${RGB.deepBrown},0.55)`
   },
-
   sheetCloseArea: {
-    ...StyleSheet.absoluteFillObject,
+    ...StyleSheet.absoluteFillObject
   },
-
   bottomSheet: {
     width: '100%',
     minHeight: SHEET_MIN_HEIGHT,
     maxHeight: SHEET_MAX_HEIGHT,
     backgroundColor: COLORS.card,
-    borderTopLeftRadius: 23,
-    borderTopRightRadius: 23,
-    paddingTop: 8,
+    borderTopLeftRadius: radii.xl,
+    borderTopRightRadius: radii.xl,
+    paddingTop: spacing.sm + 2,
     paddingBottom: Platform.OS === 'ios' ? 27 : 12,
-
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: -4,
+      height: -4
     },
     shadowOpacity: 0.18,
     shadowRadius: 12,
-    elevation: 18,
+    elevation: 18
   },
-
   sheetHandle: {
-    width: 42,
-    height: 4,
+    width: 44,
+    height: 5,
     borderRadius: 3,
-    backgroundColor: '#CDB9A8',
+    backgroundColor: `rgba(${RGB.maroon},0.22)`,
     alignSelf: 'center',
-    marginBottom: 9,
+    marginBottom: spacing.md
   },
-
   sheetHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 15,
-    paddingBottom: 9,
+    paddingHorizontal: spacing.md,
+    paddingBottom: spacing.sm,
+    gap: spacing.sm
   },
-
-  sheetTitle: {
-    fontSize: 16,
-    fontWeight: '800',
-    color: COLORS.darkBrown,
-  },
-
-  sheetCount: {
-    fontSize: 9.5,
-    color: COLORS.muted,
-    marginTop: 1,
-  },
-
-  closeButton: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: '#F1E8DF',
+  sheetTitleIcon: {
+    width: 34,
+    height: 34,
+    borderRadius: 17,
+    backgroundColor: COLORS.brown,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-
-  searchContainer: {
-    height: 39,
-    marginHorizontal: 13,
-    marginBottom: 7,
-    borderRadius: 9,
+  sheetTitle: {
+    fontSize: 18,
+    fontWeight: "700",
+    color: COLORS.darkBrown
+  },
+  sheetCount: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: COLORS.brown,
+    marginTop: 1
+  },
+  closeButton: {
+    width: 34,
+    height: 34,
+    borderRadius: 17,
+    backgroundColor: COLORS.background,
     borderWidth: 1,
     borderColor: COLORS.border,
-    backgroundColor: '#FFFBF6',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  searchContainer: {
+    height: 48,
+    marginHorizontal: spacing.md,
+    marginBottom: spacing.md,
+    borderRadius: radii.lg,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    backgroundColor: COLORS.background,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 9,
+    paddingHorizontal: spacing.sm + 2,
+    gap: spacing.xs
   },
-
   searchInput: {
     flex: 1,
-    fontSize: 12,
+    fontSize: 15,
     color: COLORS.text,
-    marginLeft: 6,
-    paddingVertical: 0,
+    paddingVertical: 0
   },
-
   sheetList: {
-    flex: 1,
+    flex: 1
   },
-
   sheetListContent: {
-    paddingHorizontal: 10,
-    paddingBottom: 10,
+    paddingHorizontal: spacing.sm,
+    paddingBottom: spacing.sm
   },
-
   optionRow: {
-    minHeight: 43,
+    minHeight: 54,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: COLORS.lightBorder,
-    borderRadius: 8,
+    paddingHorizontal: spacing.sm + 2,
+    marginBottom: 6,
+    borderRadius: radii.lg,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    backgroundColor: COLORS.background
   },
-
   selectedOption: {
-    backgroundColor: '#F5EBDD',
-    borderBottomWidth: 0,
-    marginVertical: 2,
+    backgroundColor: COLORS.brown,
+    borderColor: COLORS.brown,
+    ...shadow.card,
+    shadowColor: COLORS.brown,
+    shadowOpacity: 0.28
   },
-
   optionPressed: {
-    backgroundColor: '#F1E3D4',
+    opacity: 0.85
   },
-
   optionText: {
     flex: 1,
-    fontSize: 12.5,
+    fontSize: 14,
+    fontWeight: '600',
     color: COLORS.text,
-    paddingRight: 8,
+    paddingRight: 8
   },
-
   selectedOptionText: {
-    color: COLORS.brown,
-    fontWeight: '800',
+    color: COLORS.white,
+    fontWeight: "700"
   },
-
   loadingView: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-
   loadingText: {
-    fontSize: 11,
+    fontSize: 12,
     color: COLORS.muted,
-    marginTop: 7,
+    marginTop: 7
   },
-
   noOptions: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: 45,
+    paddingTop: 45
   },
-
   noOptionsText: {
     fontSize: 12,
     color: COLORS.muted,
-    marginTop: 7,
+    marginTop: 7
   },
-
   /* TERMS */
 
   termsRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 1,
-    marginBottom: 10,
-    paddingHorizontal: 2,
+    backgroundColor: COLORS.card,
+    borderRadius: radii.md,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    marginTop: spacing.xs,
+    marginBottom: spacing.md,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.sm
   },
-
   checkbox: {
-    width: 19,
-    height: 19,
-    borderRadius: 5,
+    width: 20,
+    height: 20,
+    borderRadius: 6,
     borderWidth: 1.5,
     borderColor: COLORS.brown,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: COLORS.white,
+    backgroundColor: COLORS.white
   },
-
   checkboxChecked: {
     backgroundColor: COLORS.brown,
-    borderColor: COLORS.brown,
+    borderColor: COLORS.brown
   },
-
   termsText: {
     flex: 1,
-    fontSize: 10,
+    fontSize: 12,
     color: COLORS.text,
     marginLeft: 7,
-    lineHeight: 14,
+    lineHeight: 18
   },
-
   termsLink: {
     color: COLORS.brown,
-    fontWeight: '800',
+    fontWeight: "600"
   },
-
   /* SUBMIT */
 
   submitButton: {
-    height: 45,
-    borderRadius: 11,
-    backgroundColor: COLORS.darkBrown,
+    borderRadius: radii.pill,
+    overflow: 'hidden',
+    ...shadow.raised,
+    shadowColor: COLORS.brown,
+    shadowOpacity: 0.32,
+    shadowRadius: 16,
+    minHeight: 58
+  },
+  submitGradient: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 7,
-
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
-    shadowOpacity: 0.14,
-    shadowRadius: 5,
-    elevation: 3,
+    gap: 10,
+    paddingHorizontal: spacing.lg
   },
-
+  submitArrowBadge: {
+    width: 26,
+    height: 26,
+    borderRadius: 13,
+    backgroundColor: COLORS.white,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
   submitPressed: {
-    transform: [
-      {
-        scale: 0.985,
-      },
-    ],
-    opacity: 0.9,
+    transform: [{
+      scale: 0.985
+    }],
+    opacity: 0.92
   },
-
   submitDisabled: {
-    opacity: 0.6,
+    opacity: 0.6
   },
-
   submitText: {
     color: COLORS.white,
-    fontSize: 13.5,
-    fontWeight: '800',
+    fontSize: 16,
+    fontWeight: "700",
+    letterSpacing: 0.2
   },
-
   footer: {
     textAlign: 'center',
-    fontSize: 9,
-    color: COLORS.muted,
-    marginTop: 12,
-  },
+    fontSize: 11.5,
+    fontWeight: '600',
+    letterSpacing: 0.3,
+    color: COLORS.goldDark,
+    marginTop: spacing.lg
+  }
 });

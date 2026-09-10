@@ -8,6 +8,8 @@ import {
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { updateChants,submitChants } from "../redux/chantsSlice"; // Import your Redux action
+import { COLORS } from "@/constants/brandColors";
+import { radii } from "@/constants/theme";
 
 const ChantCounter = () => {
   const dispatch = useDispatch();
@@ -94,90 +96,90 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
-    backgroundColor: "#f7f7f7",
-    flexDirection: "row",
+    backgroundColor: COLORS.cream,
+    flexDirection: "row"
   },
   counterContainer: {
     alignItems: "center",
-    marginRight: 30,
+    marginRight: 30
   },
   label: {
     fontSize: 18,
     marginBottom: 10,
-    color: "#000",
+    color: COLORS.deepBrown
   },
   counterBox: {
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: "center"
   },
   counter: {
     width: 80,
     height: 220,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#fff",
-    borderColor: "#7B1B1B",
-    borderRadius: 10,
+    backgroundColor: COLORS.cream,
+    borderColor: COLORS.richBrown,
+    borderRadius: radii.sm,
     borderWidth: 3,
-    elevation: 3,
+    elevation: 3
   },
   counterText: {
     fontSize: 50,
-    color: "#333",
-    fontWeight: "bold",
+    color: COLORS.deepBrown,
+    fontWeight: "bold"
   },
   buttonContainer: {
     justifyContent: "center",
     alignItems: "center",
-    marginLeft: 7,
+    marginLeft: 7
   },
   button: {
     width: 50,
     height: 50,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#fff",
+    backgroundColor: COLORS.cream,
     borderRadius: 25,
     marginVertical: 5,
-    borderColor: "#b32d2d",
-    borderWidth: 2,
+    borderColor: COLORS.saffron,
+    borderWidth: 2
   },
   buttonText: {
     fontSize: 20,
-    color: "#333",
+    color: COLORS.deepBrown
   },
   instructionsSection: {
     flex: 1,
-    justifyContent: "center",
+    justifyContent: "center"
   },
   instructionsContainer: {
-    marginBottom: 20,
+    marginBottom: 20
   },
   instructionsTitle: {
     fontSize: 14,
     fontWeight: "bold",
-    color: "#b32d2d",
-    marginBottom: 5,
+    color: COLORS.richBrown,
+    marginBottom: 5
   },
   instructionsText: {
     fontSize: 12,
-    color: "#333",
-    marginBottom: 5,
+    color: COLORS.warmBrown,
+    marginBottom: 5
   },
   submitButton: {
-    backgroundColor: "#b32d2d",
-
-    borderRadius: 25,
+    backgroundColor: COLORS.richBrown,
+    borderRadius: 16,
     textAlign: "center",
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
     maxHeight: 50,
+    minHeight: 52
   },
   submitButtonText: {
-    color: "#fff",
-    fontSize: 18,
-  },
+    color: COLORS.white,
+    fontSize: 18
+  }
 });
 
 export default ChantCounter;

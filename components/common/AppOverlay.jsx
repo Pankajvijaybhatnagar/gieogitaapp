@@ -1,3 +1,4 @@
+import { DESIGN } from '@/constants/design';
 import { Ionicons } from '@expo/vector-icons';
 import {
   ActivityIndicator,
@@ -8,20 +9,14 @@ import {
   View,
 } from 'react-native';
 
-const COLORS = {
-  deepBrown: '#2C1A0A',
-  warmBrown: '#4A2C0D',
-  gold: '#C9A227',
-  goldLight: '#E8C55A',
-  cream: '#ffffff',
-  white: '#FFFFFF',
-
-  danger: '#B42318',
-  dangerLight: '#fdfafa',
-
-  muted: '#7A6A58',
-  border: 'rgba(201, 162, 39, 0.30)',
-};
+import { COLORS, RGB } from '@/constants/brandColors';
+import {
+  hairline,
+  radii,
+  shadow,
+  spacing,
+  type as typeScale,
+} from '@/constants/theme';
 
 export default function AppOverlay({
   visible = false,
@@ -100,7 +95,7 @@ export default function AppOverlay({
 
           {isLoading ? (
             <View style={styles.loadingContainer}>
-              <ActivityIndicator size="large" color={COLORS.gold} />
+              <ActivityIndicator size="large" color={COLORS.saffron} />
 
               {title ? <Text style={styles.title}>{title}</Text> : null}
 
@@ -121,7 +116,7 @@ export default function AppOverlay({
                   <Ionicons
                     name={iconName}
                     size={34}
-                    color={destructive ? COLORS.danger : COLORS.gold}
+                    color={destructive ? COLORS.dangerRed : COLORS.saffron}
                   />
                 </View>
               ) : null}
@@ -209,15 +204,11 @@ const styles = StyleSheet.create({
 
   overlay: {
     flex: 1,
-
     backgroundColor: 'rgba(0, 0, 0, 0.48)',
-
     alignItems: 'center',
     justifyContent: 'center',
-
-    paddingHorizontal: 24,
+    paddingHorizontal: 24
   },
-
   /*
   |--------------------------------------------------------------------------
   | Main box
@@ -227,32 +218,15 @@ const styles = StyleSheet.create({
   alertBox: {
     width: '100%',
     maxWidth: 360,
-
     backgroundColor: COLORS.cream,
-
-    borderRadius: 24,
-
-    paddingHorizontal: 24,
-    paddingVertical: 26,
-
+    borderRadius: radii.xl,
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.xl - spacing.xs,
     alignItems: 'center',
-
     borderWidth: 1,
-    borderColor: COLORS.border,
-
-    shadowColor: '#000',
-
-    shadowOffset: {
-      width: 0,
-      height: 8,
-    },
-
-    shadowOpacity: 0.28,
-    shadowRadius: 16,
-
-    elevation: 12,
+    borderColor: hairline,
+    ...shadow.raised
   },
-
   /*
   |--------------------------------------------------------------------------
   | Icon
@@ -262,21 +236,15 @@ const styles = StyleSheet.create({
   iconContainer: {
     width: 64,
     height: 64,
-
-    borderRadius: 32,
-
-    backgroundColor: 'rgba(201, 162, 39, 0.14)',
-
+    borderRadius: radii.pill,
+    backgroundColor: `rgba(${RGB.saffron}, 0.12)`,
     alignItems: 'center',
     justifyContent: 'center',
-
-    marginBottom: 14,
+    marginBottom: spacing.md
   },
-
   destructiveIconContainer: {
-    backgroundColor: COLORS.dangerLight,
+    backgroundColor: COLORS.dangerLight
   },
-
   /*
   |--------------------------------------------------------------------------
   | Loading
@@ -285,11 +253,9 @@ const styles = StyleSheet.create({
 
   loadingContainer: {
     width: '100%',
-
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-
   /*
   |--------------------------------------------------------------------------
   | Text
@@ -297,29 +263,23 @@ const styles = StyleSheet.create({
   */
 
   title: {
-    marginTop: 4,
-
+    marginTop: spacing.xs,
+    ...typeScale.headline,
     fontSize: 19,
-
-    fontWeight: '700',
-
     color: COLORS.deepBrown,
-
     textAlign: 'center',
+    fontFamily: DESIGN.fonts.editorial,
+    fontWeight: "400",
+    letterSpacing: -0.4
   },
-
   message: {
-    marginTop: 9,
-
-    fontSize: 13,
-
+    marginTop: spacing.sm,
+    ...typeScale.subhead,
+    fontWeight: '400',
     lineHeight: 20,
-
     color: COLORS.warmBrown,
-
-    textAlign: 'center',
+    textAlign: 'center'
   },
-
   /*
   |--------------------------------------------------------------------------
   | Buttons
@@ -328,20 +288,14 @@ const styles = StyleSheet.create({
 
   buttonContainer: {
     width: '100%',
-
-    alignItems: 'center',
+    alignItems: 'center'
   },
-
   confirmButtonContainer: {
     flexDirection: 'row',
-
     alignItems: 'center',
-
     justifyContent: 'center',
-
-    gap: 10,
+    gap: 10
   },
-
   /*
   |--------------------------------------------------------------------------
   | Primary button
@@ -349,40 +303,25 @@ const styles = StyleSheet.create({
   */
 
   button: {
-    marginTop: 20,
-
+    marginTop: spacing.lg,
     minWidth: 120,
-
     height: 44,
-
-    paddingHorizontal: 24,
-
-    borderRadius: 22,
-
-    backgroundColor: COLORS.gold,
-
+    paddingHorizontal: spacing.lg,
+    borderRadius: radii.pill,
+    backgroundColor: COLORS.richBrown,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-
   confirmPrimaryButton: {
     flex: 1,
-
     minWidth: 0,
-
-    marginTop: 20,
-
-    paddingHorizontal: 14,
+    marginTop: spacing.lg,
+    paddingHorizontal: spacing.md
   },
-
   buttonText: {
-    color: COLORS.deepBrown,
-
-    fontSize: 13,
-
-    fontWeight: '700',
+    color: COLORS.white,
+    ...typeScale.subhead
   },
-
   /*
   |--------------------------------------------------------------------------
   | Secondary button
@@ -391,33 +330,20 @@ const styles = StyleSheet.create({
 
   secondaryButton: {
     flex: 1,
-
     height: 44,
-
-    marginTop: 20,
-
-    paddingHorizontal: 14,
-
-    borderRadius: 22,
-
-    backgroundColor: '#F2EBDD',
-
+    marginTop: spacing.lg,
+    paddingHorizontal: spacing.md,
+    borderRadius: radii.pill,
+    backgroundColor: COLORS.creamDark,
     borderWidth: 1,
-
-    borderColor: 'rgba(74, 44, 13, 0.12)',
-
+    borderColor: hairline,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-
   secondaryButtonText: {
     color: COLORS.warmBrown,
-
-    fontSize: 13,
-
-    fontWeight: '700',
+    ...typeScale.subhead
   },
-
   /*
   |--------------------------------------------------------------------------
   | Destructive
@@ -425,20 +351,16 @@ const styles = StyleSheet.create({
   */
 
   dangerButton: {
-    backgroundColor: COLORS.danger,
+    backgroundColor: COLORS.dangerRed
   },
-
   dangerButtonText: {
-    color: COLORS.white,
+    color: COLORS.white
   },
-
   secondaryDangerButton: {
-    backgroundColor: '#F7E7E5',
-
-    borderColor: 'rgba(180, 35, 24, 0.15)',
+    backgroundColor: COLORS.dangerLight,
+    borderColor: `rgba(${RGB.dangerRed}, 0.2)`
   },
-
   secondaryDangerText: {
-    color: COLORS.danger,
-  },
+    color: COLORS.dangerRed
+  }
 });

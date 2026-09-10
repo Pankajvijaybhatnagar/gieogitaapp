@@ -1,3 +1,4 @@
+import { DESIGN } from '@/constants/design';
 import { useAuth } from '@/context/AuthContext';
 import chantServices from '@/lib/services/chantServices';
 import { Ionicons } from '@expo/vector-icons';
@@ -11,26 +12,29 @@ import {
   View,
 } from 'react-native';
 
+import { COLORS as BASE, RGB } from '@/constants/brandColors';
+import { hairline, radii, shadow } from '@/constants/theme';
+
 const COLORS = {
-  primary: '#6E3F1F',
-  primaryDark: '#432412',
-  secondary: '#A8692D',
+  primary: BASE.saffron,
+  primaryDark: BASE.deepBrown,
+  secondary: BASE.warmBrown,
 
-  cream: '#FFF8EF',
-  creamDark: '#F4E6D5',
+  cream: BASE.cream,
+  creamDark: BASE.creamDark,
 
-  gold: '#D9A35D',
-  goldLight: '#F2D19D',
+  gold: BASE.gold,
+  goldLight: BASE.goldLight,
 
-  white: '#FFFFFF',
+  white: BASE.white,
 
-  text: '#382418',
-  muted: '#866F61',
+  text: BASE.deepBrown,
+  muted: BASE.warmBrown,
 
-  border: '#EBDCCD',
+  border: hairline,
 
-  red: '#B34D3C',
-  green: '#62835A',
+  red: BASE.dangerRed,
+  green: '#3F7C4D',
 };
 
 const YourChants = () => {
@@ -303,7 +307,7 @@ const YourChants = () => {
           <Ionicons
             name="calendar-outline"
             size={12}
-            color={COLORS.goldLight}
+            color={COLORS.white}
           />
 
           <Text style={styles.yearText}>{year}</Text>
@@ -322,7 +326,7 @@ const YourChants = () => {
             <Ionicons
               name="sparkles-outline"
               size={13}
-              color={COLORS.goldLight}
+              color={COLORS.primary}
             />
 
             <Text style={styles.heroLabel}>YOUR TOTAL CHANTS</Text>
@@ -340,7 +344,7 @@ const YourChants = () => {
             <Ionicons
               name="people-outline"
               size={19}
-              color={COLORS.goldLight}
+              color={COLORS.primary}
             />
           </View>
 
@@ -516,33 +520,28 @@ const StatCapsule = ({
 
 const styles = StyleSheet.create({
   scrollView: {
-    backgroundColor: COLORS.cream,
+    backgroundColor: COLORS.cream
   },
-
   container: {
     paddingHorizontal: 16,
     paddingTop: 20,
-    paddingBottom: 35,
+    paddingBottom: 35
   },
-
   wrapper: {
     backgroundColor: COLORS.cream,
-    padding: 16,
+    padding: 16
   },
-
   centerContainer: {
     minHeight: 250,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: COLORS.cream,
+    backgroundColor: COLORS.cream
   },
-
   loadingText: {
     marginTop: 10,
     fontSize: 12,
-    color: COLORS.muted,
+    color: COLORS.muted
   },
-
   loaderIcon: {
     width: 54,
     height: 54,
@@ -550,14 +549,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: COLORS.creamDark,
-    marginBottom: 12,
+    marginBottom: 12
   },
-
   loaderOm: {
     fontSize: 27,
-    color: COLORS.primary,
+    color: COLORS.primary
   },
-
   /*
   |--------------------------------------------------------------------------
   | HEADER
@@ -568,15 +565,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 18,
+    marginBottom: 18
   },
-
   headerLeft: {
     flexDirection: 'row',
     alignItems: 'center',
-    flex: 1,
+    flex: 1
   },
-
   headerIcon: {
     width: 46,
     height: 46,
@@ -584,51 +579,42 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: COLORS.creamDark,
-    marginRight: 10,
+    marginRight: 10
   },
-
   headerOm: {
     fontSize: 24,
     fontWeight: '600',
-    color: COLORS.primary,
+    color: COLORS.primary
   },
-
   headerText: {
-    flex: 1,
+    flex: 1
   },
-
   title: {
     fontSize: 22,
-    fontWeight: '800',
+    fontWeight: "400",
     color: COLORS.primaryDark,
     letterSpacing: -0.4,
+    fontFamily: DESIGN.fonts.editorial
   },
-
   subtitle: {
-    fontSize: 11,
+    fontSize: 12,
     color: COLORS.muted,
-    marginTop: 2,
+    marginTop: 2
   },
-
   yearCapsule: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 5,
-
     paddingHorizontal: 12,
     paddingVertical: 8,
-
     borderRadius: 100,
-
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.primary
   },
-
   yearText: {
-    fontSize: 11,
+    fontSize: 12,
     fontWeight: '700',
-    color: COLORS.white,
+    color: COLORS.white
   },
-
   /*
   |--------------------------------------------------------------------------
   | HERO
@@ -637,182 +623,121 @@ const styles = StyleSheet.create({
 
   heroCard: {
     position: 'relative',
-
     overflow: 'hidden',
-
-    borderRadius: 28,
-
-    backgroundColor: COLORS.primary,
-
+    borderRadius: radii.xl,
+    backgroundColor: COLORS.cream,
     paddingHorizontal: 20,
     paddingVertical: 20,
-
     marginBottom: 27,
-
-    shadowColor: COLORS.primaryDark,
-    shadowOffset: {
-      width: 0,
-      height: 7,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 12,
-
-    elevation: 6,
-    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: hairline,
+    ...shadow.card,
+    alignItems: 'center'
   },
-
   heroCircleOne: {
     position: 'absolute',
-
     width: 180,
     height: 180,
-
     borderRadius: 100,
-
-    backgroundColor: 'rgba(255,255,255,0.05)',
-
+    backgroundColor: `rgba(${RGB.saffron},0.06)`,
     top: -80,
-    right: -65,
+    right: -65
   },
-
   heroCircleTwo: {
     position: 'absolute',
-
     width: 130,
     height: 130,
-
     borderRadius: 100,
-
-    backgroundColor: 'rgba(255,204,130,0.05)',
-
+    backgroundColor: `rgba(${RGB.gold},0.06)`,
     bottom: -55,
-    left: -40,
+    left: -40
   },
-
   heroTop: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
-
   heroLabelCapsule: {
     flexDirection: 'row',
     alignItems: 'center',
-
     gap: 5,
-
     paddingHorizontal: 11,
     paddingVertical: 7,
-
-    borderRadius: 100,
-
-    backgroundColor: 'rgba(255,255,255,0.12)',
+    borderRadius: radii.pill,
+    backgroundColor: COLORS.creamDark
   },
-
   heroLabel: {
-    fontSize: 9,
-    fontWeight: '800',
+    fontSize: 12,
+    fontWeight: "600",
     letterSpacing: 1,
-
-    color: COLORS.goldLight,
+    color: COLORS.primary
   },
-
   heroOm: {
     width: 39,
     height: 39,
-
     borderRadius: 20,
-
     alignItems: 'center',
     justifyContent: 'center',
-
-    backgroundColor: 'rgba(255,255,255,0.1)',
+    backgroundColor: COLORS.creamDark
   },
-
   heroOmText: {
     fontSize: 21,
-    color: COLORS.goldLight,
+    color: COLORS.primary
   },
-
   heroNumber: {
     fontSize: 48,
     lineHeight: 57,
-
-    fontWeight: '800',
-
+    fontWeight: "600",
     letterSpacing: -1,
-
-    color: COLORS.white,
-
-    marginTop: 13,
+    color: COLORS.text,
+    marginTop: 13
   },
-
   heroDescription: {
     fontSize: 12,
-    color: '#EAD8C8',
+    color: COLORS.muted
   },
-
   heroDivider: {
     height: 1,
-
-    backgroundColor: 'rgba(255,255,255,0.13)',
-
-    marginVertical: 18,
+    backgroundColor: hairline,
+    marginVertical: 18
   },
-
   communityRow: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   },
-
   communityIcon: {
     width: 40,
     height: 40,
-
     borderRadius: 14,
-
     alignItems: 'center',
     justifyContent: 'center',
-
-    backgroundColor: 'rgba(255,255,255,0.10)',
-
-    marginRight: 10,
+    backgroundColor: COLORS.creamDark,
+    marginRight: 10
   },
-
   communityContent: {
-    flex: 1,
+    flex: 1
   },
-
   communityTitle: {
     fontSize: 12,
     fontWeight: '700',
-    color: COLORS.white,
+    color: COLORS.text
   },
-
   communitySubtitle: {
-    fontSize: 10,
-
-    color: '#CFB6A6',
-
-    marginTop: 2,
+    fontSize: 12,
+    color: COLORS.muted,
+    marginTop: 2
   },
-
   globalCapsule: {
     paddingHorizontal: 13,
     paddingVertical: 8,
-
-    borderRadius: 100,
-
-    backgroundColor: 'rgba(255,255,255,0.10)',
+    borderRadius: radii.pill,
+    backgroundColor: COLORS.creamDark
   },
-
   globalNumber: {
     fontSize: 18,
-    fontWeight: '800',
-
-    color: COLORS.goldLight,
+    fontWeight: "600",
+    color: COLORS.primary
   },
-
   /*
   |--------------------------------------------------------------------------
   | SECTION HEADER
@@ -820,27 +745,22 @@ const styles = StyleSheet.create({
   */
 
   sectionHeader: {
-    marginBottom: 12,
+    marginBottom: 12
   },
-
   sectionMiniTitle: {
-    fontSize: 9,
-    fontWeight: '800',
-
+    fontSize: 12,
+    fontWeight: "600",
     letterSpacing: 1.4,
-
     color: COLORS.secondary,
-
-    marginBottom: 2,
+    marginBottom: 2
   },
-
   sectionTitle: {
     fontSize: 18,
-    fontWeight: '800',
-
+    fontWeight: "400",
     color: COLORS.text,
+    fontFamily: DESIGN.fonts.editorial,
+    letterSpacing: -0.4
   },
-
   /*
   |--------------------------------------------------------------------------
   | STAT CAPSULES
@@ -849,87 +769,62 @@ const styles = StyleSheet.create({
 
   statsContainer: {
     gap: 10,
-    marginBottom: 27,
+    marginBottom: 27
   },
-
   statCapsule: {
     minHeight: 67,
-
     flexDirection: 'row',
     alignItems: 'center',
-
     backgroundColor: COLORS.white,
-
     paddingHorizontal: 11,
     paddingVertical: 10,
-
     borderRadius: 22,
-
     borderWidth: 1,
     borderColor: COLORS.border,
-
     shadowColor: COLORS.primary,
     shadowOffset: {
       width: 0,
-      height: 3,
+      height: 3
     },
     shadowOpacity: 0.06,
     shadowRadius: 8,
-
-    elevation: 2,
+    elevation: 2
   },
-
   statIcon: {
     width: 44,
     height: 44,
-
     borderRadius: 16,
-
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-
   statContent: {
     flex: 1,
-    marginHorizontal: 11,
+    marginHorizontal: 11
   },
-
   statLabel: {
     fontSize: 13,
     fontWeight: '700',
-
-    color: COLORS.text,
+    color: COLORS.text
   },
-
   statDescription: {
-    fontSize: 10,
-
+    fontSize: 12,
     color: COLORS.muted,
-
-    marginTop: 2,
+    marginTop: 2
   },
-
   statValueCapsule: {
     minWidth: 58,
-
     alignItems: 'center',
     justifyContent: 'center',
-
     paddingHorizontal: 12,
     paddingVertical: 9,
-
     borderRadius: 100,
-
-    backgroundColor: COLORS.cream,
+    backgroundColor: COLORS.cream
   },
-
   statValue: {
     fontSize: 17,
-    fontWeight: '800',
-
-    color: COLORS.primary,
+    fontWeight: "600",
+    color: COLORS.primary
   },
-
   /*
   |--------------------------------------------------------------------------
   | STREAK
@@ -939,92 +834,65 @@ const styles = StyleSheet.create({
   streakCapsule: {
     flexDirection: 'row',
     alignItems: 'center',
-
     backgroundColor: COLORS.white,
-
     borderRadius: 24,
-
     padding: 13,
-
     marginBottom: 22,
-
     borderWidth: 1,
     borderColor: COLORS.border,
-
     shadowColor: COLORS.primary,
     shadowOffset: {
       width: 0,
-      height: 3,
+      height: 3
     },
     shadowOpacity: 0.06,
     shadowRadius: 8,
-
-    elevation: 2,
+    elevation: 2
   },
-
   streakSection: {
     flex: 1,
-
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   },
-
   streakSectionRight: {
-    paddingLeft: 10,
+    paddingLeft: 10
   },
-
   streakIcon: {
     width: 43,
     height: 43,
-
     borderRadius: 16,
-
     alignItems: 'center',
     justifyContent: 'center',
-
     backgroundColor: COLORS.creamDark,
-
-    marginRight: 9,
+    marginRight: 9
   },
-
   fireEmoji: {
-    fontSize: 22,
+    fontSize: 22
   },
-
   streakLabel: {
-    fontSize: 10,
-
-    color: COLORS.muted,
+    fontSize: 12,
+    color: COLORS.muted
   },
-
   streakValueRow: {
     flexDirection: 'row',
     alignItems: 'baseline',
-
     gap: 3,
-
-    marginTop: 1,
+    marginTop: 1
   },
-
   streakNumber: {
     fontSize: 22,
-    fontWeight: '800',
-
-    color: COLORS.primaryDark,
+    fontWeight: "600",
+    color: COLORS.primaryDark
   },
-
   streakUnit: {
-    fontSize: 10,
-    color: COLORS.muted,
+    fontSize: 12,
+    color: COLORS.muted
   },
-
   streakVerticalLine: {
     width: 1,
     height: 38,
-
-    backgroundColor: COLORS.border,
+    backgroundColor: COLORS.border
   },
-
   /*
   |--------------------------------------------------------------------------
   | SUMMARY
@@ -1034,56 +902,38 @@ const styles = StyleSheet.create({
   summaryCapsule: {
     flexDirection: 'row',
     alignItems: 'center',
-
     padding: 12,
-
     borderRadius: 22,
-
     backgroundColor: COLORS.creamDark,
-
-    marginBottom: 10,
+    marginBottom: 10
   },
-
   summaryIcon: {
     width: 43,
     height: 43,
-
     borderRadius: 15,
-
     alignItems: 'center',
     justifyContent: 'center',
-
     backgroundColor: COLORS.white,
-
-    marginRight: 10,
+    marginRight: 10
   },
-
   summaryEmoji: {
-    fontSize: 21,
+    fontSize: 21
   },
-
   summaryContent: {
     flex: 1,
-    paddingRight: 8,
+    paddingRight: 8
   },
-
   summaryTitle: {
     fontSize: 12,
-    fontWeight: '800',
-
-    color: COLORS.primary,
+    fontWeight: "600",
+    color: COLORS.primary
   },
-
   summaryText: {
-    fontSize: 9.5,
-
-    lineHeight: 14,
-
+    fontSize: 12,
+    lineHeight: 18,
     color: COLORS.muted,
-
-    marginTop: 2,
+    marginTop: 2
   },
-
   /*
   |--------------------------------------------------------------------------
   | LOGIN / ERROR
@@ -1092,94 +942,63 @@ const styles = StyleSheet.create({
 
   loginCard: {
     backgroundColor: COLORS.white,
-
     borderRadius: 24,
-
     padding: 25,
-
     alignItems: 'center',
-
     borderWidth: 1,
-    borderColor: COLORS.border,
+    borderColor: hairline,
+    shadowOpacity: 0.045,
+    elevation: 2
   },
-
   loginIcon: {
     width: 52,
     height: 52,
-
     borderRadius: 20,
-
     backgroundColor: COLORS.creamDark,
-
     alignItems: 'center',
     justifyContent: 'center',
-
-    marginBottom: 10,
+    marginBottom: 10
   },
-
   loginTitle: {
     fontSize: 16,
-    fontWeight: '800',
-
-    color: COLORS.text,
+    fontWeight: "600",
+    color: COLORS.text
   },
-
   loginDescription: {
-    fontSize: 11,
-
-    lineHeight: 17,
-
+    fontSize: 12,
+    lineHeight: 18,
     color: COLORS.muted,
-
     textAlign: 'center',
-
     marginTop: 5,
-
-    maxWidth: 270,
+    maxWidth: 270
   },
-
   errorCard: {
-    backgroundColor: '#FFF3F0',
-
+    backgroundColor: `rgba(${RGB.dangerRed},0.06)`,
     borderRadius: 23,
-
     padding: 22,
-
-    alignItems: 'center',
+    alignItems: 'center'
   },
-
   errorIcon: {
     width: 50,
     height: 50,
-
     borderRadius: 18,
-
-    backgroundColor: '#FFE5DF',
-
+    backgroundColor: `rgba(${RGB.dangerRed},0.12)`,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-
   errorTitle: {
     fontSize: 15,
-    fontWeight: '800',
-
+    fontWeight: "600",
     color: COLORS.red,
-
-    marginTop: 9,
+    marginTop: 9
   },
-
   errorText: {
-    fontSize: 11,
-
-    lineHeight: 16,
-
+    fontSize: 12,
+    lineHeight: 18,
     color: COLORS.muted,
-
     textAlign: 'center',
-
-    marginTop: 4,
-  },
+    marginTop: 4
+  }
 });
 
 export default YourChants;

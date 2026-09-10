@@ -1,3 +1,4 @@
+import { DESIGN } from '@/constants/design';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { adhyayList, COLORS } from './constant';
 import { SectionHeader } from './Sharedui';
@@ -42,36 +43,42 @@ const styles = StyleSheet.create({
   hScrollContent: {
     paddingHorizontal: 20,
     paddingBottom: 6,
-    gap: 12,
+    gap: 12
   },
   adhyayCard: {
     width: 112,
-    backgroundColor: COLORS.creamDark,
-    borderRadius: 14,
+    backgroundColor: DESIGN.colors.surface,
+    borderRadius: 24,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: 'rgba(201,162,39,0.45)',
+    borderColor: DESIGN.colors.border,
+    shadowOpacity: 0.045,
+    elevation: 2
   },
   adhyayImg: {
     width: '100%',
     height: 76,
     backgroundColor: COLORS.gold,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-  adhyayIcon: { fontSize: 30 },
-  adhyayBody: { padding: 9 },
+  adhyayIcon: {
+    fontSize: 30
+  },
+  adhyayBody: {
+    padding: 9
+  },
   adhyayNum: {
-    fontSize: 9,
+    fontSize: 12,
     color: COLORS.saffron,
-    fontWeight: '800',
-    letterSpacing: 1,
+    fontWeight: "600",
+    letterSpacing: 1
   },
   adhyayName: {
-    fontSize: 11,
+    fontSize: 12,
     color: COLORS.deepBrown,
     fontWeight: '700',
-    lineHeight: 15,
-    marginTop: 2,
-  },
+    lineHeight: 18,
+    marginTop: 2
+  }
 });

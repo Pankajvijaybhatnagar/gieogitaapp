@@ -1,3 +1,4 @@
+import { DESIGN } from '@/constants/design';
 import { useRef, useState } from 'react';
 import {
   ActivityIndicator,
@@ -8,6 +9,7 @@ import {
   View,
 } from 'react-native';
 import { WebView } from 'react-native-webview';
+import { COLORS } from '@/constants/brandColors';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -86,7 +88,7 @@ function ReelCard({ reel }) {
     <View style={styles.card}>
       {loading && !failed && (
         <View style={styles.loader}>
-          <ActivityIndicator size="small" color="#7A4828" />
+          <ActivityIndicator size="small" color={COLORS.richBrown} />
         </View>
       )}
 
@@ -204,72 +206,64 @@ export default function InstagramReelsSection() {
 
 const styles = StyleSheet.create({
   section: {
-    paddingVertical: 16,
+    paddingVertical: 16
   },
-
   heading: {
     marginLeft: SIDE_PADDING,
     marginBottom: 10,
-    color: '#5A321D',
+    color: COLORS.richBrown,
     fontSize: 18,
-    fontWeight: '700',
+    fontWeight: "400",
+    fontFamily: DESIGN.fonts.editorial,
+    letterSpacing: -0.4
   },
-
   listContent: {
-    paddingHorizontal: SIDE_PADDING,
+    paddingHorizontal: SIDE_PADDING
   },
-
   card: {
     width: CARD_WIDTH,
     aspectRatio: 9 / 16,
     overflow: 'hidden',
     borderRadius: 14,
-    backgroundColor: '#000',
+    backgroundColor: '#000'
   },
-
   webView: {
     flex: 1,
-    backgroundColor: '#000',
+    backgroundColor: '#000'
   },
-
   loader: {
     ...StyleSheet.absoluteFillObject,
     zIndex: 2,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#F2E5D8',
+    backgroundColor: COLORS.creamDark
   },
-
   errorContainer: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#EAD9CA',
+    backgroundColor: COLORS.creamDark
   },
-
   errorText: {
-    color: '#7A4828',
+    color: COLORS.richBrown,
     fontSize: 12,
-    fontWeight: '600',
+    fontWeight: '600'
   },
-
   pagination: {
     marginTop: 13,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 5,
+    gap: 5
   },
-
   paginationDot: {
     width: 5,
     height: 5,
     borderRadius: 3,
-    backgroundColor: '#D8BEAA',
+    backgroundColor: COLORS.creamDark
   },
-
   activePaginationDot: {
     width: 18,
-    backgroundColor: '#7A4828',
-  },
+    backgroundColor: COLORS.richBrown
+  }
 });

@@ -1,3 +1,4 @@
+import { DESIGN } from '@/constants/design';
 import { useState } from 'react';
 import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { C, DOCTORS, SPECIALTIES } from './constants';
@@ -94,56 +95,161 @@ export default function SpecialtyDoctorTabs({ onBook }) {
 }
 
 const styles = StyleSheet.create({
-  tabSection: { paddingHorizontal: 20 },
-  tabRow:     { flexDirection: 'row', gap: 10, marginBottom: 14 },
-  tabChip: {
-    flex: 1, backgroundColor: C.creamDark, borderWidth: 1, borderColor: C.goldBorder,
-    borderRadius: 14, paddingVertical: 11, alignItems: 'center',
+  tabSection: {
+    paddingHorizontal: 20
   },
-  tabChipActive:     { backgroundColor: C.deepBrown, borderColor: C.gold },
-  tabChipText:       { fontSize: 12, fontWeight: '700', color: C.warmBrown },
-  tabChipTextActive: { color: C.goldLight },
-
+  tabRow: {
+    flexDirection: 'row',
+    gap: 10,
+    marginBottom: 14
+  },
+  tabChip: {
+    flex: 1,
+    backgroundColor: C.creamDark,
+    borderWidth: 1,
+    borderColor: C.goldBorder,
+    borderRadius: 14,
+    paddingVertical: 11,
+    alignItems: 'center'
+  },
+  tabChipActive: {
+    backgroundColor: C.saffron,
+    borderColor: C.saffron
+  },
+  tabChipText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: C.warmBrown
+  },
+  tabChipTextActive: {
+    color: C.white
+  },
   // Specialty
-  specialtyGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
+  specialtyGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 10
+  },
   specCard: {
     width: (width - 60) / 2,
-    backgroundColor: C.white, borderRadius: 16, padding: 14,
-    borderWidth: 1, borderColor: C.goldBorder, alignItems: 'center',
-    shadowColor: C.deepBrown, shadowOpacity: 0.05,
-    shadowOffset: { width: 0, height: 3 }, shadowRadius: 8, elevation: 2,
+    backgroundColor: DESIGN.colors.surface,
+    borderRadius: 24,
+    padding: 14,
+    borderWidth: 1,
+    borderColor: DESIGN.colors.border,
+    alignItems: 'center',
+    shadowColor: C.deepBrown,
+    shadowOpacity: 0.045,
+    shadowOffset: {
+      width: 0,
+      height: 3
+    },
+    shadowRadius: 8,
+    elevation: 2
   },
-  specIcon: { fontSize: 32, marginBottom: 8 },
-  specName: { fontSize: 12, fontWeight: '800', color: C.deepBrown, textAlign: 'center', marginBottom: 4 },
-  specDesc: { fontSize: 9, color: '#777', textAlign: 'center', lineHeight: 13, fontStyle: 'italic', marginBottom: 10 },
+  specIcon: {
+    fontSize: 32,
+    marginBottom: 8
+  },
+  specName: {
+    fontSize: 12,
+    fontWeight: "600",
+    color: C.deepBrown,
+    textAlign: 'center',
+    marginBottom: 4
+  },
+  specDesc: {
+    fontSize: 12,
+    color: C.warmBrown,
+    textAlign: 'center',
+    lineHeight: 18,
+    marginBottom: 10
+  },
   specBookBtn: {
-    backgroundColor: C.medantaBlue, borderRadius: 10, paddingHorizontal: 14, paddingVertical: 6,
+    backgroundColor: C.richBrown,
+    borderRadius: 10,
+    paddingHorizontal: 14,
+    paddingVertical: 6
   },
-  specBookBtnText: { fontSize: 10, fontWeight: '800', color: C.white },
-
+  specBookBtnText: {
+    fontSize: 12,
+    fontWeight: "600",
+    color: C.white
+  },
   // Doctors
-  doctorsList: { gap: 12 },
+  doctorsList: {
+    gap: 12
+  },
   doctorCard: {
-    backgroundColor: C.white, borderRadius: 16, padding: 14,
-    flexDirection: 'row', alignItems: 'center', gap: 12,
-    borderWidth: 1, borderColor: C.goldBorder,
-    shadowColor: C.deepBrown, shadowOpacity: 0.05,
-    shadowOffset: { width: 0, height: 3 }, shadowRadius: 8, elevation: 2,
+    backgroundColor: DESIGN.colors.surface,
+    borderRadius: 24,
+    padding: 14,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    borderWidth: 1,
+    borderColor: DESIGN.colors.border,
+    shadowColor: C.deepBrown,
+    shadowOpacity: 0.045,
+    shadowOffset: {
+      width: 0,
+      height: 3
+    },
+    shadowRadius: 8,
+    elevation: 2
   },
   doctorAvatarBox: {
-    width: 52, height: 52, borderRadius: 26,
-    backgroundColor: C.medantaPale, borderWidth: 1.5, borderColor: C.medantaBorder,
-    alignItems: 'center', justifyContent: 'center',
+    width: 52,
+    height: 52,
+    borderRadius: 26,
+    backgroundColor: C.medantaPale,
+    borderWidth: 1.5,
+    borderColor: C.medantaBorder,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
-  doctorAvatar:  { fontSize: 26 },
-  doctorInfo:    { flex: 1 },
-  doctorName:    { fontSize: 13, fontWeight: '800', color: C.deepBrown, marginBottom: 2 },
-  doctorSpec:    { fontSize: 11, color: C.medantaBlue, fontWeight: '600', marginBottom: 6 },
-  doctorMetaRow: { flexDirection: 'row', gap: 6 },
-  doctorMetaPill:{ backgroundColor: C.creamDark, borderRadius: 8, paddingHorizontal: 8, paddingVertical: 3 },
-  doctorMetaText:{ fontSize: 9, color: C.goldDark, fontWeight: '600' },
+  doctorAvatar: {
+    fontSize: 26
+  },
+  doctorInfo: {
+    flex: 1
+  },
+  doctorName: {
+    fontSize: 13,
+    fontWeight: "600",
+    color: C.deepBrown,
+    marginBottom: 2
+  },
+  doctorSpec: {
+    fontSize: 12,
+    color: C.medantaBlue,
+    fontWeight: '600',
+    marginBottom: 6
+  },
+  doctorMetaRow: {
+    flexDirection: 'row',
+    gap: 6
+  },
+  doctorMetaPill: {
+    backgroundColor: C.creamDark,
+    borderRadius: 8,
+    paddingHorizontal: 8,
+    paddingVertical: 3
+  },
+  doctorMetaText: {
+    fontSize: 12,
+    color: C.goldDark,
+    fontWeight: '600'
+  },
   doctorBookBtn: {
-    backgroundColor: C.gold, borderRadius: 10, paddingHorizontal: 14, paddingVertical: 10,
+    backgroundColor: C.richBrown,
+    borderRadius: 10,
+    paddingHorizontal: 14,
+    paddingVertical: 10
   },
-  doctorBookBtnText: { fontSize: 11, fontWeight: '800', color: C.deepBrown },
+  doctorBookBtnText: {
+    fontSize: 12,
+    fontWeight: "600",
+    color: C.white
+  }
 });

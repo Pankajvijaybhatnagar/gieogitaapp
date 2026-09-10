@@ -1,3 +1,4 @@
+import { DESIGN } from '@/constants/design';
 import { Ionicons } from '@expo/vector-icons';
 
 import React, { useEffect, useRef, useState } from 'react';
@@ -15,7 +16,10 @@ import {
   View,
 } from 'react-native';
 
-const PRIMARY_BROWN = '#A55A12';
+import { COLORS } from '@/constants/brandColors';
+import { hairline, radii } from '@/constants/theme';
+
+const PRIMARY_BROWN = COLORS.richBrown;
 
 const OTP_LENGTH = 6;
 
@@ -296,7 +300,7 @@ export default function VerifyCodeScreen({
             style={styles.backButton}
             onPress={onBack}
             disabled={loading}>
-            <Ionicons name="arrow-back" size={21} color="#333" />
+            <Ionicons name="arrow-back" size={21} color={COLORS.deepBrown} />
           </TouchableOpacity>
         </Animated.View>
 
@@ -397,7 +401,7 @@ export default function VerifyCodeScreen({
                   <Ionicons
                     name="lock-closed-outline"
                     size={17}
-                    color="#999"
+                    color={COLORS.warmBrown}
                     style={styles.passwordIcon}
                   />
 
@@ -405,7 +409,7 @@ export default function VerifyCodeScreen({
                     value={newPassword}
                     onChangeText={setNewPassword}
                     placeholder="****************"
-                    placeholderTextColor="#A6A6A6"
+                    placeholderTextColor={COLORS.warmBrown}
                     secureTextEntry={!showPassword}
                     editable={!loading}
                     style={styles.passwordInput}
@@ -418,7 +422,7 @@ export default function VerifyCodeScreen({
                     <Ionicons
                       name={showPassword ? 'eye-outline' : 'eye-off-outline'}
                       size={21}
-                      color="#444"
+                      color={COLORS.warmBrown}
                     />
                   </TouchableOpacity>
                 </View>
@@ -428,7 +432,7 @@ export default function VerifyCodeScreen({
             {/* RESEND */}
 
             <View style={styles.resendContainer}>
-              <Text style={styles.resendQuestion}>Didn't receive OTP?</Text>
+              <Text style={styles.resendQuestion}>Didn&apos;t receive OTP?</Text>
 
               <TouchableOpacity onPress={onResendCode} disabled={loading}>
                 <Text style={styles.resendText}>Resend code</Text>
@@ -452,14 +456,14 @@ export default function VerifyCodeScreen({
                       : 'alert-circle-outline'
                   }
                   size={17}
-                  color={messageType === 'success' ? '#15803D' : '#DC2626'}
+                  color={messageType === 'success' ? '#15803D' : COLORS.dangerRed}
                 />
 
                 <Text
                   style={[
                     styles.message,
                     {
-                      color: messageType === 'success' ? '#15803D' : '#DC2626',
+                      color: messageType === 'success' ? '#15803D' : COLORS.dangerRed,
                     },
                   ]}>
                   {message}
@@ -487,7 +491,7 @@ export default function VerifyCodeScreen({
                 disabled={loading || !otpComplete}
                 activeOpacity={0.88}>
                 {loading ? (
-                  <ActivityIndicator color="#FFFFFF" />
+                  <ActivityIndicator color={COLORS.white} />
                 ) : (
                   <>
                     <Text style={styles.verifyButtonText}>
@@ -497,7 +501,7 @@ export default function VerifyCodeScreen({
                     <Ionicons
                       name="arrow-forward"
                       size={18}
-                      color="#FFFFFF"
+                      color={COLORS.white}
                       style={styles.buttonIcon}
                     />
                   </>
@@ -518,13 +522,11 @@ export default function VerifyCodeScreen({
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.cream
   },
-
   keyboard: {
-    flex: 1,
+    flex: 1
   },
-
   backButton: {
     position: 'absolute',
     top: 56,
@@ -533,56 +535,51 @@ const styles = StyleSheet.create({
     height: 39,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: '#E9E9E9',
+    borderColor: hairline,
     alignItems: 'center',
     justifyContent: 'center',
-    zIndex: 10,
+    zIndex: 10
   },
-
   content: {
     flex: 1,
     paddingHorizontal: 22,
-    paddingTop: 94,
+    paddingTop: 94
   },
-
   iconCircle: {
     alignSelf: 'center',
     width: 62,
     height: 62,
     borderRadius: 31,
-    backgroundColor: '#FBF1E5',
+    backgroundColor: COLORS.creamDark,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 16,
+    marginBottom: 16
   },
-
   title: {
     fontSize: 25,
-    fontWeight: '700',
-    color: '#171717',
+    fontWeight: "400",
+    color: COLORS.deepBrown,
     textAlign: 'center',
+    fontFamily: DESIGN.fonts.editorial,
+    letterSpacing: -0.4
   },
-
   subtitle: {
     marginTop: 6,
     textAlign: 'center',
-    fontSize: 10.8,
-    color: '#929292',
-    lineHeight: 16,
+    fontSize: 12,
+    color: COLORS.warmBrown,
+    lineHeight: 18
   },
-
   emailText: {
     marginTop: 4,
     textAlign: 'center',
-    color: '#795D3D',
-    fontSize: 11,
-    fontWeight: '700',
+    color: COLORS.richBrown,
+    fontSize: 12,
+    fontWeight: '700'
   },
-
   formContent: {
-    width: '100%',
+    width: '100%'
   },
-
   /*
    * SIX BOXES
    */
@@ -592,118 +589,103 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: 29,
+    marginTop: 29
   },
-
   otpBoxOuter: {
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 3,
+      height: 3
     },
     shadowOpacity: 0.04,
     shadowRadius: 6,
-    elevation: 2,
+    elevation: 2
   },
-
   otpInput: {
     width: 46,
     height: 49,
-    borderRadius: 12,
-    backgroundColor: '#F7F7F7',
+    borderRadius: radii.sm,
+    backgroundColor: COLORS.creamDark,
     borderWidth: 1,
-    borderColor: '#ECECEC',
+    borderColor: hairline,
     fontSize: 18,
     fontWeight: '700',
-    color: '#333333',
+    color: COLORS.deepBrown
   },
-
   otpInputActive: {
     borderColor: PRIMARY_BROWN,
-    backgroundColor: '#FCF6F0',
+    backgroundColor: COLORS.cream,
     shadowColor: PRIMARY_BROWN,
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 2
     },
     shadowOpacity: 0.1,
     shadowRadius: 5,
-    elevation: 2,
+    elevation: 2
   },
-
   label: {
     fontSize: 12,
-    color: '#333333',
+    color: COLORS.deepBrown,
     marginBottom: 8,
-    fontWeight: '600',
+    fontWeight: '600'
   },
-
   passwordLabel: {
-    marginTop: 24,
+    marginTop: 24
   },
-
   passwordWrapper: {
     width: '100%',
     height: 49,
-    borderRadius: 13,
-    backgroundColor: '#F6F6F6',
+    borderRadius: radii.md,
+    backgroundColor: COLORS.creamDark,
     borderWidth: 1,
-    borderColor: '#EFEFEF',
+    borderColor: hairline,
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   },
-
   passwordIcon: {
-    marginLeft: 14,
+    marginLeft: 14
   },
-
   passwordInput: {
     flex: 1,
     height: '100%',
     paddingHorizontal: 12,
     fontSize: 12,
-    color: '#333333',
+    color: COLORS.deepBrown
   },
-
   eyeButton: {
     width: 44,
     height: '100%',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-
   resendContainer: {
     alignItems: 'center',
-    marginTop: 25,
+    marginTop: 25
   },
-
   resendQuestion: {
-    fontSize: 10.5,
-    color: '#929292',
+    fontSize: 12,
+    color: COLORS.warmBrown
   },
-
   resendText: {
     marginTop: 4,
-    color: '#333333',
-    fontSize: 11,
+    color: COLORS.deepBrown,
+    fontSize: 12,
     fontWeight: '700',
-    textDecorationLine: 'underline',
+    textDecorationLine: 'underline'
   },
-
   messageBox: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 13,
+    marginTop: 13
   },
-
   message: {
-    fontSize: 10.5,
+    fontSize: 12,
     marginLeft: 5,
     textAlign: 'center',
-    flex: 1,
+    flex: 1
   },
-
   verifyButton: {
     marginTop: 22,
     height: 50,
@@ -715,31 +697,26 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 7,
+      height: 7
     },
     shadowOpacity: 0.13,
     shadowRadius: 12,
-    elevation: 5,
+    elevation: 5
   },
-
   verifyButtonInactive: {
-    opacity: 0.45,
+    opacity: 0.45
   },
-
   disabledButton: {
-    opacity: 0.68,
+    opacity: 0.68
   },
-
   verifyButtonText: {
-    color: '#FFFFFF',
+    color: COLORS.white,
     fontSize: 14,
-    fontWeight: '700',
+    fontWeight: '700'
   },
-
   buttonIcon: {
-    marginLeft: 9,
+    marginLeft: 9
   },
-
   homeIndicator: {
     position: 'absolute',
     bottom: 10,
@@ -747,6 +724,6 @@ const styles = StyleSheet.create({
     width: 135,
     height: 5,
     borderRadius: 5,
-    backgroundColor: '#111111',
-  },
+    backgroundColor: COLORS.deepBrown
+  }
 });

@@ -1,11 +1,14 @@
 import { useRef, useState } from 'react';
 
-import { Alert, Linking, Platform, StyleSheet, View } from 'react-native';
+import { Linking, Platform, StyleSheet, View } from 'react-native';
 
 import { WebView } from 'react-native-webview';
 
 import PaymentHeader from './PaymentHeader';
 import PaymentLoading from './PaymentLoading';
+
+import { useAppAlert } from '@/context/AppAlertContext';
+import { COLORS } from '@/constants/brandColors';
 
 const CALLBACK_DOMAINS = ['gieogita.org', 'www.gieogita.org'];
 
@@ -15,6 +18,7 @@ export default function PaymentWebView({
   onGatewayReturn,
   onClose,
 }) {
+  const { error, confirm } = useAppAlert();
   const webViewRef = useRef(null);
   const returnedRef = useRef(false);
   const externalUrlOpeningRef = useRef(false);
@@ -97,10 +101,10 @@ export default function PaymentWebView({
       console.log('[Payment WebView] Opening external app:', url);
 
       await Linking.openURL(url);
-    } catch (error) {
-      console.log('[Payment WebView] Unable to open external URL:', error);
+    } catch (err) {
+      console.log('[Payment WebView] Unable to open external URL:', err);
 
-      Alert.alert(
+      error(
         'UPI App Not Available',
         'Unable to open a UPI payment app. Please make sure Google Pay, PhonePe, Paytm or another UPI app is installed.',
       );
@@ -181,20 +185,16 @@ export default function PaymentWebView({
   */
 
   const handleClose = () => {
-    Alert.alert(
+    confirm(
       'Leave Payment?',
       'Your payment may still be in progress. Are you sure you want to leave?',
-      [
-        {
-          text: 'Continue Payment',
-          style: 'cancel',
-        },
-        {
-          text: 'Leave',
-          style: 'destructive',
-          onPress: onClose,
-        },
-      ],
+      onClose,
+      {
+        buttonText: 'Leave',
+        secondaryButtonText: 'Continue Payment',
+        destructive: true,
+        icon: 'warning',
+      },
     );
   };
 
@@ -303,15 +303,13 @@ export default function PaymentWebView({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.cream
   },
-
   webViewContainer: {
-    flex: 1,
+    flex: 1
   },
-
   webView: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
-  },
+    backgroundColor: COLORS.cream
+  }
 });

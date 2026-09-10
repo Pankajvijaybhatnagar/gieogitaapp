@@ -78,24 +78,28 @@ export default function ProfileScreen() {
 }
 
 const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: C.cream },
-  scroll: { flex: 1 },
-
+  root: {
+    flex: 1,
+    backgroundColor: C.cream
+  },
+  scroll: {
+    flex: 1
+  },
   hero: {
     backgroundColor: C.deepBrown,
     paddingBottom: 30,
     alignItems: 'center',
     position: 'relative',
-    overflow: 'hidden',
+    overflow: 'hidden'
   },
   heroBlob1: {
     position: 'absolute',
     width: 280,
     height: 280,
     borderRadius: 140,
-    backgroundColor: 'rgba(201,162,39,0.06)',
+    backgroundColor: 'rgba(179,149,98,0.06)',
     top: -100,
-    right: -80,
+    right: -80
   },
   heroBlob2: {
     position: 'absolute',
@@ -104,7 +108,7 @@ const styles = StyleSheet.create({
     borderRadius: 90,
     backgroundColor: 'rgba(74,44,13,0.2)',
     bottom: -60,
-    left: -50,
+    left: -50
   },
   heroArc: {
     position: 'absolute',
@@ -112,19 +116,18 @@ const styles = StyleSheet.create({
     height: 340,
     borderRadius: 170,
     borderWidth: 1,
-    borderColor: 'rgba(201,162,39,0.06)',
+    borderColor: 'rgba(179,149,98,0.06)',
     top: -100,
-    left: -80,
+    left: -80
   },
   heroOm: {
     position: 'absolute',
     right: 24,
     top: 60,
     fontSize: 90,
-    color: 'rgba(201,162,39,0.05)',
-    lineHeight: 100,
+    color: 'rgba(179,149,98,0.05)',
+    lineHeight: 100
   },
-
   topBar: {
     width: '100%',
     flexDirection: 'row',
@@ -132,26 +135,27 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 20,
     paddingTop: 54,
-    paddingBottom: 20,
+    paddingBottom: 20
   },
   backBtn: {
     width: 38,
     height: 38,
     borderRadius: 19,
-    backgroundColor: 'rgba(201,162,39,0.12)',
+    backgroundColor: 'rgba(179,149,98,0.12)',
     borderWidth: 1,
     borderColor: C.goldBorder,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-  topBarTitle: { alignItems: 'center' },
+  topBarTitle: {
+    alignItems: 'center'
+  },
   topBarTitleText: {
     fontSize: 12,
-    fontWeight: '800',
+    fontWeight: "600",
     color: C.goldLight,
-    letterSpacing: 3,
+    letterSpacing: 3
   },
-
   closeBtn: {
     position: 'absolute',
     top: 54,
@@ -159,11 +163,11 @@ const styles = StyleSheet.create({
     width: 38,
     height: 38,
     borderRadius: 19,
-    backgroundColor: 'rgba(201,162,39,0.14)',
+    backgroundColor: 'rgba(179,149,98,0.14)',
     borderWidth: 1,
     borderColor: C.goldBorder,
     alignItems: 'center',
     justifyContent: 'center',
-    zIndex: 99,
-  },
+    zIndex: 99
+  }
 });

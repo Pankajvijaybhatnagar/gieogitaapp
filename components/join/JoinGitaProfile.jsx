@@ -9,18 +9,13 @@ import {
   View,
 } from 'react-native';
 
+import { COLORS } from '@/constants/brandColors';
+import { spacing, type } from '@/constants/theme';
 import AshtaDashShalokiGita from './AshtaDashShalokiGita';
 import LatestMasikParwas from './LatestMasikParwas';
 import ProfileHero from './ProfileHero';
 import ProfileInfoCard from './ProfileInfoCard';
 import RastSuchna from './RastSuchna';
-
-const COLORS = {
-  background: '#F7EFE5',
-  primary: '#6E3F1F',
-  dark: '#3D2417',
-  cream: '#FFF9F2',
-};
 
 const JoinGitaProfile = ({ profile, onRefresh }) => {
   const router = useRouter();
@@ -35,7 +30,7 @@ const JoinGitaProfile = ({ profile, onRefresh }) => {
 
   return (
     <SafeAreaView style={styles.safe}>
-      <StatusBar barStyle="light-content" backgroundColor={COLORS.primary} />
+      <StatusBar barStyle="dark-content" backgroundColor={COLORS.cream} />
 
       <ScrollView
         style={styles.scroll}
@@ -45,8 +40,8 @@ const JoinGitaProfile = ({ profile, onRefresh }) => {
           <RefreshControl
             refreshing={false}
             onRefresh={onRefresh}
-            tintColor={COLORS.primary}
-            colors={[COLORS.primary]}
+            tintColor={COLORS.saffron}
+            colors={[COLORS.saffron]}
           />
         }>
         <ProfileHero profile={profile} onUpdated={onRefresh} />
@@ -74,85 +69,35 @@ const JoinGitaProfile = ({ profile, onRefresh }) => {
 const styles = StyleSheet.create({
   safe: {
     flex: 1,
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.cream
   },
-
-  header: {
-    minHeight: 68,
-    backgroundColor: COLORS.primary,
-    paddingHorizontal: 16,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-
-  headerButton: {
-    width: 42,
-    height: 42,
-    borderRadius: 21,
-    backgroundColor: 'rgba(255,255,255,0.12)',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
-  headerButtonPlaceholder: {
-    width: 42,
-  },
-
-  headerContent: {
-    flex: 1,
-    alignItems: 'center',
-  },
-
-  headerSmall: {
-    color: '#EAD8C5',
-    fontSize: 9,
-    fontWeight: '700',
-    letterSpacing: 2,
-  },
-
-  headerTitle: {
-    marginTop: 2,
-    color: '#FFF',
-    fontSize: 18,
-    fontWeight: '800',
-  },
-
   scroll: {
     flex: 1,
-    backgroundColor: COLORS.background,
+    backgroundColor: COLORS.creamDark
   },
-
   content: {
-    paddingBottom: 40,
+    paddingBottom: 40
   },
-
   footer: {
     alignItems: 'center',
-    marginHorizontal: 18,
-    marginTop: 10,
-    paddingTop: 28,
-    paddingBottom: 10,
+    marginHorizontal: spacing.md + 2,
+    marginTop: spacing.sm + 2,
+    paddingTop: spacing.lg + 4,
+    paddingBottom: spacing.sm + 2
   },
-
-  footerSymbol: {
-    fontSize: 28,
-    color: '#9B6A3E',
-  },
-
   footerText: {
-    marginTop: 4,
-    color: COLORS.dark,
+    marginTop: spacing.xs,
+    ...type.subhead,
     fontSize: 14,
-    fontWeight: '800',
-    letterSpacing: 2,
+    color: COLORS.deepBrown,
+    letterSpacing: 2
   },
-
   footerSubtext: {
-    color: '#977C68',
-    fontSize: 11,
-    marginTop: 4,
-    textAlign: 'center',
-  },
+    color: COLORS.warmBrown,
+    fontSize: 12,
+    marginTop: spacing.xs,
+    textAlign: 'center'
+  }
 });
 
 export default JoinGitaProfile;

@@ -63,10 +63,9 @@ export default function MyPledge() {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: C.cream,
+    backgroundColor: C.cream
   },
-
   scroll: {
-    flex: 1,
-  },
+    flex: 1
+  }
 });

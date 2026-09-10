@@ -1,3 +1,4 @@
+import { DESIGN } from '@/constants/design';
 import { useState } from 'react';
 import { Button, ScrollView, StyleSheet, Text, View } from 'react-native';
 
@@ -6,6 +7,8 @@ import {
     GoogleSigninButton,
     statusCodes,
 } from '@react-native-google-signin/google-signin';
+import { COLORS } from '@/constants/brandColors';
+import { radii } from '@/constants/theme';
 
 GoogleSignin.configure({
   webClientId:
@@ -191,30 +194,29 @@ ${error?.message || 'Unknown error'}`,
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
-    padding: 16,
+    backgroundColor: COLORS.cream,
+    padding: 16
   },
-
   heading: {
     fontSize: 20,
-    fontWeight: '600',
+    fontWeight: "400",
+    color: COLORS.deepBrown,
     marginBottom: 20,
+    fontFamily: DESIGN.fonts.editorial,
+    letterSpacing: -0.4
   },
-
   buttonWrapper: {
     marginTop: 10,
-    marginBottom: 20,
+    marginBottom: 20
   },
-
   responseBox: {
     flex: 1,
-    backgroundColor: '#f2f2f2',
+    backgroundColor: COLORS.creamDark,
     padding: 10,
-    borderRadius: 8,
+    borderRadius: radii.md
   },
-
   responseText: {
     fontSize: 14,
-    color: '#333',
-  },
+    color: COLORS.warmBrown
+  }
 });

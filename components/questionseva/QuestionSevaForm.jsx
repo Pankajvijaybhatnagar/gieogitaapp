@@ -1,8 +1,8 @@
+import { DESIGN } from '@/constants/design';
 import { useEffect, useState } from 'react';
 
 import {
     ActivityIndicator,
-    Alert,
     KeyboardAvoidingView,
     Platform,
     SafeAreaView,
@@ -16,9 +16,11 @@ import {
 } from 'react-native';
 
 import { useAuth } from '@/context/AuthContext';
+import { useAppAlert } from '@/context/AppAlertContext';
 import questionSevaServices from '@/lib/services/questionSevaServices';
 
 export default function QuestionSevaForm() {
+  const { error } = useAppAlert();
   // =========================================================
   // SCREEN SIZE
   // =========================================================
@@ -114,19 +116,19 @@ export default function QuestionSevaForm() {
 
   const validateForm = () => {
     if (!name.trim()) {
-      Alert.alert('Name Required', 'Please enter your full name.');
+      error('Name Required', 'Please enter your full name.');
 
       return false;
     }
 
     if (!phone.trim()) {
-      Alert.alert('Mobile Number Required', 'Please enter your mobile number.');
+      error('Mobile Number Required', 'Please enter your mobile number.');
 
       return false;
     }
 
     if (phone.length !== 10) {
-      Alert.alert(
+      error(
         'Invalid Mobile Number',
         'Please enter a valid 10-digit mobile number.',
       );
@@ -138,20 +140,20 @@ export default function QuestionSevaForm() {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
       if (!emailRegex.test(email.trim())) {
-        Alert.alert('Invalid Email', 'Please enter a valid email address.');
+        error('Invalid Email', 'Please enter a valid email address.');
 
         return false;
       }
     }
 
     if (!question.trim()) {
-      Alert.alert('Question Required', 'Please write your question.');
+      error('Question Required', 'Please write your question.');
 
       return false;
     }
 
     if (question.trim().length < 5) {
-      Alert.alert(
+      error(
         'Question Too Short',
         'Please write your question in a little more detail.',
       );
@@ -269,7 +271,7 @@ export default function QuestionSevaForm() {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <StatusBar barStyle="dark-content" backgroundColor="#F5EAD9" />
+      <StatusBar barStyle="dark-content" backgroundColor="#F8F5F0" />
 
       <KeyboardAvoidingView
         style={styles.keyboardView}
@@ -342,7 +344,7 @@ export default function QuestionSevaForm() {
                   setName(value);
                 }}
                 placeholder="Enter your full name"
-                placeholderTextColor="#A0927F"
+                placeholderTextColor="#8A7863"
                 editable={!loading}
                 autoCapitalize="words"
                 autoCorrect={false}
@@ -374,7 +376,7 @@ export default function QuestionSevaForm() {
                   value={phone}
                   onChangeText={handlePhoneChange}
                   placeholder="Enter mobile number"
-                  placeholderTextColor="#A0927F"
+                  placeholderTextColor="#8A7863"
                   keyboardType="number-pad"
                   maxLength={10}
                   editable={!loading}
@@ -402,7 +404,7 @@ export default function QuestionSevaForm() {
                   setEmail(value);
                 }}
                 placeholder="email@example.com"
-                placeholderTextColor="#A0927F"
+                placeholderTextColor="#8A7863"
                 editable={!loading}
                 keyboardType="email-address"
                 autoCapitalize="none"
@@ -434,7 +436,7 @@ export default function QuestionSevaForm() {
                   setQuestion(value.slice(0, 500));
                 }}
                 placeholder="Write your question here..."
-                placeholderTextColor="#A0927F"
+                placeholderTextColor="#8A7863"
                 editable={!loading}
                 multiline
                 numberOfLines={4}
@@ -509,11 +511,11 @@ export default function QuestionSevaForm() {
 // COLORS
 // ============================================================
 //
-// Main dark brown : #3a2c16
-// Main brown      : #5a3816
-// Biscuit         : #F5EAD9
-// Light biscuit   : #FBF7F0
-// Input           : #F9F3E9
+// Main dark brown : #2B1B12
+// Main brown      : #E8721C
+// Biscuit         : #FFF8EE
+// Light biscuit   : #FFFDF9
+// Input           : #FFFCF8
 //
 // ============================================================
 
@@ -524,493 +526,330 @@ const styles = StyleSheet.create({
 
   safeArea: {
     flex: 1,
-    backgroundColor: '#F5EAD9',
+    backgroundColor: DESIGN.colors.canvas
   },
-
   keyboardView: {
-    flex: 1,
+    flex: 1
   },
-
   screen: {
     flex: 1,
-
     justifyContent: 'center',
-
-    backgroundColor: '#F5EAD9',
-
-    paddingHorizontal: 16,
-
-    paddingTop: Platform.OS === 'ios' ? 8 : 10,
-
-    paddingBottom: 10,
+    backgroundColor: DESIGN.colors.canvas,
+    paddingHorizontal: 24,
+    paddingTop: 6,
+    paddingBottom: 6
   },
-
   screenSmall: {
     paddingTop: 5,
-    paddingBottom: 5,
+    paddingBottom: 5
   },
-
   tabletWidth: {
     width: '100%',
     maxWidth: 560,
-    alignSelf: 'center',
+    alignSelf: 'center'
   },
-
   // ==========================================================
   // HEADER
   // ==========================================================
 
   header: {
     width: '100%',
-
     maxWidth: 600,
-
     alignSelf: 'center',
-
     flexDirection: 'row',
-
     alignItems: 'center',
-
-    marginBottom: 13,
-
-    paddingHorizontal: 2,
+    marginBottom: 20,
+    paddingHorizontal: 2
   },
-
   headerSmall: {
-    marginBottom: 8,
+    marginBottom: 8
   },
-
   headerAccent: {
-    width: 5,
-
-    height: 43,
-
+    width: 3,
+    height: 42,
     borderRadius: 10,
-
-    marginRight: 11,
-
-    backgroundColor: '#5a3816',
+    marginRight: 14,
+    backgroundColor: DESIGN.colors.gold
   },
-
   headerTextArea: {
-    flex: 1,
+    flex: 1
   },
-
   title: {
-    color: '#3a2c16',
-
-    fontSize: 25,
-
-    fontWeight: '800',
-
-    letterSpacing: 0.1,
+    color: '#292328',
+    fontSize: 28,
+    fontWeight: "400",
+    letterSpacing: -0.4,
+    fontFamily: DESIGN.fonts.editorial,
+    lineHeight: 36
   },
-
   titleSmall: {
-    fontSize: 21,
+    fontSize: 26,
+    fontFamily: DESIGN.fonts.editorial,
+    fontWeight: "400",
+    letterSpacing: -0.4
   },
-
   subtitle: {
     marginTop: 2,
-
-    color: '#78654E',
-
-    fontSize: 11.5,
-
+    color: DESIGN.colors.muted,
+    fontSize: 12,
     fontWeight: '500',
+    lineHeight: 18
   },
-
   // ==========================================================
   // CARD
   // ==========================================================
 
   card: {
     width: '100%',
-
     maxWidth: 600,
-
     alignSelf: 'center',
-
-    paddingHorizontal: 17,
-
-    paddingTop: 16,
-
-    paddingBottom: 17,
-
-    borderRadius: 20,
-
-    backgroundColor: '#FFFDF9',
-
+    paddingHorizontal: 20,
+    paddingTop: 22,
+    paddingBottom: 22,
+    borderRadius: 24,
+    backgroundColor: DESIGN.colors.surface,
     borderWidth: 1,
-
-    borderColor: '#E2D2BA',
-
-    elevation: 5,
-
-    shadowColor: '#3a2c16',
-
+    borderColor: DESIGN.colors.border,
+    elevation: 2,
+    shadowColor: '#292328',
     shadowOffset: {
       width: 0,
-      height: 5,
+      height: 5
     },
-
-    shadowOpacity: 0.12,
-
-    shadowRadius: 10,
+    shadowOpacity: 0.045,
+    shadowRadius: 10
   },
-
   cardSmall: {
-    paddingHorizontal: 13,
-    paddingTop: 11,
-    paddingBottom: 12,
-
-    borderRadius: 16,
+    paddingHorizontal: 18,
+    paddingTop: 20,
+    paddingBottom: 20,
+    borderRadius: 24
   },
-
   // ==========================================================
   // LOGIN STATUS
   // ==========================================================
 
   loginBox: {
-    minHeight: 39,
-
+    minHeight: 44,
     flexDirection: 'row',
-
     alignItems: 'center',
-
     paddingHorizontal: 12,
-
     marginBottom: 15,
-
     borderRadius: 10,
-
-    backgroundColor: '#F2E7D6',
-
-    borderWidth: 1,
-
-    borderColor: '#E3D1B7',
+    backgroundColor: DESIGN.colors.sageSoft,
+    borderWidth: 0,
+    borderColor: '#E7DFD7',
+    paddingVertical: 10
   },
-
   loginBoxSmall: {
-    minHeight: 33,
-    marginBottom: 9,
+    minHeight: 44,
+    marginBottom: 16
   },
-
   statusDot: {
     width: 8,
-
     height: 8,
-
     borderRadius: 4,
-
     marginRight: 8,
-
-    backgroundColor: '#6D7F4A',
+    backgroundColor: '#1FA97E'
   },
-
   guestDot: {
-    backgroundColor: '#5a3816',
+    backgroundColor: '#A65338'
   },
-
   loginText: {
     flex: 1,
-
-    color: '#5a3816',
-
-    fontSize: 11.5,
-
+    color: DESIGN.colors.sage,
+    fontSize: 12,
     fontWeight: '700',
-
-    textTransform: 'capitalize',
+    textTransform: 'capitalize'
   },
-
   // ==========================================================
   // FORM
   // ==========================================================
 
   field: {
-    marginBottom: 12,
+    marginBottom: 16
   },
-
   fieldSmall: {
-    marginBottom: 7,
+    marginBottom: 14
   },
-
   labelRow: {
     flexDirection: 'row',
-
     alignItems: 'center',
-
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
-
   label: {
-    color: '#3a2c16',
-
-    fontSize: 12,
-
+    color: '#292328',
+    fontSize: 13,
     fontWeight: '700',
-
-    marginBottom: 6,
+    marginBottom: 8
   },
-
   required: {
-    color: '#A14B37',
+    color: '#E5484D'
   },
-
   optional: {
-    color: '#95836C',
-
-    fontSize: 9.5,
-
+    color: '#8A7863',
+    fontSize: 12,
     fontWeight: '500',
-
-    marginBottom: 6,
+    marginBottom: 6
   },
-
   counter: {
-    color: '#95836C',
-
-    fontSize: 9,
-
+    color: '#8A7863',
+    fontSize: 10,
     fontWeight: '500',
-
-    marginBottom: 6,
+    marginBottom: 6
   },
-
   // ==========================================================
   // INPUT
   // ==========================================================
 
   input: {
     width: '100%',
-
-    height: 44,
-
+    height: 52,
     borderWidth: 1,
-
-    borderColor: '#DDC9AD',
-
-    borderRadius: 10,
-
-    backgroundColor: '#F9F3E9',
-
+    borderColor: DESIGN.colors.border,
+    borderRadius: 14,
+    backgroundColor: "#FCFAF7",
     paddingHorizontal: 13,
-
-    color: '#3a2c16',
-
-    fontSize: 12.5,
+    color: '#292328',
+    fontSize: 15
   },
-
   inputSmall: {
-    height: 38,
-    fontSize: 12,
+    height: 52,
+    fontSize: 15
   },
-
   // ==========================================================
   // PHONE
   // ==========================================================
 
   phoneContainer: {
     width: '100%',
-
-    height: 44,
-
+    height: 52,
     flexDirection: 'row',
-
     overflow: 'hidden',
-
     borderWidth: 1,
-
-    borderColor: '#DDC9AD',
-
-    borderRadius: 10,
-
-    backgroundColor: '#F9F3E9',
+    borderColor: DESIGN.colors.border,
+    borderRadius: 14,
+    backgroundColor: "#FCFAF7"
   },
-
   phoneContainerSmall: {
-    height: 38,
+    height: 52
   },
-
   countryCodeBox: {
     width: 57,
-
     alignItems: 'center',
-
     justifyContent: 'center',
-
-    backgroundColor: '#EFE3D1',
-
+    backgroundColor: '#F0EAE2',
     borderRightWidth: 1,
-
-    borderRightColor: '#DDC9AD',
+    borderRightColor: '#E7DFD7'
   },
-
   countryCode: {
-    color: '#5a3816',
-
+    color: '#A65338',
     fontSize: 12,
-
-    fontWeight: '800',
+    fontWeight: "600"
   },
-
   phoneInput: {
     flex: 1,
-
     paddingHorizontal: 12,
-
-    color: '#3a2c16',
-
-    fontSize: 12.5,
+    color: '#292328',
+    fontSize: 15
   },
-
   // ==========================================================
   // QUESTION
   // ==========================================================
 
   questionInput: {
     width: '100%',
-
-    minHeight: 93,
-
-    maxHeight: 100,
-
+    minHeight: 120,
+    maxHeight: 180,
     paddingHorizontal: 13,
-
     paddingTop: 10,
-
     paddingBottom: 10,
-
     borderWidth: 1,
-
-    borderColor: '#DDC9AD',
-
-    borderRadius: 10,
-
-    backgroundColor: '#F9F3E9',
-
-    color: '#3a2c16',
-
-    fontSize: 12.5,
-
-    lineHeight: 18,
+    borderColor: DESIGN.colors.border,
+    borderRadius: 14,
+    backgroundColor: "#FCFAF7",
+    color: '#292328',
+    fontSize: 15,
+    lineHeight: 23
   },
-
   questionInputSmall: {
-    minHeight: 70,
-    maxHeight: 73,
-
-    paddingTop: 7,
+    minHeight: 120,
+    maxHeight: 180,
+    paddingTop: 12
   },
-
   questionInputVerySmall: {
-    minHeight: 56,
-    maxHeight: 60,
+    minHeight: 120,
+    maxHeight: 180
   },
-
   // ==========================================================
   // MESSAGE
   // ==========================================================
 
   messageBox: {
     paddingHorizontal: 10,
-
     paddingVertical: 7,
-
     marginBottom: 9,
-
     borderWidth: 1,
-
-    borderRadius: 9,
+    borderRadius: 9
   },
-
   successBox: {
-    backgroundColor: '#EFF3E7',
-    borderColor: '#CAD4B2',
+    backgroundColor: '#E6FBF7',
+    borderColor: '#B8F3E6'
   },
-
   errorBox: {
-    backgroundColor: '#FAECE8',
-    borderColor: '#E3BBAE',
+    backgroundColor: '#FDECEC',
+    borderColor: '#F8C9C9'
   },
-
   messageText: {
-    fontSize: 10,
-
-    lineHeight: 14,
-
-    fontWeight: '600',
+    fontSize: 12,
+    lineHeight: 18,
+    fontWeight: '600'
   },
-
   successText: {
-    color: '#596A40',
+    color: '#0B7F6B'
   },
-
   errorText: {
-    color: '#934936',
+    color: '#D62839'
   },
-
   // ==========================================================
   // SUBMIT
   // ==========================================================
 
   submitButton: {
     width: '100%',
-
-    height: 48,
-
     alignItems: 'center',
-
     justifyContent: 'center',
-
-    borderRadius: 10,
-
-    backgroundColor: '#5a3816',
-
-    borderWidth: 1,
-
-    borderColor: '#3a2c16',
-
-    elevation: 3,
-
-    shadowColor: '#3a2c16',
-
+    borderRadius: 16,
+    backgroundColor: DESIGN.colors.plum,
+    borderWidth: 0,
+    borderColor: '#292328',
+    elevation: 0,
+    shadowColor: '#292328',
     shadowOffset: {
       width: 0,
-      height: 3,
+      height: 3
     },
-
-    shadowOpacity: 0.2,
-
+    shadowOpacity: 0,
     shadowRadius: 5,
+    minHeight: 52,
+    height: 54
   },
-
   submitButtonSmall: {
-    height: 41,
+    height: 54
   },
-
   submitButtonDisabled: {
-    opacity: 0.6,
+    opacity: 0.6
   },
-
   buttonRow: {
     flexDirection: 'row',
-
     alignItems: 'center',
-
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-
   submitText: {
     marginLeft: 7,
-
     color: '#FFFFFF',
-
-    fontSize: 13.5,
-
-    fontWeight: '800',
-
-    letterSpacing: 0.2,
-  },
+    fontSize: 15,
+    fontWeight: "600",
+    letterSpacing: 0.2
+  }
 });

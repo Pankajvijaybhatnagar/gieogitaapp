@@ -1,3 +1,4 @@
+import { DESIGN } from '@/constants/design';
 import { Ionicons } from '@expo/vector-icons';
 
 import React, { useEffect, useRef, useState } from 'react';
@@ -15,9 +16,12 @@ import {
   View,
 } from 'react-native';
 
-const PRIMARY_BROWN = '#A55A12';
+import { COLORS } from '@/constants/brandColors';
+import { hairline, radii } from '@/constants/theme';
 
-const DARK_BROWN = '#6D3B0D';
+const PRIMARY_BROWN = COLORS.richBrown;
+
+const DARK_BROWN = COLORS.richBrown;
 
 export default function ForgotPasswordScreen({
   onBack,
@@ -103,7 +107,7 @@ export default function ForgotPasswordScreen({
             style={styles.backButton}
             onPress={onBack}
             disabled={loading}>
-            <Ionicons name="arrow-back" size={21} color="#333" />
+            <Ionicons name="arrow-back" size={21} color={COLORS.deepBrown} />
           </TouchableOpacity>
         </Animated.View>
 
@@ -144,7 +148,7 @@ export default function ForgotPasswordScreen({
           <Text style={styles.subtitle}>Enter your email address and</Text>
 
           <Text style={styles.subtitle}>
-            we'll send you a verification code.
+            we&apos;ll send you a verification code.
           </Text>
 
           <Animated.View
@@ -159,7 +163,7 @@ export default function ForgotPasswordScreen({
               <Ionicons
                 name="mail-outline"
                 size={17}
-                color="#999"
+                color={COLORS.warmBrown}
                 style={styles.inputIcon}
               />
 
@@ -167,7 +171,7 @@ export default function ForgotPasswordScreen({
                 value={email}
                 onChangeText={setEmail}
                 placeholder="example@gmail.com"
-                placeholderTextColor="#A6A6A6"
+                placeholderTextColor={COLORS.warmBrown}
                 keyboardType="email-address"
                 autoCapitalize="none"
                 editable={!loading}
@@ -186,14 +190,14 @@ export default function ForgotPasswordScreen({
                       : 'alert-circle-outline'
                   }
                   size={17}
-                  color={messageType === 'success' ? '#15803D' : '#DC2626'}
+                  color={messageType === 'success' ? '#15803D' : COLORS.dangerRed}
                 />
 
                 <Text
                   style={[
                     styles.message,
                     {
-                      color: messageType === 'success' ? '#15803D' : '#DC2626',
+                      color: messageType === 'success' ? '#15803D' : COLORS.dangerRed,
                     },
                   ]}>
                   {message}
@@ -252,13 +256,11 @@ export default function ForgotPasswordScreen({
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: COLORS.cream
   },
-
   keyboard: {
-    flex: 1,
+    flex: 1
   },
-
   backButton: {
     position: 'absolute',
     top: 56,
@@ -267,95 +269,84 @@ const styles = StyleSheet.create({
     height: 39,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: '#E9E9E9',
+    borderColor: hairline,
     alignItems: 'center',
     justifyContent: 'center',
-    zIndex: 10,
+    zIndex: 10
   },
-
   content: {
     paddingHorizontal: 24,
-    paddingTop: 100,
+    paddingTop: 100
   },
-
   iconCircle: {
     alignSelf: 'center',
     width: 62,
     height: 62,
     borderRadius: 31,
-    backgroundColor: '#FBF1E5',
+    backgroundColor: COLORS.creamDark,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 17,
+    marginBottom: 17
   },
-
   title: {
     fontSize: 25,
-    fontWeight: '700',
-    color: '#171717',
+    fontWeight: "400",
+    color: COLORS.deepBrown,
     textAlign: 'center',
+    fontFamily: DESIGN.fonts.editorial,
+    letterSpacing: -0.4
   },
-
   subtitle: {
     marginTop: 6,
     textAlign: 'center',
-    fontSize: 10.8,
-    color: '#929292',
-    lineHeight: 17,
+    fontSize: 12,
+    color: COLORS.warmBrown,
+    lineHeight: 18
   },
-
   label: {
     fontSize: 12,
-    color: '#333333',
+    color: COLORS.deepBrown,
     marginBottom: 8,
-    fontWeight: '600',
+    fontWeight: '600'
   },
-
   emailLabel: {
-    marginTop: 32,
+    marginTop: 32
   },
-
   inputWrapper: {
     width: '100%',
-    height: 49,
-    borderRadius: 13,
-    backgroundColor: '#F6F6F6',
+    height: 52,
+    borderRadius: 14,
+    backgroundColor: COLORS.creamDark,
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#EFEFEF',
+    borderColor: hairline
   },
-
   inputIcon: {
-    marginLeft: 14,
+    marginLeft: 14
   },
-
   input: {
     flex: 1,
     height: '100%',
     paddingHorizontal: 12,
-    fontSize: 12,
-    color: '#333333',
+    fontSize: 15,
+    color: COLORS.deepBrown
   },
-
   messageBox: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 14,
+    marginTop: 14
   },
-
   message: {
-    fontSize: 10.8,
+    fontSize: 12,
     marginLeft: 5,
     textAlign: 'center',
-    flex: 1,
+    flex: 1
   },
-
   primaryButton: {
     marginTop: 23,
-    height: 50,
-    borderRadius: 25,
+    borderRadius: 16,
     backgroundColor: PRIMARY_BROWN,
     alignItems: 'center',
     justifyContent: 'center',
@@ -363,39 +354,34 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 7,
+      height: 7
     },
-    shadowOpacity: 0.13,
+    shadowOpacity: 0.06,
     shadowRadius: 12,
-    elevation: 5,
+    elevation: 2,
+    minHeight: 52
   },
-
   disabledButton: {
-    opacity: 0.68,
+    opacity: 0.68
   },
-
   primaryButtonText: {
-    color: '#FFFFFF',
+    color: COLORS.white,
     fontSize: 14,
-    fontWeight: '700',
+    fontWeight: '700'
   },
-
   buttonIcon: {
-    marginLeft: 9,
+    marginLeft: 9
   },
-
   loginBackButton: {
     alignSelf: 'center',
-    marginTop: 24,
+    marginTop: 24
   },
-
   loginBackText: {
     color: DARK_BROWN,
-    fontSize: 11,
+    fontSize: 12,
     fontWeight: '700',
-    textDecorationLine: 'underline',
+    textDecorationLine: 'underline'
   },
-
   homeIndicator: {
     position: 'absolute',
     bottom: 10,
@@ -403,6 +389,6 @@ const styles = StyleSheet.create({
     width: 135,
     height: 5,
     borderRadius: 5,
-    backgroundColor: '#111111',
-  },
+    backgroundColor: COLORS.deepBrown
+  }
 });

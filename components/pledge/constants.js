@@ -1,17 +1,17 @@
 // ─── COLOR PALETTE ────────────────────────────────────────────────────────────
 export const C = {
-  deepBrown:    '#2C1A0A',
-  warmBrown:    '#4A2C0D',
-  richBrown:    '#3D2010',
-  gold:         '#C9A227',
-  goldLight:    '#E8C55A',
-  goldDark:     '#8B6914',
-  goldPale:     'rgba(201,162,39,0.12)',
-  goldBorder:   'rgba(201,162,39,0.30)',
-  cream:        '#FDF6E3',
-  creamDark:    '#F5E6C8',
-  saffron:      '#E8721C',
-  saffronLight: '#F4A44A',
+  deepBrown:    '#292328', // warm near-black text (not a panel bg)
+  warmBrown:    '#74696A', // secondary/muted text
+  richBrown:    '#55334A', // temple maroon accent — small strips/badges only
+  gold:         '#B39562',
+  goldLight:    '#DFC99F',
+  goldDark:     '#80653B',
+  goldPale:     'rgba(179,149,98,0.12)',
+  goldBorder:   'rgba(179,149,98,0.30)',
+  cream:        '#FFFFFF', // main background = white
+  creamDark:    '#F0EAE2', // warm off-white secondary surface
+  saffron:      '#A65338',
+  saffronLight: '#CD8B6E',
   white:        '#FFFFFF',
   green:        '#27AE60',
   greenLight:   '#2ECC71',

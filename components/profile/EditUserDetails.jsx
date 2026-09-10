@@ -18,6 +18,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateUserDetails } from '../redux/authSlice';
 import { C } from './constants';
 import { SectionHeader } from './InfoCard';
+import { hairline } from '@/constants/theme';
+import { COLORS } from '@/constants/brandColors';
 
 function StyledInput({ icon, placeholder, value, onChangeText, keyboardType, editable = true, onPress }) {
   const content = (
@@ -129,7 +131,7 @@ export default function EditUserDetails() {
         )}
 
         <TouchableOpacity style={styles.updateBtn} onPress={handleUpdate} activeOpacity={0.85}>
-          <FontAwesome name="check-circle" size={15} color={C.deepBrown} style={{ marginRight: 8 }} />
+          <FontAwesome name="check-circle" size={15} color={C.white} style={{ marginRight: 8 }} />
           <Text style={styles.updateBtnText}>Update Profile</Text>
         </TouchableOpacity>
       </Animated.View>
@@ -138,45 +140,82 @@ export default function EditUserDetails() {
 }
 
 const styles = StyleSheet.create({
-  editSection: { paddingHorizontal: 20, paddingTop: 10 },
-
+  editSection: {
+    paddingHorizontal: 20,
+    paddingTop: 10
+  },
   editCard: {
-    backgroundColor: C.white, borderRadius: 18, padding: 18,
-    borderWidth: 1, borderColor: C.goldBorder,
-    shadowColor: C.deepBrown, shadowOpacity: 0.06,
-    shadowOffset: { width: 0, height: 4 }, shadowRadius: 10, elevation: 2,
+    backgroundColor: COLORS.white,
+    borderRadius: 24,
+    padding: 18,
+    borderWidth: 1,
+    borderColor: hairline,
+    shadowColor: C.deepBrown,
+    shadowOpacity: 0.045,
+    shadowOffset: {
+      width: 0,
+      height: 4
+    },
+    shadowRadius: 10,
+    elevation: 2
   },
   editCardTitle: {
-    fontSize: 13, fontWeight: '800', color: C.deepBrown,
-    letterSpacing: 0.3, marginBottom: 14,
+    fontSize: 13,
+    fontWeight: "600",
+    color: C.deepBrown,
+    letterSpacing: 0.3,
+    marginBottom: 14
   },
-
   inputWrap: {
     marginBottom: 10,
-    borderRadius: 12, overflow: 'hidden',
-    borderWidth: 1, borderColor: C.goldBorder,
-    backgroundColor: C.creamDark,
+    borderRadius: 14,
+    overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: C.goldBorder,
+    backgroundColor: C.creamDark
   },
   inputRow: {
-    flexDirection: 'row', alignItems: 'center',
+    flexDirection: 'row',
+    alignItems: 'center'
   },
   inputIconBox: {
-    width: 44, height: 48,
-    backgroundColor: 'rgba(201,162,39,0.08)',
-    borderRightWidth: 1, borderRightColor: C.goldBorder,
-    alignItems: 'center', justifyContent: 'center',
+    width: 44,
+    height: 48,
+    backgroundColor: C.goldPale,
+    borderRightWidth: 1,
+    borderRightColor: C.goldBorder,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   textInput: {
-    flex: 1, paddingHorizontal: 14, paddingVertical: 12,
-    fontSize: 14, color: C.deepBrown, fontWeight: '600',
+    flex: 1,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+    fontSize: 15,
+    color: C.deepBrown,
+    fontWeight: '600'
   },
-
   updateBtn: {
-    backgroundColor: C.gold, borderRadius: 22,
-    paddingVertical: 13, marginTop: 6,
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
-    shadowColor: C.gold, shadowOpacity: 0.3,
-    shadowOffset: { width: 0, height: 3 }, shadowRadius: 8, elevation: 3,
+    backgroundColor: C.richBrown,
+    borderRadius: 22,
+    paddingVertical: 13,
+    marginTop: 6,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: C.deepBrown,
+    shadowOpacity: 0.15,
+    shadowOffset: {
+      width: 0,
+      height: 3
+    },
+    shadowRadius: 8,
+    elevation: 3
   },
-  updateBtnText: { fontSize: 14, fontWeight: '800', color: C.deepBrown, letterSpacing: 0.3 },
+  updateBtnText: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: C.white,
+    letterSpacing: 0.3
+  }
 });

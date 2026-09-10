@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { View, FlatList, Image, Dimensions, StyleSheet, Animated } from 'react-native';
+import { COLORS } from '@/constants/brandColors';
 
 const { width } = Dimensions.get('window');
 const imageWidth = width * 0.8; // Set a smaller width to leave space for gap
@@ -59,30 +60,32 @@ const ImageSlider = ({ images }) => {
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: 'center',
+    alignItems: 'center'
   },
   image: {
-    width: imageWidth,  // Set image width
+    width: imageWidth,
+    // Set image width
     height: 150,
     resizeMode: 'cover',
-    borderRadius: 15,   // Rounded corners
-    marginHorizontal: imageGap / 2,  // Gap between images
+    borderRadius: 15,
+    // Rounded corners
+    marginHorizontal: imageGap / 2 // Gap between images
   },
   indicatorContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: 10,
+    marginTop: 10
   },
   indicator: {
     height: 8,
     width: 8,
     borderRadius: 4,
-    backgroundColor: '#ccc',
-    margin: 5,
+    backgroundColor: COLORS.creamDark,
+    margin: 5
   },
   activeIndicator: {
-    backgroundColor: '#333',
-  },
+    backgroundColor: COLORS.deepBrown
+  }
 });
 
 export default ImageSlider;

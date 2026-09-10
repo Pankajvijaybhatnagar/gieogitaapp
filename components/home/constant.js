@@ -1,25 +1,34 @@
 // ─── COLOR PALETTE ────────────────────────────────────────────────────────────
-export const COLORS = {
-  deepBrown: '#2C1A0A',
-  warmBrown: '#4A2C0D',
-  richBrown: '#3D2010',
-  gold: '#C9A227',
-  goldLight: '#E8C55A',
-  goldDark: '#8B6914',
-  cream: '#FDF6E3',
-  creamDark: '#F5E6C8',
-  saffron: '#E8721C',
-  saffronLight: '#F4A44A',
-  textDark: '#1A0E00',
-  white: '#FFFFFF',
-  liveRed: '#E53935',
-};
+export { COLORS } from '@/constants/brandColors';
 
 // ─── MOCK DATA ────────────────────────────────────────────────────────────────
 export const heroImages = [
   { id: '3', source: require('@/assets/images/hero3.png') },
   { id: '1', source: require('@/assets/images/hero1.png') },
   { id: '2', source: require('@/assets/images/hero2.png') },
+];
+
+// ─── GALLERY ──────────────────────────────────────────────────────────────────
+// Real photos already live on gieogita.org — used as the gallery's content
+// until the backend's admin-managed gallery folder actually has photos in it
+// (galleryServices.getPublicGallery() currently returns an empty list for
+// every folder tried; this is the real, live fallback in the meantime).
+export const galleryPhotos = [
+  { id: 'g1', uri: 'https://gieogita.org/assets/images/project/project-4-1.jpg', caption: '' },
+  { id: 'g2', uri: 'https://gieogita.org/assets/images/project/project-4-2.jpg', caption: '' },
+  { id: 'g3', uri: 'https://gieogita.org/assets/images/project/project-4-3.jpg', caption: '' },
+  { id: 'g4', uri: 'https://gieogita.org/assets/images/project/project-4-31.jpg', caption: '' },
+  { id: 'g5', uri: 'https://gieogita.org/assets/images/project/project-4-4.jpg', caption: '' },
+  { id: 'g6', uri: 'https://gieogita.org/assets/images/project/project-4-5.jpg', caption: '' },
+  { id: 'g7', uri: 'https://gieogita.org/assets/images/project/project-4-6.jpg', caption: '' },
+  { id: 'g8', uri: 'https://gieogita.org/assets/images/services/bal%20sanskar.jpg', caption: 'Bal Sanskar' },
+  { id: 'g9', uri: 'https://gieogita.org/assets/images/services/dhyanam.jpg', caption: 'Dhyanam' },
+  { id: 'g10', uri: 'https://gieogita.org/assets/images/services/aanpurna%20copy.jpg', caption: 'Annapurna Seva' },
+  { id: 'g11', uri: 'https://gieogita.org/assets/images/services/join.jpg', caption: 'Join GIEO Gita' },
+  { id: 'g12', uri: 'https://gieogita.org/assets/images/services/gieo-gurukul%20copy.jpg', caption: 'GIEO Gurukul' },
+  { id: 'g13', uri: 'https://gieogita.org/assets/images/resources/seminar%20copy.jpg', caption: '' },
+  { id: 'g14', uri: 'https://gieogita.org/assets/images/resources/seminar%20kuk%20copy.jpg', caption: '' },
+  { id: 'g15', uri: 'https://gieogita.org/assets/images/resources/spritual%20copy.jpg', caption: '' },
 ];
 
 export const exclusiveContent = [
@@ -201,5 +210,48 @@ export const aboutInitiatives = [
     title: 'Join GIEO Gita',
     desc: 'Spread Gita wisdom globally',
     route: 'home/JoinGieoGita',
+  },
+];
+
+// ─── SERVICES ─────────────────────────────────────────────────────────────────
+// The app's five core services, surfaced as a horizontally scrolling row
+// of photo cards on the home page. Titles, descriptions and photos are the
+// real ones published on gieogita.org's own "Our Services" section; `icon`
+// is an Ionicons name used as a fallback badge where there's no photo yet.
+export const servicesList = [
+  {
+    icon: 'medkit-outline',
+    title: 'Health Seva',
+    desc: 'Free medical camps & care with Medanta doctors',
+    route: '/home/health',
+    image: null,
+  },
+  {
+    icon: 'paw-outline',
+    title: 'GIEO Gaushala',
+    desc: 'Promoting cow protection and seva for preserving indigenous cow breeds',
+    route: '/home/GieoGaushala',
+    image: 'https://gieogita.org/assets/images/services/services-4-3.jpg',
+  },
+  {
+    icon: 'school-outline',
+    title: 'GIEO Gurukul',
+    desc: 'Blending ancient Gurukul values with modern learning for holistic education',
+    route: '/home/gurukul',
+    image: 'https://gieogita.org/assets/images/services/gieo-gurukul%20copy.jpg',
+  },
+  {
+    icon: 'book-outline',
+    title: 'Bal Sanskar',
+    desc: 'Instilling spiritual values in children through Vedic teachings and cultural education',
+    route: '/home/balSanskar',
+    image: 'https://gieogita.org/assets/images/services/bal%20sanskar.jpg',
+  },
+  {
+    icon: 'earth-outline',
+    title: 'Join GIEO Gita',
+    desc: 'Be a part of our mission to spread the wisdom of the Bhagwad Gita in the globe',
+    route: '/home/JoinGieoGita',
+    image: 'https://gieogita.org/assets/images/services/join.jpg',
   },
 ];

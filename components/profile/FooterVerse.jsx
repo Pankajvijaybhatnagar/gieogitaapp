@@ -15,17 +15,27 @@ export default function FooterVerse() {
 
 const styles = StyleSheet.create({
   footerVerse: {
-    backgroundColor: C.warmBrown, marginHorizontal: 20, marginTop: 24,
-    borderRadius: 16, padding: 18,
-    borderWidth: 1, borderColor: C.goldBorder,
-    borderLeftWidth: 3, borderLeftColor: C.gold,
+    backgroundColor: C.cream,
+    marginHorizontal: 20,
+    marginTop: 24,
+    borderRadius: 16,
+    padding: 18,
+    borderWidth: 1,
+    borderColor: C.goldBorder,
+    borderLeftWidth: 3,
+    borderLeftColor: C.gold
   },
   footerVerseText: {
-    fontSize: 12, color: C.creamDark,
-    lineHeight: 20, fontStyle: 'italic', marginBottom: 8,
+    fontSize: 12,
+    color: C.deepBrown,
+    lineHeight: 20,
+    marginBottom: 8
   },
   footerVerseRef: {
-    fontSize: 10, color: C.goldDark,
-    fontWeight: '700', letterSpacing: 0.5, textAlign: 'right',
-  },
+    fontSize: 12,
+    color: C.goldDark,
+    fontWeight: '700',
+    letterSpacing: 0.5,
+    textAlign: 'right'
+  }
 });

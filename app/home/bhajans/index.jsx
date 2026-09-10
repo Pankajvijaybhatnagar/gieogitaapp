@@ -1,4 +1,6 @@
+import { DESIGN } from '@/constants/design';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 import { StatusBar } from 'expo-status-bar';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Pressable, SafeAreaView, StyleSheet, Text, View } from 'react-native';
@@ -6,6 +8,8 @@ import { Pressable, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import BhajanList from '@/components/bhajans/BhajanList';
 import MusicPlayer from '@/components/bhajans/MusicPlayer';
 import bhajanServices from '@/lib/services/bhajanServices';
+import { COLORS, RGB } from '@/constants/brandColors';
+import { radii, spacing, type } from '@/constants/theme';
 
 function normalizeBhajan(item) {
   return {
@@ -173,7 +177,7 @@ export default function BhajansPage() {
 
       {error ? (
         <View style={styles.errorBox}>
-          <Ionicons name="alert-circle-outline" size={20} color="#B42318" />
+          <Ionicons name="alert-circle-outline" size={20} color={COLORS.dangerRed} />
 
           <Text style={styles.errorText}>{error}</Text>
 
@@ -183,24 +187,45 @@ export default function BhajansPage() {
         </View>
       ) : null}
 
-      <View style={styles.sectionHeader}>
-        <View
-          style={{
-            flex: 1,
-            flexDirection: 'row',
-            alignContent:'center'
-          }}>
-          <Text style={styles.sectionTitle}>All Bhajans</Text>
-          <Pressable
-            onPress={() => fetchBhajans(true)}
-            style={styles.headerButton}>
-            <Ionicons name="refresh" size={20} color="#222" />
-          </Pressable>
+      <View style={styles.libraryHeader}>
+        <View style={styles.headerDecorWrap} pointerEvents="none">
+          <Ionicons
+            name="musical-notes"
+            size={70}
+            color={`rgba(${RGB.saffron},0.06)`}
+            style={styles.headerDecorNote}
+          />
         </View>
 
-        {!!bhajans.length && (
-          <Text style={styles.count}>{bhajans.length} tracks</Text>
-        )}
+        <LinearGradient
+          colors={[COLORS.richBrown, COLORS.deepBrown]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={styles.libraryIconBadge}>
+          <Ionicons name="musical-notes" size={20} color={COLORS.white} />
+        </LinearGradient>
+
+        <View style={styles.libraryTextArea}>
+          <Text style={styles.sectionTitle} numberOfLines={1}>
+            All Bhajans
+          </Text>
+
+          <View style={styles.captionRow}>
+            <View style={styles.livePulseDot} />
+            <Text style={styles.count} numberOfLines={1}>
+              {bhajans.length
+                ? `${bhajans.length} tracks · tune in & reflect`
+                : 'Curated for your practice'}
+            </Text>
+          </View>
+        </View>
+
+        <Pressable
+          onPress={() => fetchBhajans(true)}
+          hitSlop={8}
+          style={styles.headerButton}>
+          <Ionicons name="refresh" size={16} color={COLORS.richBrown} />
+        </Pressable>
       </View>
 
       <View style={styles.listContainer}>
@@ -234,88 +259,95 @@ export default function BhajansPage() {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: '#FFF',
+    backgroundColor: COLORS.cream
   },
-
-  header: {
-    height: 72,
+  headerButton: {
+    width: 32,
+    height: 32,
+    borderRadius: radii.pill,
+    backgroundColor: `rgba(${RGB.maroon},0.08)`,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  libraryHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 12,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: '#ECECEC',
+    paddingHorizontal: spacing.md,
+    paddingTop: spacing.sm,
+    paddingBottom: spacing.sm,
+    gap: spacing.sm,
+    overflow: 'hidden'
   },
-
-  headerButton: {
-    width: 24,
-    height: 24,
-    borderRadius: 22,
+  headerDecorWrap: {
+    position: 'absolute',
+    top: -18,
+    right: -10
+  },
+  headerDecorNote: {
+    transform: [{ rotate: '18deg' }]
+  },
+  libraryIconBadge: {
+    width: 40,
+    height: 40,
+    borderRadius: radii.md,
     alignItems: 'center',
     justifyContent: 'center',
-    // borderWidth:2,
+    shadowColor: COLORS.richBrown,
+    shadowOpacity: 0.25,
+    shadowRadius: 6,
+    shadowOffset: { width: 0, height: 3 },
+    elevation: 3
   },
-
-  headerText: {
+  libraryTextArea: {
     flex: 1,
-    alignItems: 'center',
+    minWidth: 0
   },
-
-  heading: {
-    fontSize: 20,
-    fontWeight: '800',
-    color: '#1D1D1D',
-  },
-
-  subheading: {
-    fontSize: 11,
-    color: '#888',
-    marginTop: 2,
-  },
-
-  sectionHeader: {
-    paddingHorizontal: 18,
-    paddingTop: 18,
-    paddingBottom: 7,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-
   sectionTitle: {
-    fontSize: 18,
-    fontWeight: '800',
-    color: '#222',
+    ...type.title,
+    fontSize: 19,
+    color: COLORS.deepBrown,
+    fontFamily: DESIGN.fonts.editorial,
+    fontWeight: "400",
+    letterSpacing: -0.3
   },
-
-  count: {
-    fontSize: 12,
-    color: '#888',
-  },
-
-  listContainer: {
-    flex: 1,
-  },
-
-  errorBox: {
-    marginHorizontal: 16,
-    marginTop: 12,
-    padding: 12,
-    borderRadius: 12,
-    backgroundColor: '#FEF3F2',
+  captionRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    marginTop: 2,
+    gap: 5
   },
-
+  livePulseDot: {
+    width: 5,
+    height: 5,
+    borderRadius: 3,
+    backgroundColor: COLORS.saffron
+  },
+  count: {
+    ...type.footnote,
+    color: COLORS.warmBrown,
+    flexShrink: 1
+  },
+  listContainer: {
+    flex: 1
+  },
+  errorBox: {
+    marginHorizontal: spacing.md,
+    marginTop: spacing.sm,
+    padding: spacing.sm,
+    borderRadius: 12,
+    backgroundColor: `rgba(${RGB.dangerRed},0.08)`,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8
+  },
   errorText: {
     flex: 1,
-    color: '#B42318',
-    fontSize: 13,
+    color: COLORS.dangerRed,
+    fontSize: 13
   },
-
   retry: {
-    color: '#FF7A00',
+    color: COLORS.saffron,
     fontWeight: '700',
-    fontSize: 13,
-  },
+    fontSize: 13
+  }
 });

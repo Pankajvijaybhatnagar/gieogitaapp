@@ -1,5 +1,9 @@
+import { DESIGN } from '@/constants/design';
 import { FontAwesome } from '@expo/vector-icons';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import Card from '@/components/ui/Card';
+import { hairline, radii, spacing, type } from '@/constants/theme';
+import { RGB } from '@/constants/brandColors';
 import { COLORS } from './constant';
 import { SectionHeader } from './Sharedui';
 
@@ -20,9 +24,9 @@ const teachers = [
 ];
 
 const ageGroups = [
-  { age: '5–8', label: 'Balak', color: 'rgba(201,162,39,0.2)', desc: 'Stories & Songs' },
-  { age: '9–12', label: 'Kishora', color: 'rgba(201,162,39,0.3)', desc: 'Shlokas & Yoga' },
-  { age: '13–16', label: 'Yuva', color: 'rgba(201,162,39,0.45)', desc: 'Deep Study' },
+  { age: '5–8', label: 'Balak', tint: 0.08, desc: 'Stories & Songs' },
+  { age: '9–12', label: 'Kishora', tint: 0.14, desc: 'Shlokas & Yoga' },
+  { age: '13–16', label: 'Yuva', tint: 0.2, desc: 'Deep Study' },
 ];
 
 const stats = [
@@ -45,7 +49,7 @@ export default function BalSanskarSection() {
       <SectionHeader title="📚 Bal" accent="Sanskar" />
 
       {/* Hero Card */}
-      <View style={styles.card}>
+      <Card radius={radii.xl} style={styles.card}>
         <View style={styles.badge}>
           <Text style={styles.badgeText}>✨ Vedic Education Program</Text>
         </View>
@@ -66,27 +70,29 @@ export default function BalSanskarSection() {
             </View>
           ))}
         </View>
-      </View>
+      </Card>
 
       {/* Age Groups */}
-      <View style={styles.card}>
+      <Card radius={radii.xl} style={styles.card}>
         <View style={styles.rowTitle}>
           <Text style={styles.rowIcon}>🎓</Text>
           <Text style={styles.sectionTitle}>Age Groups</Text>
         </View>
         <View style={styles.ageRow}>
           {ageGroups.map((g) => (
-            <View key={g.label} style={[styles.ageCard, { backgroundColor: g.color }]}>
+            <View
+              key={g.label}
+              style={[styles.ageCard, { backgroundColor: `rgba(${RGB.saffron},${g.tint})` }]}>
               <Text style={styles.ageNum}>{g.age}</Text>
               <Text style={styles.ageLabel}>{g.label}</Text>
               <Text style={styles.ageDesc}>{g.desc}</Text>
             </View>
           ))}
         </View>
-      </View>
+      </Card>
 
       {/* Curriculum */}
-      <View style={styles.card}>
+      <Card radius={radii.xl} style={styles.card}>
         <View style={styles.rowTitle}>
           <Text style={styles.rowIcon}>📜</Text>
           <Text style={styles.sectionTitle}>Our Curriculum</Text>
@@ -103,10 +109,10 @@ export default function BalSanskarSection() {
             </View>
           ))}
         </View>
-      </View>
+      </Card>
 
       {/* Teachers */}
-      <View style={styles.card}>
+      <Card radius={radii.xl} style={styles.card}>
         <View style={styles.rowTitle}>
           <Text style={styles.rowIcon}>🙏</Text>
           <Text style={styles.sectionTitle}>Our Acharyas</Text>
@@ -128,10 +134,10 @@ export default function BalSanskarSection() {
             </View>
           </View>
         ))}
-      </View>
+      </Card>
 
       {/* Schedule */}
-      <View style={styles.card}>
+      <Card radius={radii.xl} style={styles.card}>
         <View style={styles.rowTitle}>
           <Text style={styles.rowIcon}>🗓️</Text>
           <Text style={styles.sectionTitle}>Weekly Schedule</Text>
@@ -146,131 +152,298 @@ export default function BalSanskarSection() {
             <Text style={styles.scheduleTime}>{s.time}</Text>
           </View>
         ))}
-      </View>
+      </Card>
 
       {/* CTA */}
-      <View style={[styles.card, styles.ctaCard]}>
+      <Card radius={radii.xl} style={[styles.card, styles.ctaCard]}>
         <Text style={styles.ctaHeading}>Enroll Your Child Today</Text>
         <Text style={styles.ctaSubtext}>
           Give your child the gift of Gita wisdom.{'\n'}Admissions open for all age groups.
         </Text>
         <TouchableOpacity style={styles.ctaButton} activeOpacity={0.85}>
           <Text style={styles.ctaButtonText}>Apply for Admission</Text>
-          <FontAwesome name="arrow-right" size={12} color="#2C1A0E" />
+          <FontAwesome name="arrow-right" size={12} color={COLORS.white} />
         </TouchableOpacity>
         <TouchableOpacity style={styles.secondaryBtn} activeOpacity={0.85}>
           <Text style={styles.secondaryText}>Download Brochure</Text>
         </TouchableOpacity>
-      </View>
+      </Card>
     </>
   );
 }
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: COLORS.richBrown,
-    marginHorizontal: 20,
-    borderRadius: 16,
-    padding: 16,
-    borderWidth: 1,
-    borderColor: 'rgba(201,162,39,0.3)',
-    marginBottom: 12,
+    marginHorizontal: spacing.md,
+    padding: spacing.md,
+    marginBottom: spacing.md
   },
   badge: {
     alignSelf: 'flex-start',
-    backgroundColor: 'rgba(201,162,39,0.15)',
-    borderRadius: 20,
-    paddingHorizontal: 12,
-    paddingVertical: 4,
+    backgroundColor: `rgba(${RGB.saffron},0.12)`,
+    borderRadius: radii.pill,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
     borderWidth: 1,
-    borderColor: 'rgba(201,162,39,0.35)',
-    marginBottom: 12,
+    borderColor: `rgba(${RGB.saffron},0.3)`,
+    marginBottom: spacing.sm
   },
-  badgeText: { color: COLORS.goldLight, fontSize: 10, fontWeight: '700', letterSpacing: 0.4 },
-  heroHeading: { color: COLORS.cream, fontSize: 20, fontWeight: '800', lineHeight: 28, marginBottom: 10 },
-  accent: { color: COLORS.goldLight },
-  desc: { color: 'rgba(253,246,227,0.65)', fontSize: 12, lineHeight: 18, fontStyle: 'italic', marginBottom: 14 },
+  badgeText: {
+    color: COLORS.saffron,
+    ...type.caption,
+    letterSpacing: 0.4
+  },
+  heroHeading: {
+    ...type.title,
+    fontSize: 20,
+    color: COLORS.deepBrown,
+    lineHeight: 28,
+    marginBottom: spacing.sm,
+    fontFamily: DESIGN.fonts.editorial,
+    fontWeight: "400",
+    letterSpacing: -0.4
+  },
+  accent: {
+    color: COLORS.saffron
+  },
+  desc: {
+    ...type.body,
+    color: COLORS.warmBrown,
+    marginBottom: spacing.md
+  },
   statsRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: 'rgba(201,162,39,0.1)',
-    borderRadius: 12,
-    padding: 12,
-    borderWidth: 1,
-    borderColor: 'rgba(201,162,39,0.2)',
+    backgroundColor: COLORS.creamDark,
+    borderRadius: radii.md,
+    padding: spacing.sm
   },
-  statItem: { alignItems: 'center', flex: 1 },
-  statValue: { color: COLORS.goldLight, fontSize: 16, fontWeight: '800' },
-  statLabel: { color: 'rgba(253,246,227,0.5)', fontSize: 9, marginTop: 2, textAlign: 'center', fontStyle: 'italic' },
-
-  rowTitle: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 12 },
-  rowIcon: { fontSize: 18 },
-  sectionTitle: { color: COLORS.cream, fontSize: 15, fontWeight: '800' },
-  subText: { color: 'rgba(253,246,227,0.55)', fontSize: 11, fontStyle: 'italic', marginBottom: 12, lineHeight: 16 },
-
-  ageRow: { flexDirection: 'row', gap: 8 },
+  statItem: {
+    alignItems: 'center',
+    flex: 1
+  },
+  statValue: {
+    color: COLORS.saffron,
+    fontSize: 16,
+    fontWeight: "600"
+  },
+  statLabel: {
+    ...type.footnote,
+    fontSize: 12,
+    color: COLORS.warmBrown,
+    marginTop: 2,
+    textAlign: 'center'
+  },
+  rowTitle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+    marginBottom: spacing.sm
+  },
+  rowIcon: {
+    fontSize: 18
+  },
+  sectionTitle: {
+    ...type.headline,
+    fontSize: 15,
+    color: COLORS.deepBrown
+  },
+  subText: {
+    ...type.footnote,
+    color: COLORS.warmBrown,
+    marginBottom: spacing.sm,
+    lineHeight: 16
+  },
+  ageRow: {
+    flexDirection: 'row',
+    gap: spacing.sm
+  },
   ageCard: {
-    flex: 1, borderRadius: 12, padding: 12, alignItems: 'center',
-    borderWidth: 1, borderColor: 'rgba(201,162,39,0.3)',
+    flex: 1,
+    borderRadius: radii.md,
+    padding: spacing.sm,
+    alignItems: 'center'
   },
-  ageNum: { color: COLORS.goldLight, fontSize: 15, fontWeight: '800' },
-  ageLabel: { color: COLORS.cream, fontSize: 11, fontWeight: '700', marginTop: 2 },
-  ageDesc: { color: 'rgba(253,246,227,0.55)', fontSize: 9, marginTop: 3, textAlign: 'center', fontStyle: 'italic' },
-
-  grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
+  ageNum: {
+    color: COLORS.saffron,
+    fontSize: 15,
+    fontWeight: "600"
+  },
+  ageLabel: {
+    color: COLORS.deepBrown,
+    fontSize: 12,
+    fontWeight: '700',
+    marginTop: 2
+  },
+  ageDesc: {
+    color: COLORS.warmBrown,
+    fontSize: 12,
+    marginTop: 3,
+    textAlign: 'center'
+  },
+  grid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing.sm
+  },
   currCard: {
-    width: '47%', backgroundColor: 'rgba(201,162,39,0.08)',
-    borderRadius: 12, padding: 12, borderWidth: 1, borderColor: 'rgba(201,162,39,0.2)',
+    width: '47%',
+    backgroundColor: DESIGN.colors.surface,
+    borderRadius: 24,
+    padding: spacing.sm,
+    borderColor: DESIGN.colors.border,
+    borderWidth: 1,
+    shadowOpacity: 0.045,
+    elevation: 2
   },
-  currIcon: { fontSize: 22, marginBottom: 6 },
+  currIcon: {
+    fontSize: 22,
+    marginBottom: spacing.xs
+  },
   levelBadge: {
-    alignSelf: 'flex-start', backgroundColor: 'rgba(201,162,39,0.2)',
-    borderRadius: 6, paddingHorizontal: 6, paddingVertical: 2, marginBottom: 5,
+    alignSelf: 'flex-start',
+    backgroundColor: `rgba(${RGB.saffron},0.14)`,
+    borderRadius: radii.sm,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    marginBottom: 5
   },
-  levelText: { color: COLORS.goldLight, fontSize: 8, fontWeight: '700' },
-  currTitle: { color: COLORS.cream, fontSize: 11, fontWeight: '700', marginBottom: 3 },
-  currDesc: { color: 'rgba(253,246,227,0.5)', fontSize: 9, fontStyle: 'italic', lineHeight: 13 },
-
+  levelText: {
+    color: COLORS.saffron,
+    fontSize: 12,
+    fontWeight: '700'
+  },
+  currTitle: {
+    color: COLORS.deepBrown,
+    fontSize: 12,
+    fontWeight: '700',
+    marginBottom: 3
+  },
+  currDesc: {
+    color: COLORS.warmBrown,
+    fontSize: 12,
+    lineHeight: 18
+  },
   teacherCard: {
-    flexDirection: 'row', alignItems: 'center', gap: 12,
-    backgroundColor: 'rgba(201,162,39,0.08)', borderRadius: 12,
-    paddingHorizontal: 12, paddingVertical: 10, marginBottom: 8,
-    borderWidth: 1, borderColor: 'rgba(201,162,39,0.2)',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+    backgroundColor: DESIGN.colors.surface,
+    borderRadius: 24,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: 10,
+    marginBottom: spacing.sm,
+    borderColor: DESIGN.colors.border,
+    borderWidth: 1,
+    shadowOpacity: 0.045,
+    elevation: 2
   },
   avatar: {
-    width: 42, height: 42, borderRadius: 21,
-    backgroundColor: 'rgba(201,162,39,0.2)', alignItems: 'center', justifyContent: 'center',
-    borderWidth: 1, borderColor: 'rgba(201,162,39,0.4)',
+    width: 42,
+    height: 42,
+    borderRadius: 21,
+    backgroundColor: `rgba(${RGB.saffron},0.14)`,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
-  avatarIcon: { fontSize: 20 },
-  teacherInfo: { flex: 1 },
-  teacherName: { color: COLORS.cream, fontSize: 13, fontWeight: '700' },
-  teacherRole: { color: 'rgba(253,246,227,0.55)', fontSize: 10, marginTop: 2, fontStyle: 'italic' },
+  avatarIcon: {
+    fontSize: 20
+  },
+  teacherInfo: {
+    flex: 1
+  },
+  teacherName: {
+    color: COLORS.deepBrown,
+    fontSize: 13,
+    fontWeight: '700'
+  },
+  teacherRole: {
+    color: COLORS.warmBrown,
+    fontSize: 12,
+    marginTop: 2
+  },
   expBadge: {
-    backgroundColor: 'rgba(201,162,39,0.15)', borderRadius: 8,
-    paddingHorizontal: 8, paddingVertical: 4, borderWidth: 1, borderColor: 'rgba(201,162,39,0.35)',
+    backgroundColor: `rgba(${RGB.saffron},0.12)`,
+    borderRadius: radii.sm,
+    paddingHorizontal: spacing.xs,
+    paddingVertical: 4
   },
-  expText: { color: COLORS.goldLight, fontSize: 10, fontWeight: '700' },
-
+  expText: {
+    color: COLORS.saffron,
+    fontSize: 12,
+    fontWeight: '700'
+  },
   scheduleRow: {
-    flexDirection: 'row', alignItems: 'center', gap: 10,
-    paddingVertical: 9, borderBottomWidth: 1, borderBottomColor: 'rgba(201,162,39,0.12)',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+    paddingVertical: 9,
+    borderBottomWidth: 1,
+    borderBottomColor: hairline
   },
-  dot: { width: 7, height: 7, borderRadius: 4, backgroundColor: COLORS.goldLight },
-  scheduleInfo: { flex: 1 },
-  scheduleDay: { color: COLORS.cream, fontSize: 12, fontWeight: '700' },
-  scheduleTopic: { color: 'rgba(253,246,227,0.55)', fontSize: 10, marginTop: 1, fontStyle: 'italic' },
-  scheduleTime: { color: COLORS.goldLight, fontSize: 10, fontWeight: '600' },
-
-  ctaCard: { alignItems: 'center', borderColor: 'rgba(201,162,39,0.45)', padding: 20 },
-  ctaHeading: { color: COLORS.cream, fontSize: 17, fontWeight: '800', textAlign: 'center', marginBottom: 8 },
-  ctaSubtext: { color: 'rgba(253,246,227,0.6)', fontSize: 11, fontStyle: 'italic', textAlign: 'center', lineHeight: 16, marginBottom: 16 },
+  dot: {
+    width: 7,
+    height: 7,
+    borderRadius: 4,
+    backgroundColor: COLORS.saffron
+  },
+  scheduleInfo: {
+    flex: 1
+  },
+  scheduleDay: {
+    color: COLORS.deepBrown,
+    fontSize: 12,
+    fontWeight: '700'
+  },
+  scheduleTopic: {
+    color: COLORS.warmBrown,
+    fontSize: 12,
+    marginTop: 1
+  },
+  scheduleTime: {
+    color: COLORS.saffron,
+    fontSize: 12,
+    fontWeight: '600'
+  },
+  ctaCard: {
+    alignItems: 'center',
+    padding: spacing.lg
+  },
+  ctaHeading: {
+    ...type.headline,
+    fontSize: 17,
+    color: COLORS.deepBrown,
+    textAlign: 'center',
+    marginBottom: spacing.sm
+  },
+  ctaSubtext: {
+    ...type.footnote,
+    color: COLORS.warmBrown,
+    textAlign: 'center',
+    lineHeight: 16,
+    marginBottom: spacing.md
+  },
   ctaButton: {
-    flexDirection: 'row', alignItems: 'center', gap: 8,
-    backgroundColor: COLORS.goldLight, borderRadius: 10,
-    paddingVertical: 13, paddingHorizontal: 28, marginBottom: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+    backgroundColor: COLORS.saffron,
+    borderRadius: radii.lg,
+    paddingVertical: 13,
+    paddingHorizontal: spacing.xl,
+    marginBottom: spacing.sm
   },
-  ctaButtonText: { color: '#2C1A0E', fontSize: 13, fontWeight: '800' },
-  secondaryBtn: { paddingVertical: 6 },
-  secondaryText: { color: 'rgba(253,246,227,0.45)', fontSize: 12, fontStyle: 'italic', textDecorationLine: 'underline' },
+  ctaButtonText: {
+    color: COLORS.white,
+    fontSize: 13,
+    fontWeight: "600"
+  },
+  secondaryBtn: {
+    paddingVertical: spacing.xs
+  },
+  secondaryText: {
+    color: COLORS.warmBrown,
+    fontSize: 12,
+    textDecorationLine: 'underline'
+  }
 });

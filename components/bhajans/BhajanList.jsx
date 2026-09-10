@@ -1,3 +1,4 @@
+import { DESIGN } from '@/constants/design';
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import {
@@ -9,6 +10,9 @@ import {
   Text,
   View,
 } from 'react-native';
+
+import { COLORS, RGB } from '@/constants/brandColors';
+import { radii, spacing, type } from '@/constants/theme';
 
 function BhajanItem({ item, active, isPlaying, onPress }) {
   return (
@@ -29,7 +33,11 @@ function BhajanItem({ item, active, isPlaying, onPress }) {
           />
         ) : (
           <View style={styles.coverPlaceholder}>
-            <Ionicons name="musical-notes" size={24} color="#5a3816" />
+            <Ionicons
+              name="musical-notes"
+              size={24}
+              color={COLORS.saffron}
+            />
           </View>
         )}
 
@@ -38,7 +46,7 @@ function BhajanItem({ item, active, isPlaying, onPress }) {
             <Ionicons
               name={isPlaying ? 'pause' : 'play'}
               size={18}
-              color="#fff"
+              color={COLORS.white}
             />
           </View>
         )}
@@ -57,7 +65,11 @@ function BhajanItem({ item, active, isPlaying, onPress }) {
 
         {!!item.plays && (
           <View style={styles.stats}>
-            <Ionicons name="headset-outline" size={13} color="#888" />
+            <Ionicons
+              name="headset-outline"
+              size={13}
+              color={COLORS.warmBrown}
+            />
             <Text style={styles.statsText}>
               {Number(item.plays).toLocaleString()} plays
             </Text>
@@ -73,7 +85,7 @@ function BhajanItem({ item, active, isPlaying, onPress }) {
         <Ionicons
           name={active ? 'musical-notes' : 'play-circle-outline'}
           size={26}
-          color={active ? '#5a3816' : '#999'}
+          color={active ? COLORS.saffron : COLORS.warmBrown}
         />
       </View>
     </Pressable>
@@ -92,7 +104,7 @@ export default function BhajanList({
   if (loading && !data.length) {
     return (
       <View style={styles.center}>
-        <ActivityIndicator size="large" color="#5a3816" />
+        <ActivityIndicator size="large" color={COLORS.saffron} />
         <Text style={styles.loadingText}>Loading bhajans...</Text>
       </View>
     );
@@ -101,7 +113,11 @@ export default function BhajanList({
   if (!loading && !data.length) {
     return (
       <View style={styles.center}>
-        <Ionicons name="musical-notes-outline" size={48} color="#bbb" />
+        <Ionicons
+          name="musical-notes-outline"
+          size={48}
+          color={COLORS.warmBrown}
+        />
 
         <Text style={styles.emptyTitle}>No bhajans found</Text>
 
@@ -135,122 +151,113 @@ export default function BhajanList({
 
 const styles = StyleSheet.create({
   list: {
-    paddingHorizontal: 16,
-    paddingTop: 8,
-    paddingBottom: 180,
+    paddingHorizontal: spacing.md,
+    paddingTop: spacing.sm,
+    paddingBottom: 180
   },
-
   item: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 10,
-    paddingHorizontal: 10,
-    borderRadius: 16,
-    marginBottom: 5,
+    paddingVertical: spacing.sm,
+    paddingHorizontal: spacing.sm + 2,
+    borderRadius: radii.md,
+    marginBottom: 2
   },
-
   activeItem: {
-    backgroundColor: '#FFF5EA',
+    backgroundColor: `rgba(${RGB.saffron}, 0.08)`
   },
-
   pressedItem: {
-    opacity: 0.75,
+    opacity: 0.75
   },
-
   coverContainer: {
-    width: 58,
-    height: 58,
-    borderRadius: 13,
-    overflow: 'hidden',
+    width: 52,
+    height: 52,
+    borderRadius: radii.sm,
+    overflow: 'hidden'
   },
-
   cover: {
     width: '100%',
-    height: '100%',
+    height: '100%'
   },
-
   coverPlaceholder: {
     flex: 1,
-    backgroundColor: '#FFF1E3',
+    backgroundColor: COLORS.creamDark,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-
   playingOverlay: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: 'rgba(0,0,0,0.38)',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-
   details: {
     flex: 1,
-    marginLeft: 12,
-    minWidth: 0,
+    marginLeft: spacing.md - 4,
+    minWidth: 0
   },
-
   title: {
+    ...type.subhead,
     fontSize: 15,
     fontWeight: '700',
-    color: '#666666',
+    color: COLORS.deepBrown
   },
-
   activeTitle: {
-    color: '#5a3816',
+    color: COLORS.saffron
   },
-
   subtitle: {
+    ...type.footnote,
     fontSize: 13,
-    color: '#777',
-    marginTop: 3,
+    color: COLORS.warmBrown,
+    marginTop: 3
   },
-
   stats: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    marginTop: 4,
+    marginTop: 4
   },
-
   statsText: {
-    fontSize: 11,
-    color: '#999',
+    ...type.caption,
+    fontWeight: '400',
+    letterSpacing: 0,
+    color: COLORS.warmBrown
   },
-
   right: {
     alignItems: 'flex-end',
     gap: 6,
-    marginLeft: 8,
+    marginLeft: spacing.sm
   },
-
   duration: {
-    fontSize: 11,
-    color: '#888',
+    ...type.caption,
+    fontWeight: '400',
+    letterSpacing: 0,
+    color: COLORS.warmBrown
   },
-
   center: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 30,
+    padding: spacing.xl - 2
   },
-
   loadingText: {
-    marginTop: 12,
-    color: '#777',
+    marginTop: spacing.md - 4,
+    color: COLORS.warmBrown
   },
-
   emptyTitle: {
+    ...type.headline,
     fontSize: 18,
-    fontWeight: '700',
-    color: '#333',
-    marginTop: 14,
+    color: COLORS.deepBrown,
+    marginTop: spacing.md - 2,
+    fontFamily: DESIGN.fonts.editorial,
+    fontWeight: "400",
+    letterSpacing: -0.4
   },
-
   emptyText: {
+    ...type.body,
     fontSize: 14,
-    color: '#888',
-    marginTop: 5,
-    textAlign: 'center',
-  },
+    color: COLORS.warmBrown,
+    marginTop: spacing.xs + 1,
+    textAlign: 'center'
+  }
 });

@@ -10,6 +10,7 @@ import Animated, {
     useSharedValue,
     withSpring,
 } from 'react-native-reanimated';
+import { COLORS } from '@/constants/brandColors';
 
 const ITEM_HEIGHT = 48;
 const VISIBLE_RANGE = 20;
@@ -193,57 +194,49 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     position: 'relative',
-    overflow: 'hidden',
+    overflow: 'hidden'
   },
-
   wheel: {
     width: 110,
     height: ITEM_HEIGHT,
     position: 'relative',
     alignItems: 'center',
     justifyContent: 'center',
-    overflow: 'visible',
+    overflow: 'visible'
   },
-
   item: {
     position: 'absolute',
     width: 110,
     height: ITEM_HEIGHT,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-
   number: {
     fontSize: 16,
     fontWeight: '500',
-    color: '#A88B68',
-    includeFontPadding: false,
+    color: COLORS.warmBrown,
+    includeFontPadding: false
   },
-
   centerNumber: {
     fontSize: 23,
     fontWeight: '700',
-    color: '#6B3518',
+    color: COLORS.deepBrown
   },
-
   disabledNumber: {
-    opacity: 0,
+    opacity: 0
   },
-
   arrowContainer: {
     height: 30,
     width: 110,
     alignItems: 'center',
     justifyContent: 'center',
-    zIndex: 30,
+    zIndex: 30
   },
-
   arrow: {
     fontSize: 10,
-    color: '#8A5A32',
-    opacity: 0.8,
+    color: COLORS.goldDark,
+    opacity: 0.8
   },
-
   centerHighlight: {
     position: 'absolute',
     left: 10,
@@ -251,15 +244,13 @@ const styles = StyleSheet.create({
     top: 71,
     height: ITEM_HEIGHT,
     justifyContent: 'space-between',
-    zIndex: 20,
+    zIndex: 20
   },
-
   centerLine: {
     width: '100%',
     height: 2,
-    backgroundColor: '#B97832',
+    backgroundColor: COLORS.saffron
   },
-
   topFade: {
     position: 'absolute',
     top: 25,
@@ -267,9 +258,8 @@ const styles = StyleSheet.create({
     right: 0,
     height: 35,
     backgroundColor: 'rgba(255,255,255,0.35)',
-    zIndex: 10,
+    zIndex: 10
   },
-
   bottomFade: {
     position: 'absolute',
     bottom: 25,
@@ -277,6 +267,6 @@ const styles = StyleSheet.create({
     right: 0,
     height: 35,
     backgroundColor: 'rgba(255,255,255,0.35)',
-    zIndex: 10,
-  },
+    zIndex: 10
+  }
 });

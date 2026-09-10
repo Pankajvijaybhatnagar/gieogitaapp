@@ -1,3 +1,4 @@
+import { DESIGN } from '@/constants/design';
 import { FontAwesome } from '@expo/vector-icons';
 import { useRef, useState } from 'react';
 import { Animated, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
@@ -54,7 +55,7 @@ export default function SevaCard({ seva, onDonate }) {
             onPress={() => onDonate(seva)}
             activeOpacity={0.85}
           >
-            <FontAwesome name="heart" size={12} color={C.deepBrown} style={{ marginRight: 6 }} />
+            <FontAwesome name="heart" size={12} color={C.white} style={{ marginRight: 6 }} />
             <Text style={styles.donateLargeBtnText}>Donate ₹{seva.amount} — {seva.name}</Text>
           </TouchableOpacity>
         </View>
@@ -65,45 +66,121 @@ export default function SevaCard({ seva, onDonate }) {
 
 const styles = StyleSheet.create({
   sevaCard: {
-    backgroundColor: C.white, borderRadius: 18,
-    borderWidth: 1, borderColor: C.goldBorder, overflow: 'hidden',
-    shadowColor: C.deepBrown, shadowOpacity: 0.06,
-    shadowOffset: { width: 0, height: 4 }, shadowRadius: 10, elevation: 2,
+    backgroundColor: DESIGN.colors.surface,
+    borderRadius: 24,
+    borderWidth: 1,
+    borderColor: DESIGN.colors.border,
+    overflow: 'hidden',
+    shadowColor: C.deepBrown,
+    shadowOpacity: 0.045,
+    shadowOffset: {
+      width: 0,
+      height: 4
+    },
+    shadowRadius: 10,
+    elevation: 2
   },
   sevaCategoryBadge: {
-    backgroundColor: C.deepBrown, paddingHorizontal: 12, paddingVertical: 4,
-    alignSelf: 'flex-start', borderBottomRightRadius: 12,
+    backgroundColor: C.richBrown,
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    alignSelf: 'flex-start',
+    borderBottomRightRadius: 12
   },
-  sevaCategoryText: { fontSize: 8, color: C.goldDark, letterSpacing: 1.5, fontWeight: '800' },
-  sevaMainRow:      { flexDirection: 'row', alignItems: 'center', padding: 14, gap: 12 },
+  sevaCategoryText: {
+    fontSize: 12,
+    color: C.goldLight,
+    letterSpacing: 1.5,
+    fontWeight: "600"
+  },
+  sevaMainRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 14,
+    gap: 12
+  },
   sevaIconBox: {
-    width: 52, height: 52, borderRadius: 14,
-    backgroundColor: C.creamDark, borderWidth: 1, borderColor: C.goldBorder,
-    alignItems: 'center', justifyContent: 'center',
+    width: 52,
+    height: 52,
+    borderRadius: 14,
+    backgroundColor: C.creamDark,
+    borderWidth: 1,
+    borderColor: C.goldBorder,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
-  sevaIcon:    { fontSize: 26 },
-  sevaInfo:    { flex: 1 },
-  sevaName:    { fontSize: 13, fontWeight: '800', color: C.deepBrown, marginBottom: 2 },
-  sevaBenefit: { fontSize: 10, color: C.saffron, fontStyle: 'italic', marginBottom: 4 },
-  sevaAmount:  { fontSize: 16, fontWeight: '800', color: C.goldDark },
-  sevaActions: { alignItems: 'center', gap: 8 },
+  sevaIcon: {
+    fontSize: 26
+  },
+  sevaInfo: {
+    flex: 1
+  },
+  sevaName: {
+    fontSize: 13,
+    fontWeight: "600",
+    color: C.deepBrown,
+    marginBottom: 2
+  },
+  sevaBenefit: {
+    fontSize: 12,
+    color: C.saffron,
+    marginBottom: 4
+  },
+  sevaAmount: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: C.goldDark
+  },
+  sevaActions: {
+    alignItems: 'center',
+    gap: 8
+  },
   expandBtn: {
-    width: 28, height: 28, borderRadius: 14,
-    backgroundColor: C.creamDark, borderWidth: 1, borderColor: C.goldBorder,
-    alignItems: 'center', justifyContent: 'center',
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: C.creamDark,
+    borderWidth: 1,
+    borderColor: C.goldBorder,
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   donateSmallBtn: {
-    backgroundColor: C.gold, borderRadius: 14, paddingHorizontal: 12, paddingVertical: 6,
+    backgroundColor: C.richBrown,
+    borderRadius: 14,
+    paddingHorizontal: 12,
+    paddingVertical: 6
   },
-  donateSmallBtnText: { fontSize: 11, fontWeight: '800', color: C.deepBrown },
+  donateSmallBtnText: {
+    fontSize: 12,
+    fontWeight: "600",
+    color: C.white
+  },
   sevaDescInner: {
-    backgroundColor: C.creamDark, borderTopWidth: 1, borderTopColor: C.goldBorder, padding: 14,
+    backgroundColor: C.creamDark,
+    borderTopWidth: 1,
+    borderTopColor: C.goldBorder,
+    padding: 14
   },
-  sevaDesc: { fontSize: 12, color: C.warmBrown, lineHeight: 19, fontStyle: 'italic', marginBottom: 12 },
+  sevaDesc: {
+    fontSize: 12,
+    color: C.warmBrown,
+    lineHeight: 19,
+    marginBottom: 12
+  },
   donateLargeBtn: {
-    backgroundColor: C.gold, borderRadius: 20,
-    paddingVertical: 11, paddingHorizontal: 20,
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
+    backgroundColor: C.richBrown,
+    borderRadius: 16,
+    paddingVertical: 11,
+    paddingHorizontal: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: 52
   },
-  donateLargeBtnText: { fontSize: 12, fontWeight: '800', color: C.deepBrown },
+  donateLargeBtnText: {
+    fontSize: 12,
+    fontWeight: "600",
+    color: C.white
+  }
 });

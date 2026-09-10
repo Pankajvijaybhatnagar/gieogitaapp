@@ -1,3 +1,4 @@
+import { DESIGN } from '@/constants/design';
 import { useEffect, useMemo, useState } from 'react';
 
 import {
@@ -17,6 +18,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import RenderHTML from 'react-native-render-html';
 
 import { COLORS } from '@/components/home/constant';
+import { hairline, radii, shadow } from '@/constants/theme';
 
 import eventServices from '@/lib/services/eventServices';
 
@@ -297,7 +299,7 @@ export default function Event() {
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color={COLORS.gold} />
+        <ActivityIndicator size="large" color={COLORS.saffron} />
 
         <Text style={styles.loadingText}>Loading event...</Text>
       </View>
@@ -497,7 +499,7 @@ export default function Event() {
 
                 tagsStyles={{
                   p: {
-                    color: 'rgba(253,246,227,0.78)',
+                    color: COLORS.warmBrown,
                     fontSize: 14,
                     lineHeight: 23,
                     marginTop: 0,
@@ -505,27 +507,25 @@ export default function Event() {
                   },
 
                   span: {
-                    color: 'rgba(253,246,227,0.78)',
+                    color: COLORS.warmBrown,
                   },
 
                   strong: {
-                    color: COLORS.goldLight,
+                    color: COLORS.deepBrown,
                     fontWeight: '800',
                   },
 
                   b: {
-                    color: COLORS.goldLight,
+                    color: COLORS.deepBrown,
                     fontWeight: '800',
                   },
 
                   em: {
-                    color: 'rgba(253,246,227,0.78)',
-                    fontStyle: 'italic',
+                    color: COLORS.warmBrown,
                   },
 
                   i: {
-                    color: 'rgba(253,246,227,0.78)',
-                    fontStyle: 'italic',
+                    color: COLORS.warmBrown,
                   },
 
                   br: {
@@ -543,28 +543,28 @@ export default function Event() {
                   },
 
                   li: {
-                    color: 'rgba(253,246,227,0.78)',
+                    color: COLORS.warmBrown,
                     fontSize: 14,
                     lineHeight: 23,
                     marginBottom: 5,
                   },
 
                   h1: {
-                    color: COLORS.cream,
+                    color: COLORS.deepBrown,
                     fontSize: 22,
                     fontWeight: '800',
                     marginBottom: 12,
                   },
 
                   h2: {
-                    color: COLORS.cream,
+                    color: COLORS.deepBrown,
                     fontSize: 19,
                     fontWeight: '800',
                     marginBottom: 10,
                   },
 
                   h3: {
-                    color: COLORS.goldLight,
+                    color: COLORS.deepBrown,
                     fontSize: 17,
                     fontWeight: '800',
                     marginBottom: 8,
@@ -575,7 +575,7 @@ export default function Event() {
                   // =================================================
 
                   a: {
-                    color: COLORS.goldLight,
+                    color: COLORS.saffron,
                     textDecorationLine: 'underline',
                     fontWeight: '700',
                   },
@@ -615,15 +615,13 @@ const styles = StyleSheet.create({
 
   container: {
     flex: 1,
-    backgroundColor: COLORS.deepBrown,
+    backgroundColor: COLORS.cream
   },
-
   scrollContent: {
     paddingHorizontal: 8,
     paddingTop: 8,
-    paddingBottom: 24,
+    paddingBottom: 24
   },
-
   // =========================================================
   // TOP ROW
   // =========================================================
@@ -632,9 +630,8 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     // alignItems: 'center',
-    marginBottom: 14,
+    marginBottom: 14
   },
-
   // =========================================================
   // BACK BUTTON
   // =========================================================
@@ -643,22 +640,20 @@ const styles = StyleSheet.create({
     width: 42,
     height: 42,
     borderRadius: 21,
-    backgroundColor: 'rgba(201,162,39,0.16)',
+    backgroundColor: COLORS.creamDark,
     borderWidth: 1,
-    borderColor: 'rgba(201,162,39,0.3)',
+    borderColor: hairline,
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 8,
-    flexShrink: 0,
+    flexShrink: 0
   },
-
   backArrow: {
-    color: COLORS.gold,
+    color: COLORS.saffron,
     fontSize: 32,
     lineHeight: 35,
-    marginTop: -4,
+    marginTop: -4
   },
-
   // =========================================================
   // IMAGE
   // =========================================================
@@ -666,218 +661,202 @@ const styles = StyleSheet.create({
   imageWrapper: {
     flex: 1,
     height: 300,
-    borderRadius: 16,
+    borderRadius: radii.md,
     overflow: 'hidden',
-    backgroundColor: COLORS.richBrown,
+    backgroundColor: COLORS.creamDark,
     borderWidth: 1,
-    borderColor: 'rgba(201,162,39,0.25)',
+    borderColor: hairline
   },
-
   coverImage: {
     width: '100%',
-    height: '100%',
+    height: '100%'
   },
-
   imagePlaceholder: {
     flex: 1,
     height: 230,
-    borderRadius: 16,
-    backgroundColor: COLORS.richBrown,
+    borderRadius: radii.md,
+    backgroundColor: COLORS.creamDark,
     borderWidth: 1,
-    borderColor: 'rgba(201,162,39,0.25)',
+    borderColor: hairline,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-
   placeholderIcon: {
-    fontSize: 38,
+    fontSize: 38
   },
-
   // =========================================================
   // TITLE
   // =========================================================
 
   title: {
-    color: COLORS.cream,
+    color: COLORS.deepBrown,
     fontSize: 24,
     lineHeight: 32,
-    fontWeight: '800',
+    fontWeight: "400",
     marginBottom: 16,
+    fontFamily: DESIGN.fonts.editorial,
+    letterSpacing: -0.4
   },
-
   // =========================================================
   // INFO CARD
   // =========================================================
 
   infoCard: {
-    backgroundColor: COLORS.richBrown,
-    borderRadius: 14,
+    backgroundColor: COLORS.white,
+    borderRadius: 24,
     padding: 14,
     borderWidth: 1,
-    borderColor: 'rgba(201,162,39,0.25)',
+    borderColor: hairline,
     marginBottom: 20,
+    ...shadow.card,
+    shadowOpacity: 0.045,
+    elevation: 2
   },
-
   infoRow: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'center'
   },
-
   iconBox: {
     width: 40,
     height: 40,
     borderRadius: 10,
-    backgroundColor: 'rgba(201,162,39,0.12)',
+    backgroundColor: COLORS.creamDark,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 11,
+    marginRight: 11
   },
-
   icon: {
-    fontSize: 18,
+    fontSize: 18
   },
-
   infoContent: {
-    flex: 1,
+    flex: 1
   },
-
   infoLabel: {
-    color: 'rgba(253,246,227,0.48)',
-    fontSize: 10,
-    marginBottom: 3,
+    color: COLORS.warmBrown,
+    fontSize: 12,
+    marginBottom: 3
   },
-
   infoValue: {
-    color: COLORS.cream,
+    color: COLORS.deepBrown,
     fontSize: 13,
     fontWeight: '600',
-    lineHeight: 19,
+    lineHeight: 19
   },
-
   divider: {
     height: 1,
-    backgroundColor: 'rgba(201,162,39,0.12)',
-    marginVertical: 12,
+    backgroundColor: hairline,
+    marginVertical: 12
   },
-
   // =========================================================
   // SECTION
   // =========================================================
 
   section: {
-    marginBottom: 20,
+    marginBottom: 20
   },
-
   sectionTitle: {
-    color: COLORS.goldLight,
+    color: COLORS.deepBrown,
     fontSize: 16,
-    fontWeight: '800',
-    marginBottom: 9,
+    fontWeight: "600",
+    marginBottom: 9
   },
-
   // =========================================================
   // LOCATION
   // =========================================================
 
   locationCard: {
-    backgroundColor: COLORS.richBrown,
-    borderRadius: 14,
+    backgroundColor: COLORS.white,
+    borderRadius: 24,
     padding: 14,
     borderWidth: 1,
-    borderColor: 'rgba(201,162,39,0.25)',
+    borderColor: hairline,
+    ...shadow.card,
+    shadowOpacity: 0.045,
+    elevation: 2
   },
-
   locationName: {
-    color: COLORS.cream,
+    color: COLORS.deepBrown,
     fontSize: 16,
     fontWeight: '700',
-    marginBottom: 6,
+    marginBottom: 6
   },
-
   locationAddress: {
-    color: 'rgba(253,246,227,0.68)',
+    color: COLORS.warmBrown,
     fontSize: 13,
-    lineHeight: 20,
+    lineHeight: 20
   },
-
   mapButton: {
     marginTop: 13,
     alignSelf: 'flex-start',
-    backgroundColor: 'rgba(201,162,39,0.14)',
-    borderWidth: 1,
-    borderColor: 'rgba(201,162,39,0.35)',
-    borderRadius: 10,
+    backgroundColor: COLORS.richBrown,
+    borderRadius: radii.sm,
     paddingHorizontal: 12,
-    paddingVertical: 8,
+    paddingVertical: 8
   },
-
   mapButtonText: {
-    color: COLORS.goldLight,
-    fontSize: 11,
-    fontWeight: '700',
+    color: COLORS.white,
+    fontSize: 12,
+    fontWeight: '700'
   },
-
   // =========================================================
   // DESCRIPTION
   // =========================================================
 
   descriptionCard: {
-    backgroundColor: COLORS.richBrown,
-    borderRadius: 14,
+    backgroundColor: COLORS.white,
+    borderRadius: 24,
     paddingHorizontal: 14,
     paddingVertical: 14,
     borderWidth: 1,
-    borderColor: 'rgba(201,162,39,0.2)',
+    borderColor: hairline,
+    ...shadow.card,
+    shadowOpacity: 0.045,
+    elevation: 2
   },
-
   // =========================================================
   // PRIMARY BUTTON
   // =========================================================
 
   primaryButton: {
-    backgroundColor: COLORS.gold,
-    borderRadius: 13,
+    backgroundColor: COLORS.richBrown,
+    borderRadius: 16,
     paddingVertical: 14,
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 2,
+    minHeight: 52
   },
-
   primaryButtonText: {
-    color: COLORS.deepBrown,
+    color: COLORS.white,
     fontSize: 14,
-    fontWeight: '800',
+    fontWeight: "600"
   },
-
   // =========================================================
   // LOADING
   // =========================================================
 
   loadingContainer: {
     flex: 1,
-    backgroundColor: COLORS.deepBrown,
+    backgroundColor: COLORS.cream,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-
   loadingText: {
     marginTop: 10,
-    color: COLORS.goldLight,
-    fontSize: 12,
+    color: COLORS.warmBrown,
+    fontSize: 12
   },
-
   // =========================================================
   // EMPTY
   // =========================================================
 
   emptyContainer: {
     flex: 1,
-    backgroundColor: COLORS.deepBrown,
+    backgroundColor: COLORS.cream,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 24,
+    paddingHorizontal: 24
   },
-
   errorBackButton: {
     position: 'absolute',
     top: 14,
@@ -885,47 +864,43 @@ const styles = StyleSheet.create({
     width: 42,
     height: 42,
     borderRadius: 21,
-    backgroundColor: 'rgba(201,162,39,0.16)',
+    backgroundColor: COLORS.creamDark,
     borderWidth: 1,
-    borderColor: 'rgba(201,162,39,0.3)',
+    borderColor: hairline,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-
   emptyIcon: {
     fontSize: 42,
-    marginBottom: 12,
+    marginBottom: 12
   },
-
   emptyTitle: {
-    color: COLORS.cream,
+    color: COLORS.deepBrown,
     fontSize: 20,
-    fontWeight: '800',
+    fontWeight: "400",
     marginBottom: 8,
+    fontFamily: DESIGN.fonts.editorial,
+    letterSpacing: -0.4
   },
-
   emptyText: {
-    color: 'rgba(253,246,227,0.6)',
+    color: COLORS.warmBrown,
     fontSize: 13,
     textAlign: 'center',
     lineHeight: 20,
-    marginBottom: 20,
+    marginBottom: 20
   },
-
   backButton: {
-    backgroundColor: COLORS.gold,
-    borderRadius: 12,
+    backgroundColor: COLORS.richBrown,
+    borderRadius: radii.lg,
     paddingHorizontal: 20,
-    paddingVertical: 11,
+    paddingVertical: 11
   },
-
   backButtonText: {
-    color: COLORS.deepBrown,
+    color: COLORS.white,
     fontSize: 13,
-    fontWeight: '800',
+    fontWeight: "600"
   },
-
   bottomSpace: {
-    height: 16,
-  },
+    height: 16
+  }
 });

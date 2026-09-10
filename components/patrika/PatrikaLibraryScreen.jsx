@@ -17,14 +17,7 @@ import masikPatrikaServices from '@/lib/services/masikPatrikaServices';
 import PatrikaGrid from './PatrikaGrid';
 import PatrikaStatusCard, { normalizeSubscription } from './PatrikaStatusCard';
 
-const COLORS = {
-  deepBrown: '#2C1A0A',
-  warmBrown: '#4A2C0D',
-  gold: '#C9A227',
-  goldLight: '#E8C55A',
-  goldDark: '#8B6914',
-  cream: '#FDF6E3',
-};
+import { COLORS } from '@/constants/brandColors';
 
 function normalizePatrikaResponse(response) {
   const root = response?.data ?? response ?? {};
@@ -185,7 +178,7 @@ export default function PatrikaLibraryScreen({
 
         <View style={styles.hero}>
           <View style={styles.heroIcon}>
-            <Ionicons name="book" size={27} color={COLORS.goldLight} />
+            <Ionicons name="book" size={27} color="#FFFFFF" />
           </View>
 
           <View style={styles.heroText}>
@@ -279,56 +272,48 @@ export default function PatrikaLibraryScreen({
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: '#FFF9F3',
+    backgroundColor: COLORS.creamDark
   },
-
   content: {
     paddingHorizontal: 14,
     paddingTop: 10,
-    paddingBottom: 35,
+    paddingBottom: 35
   },
-
   hero: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 7,
-    marginBottom: 18,
+    marginBottom: 18
   },
-
   heroIcon: {
     width: 52,
     height: 52,
     borderRadius: 17,
-    backgroundColor: COLORS.deepBrown,
+    backgroundColor: COLORS.saffron,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-
   heroText: {
     flex: 1,
-    marginLeft: 12,
+    marginLeft: 12
   },
-
   eyebrow: {
-    fontSize: 9,
-    fontWeight: '800',
+    fontSize: 10,
+    fontWeight: "600",
     letterSpacing: 1.6,
-    color: '#AA7754',
+    color: COLORS.warmBrown
   },
-
   title: {
     marginTop: 2,
     fontSize: 23,
-    fontWeight: '800',
-    color: COLORS.deepBrown,
+    fontWeight: "700",
+    color: COLORS.deepBrown
   },
-
   subtitle: {
     marginTop: 3,
-    fontSize: 10.5,
-    color: '#897462',
+    fontSize: 12,
+    color: COLORS.warmBrown
   },
-
   errorBox: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -336,52 +321,45 @@ const styles = StyleSheet.create({
     marginBottom: 14,
     padding: 11,
     borderRadius: 12,
-    backgroundColor: '#FBEDEA',
+    backgroundColor: '#FBEDEA'
   },
-
   errorText: {
     flex: 1,
-    fontSize: 10.5,
-    color: '#964839',
+    fontSize: 12,
+    color: COLORS.dangerRed
   },
-
   sectionHeader: {
     marginTop: 8,
     marginBottom: 9,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
-
   sectionTitle: {
     fontSize: 13,
-    fontWeight: '800',
-    color: '#523421',
+    fontWeight: "600",
+    color: COLORS.deepBrown
   },
-
   sectionSubtitle: {
     marginTop: 2,
-    fontSize: 9,
-    color: '#A08774',
+    fontSize: 12,
+    color: COLORS.warmBrown
   },
-
   count: {
-    fontSize: 9,
+    fontSize: 12,
     color: COLORS.goldDark,
-    fontWeight: '700',
+    fontWeight: '700'
   },
-
   securityNote: {
     marginTop: 7,
     paddingHorizontal: 10,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    gap: 5,
+    gap: 5
   },
-
   securityText: {
-    fontSize: 8.5,
-    color: '#927965',
-  },
+    fontSize: 12,
+    color: COLORS.warmBrown
+  }
 });

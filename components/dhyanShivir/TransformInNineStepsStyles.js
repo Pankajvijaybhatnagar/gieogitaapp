@@ -1,99 +1,95 @@
+import { DESIGN } from '@/constants/design';
+import { COLORS } from '@/constants/brandColors';
+import { hairline } from '@/constants/theme';
 import { Dimensions, StyleSheet } from 'react-native';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 const CARD_WIDTH = SCREEN_WIDTH * 0.74;
-const CARD_HEIGHT = 445;
+const CARD_HEIGHT = 510;
 
 export const styles = StyleSheet.create({
   section: {
     width: '100%',
-    backgroundColor: '#24120D',
-    paddingVertical: 30,
+    backgroundColor: COLORS.cream,
+    paddingVertical: 32,
     overflow: 'hidden',
-    marginTop: 30,
+    marginTop: 28
   },
-
   header: {
     paddingHorizontal: 24,
-    alignItems: 'center',
+    alignItems: "flex-start"
   },
-
   headerSmall: {
-    color: '#D8A746',
-    fontSize: 9,
-    fontWeight: '800',
+    color: COLORS.goldDark,
+    fontSize: 12,
+    fontWeight: "600",
     letterSpacing: 2,
     textAlign: 'center',
-    marginBottom: 10,
+    marginBottom: 10
   },
-
   headerTitle: {
-    color: '#FFF2D8',
-    fontSize: 22,
-    lineHeight: 33,
-    fontWeight: '800',
-    textAlign: 'center',
+    color: COLORS.deepBrown,
+    fontSize: 30,
+    lineHeight: 38,
+    fontWeight: "400",
+    textAlign: "left",
+    fontFamily: DESIGN.fonts.editorial,
+    letterSpacing: -0.4
   },
   headerTitleName: {
-    color: '#FFF2D8',
-    fontSize: 35,
-    lineHeight: 33,
-    fontWeight: '300',
-    textAlign: 'center',
-    textTransform: 'uppercase',
+    color: COLORS.saffron,
+    fontSize: 32,
+    lineHeight: 42,
+    fontWeight: "400",
+    textAlign: "left",
+    textTransform: "none",
+    fontFamily: DESIGN.fonts.editorial,
+    letterSpacing: -0.4
   },
-
   headerSubtitle: {
-    color: '#E6D1AD',
-    fontSize: 18,
-    lineHeight: 22,
-    fontWeight: '00',
-    textAlign: 'center',
+    color: COLORS.warmBrown,
+    fontSize: 16,
+    lineHeight: 26,
+    fontWeight: "400",
+    textAlign: "left",
     marginTop: 0,
-    marginBottom: 5,
+    marginBottom: 5
   },
-
   headerHighlight: {
-    color: '#E7B34C',
-    fontWeight: '800',
+    color: COLORS.saffron,
+    fontWeight: "600"
   },
-
   headerDescription: {
-    color: 'rgba(255,242,216,0.55)',
-    fontSize: 11,
-    lineHeight: 17,
+    color: COLORS.warmBrown,
+    fontSize: 12,
+    lineHeight: 18,
     textAlign: 'center',
     marginTop: 10,
-    maxWidth: 310,
+    maxWidth: 310
   },
-
   divider: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 55,
     marginTop: 18,
     marginBottom: 2,
-    gap: 10,
+    gap: 10
   },
-
   dividerLine: {
     flex: 1,
     height: 1,
-    backgroundColor: 'rgba(216,167,70,0.22)',
+    backgroundColor: hairline
   },
-
   dividerIcon: {
-    color: '#D8A746',
-    fontSize: 18,
+    color: COLORS.gold,
+    fontSize: 18
   },
-
   sliderArea: {
     position: 'relative',
     minHeight: CARD_HEIGHT + 48,
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-
   backgroundCardOne: {
     position: 'absolute',
     width: CARD_WIDTH - 16,
@@ -101,16 +97,14 @@ export const styles = StyleSheet.create({
     left: (SCREEN_WIDTH - (CARD_WIDTH - 16)) / 2,
     top: 30,
     borderRadius: 25,
-    backgroundColor: '#4B2A1E',
+    backgroundColor: '#4A2C1B',
     borderWidth: 1,
-    borderColor: 'rgba(216,167,70,0.16)',
-    transform: [
-      {
-        rotate: '-3deg',
-      },
-    ],
+    borderColor: 'rgba(212,175,55,0.16)',
+    transform: [{
+      rotate: '-3deg'
+    }],
+    display: "none"
   },
-
   backgroundCardTwo: {
     position: 'absolute',
     width: CARD_WIDTH - 32,
@@ -118,16 +112,14 @@ export const styles = StyleSheet.create({
     left: (SCREEN_WIDTH - (CARD_WIDTH - 32)) / 2,
     top: 37,
     borderRadius: 25,
-    backgroundColor: '#3C2118',
+    backgroundColor: '#3D2416',
     borderWidth: 1,
-    borderColor: 'rgba(216,167,70,0.12)',
-    transform: [
-      {
-        rotate: '4deg',
-      },
-    ],
+    borderColor: 'rgba(212,175,55,0.12)',
+    transform: [{
+      rotate: '4deg'
+    }],
+    display: "none"
   },
-
   backgroundCardThree: {
     position: 'absolute',
     width: CARD_WIDTH - 50,
@@ -135,231 +127,200 @@ export const styles = StyleSheet.create({
     left: (SCREEN_WIDTH - (CARD_WIDTH - 50)) / 2,
     top: 44,
     borderRadius: 25,
-    backgroundColor: '#301A13',
+    backgroundColor: '#2B1710',
     borderWidth: 1,
-    borderColor: 'rgba(216,167,70,0.08)',
-    transform: [
-      {
-        rotate: '-6deg',
-      },
-    ],
+    borderColor: 'rgba(212,175,55,0.08)',
+    transform: [{
+      rotate: '-6deg'
+    }],
+    display: "none"
   },
-
   cardWrapper: {
-    height: CARD_HEIGHT,
+    height: CARD_HEIGHT
   },
-
   courseCard: {
     width: '100%',
     height: '100%',
-    backgroundColor: '#3A2118',
+    backgroundColor: DESIGN.colors.surface,
     borderRadius: 24,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: 'rgba(216,167,70,0.38)',
-
+    borderColor: DESIGN.colors.border,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 10,
+      height: 10
     },
-    shadowOpacity: 0.3,
+    shadowOpacity: 0,
     shadowRadius: 18,
-
-    elevation: 10,
+    elevation: 0
   },
-
   imageContainer: {
-    height: 235,
-    margin: 10,
-    borderRadius: 17,
+    height: 205,
+    margin: 8,
+    borderRadius: 18,
     overflow: 'hidden',
     position: 'relative',
-    backgroundColor: '#2C1711',
+    backgroundColor: DESIGN.colors.soft
   },
-
   courseImage: {
     width: '100%',
-    height: '100%',
+    height: '100%'
   },
-
   imageOverlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(51,27,17,0.15)',
+    backgroundColor: 'rgba(43,23,16,0.15)'
   },
-
   stepBadge: {
     position: 'absolute',
     top: 12,
     left: 12,
-    backgroundColor: 'rgba(41,21,14,0.9)',
-    borderWidth: 1,
-    borderColor: 'rgba(225,180,83,0.52)',
+    backgroundColor: DESIGN.colors.plum,
+    borderWidth: 0,
+    borderColor: 'rgba(226,192,102,0.52)',
     paddingHorizontal: 11,
-    paddingVertical: 6,
-    borderRadius: 18,
+    paddingVertical: 8,
+    borderRadius: 18
   },
-
   stepText: {
-    color: '#F3CA70',
-    fontSize: 8,
+    color: "#FFFFFF",
+    fontSize: 10,
     fontWeight: '900',
-    letterSpacing: 1.2,
+    letterSpacing: 1.2
   },
-
   durationBadge: {
     position: 'absolute',
     right: 12,
     bottom: 12,
-    backgroundColor: 'rgba(41,21,14,0.88)',
+    backgroundColor: 'rgba(43,23,16,0.88)',
     borderWidth: 1,
     borderColor: 'rgba(255,255,255,0.08)',
     borderRadius: 18,
     paddingHorizontal: 10,
-    paddingVertical: 5,
+    paddingVertical: 5
   },
-
   durationText: {
-    color: '#FFF0D1',
-    fontSize: 9,
-    fontWeight: '700',
+    color: '#FFF3E0',
+    fontSize: 11,
+    fontWeight: '700'
   },
-
   content: {
     flex: 1,
-    paddingHorizontal: 18,
-    paddingTop: 4,
-    paddingBottom: 17,
+    paddingHorizontal: 20,
+    paddingTop: 12,
+    paddingBottom: 20
   },
-
   goldLine: {
     width: 28,
     height: 2,
     borderRadius: 10,
-    backgroundColor: '#D8A746',
-    marginBottom: 9,
+    backgroundColor: COLORS.gold,
+    marginBottom: 9
   },
-
   courseTitle: {
-    color: '#FFF3DB',
-    fontSize: 19,
-    lineHeight: 24,
-    fontWeight: '800',
+    color: DESIGN.colors.ink,
+    fontSize: 23,
+    lineHeight: 29,
+    fontWeight: "400",
     marginBottom: 7,
+    fontFamily: DESIGN.fonts.editorial,
+    letterSpacing: -0.4
   },
-
   courseDescription: {
     flex: 1,
-    color: 'rgba(255,243,219,0.58)',
-    fontSize: 10.5,
-    lineHeight: 16,
+    color: DESIGN.colors.muted,
+    fontSize: 13,
+    lineHeight: 21
   },
-
   cardFooter: {
     flexDirection: 'row',
     alignItems: 'flex-end',
     justifyContent: 'space-between',
-    marginTop: 10,
+    marginTop: 10
   },
-
   guideSection: {
-    flex: 1,
+    flex: 1
   },
-
   guideLabel: {
-    color: 'rgba(255,243,219,0.35)',
-    fontSize: 7,
-    fontWeight: '800',
-    letterSpacing: 1.2,
-    marginBottom: 3,
+    color: DESIGN.colors.muted,
+    fontSize: 10,
+    fontWeight: "600",
+    letterSpacing: 1.1,
+    marginBottom: 3
   },
-
   guideName: {
-    color: '#E4B456',
-    fontSize: 12,
-    fontWeight: '800',
+    color: DESIGN.colors.plum,
+    fontSize: 14,
+    fontWeight: "600"
   },
-
   arrowCircle: {
-    width: 38,
-    height: 38,
-    borderRadius: 19,
-    backgroundColor: '#D8A746',
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: DESIGN.colors.plumSoft,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-
   arrowText: {
-    color: '#321A11',
+    color: DESIGN.colors.plum,
     fontSize: 22,
     lineHeight: 24,
-    fontWeight: '700',
+    fontWeight: '700'
   },
-
   pagination: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     gap: 6,
-    marginTop: 3,
+    marginTop: 3
   },
-
   paginationDot: {
     width: 5,
     height: 5,
     borderRadius: 10,
-    backgroundColor: 'rgba(216,167,70,0.23)',
+    backgroundColor: hairline
   },
-
   paginationDotActive: {
     width: 22,
-    backgroundColor: '#D8A746',
+    backgroundColor: COLORS.saffron
   },
-
   pageNumberContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     gap: 4,
-    marginTop: 9,
+    marginTop: 9
   },
-
   currentPage: {
-    color: '#E6B957',
+    color: COLORS.saffron,
     fontSize: 12,
-    fontWeight: '800',
+    fontWeight: "600"
   },
-
   pageSlash: {
-    color: 'rgba(255,243,219,0.24)',
-    fontSize: 10,
+    color: COLORS.warmBrown,
+    fontSize: 10
   },
-
   totalPage: {
-    color: 'rgba(255,243,219,0.4)',
-    fontSize: 9,
-    fontWeight: '600',
+    color: COLORS.warmBrown,
+    fontSize: 10,
+    fontWeight: '600'
   },
-
   loadingContainer: {
     height: 300,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-
   loadingText: {
-    color: '#D8A746',
-    fontSize: 11,
+    color: COLORS.warmBrown,
+    fontSize: 12
   },
-
   emptyContainer: {
     minHeight: 250,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
-
   emptyText: {
-    color: 'rgba(255,243,219,0.5)',
-    fontSize: 11,
-  },
+    color: COLORS.warmBrown,
+    fontSize: 12
+  }
 });

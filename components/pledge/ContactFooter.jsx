@@ -47,23 +47,25 @@ const styles = StyleSheet.create({
     marginTop: 4,
     borderWidth: 1,
     borderColor: C.goldBorder,
-    alignItems: 'center',
+    alignItems: 'center'
   },
   contactTitle: {
     fontSize: 16,
-    fontWeight: '800',
+    fontWeight: "600",
     color: C.deepBrown,
-    marginBottom: 8,
+    marginBottom: 8
   },
   contactDesc: {
     fontSize: 12,
     color: C.warmBrown,
     textAlign: 'center',
     lineHeight: 18,
-    fontStyle: 'italic',
-    marginBottom: 14,
+    marginBottom: 14
   },
-  contactRow: { flexDirection: 'row', gap: 10 },
+  contactRow: {
+    flexDirection: 'row',
+    gap: 10
+  },
   contactBtn: {
     backgroundColor: C.gold,
     borderRadius: 20,
@@ -71,7 +73,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
+    gap: 6
   },
-  contactBtnText: { fontSize: 13, fontWeight: '800', color: C.deepBrown },
+  contactBtnText: {
+    fontSize: 13,
+    fontWeight: "600",
+    color: C.deepBrown
+  }
 });

@@ -1,9 +1,10 @@
+import { DESIGN } from '@/constants/design';
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
 // Define the App component
-export default function chantsScreen() {
+export default function ChantsScreenDemo() {
   const [showChants, setShowChants] = useState(false);
 
   // Conditional rendering based on showChants state
@@ -27,7 +28,7 @@ export default function chantsScreen() {
         />
         <View style={styles.quoteTextContainer}>
           <Text style={styles.quoteText}>
-            "People who have made a hell out of themselves want to go to heaven. People who have made heaven out..."
+            &quot;People who have made a hell out of themselves want to go to heaven. People who have made heaven out...&quot;
           </Text>
           <TouchableOpacity style={styles.button}>
             <Text style={styles.buttonText}>Start Your Day</Text>
@@ -73,13 +74,8 @@ export default function chantsScreen() {
   );
 }
 
-// Define types for ChantsScreen
-type ChantsScreenProps = {
-  setShowChants: (show) => void;
-};
-
 // ChantsScreen component
-function ChantsScreen({ setShowChants }: ChantsScreenProps) {
+function ChantsScreen({ setShowChants }) {
   return (
     <View style={chantsStyles.container}>
       <Text style={chantsStyles.text}>Chants</Text>
@@ -96,65 +92,67 @@ function ChantsScreen({ setShowChants }: ChantsScreenProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFEECC',
+    backgroundColor: '#FFEECC'
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: 20,
-    alignItems: 'center',
+    alignItems: 'center'
   },
   greeting: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#333',
+    color: '#333'
   },
   quoteContainer: {
     backgroundColor: '#FFF7E5',
     marginHorizontal: 20,
     borderRadius: 10,
     overflow: 'hidden',
-    marginBottom: 20,
+    marginBottom: 20
   },
   image: {
     width: '100%',
-    height: 200,
+    height: 200
   },
   quoteTextContainer: {
-    padding: 20,
+    padding: 20
   },
   quoteText: {
     fontSize: 16,
     marginBottom: 10,
-    color: '#555',
+    color: '#555'
   },
   button: {
     backgroundColor: '#66C2FF',
     paddingVertical: 10,
     paddingHorizontal: 20,
-    borderRadius: 5,
+    borderRadius: 5
   },
   buttonText: {
     color: '#fff',
     textAlign: 'center',
-    fontWeight: 'bold',
+    fontWeight: 'bold'
   },
   livestreamContainer: {
-    padding: 20,
+    padding: 20
   },
   livestreamTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "400",
     marginBottom: 10,
+    fontFamily: DESIGN.fonts.editorial,
+    letterSpacing: -0.4
   },
   livestreamImage: {
     width: '100%',
     height: 150,
-    marginBottom: 10,
+    marginBottom: 10
   },
   livestreamDescription: {
     fontSize: 16,
-    color: '#555',
+    color: '#555'
   },
   chantsButton: {
     backgroundColor: '#66C2FF',
@@ -162,11 +160,11 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     borderRadius: 5,
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 20
   },
   chantsButtonText: {
     color: '#fff',
-    fontWeight: 'bold',
+    fontWeight: 'bold'
   },
   bottomNav: {
     flexDirection: 'row',
@@ -174,8 +172,8 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     backgroundColor: '#FFF',
     borderTopWidth: 1,
-    borderColor: '#DDD',
-  },
+    borderColor: '#DDD'
+  }
 });
 
 const chantsStyles = StyleSheet.create({
@@ -183,21 +181,21 @@ const chantsStyles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#FFEECC',
+    backgroundColor: '#FFEECC'
   },
   text: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#333',
+    color: '#333'
   },
   backButton: {
     marginTop: 20,
     backgroundColor: '#66C2FF',
     padding: 10,
-    borderRadius: 5,
+    borderRadius: 5
   },
   backButtonText: {
     color: '#fff',
-    fontWeight: 'bold',
-  },
+    fontWeight: 'bold'
+  }
 });
