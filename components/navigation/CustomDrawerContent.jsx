@@ -1,5 +1,6 @@
 import { useAuth } from '@/context/AuthContext';
 import { useAppAlert } from '@/context/AppAlertContext';
+import { unregisterForPushNotificationsAsync } from '@/lib/notifications/pushNotifications';
 import { FontAwesome } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { usePathname, useRouter } from 'expo-router';
@@ -41,7 +42,7 @@ export default function CustomDrawerContent({ navigation }) {
   const router = useRouter();
   const pathname = usePathname().replace('/(tabs)', '');
   const insets = useSafeAreaInsets();
-  const { user, logout } = useAuth();
+  const { user, access_token, logout } = useAuth();
   const { confirm } = useAppAlert();
 
   const handleLogout = () => {
@@ -49,6 +50,10 @@ export default function CustomDrawerContent({ navigation }) {
       'Logout',
       'Are you sure you want to logout?',
       async () => {
+        // Unregister the device's push token while the access token is
+        // still valid — logout() below clears it from state/SecureStore.
+        await unregisterForPushNotificationsAsync(access_token);
+
         const res = await logout();
         if (res.status) router.replace('/login2');
       },

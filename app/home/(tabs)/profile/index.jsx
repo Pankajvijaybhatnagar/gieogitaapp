@@ -9,6 +9,7 @@ import {
   RefreshControl,
   ScrollView,
   StyleSheet,
+  Switch,
   Text,
   TextInput,
   TouchableOpacity,
@@ -23,6 +24,7 @@ import { useRouter } from 'expo-router';
 import { useAppAlert } from '@/context/AppAlertContext';
 import { useHeaderScrollProps } from '@/context/HeaderScrollContext';
 import { useAuth } from '@/context/AuthContext';
+import { useNotifications } from '@/context/NotificationContext';
 
 import userServices from '@/lib/services/userServices';
 
@@ -65,6 +67,24 @@ export default function ProfileScreen() {
     isAuthenticated,
     logout,
   } = useAuth();
+
+  const { notificationsEnabled, setNotificationsEnabled } = useNotifications();
+
+  // Local, optimistic mirror of notificationsEnabled. The context version
+  // only updates once the permission request / API call round-trips, which
+  // is too slow to drive the Switch directly — without this, the thumb
+  // visually moves on tap (native gesture) then snaps back on re-render
+  // because the controlled `value` prop hasn't caught up yet, reading as
+  // "frozen" or "moving back by itself".
+  const [switchValue, setSwitchValue] = useState(true);
+
+  const [notificationsToggling, setNotificationsToggling] = useState(false);
+
+  useEffect(() => {
+    if (notificationsEnabled !== null) {
+      setSwitchValue(notificationsEnabled);
+    }
+  }, [notificationsEnabled]);
 
   /*
   |--------------------------------------------------------------------------
@@ -471,6 +491,60 @@ export default function ProfileScreen() {
     } finally {
       setSaving(false);
     }
+  };
+
+  /*
+  |--------------------------------------------------------------------------
+  | NOTIFICATIONS TOGGLE
+  |--------------------------------------------------------------------------
+  */
+
+  const applyNotificationsToggle = async value => {
+    setNotificationsToggling(true);
+
+    try {
+      const applied = await setNotificationsEnabled(value);
+
+      // Reconcile with whatever actually happened (e.g. permission denied
+      // when turning on) instead of trusting the optimistic tap.
+      setSwitchValue(applied);
+
+      if (value && !applied) {
+        alert(
+          'Notifications Disabled',
+          'We could not enable push notifications. Please allow notifications for this app in your device settings.',
+        );
+      }
+    } finally {
+      setNotificationsToggling(false);
+    }
+  };
+
+  const handleToggleNotifications = value => {
+    // Move the thumb immediately so the tap always feels responsive —
+    // the slower permission/API work happens in the background and only
+    // snaps the switch back if it didn't actually take effect.
+    setSwitchValue(value);
+
+    // Turning ON needs no confirmation. Turning OFF does — a stray tap
+    // shouldn't silently cut someone off from updates/donation receipts.
+    if (value) {
+      applyNotificationsToggle(true);
+      return;
+    }
+
+    confirm(
+      'Turn Off Notifications?',
+      'You will stop receiving push notifications about updates, donations and more.',
+      () => applyNotificationsToggle(false),
+      {
+        buttonText: 'Turn Off',
+        secondaryButtonText: 'Cancel',
+        destructive: true,
+        icon: 'notifications-off-outline',
+        onCancel: () => setSwitchValue(true),
+      },
+    );
   };
 
   /*
@@ -1007,6 +1081,55 @@ export default function ProfileScreen() {
                   onPress={() => router.push('/home/profile/password')}
                   isLast
                 />
+              </Card>
+            </Animated.View>
+
+            {/* NOTIFICATIONS */}
+
+            <Animated.View
+              style={[
+                styles.section,
+                {
+                  opacity: cardsOpacity,
+                },
+              ]}>
+              <SectionHeader
+                icon="notifications-outline"
+                title="Notifications"
+                subtitle="Control push notifications"
+              />
+
+              <Card radius={radii.xl} style={styles.card}>
+                <View style={styles.toggleRow}>
+                  <View style={styles.accountActionIcon}>
+                    <Ionicons
+                      name="notifications-outline"
+                      size={18}
+                      color={COLORS.primaryDark}
+                    />
+                  </View>
+
+                  <View style={styles.accountActionContent}>
+                    <Text style={styles.accountActionTitle}>
+                      Push Notifications
+                    </Text>
+
+                    <Text style={styles.accountActionSubtitle}>
+                      Get notified about updates, donations and more
+                    </Text>
+                  </View>
+
+                  <Switch
+                    value={switchValue}
+                    onValueChange={handleToggleNotifications}
+                    disabled={notificationsToggling}
+                    trackColor={{
+                      false: COLORS.border,
+                      true: COLORS.primaryDark,
+                    }}
+                    thumbColor={COLORS.white}
+                  />
+                </View>
               </Card>
             </Animated.View>
 
@@ -1549,6 +1672,11 @@ const styles = StyleSheet.create({
   },
   accountActionLast: {
     paddingBottom: 0,
+  },
+  toggleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm + 2,
   },
   accountActionIcon: {
     width: 38,

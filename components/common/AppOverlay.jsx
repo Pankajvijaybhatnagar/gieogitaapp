@@ -243,7 +243,11 @@ const styles = StyleSheet.create({
     marginBottom: spacing.md
   },
   destructiveIconContainer: {
-    backgroundColor: COLORS.dangerLight
+    // A light tint behind the solid dangerRed icon, same "soft tint +
+    // solid glyph" pairing as the default saffron icon container — the
+    // previous solid dangerLight fill was itself reddish, so the dangerRed
+    // icon on top barely showed up against it.
+    backgroundColor: `rgba(${RGB.dangerRed}, 0.12)`
   },
   /*
   |--------------------------------------------------------------------------
@@ -357,8 +361,11 @@ const styles = StyleSheet.create({
     color: COLORS.white
   },
   secondaryDangerButton: {
-    backgroundColor: COLORS.dangerLight,
-    borderColor: `rgba(${RGB.dangerRed}, 0.2)`
+    // Same fix as the icon container — a light dangerRed tint instead of
+    // the solid dangerLight fill, so the dangerRed label actually reads
+    // against it instead of red-on-red.
+    backgroundColor: `rgba(${RGB.dangerRed}, 0.1)`,
+    borderColor: `rgba(${RGB.dangerRed}, 0.25)`
   },
   secondaryDangerText: {
     color: COLORS.dangerRed

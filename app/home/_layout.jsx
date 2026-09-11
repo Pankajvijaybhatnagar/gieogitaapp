@@ -11,9 +11,11 @@ import SharedTabBar from '@/components/navigation/SharedTabBar';
 import { COLORS, RGB } from '@/constants/brandColors';
 import { radii, spacing } from '@/constants/theme';
 import { HeaderScrollProvider, useHeaderScrollY } from '@/context/HeaderScrollContext';
+import { useNotifications } from '@/context/NotificationContext';
 
 function HomeHeader({ navigation }) {
   const router = useRouter();
+  const { unreadCount } = useNotifications();
   const [fontsLoaded] = useFonts({
     'GreatVibes-Regular': require('@/assets/fonts/GreatVibes-Regular.ttf'),
   });
@@ -61,7 +63,7 @@ function HomeHeader({ navigation }) {
             style={styles.iconButton}
             onPress={() => router.push('/home/notifications')}>
             <FontAwesome name="bell-o" size={18} color={COLORS.richBrown} />
-            <View style={styles.notificationDot} />
+            {unreadCount > 0 && <View style={styles.notificationDot} />}
           </TouchableOpacity>
           <TouchableOpacity
             accessibilityRole="button"
