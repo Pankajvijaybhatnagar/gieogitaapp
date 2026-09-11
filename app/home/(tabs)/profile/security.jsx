@@ -16,8 +16,8 @@ import { Ionicons } from '@expo/vector-icons';
 
 import { useRouter } from 'expo-router';
 
-import { useAuth } from '@/context/AuthContext';
 import { useAppAlert } from '@/context/AppAlertContext';
+import { useAuth } from '@/context/AuthContext';
 
 import userServices from '@/lib/services/userServices';
 
@@ -50,6 +50,7 @@ export default function SecurityScreen() {
   const router = useRouter();
 
   const { access_token, isAuthenticated, loading: authLoading } = useAuth();
+
   const {
     success: showSuccessAlert,
     error: showErrorAlert,
@@ -57,46 +58,41 @@ export default function SecurityScreen() {
   } = useAppAlert();
 
   /*
-  |--------------------------------------------------------------------------
-  | DATA
-  |--------------------------------------------------------------------------
-  */
+   |--------------------------------------------------------------------------
+   | DATA
+   |--------------------------------------------------------------------------
+   */
 
   const [sessions, setSessions] = useState([]);
-
   const [page, setPage] = useState(1);
-
   const [totalPages, setTotalPages] = useState(1);
 
   /*
-  |--------------------------------------------------------------------------
-  | UI STATE
-  |--------------------------------------------------------------------------
-  */
+   |--------------------------------------------------------------------------
+   | UI STATE
+   |--------------------------------------------------------------------------
+   */
 
   const [loading, setLoading] = useState(true);
-
   const [refreshing, setRefreshing] = useState(false);
-
   const [actionLoading, setActionLoading] = useState(false);
-
   const [error, setError] = useState('');
 
   /*
-  |--------------------------------------------------------------------------
-  | ANIMATION
-  |--------------------------------------------------------------------------
-  */
+   |--------------------------------------------------------------------------
+   | ANIMATION
+   |--------------------------------------------------------------------------
+   */
 
   const screenOpacity = useRef(new Animated.Value(0)).current;
 
   const screenTranslate = useRef(new Animated.Value(20)).current;
 
   /*
-  |--------------------------------------------------------------------------
-  | AUTH CHECK
-  |--------------------------------------------------------------------------
-  */
+   |--------------------------------------------------------------------------
+   | AUTH CHECK
+   |--------------------------------------------------------------------------
+   */
 
   useEffect(() => {
     if (authLoading) {
@@ -111,174 +107,382 @@ export default function SecurityScreen() {
   }, [authLoading, isAuthenticated, access_token, router]);
 
   /*
-  |--------------------------------------------------------------------------
-  | USER AGENT PARSER
-  |--------------------------------------------------------------------------
-  |
-  | Same logic as web SessionsPage:
-  |
-  | Chrome
-  | Firefox
-  | Edge
-  | Safari
-  |
-  | Windows
-  | Mac
-  | Android
-  | iPhone
-  |--------------------------------------------------------------------------
-  */
+   |--------------------------------------------------------------------------
+   | DEVICE INFO PARSER
+   |--------------------------------------------------------------------------
+   | Same information structure as web version.
+   |
+   | Priority:
+   | 1. device_info
+   | 2. user_agent fallback
+   |--------------------------------------------------------------------------
+   */
+
+  const parseDeviceInfo = useCallback(deviceInfo => {
+    if (!deviceInfo) {
+      return {};
+    }
+
+    try {
+      let parsed = deviceInfo;
+
+      if (typeof deviceInfo === 'string') {
+        parsed = JSON.parse(deviceInfo);
+      }
+
+      if (Array.isArray(parsed)) {
+        parsed = parsed[0] || {};
+      }
+
+      if (parsed && typeof parsed === 'object') {
+        return parsed;
+      }
+
+      return {};
+    } catch (parseError) {
+      console.error('[Security] Unable to parse device_info:', parseError);
+
+      return {};
+    }
+  }, []);
+
+  /*
+   |--------------------------------------------------------------------------
+   | USER AGENT FALLBACK
+   |--------------------------------------------------------------------------
+   | Used only when device_info does not contain
+   | the required information.
+   |--------------------------------------------------------------------------
+   */
 
   const parseUserAgent = useCallback((userAgent = '') => {
     const ua = String(userAgent).toLowerCase();
 
-    let browser = 'Unknown';
+    let browser = 'Unknown Browser';
+    let browserVersion = '';
 
-    let os = 'Unknown';
+    let os = 'Unknown OS';
+    let osVersion = '';
 
-    let device = 'Desktop';
+    let deviceType = 'desktop';
 
-    if (ua.includes('edg')) {
+    /*
+     * BROWSER
+     */
+
+    if (ua.includes('edg/')) {
       browser = 'Edge';
-    } else if (ua.includes('chrome')) {
-      browser = 'Chrome';
-    } else if (ua.includes('firefox')) {
+
+      browserVersion = userAgent.match(/Edg\/([\d.]+)/i)?.[1] || '';
+    } else if (ua.includes('firefox/')) {
       browser = 'Firefox';
-    } else if (ua.includes('safari')) {
+
+      browserVersion = userAgent.match(/Firefox\/([\d.]+)/i)?.[1] || '';
+    } else if (ua.includes('chrome/')) {
+      browser = 'Chrome';
+
+      browserVersion = userAgent.match(/Chrome\/([\d.]+)/i)?.[1] || '';
+    } else if (ua.includes('safari/')) {
       browser = 'Safari';
+
+      browserVersion = userAgent.match(/Version\/([\d.]+)/i)?.[1] || '';
+    } else if (ua.includes('postmanruntime/')) {
+      browser = 'Postman Desktop';
+
+      browserVersion = userAgent.match(/PostmanRuntime\/([\d.]+)/i)?.[1] || '';
+    } else if (ua.includes('okhttp/')) {
+      browser = 'OkHttp';
+
+      browserVersion = userAgent.match(/okhttp\/([\d.]+)/i)?.[1] || '';
     }
+
+    /*
+     * OPERATING SYSTEM
+     */
 
     if (ua.includes('windows')) {
       os = 'Windows';
-    } else if (ua.includes('mac')) {
-      os = 'Mac';
+      deviceType = 'desktop';
     } else if (ua.includes('android')) {
       os = 'Android';
+      deviceType = 'mobile';
 
-      device = 'Mobile';
-    } else if (ua.includes('iphone')) {
-      os = 'iPhone';
+      osVersion = userAgent.match(/Android\s([\d.]+)/i)?.[1] || '';
+    } else if (ua.includes('iphone') || ua.includes('ipad')) {
+      os = ua.includes('ipad') ? 'iPadOS' : 'iOS';
 
-      device = 'Mobile';
-    } else if (ua.includes('ipad')) {
-      os = 'iPad';
+      deviceType = ua.includes('ipad') ? 'tablet' : 'mobile';
 
-      device = 'Tablet';
+      const iosVersion = userAgent.match(/OS\s([\d_]+)/i)?.[1];
+
+      osVersion = iosVersion ? iosVersion.replaceAll('_', '.') : '';
+    } else if (ua.includes('macintosh') || ua.includes('mac os')) {
+      os = 'macOS';
+      deviceType = 'desktop';
     } else if (ua.includes('linux')) {
       os = 'Linux';
+      deviceType = 'desktop';
     }
 
     return {
       browser,
+      browserVersion,
       os,
-      device,
+      osVersion,
+      brand: '',
+      model: '',
+      deviceType,
+      clientType: browser === 'OkHttp' ? 'app' : 'web',
+      appVersion: '',
+      timezone: '',
     };
   }, []);
 
   /*
-  |--------------------------------------------------------------------------
-  | GET BROWSER ICON
-  |--------------------------------------------------------------------------
-  */
+   |--------------------------------------------------------------------------
+   | NORMALIZE SESSION DEVICE DATA
+   |--------------------------------------------------------------------------
+   | Same logic as web SessionsPage.
+   |
+   | device_info has priority.
+   | user_agent is fallback.
+   |--------------------------------------------------------------------------
+   */
+
+  const getSessionDeviceInfo = useCallback(
+    session => {
+      const deviceInfo = parseDeviceInfo(session?.device_info);
+
+      const fallback = parseUserAgent(session?.user_agent);
+
+      const browser =
+        deviceInfo.browser || fallback.browser || 'Unknown Browser';
+
+      const browserVersion =
+        deviceInfo.browser_version || fallback.browserVersion || '';
+
+      const os =
+        deviceInfo.app_device_os ||
+        deviceInfo.os ||
+        fallback.os ||
+        'Unknown OS';
+
+      const osVersion =
+        deviceInfo.app_device_os_version ||
+        deviceInfo.os_version ||
+        fallback.osVersion ||
+        '';
+
+      const brand = deviceInfo.app_device_brand || deviceInfo.brand || '';
+
+      const model =
+        deviceInfo.app_device_model ||
+        deviceInfo.model ||
+        deviceInfo.model_hint ||
+        '';
+
+      let deviceType = deviceInfo.device_type || fallback.deviceType || '';
+
+      /*
+       * DEVICE TYPE FALLBACK
+       */
+
+      if (!deviceType) {
+        if (deviceInfo.is_tablet) {
+          deviceType = 'tablet';
+        } else if (deviceInfo.is_mobile) {
+          deviceType = 'mobile';
+        } else if (deviceInfo.is_desktop) {
+          deviceType = 'desktop';
+        } else {
+          deviceType = 'unknown';
+        }
+      }
+
+      const clientType =
+        deviceInfo.client_type || (browser === 'OkHttp' ? 'app' : 'web');
+
+      const appVersion = deviceInfo.app_version || '';
+
+      const timezone = deviceInfo.timezone || '';
+
+      return {
+        browser,
+        browserVersion,
+        os,
+        osVersion,
+        brand,
+        model,
+        deviceType,
+        clientType,
+        appVersion,
+        timezone,
+      };
+    },
+    [parseDeviceInfo, parseUserAgent],
+  );
+
+  /*
+   |--------------------------------------------------------------------------
+   | TEXT HELPERS
+   |--------------------------------------------------------------------------
+   */
+
+  const capitalize = value => {
+    if (!value) {
+      return '';
+    }
+
+    return value.charAt(0).toUpperCase() + value.slice(1);
+  };
+
+  const getBrowserText = info => {
+    if (info.browserVersion) {
+      return `${info.browser} ${info.browserVersion}`;
+    }
+
+    return info.browser;
+  };
+
+  const getOSDeviceText = info => {
+    const osText = info.osVersion ? `${info.os} ${info.osVersion}` : info.os;
+
+    const deviceText = capitalize(info.deviceType);
+
+    return [osText, deviceText].filter(Boolean).join(' • ');
+  };
+
+  const getModelText = info => {
+    const values = [];
+
+    if (info.brand) {
+      values.push(info.brand);
+    }
+
+    if (info.model && info.model.toLowerCase() !== info.brand?.toLowerCase()) {
+      values.push(info.model);
+    }
+
+    return values.join(' ');
+  };
+
+  const getAdditionalDeviceText = info => {
+    const values = [];
+
+    const modelText = getModelText(info);
+
+    if (modelText) {
+      values.push(modelText);
+    }
+
+    if (info.clientType) {
+      values.push(info.clientType === 'app' ? 'Mobile App' : 'Web');
+    }
+
+    if (info.appVersion) {
+      values.push(`App v${info.appVersion}`);
+    }
+
+    return values.join(' • ');
+  };
+
+  /*
+   |--------------------------------------------------------------------------
+   | BROWSER ICON
+   |--------------------------------------------------------------------------
+   */
 
   const getBrowserIcon = browser => {
-    switch (browser) {
-      case 'Chrome':
-        return 'logo-chrome';
+    const value = String(browser || '').toLowerCase();
 
-      case 'Firefox':
-        return 'logo-firefox';
-
-      case 'Edge':
-        return 'globe-outline';
-
-      case 'Safari':
-        return 'logo-apple';
-
-      default:
-        return 'laptop-outline';
+    if (value.includes('edge')) {
+      return 'globe-outline';
     }
+
+    if (value.includes('chrome')) {
+      return 'logo-chrome';
+    }
+
+    if (value.includes('firefox')) {
+      return 'logo-firefox';
+    }
+
+    if (value.includes('safari')) {
+      return 'logo-apple';
+    }
+
+    return 'laptop-outline';
   };
 
   /*
-  |--------------------------------------------------------------------------
-  | GET OS ICON
-  |--------------------------------------------------------------------------
-  */
+   |--------------------------------------------------------------------------
+   | OS ICON
+   |--------------------------------------------------------------------------
+   */
 
   const getOSIcon = os => {
-    switch (os) {
-      case 'Windows':
-        return 'logo-windows';
+    const value = String(os || '').toLowerCase();
 
-      case 'Mac':
-        return 'logo-apple';
-
-      case 'Android':
-        return 'logo-android';
-
-      case 'iPhone':
-      case 'iPad':
-        return 'phone-portrait-outline';
-
-      default:
-        return 'laptop-outline';
+    if (value.includes('windows')) {
+      return 'logo-windows';
     }
+
+    if (value.includes('android')) {
+      return 'logo-android';
+    }
+
+    if (
+      value.includes('ios') ||
+      value.includes('iphone') ||
+      value.includes('ipad') ||
+      value.includes('mac')
+    ) {
+      return 'logo-apple';
+    }
+
+    return 'laptop-outline';
   };
 
   /*
-  |--------------------------------------------------------------------------
-  | ACTIVE CHECK
-  |--------------------------------------------------------------------------
-  |
-  | Same as web:
-  |
-  | new Date(exp) > new Date()
-  |--------------------------------------------------------------------------
-  */
+   |--------------------------------------------------------------------------
+   | ACTIVE CHECK
+   |--------------------------------------------------------------------------
+   */
+
+  const parseApiDate = date => {
+    if (!date) {
+      return null;
+    }
+
+    const normalizedDate = String(date).includes('T')
+      ? String(date)
+      : String(date).replace(' ', 'T');
+
+    const parsedDate = new Date(normalizedDate);
+
+    return Number.isNaN(parsedDate.getTime()) ? null : parsedDate;
+  };
 
   const isActive = expiresAt => {
-    if (!expiresAt) {
-      return false;
-    }
+    const expiryDate = parseApiDate(expiresAt);
 
-    const expiry = new Date(expiresAt).getTime();
-
-    if (Number.isNaN(expiry)) {
-      return false;
-    }
-
-    return expiry > Date.now();
+    return expiryDate ? expiryDate.getTime() > Date.now() : false;
   };
 
   /*
-  |--------------------------------------------------------------------------
-  | DATE FORMAT
-  |--------------------------------------------------------------------------
-  |
-  | Similar to:
-  |
-  | en-GB
-  | day: numeric
-  | month: short
-  | year: numeric
-  | hour: numeric
-  | minute: 2-digit
-  |--------------------------------------------------------------------------
-  */
+   |--------------------------------------------------------------------------
+   | DATE FORMAT
+   |--------------------------------------------------------------------------
+   */
 
   const formatDate = date => {
-    if (!date) {
+    const parsedDate = parseApiDate(date);
+
+    if (!parsedDate) {
       return '-';
     }
 
-    const parsed = new Date(date);
-
-    if (Number.isNaN(parsed.getTime())) {
-      return String(date);
-    }
-
-    return parsed.toLocaleString('en-GB', {
+    return parsedDate.toLocaleString('en-GB', {
       day: 'numeric',
       month: 'short',
       year: 'numeric',
@@ -288,10 +492,10 @@ export default function SecurityScreen() {
   };
 
   /*
-  |--------------------------------------------------------------------------
-  | FETCH SESSIONS
-  |--------------------------------------------------------------------------
-  */
+   |--------------------------------------------------------------------------
+   | FETCH SESSIONS
+   |--------------------------------------------------------------------------
+   */
 
   const fetchSessions = useCallback(
     async (requestedPage = page, showLoader = true) => {
@@ -339,6 +543,8 @@ export default function SecurityScreen() {
       } catch (requestError) {
         console.error('[Security] Fetch sessions error:', requestError);
 
+        setSessions([]);
+
         setError(requestError?.message || 'Failed to load sessions');
       } finally {
         setLoading(false);
@@ -349,10 +555,10 @@ export default function SecurityScreen() {
   );
 
   /*
-  |--------------------------------------------------------------------------
-  | INITIAL / PAGE FETCH
-  |--------------------------------------------------------------------------
-  */
+   |--------------------------------------------------------------------------
+   | INITIAL / PAGE FETCH
+   |--------------------------------------------------------------------------
+   */
 
   useEffect(() => {
     if (authLoading || !isAuthenticated || !access_token) {
@@ -363,10 +569,10 @@ export default function SecurityScreen() {
   }, [authLoading, isAuthenticated, access_token, page]);
 
   /*
-  |--------------------------------------------------------------------------
-  | SCREEN ANIMATION
-  |--------------------------------------------------------------------------
-  */
+   |--------------------------------------------------------------------------
+   | SCREEN ANIMATION
+   |--------------------------------------------------------------------------
+   */
 
   useEffect(() => {
     if (loading) {
@@ -391,10 +597,10 @@ export default function SecurityScreen() {
   }, [loading]);
 
   /*
-  |--------------------------------------------------------------------------
-  | REFRESH
-  |--------------------------------------------------------------------------
-  */
+   |--------------------------------------------------------------------------
+   | REFRESH
+   |--------------------------------------------------------------------------
+   */
 
   const handleRefresh = async () => {
     setRefreshing(true);
@@ -403,10 +609,10 @@ export default function SecurityScreen() {
   };
 
   /*
-  |--------------------------------------------------------------------------
-  | LOGOUT SINGLE SESSION
-  |--------------------------------------------------------------------------
-  */
+   |--------------------------------------------------------------------------
+   | LOGOUT SINGLE SESSION
+   |--------------------------------------------------------------------------
+   */
 
   const handleLogout = session => {
     const sessionId = session?.id ?? session?.session_id;
@@ -418,8 +624,7 @@ export default function SecurityScreen() {
     }
 
     /*
-     * Don't allow logging out
-     * current device.
+     * Never logout current device.
      */
 
     if (session?.is_current) {
@@ -467,10 +672,10 @@ export default function SecurityScreen() {
   };
 
   /*
-  |--------------------------------------------------------------------------
-  | LOGOUT ALL
-  |--------------------------------------------------------------------------
-  */
+   |--------------------------------------------------------------------------
+   | LOGOUT ALL
+   |--------------------------------------------------------------------------
+   */
 
   const handleLogoutAll = () => {
     confirm(
@@ -489,13 +694,6 @@ export default function SecurityScreen() {
           if (!res?.success) {
             throw new Error(res?.error || 'Failed to logout all sessions');
           }
-
-          /*
-           * Your web version simply calls
-           * fetchSessions() again after this.
-           *
-           * We follow the same behavior.
-           */
 
           await fetchSessions(page, false);
 
@@ -521,17 +719,17 @@ export default function SecurityScreen() {
   };
 
   /*
-  |--------------------------------------------------------------------------
-  | PAGINATION
-  |--------------------------------------------------------------------------
-  */
+   |--------------------------------------------------------------------------
+   | PAGINATION
+   |--------------------------------------------------------------------------
+   */
 
   const goPrevious = () => {
     if (page <= 1 || actionLoading) {
       return;
     }
 
-    setPage(previous => previous - 1);
+    setPage(previous => Math.max(1, previous - 1));
   };
 
   const goNext = () => {
@@ -539,14 +737,14 @@ export default function SecurityScreen() {
       return;
     }
 
-    setPage(previous => previous + 1);
+    setPage(previous => Math.min(totalPages, previous + 1));
   };
 
   /*
-  |--------------------------------------------------------------------------
-  | LOADING
-  |--------------------------------------------------------------------------
-  */
+   |--------------------------------------------------------------------------
+   | LOADING
+   |--------------------------------------------------------------------------
+   */
 
   if (authLoading || loading) {
     return (
@@ -559,10 +757,10 @@ export default function SecurityScreen() {
   }
 
   /*
-  |--------------------------------------------------------------------------
-  | RENDER
-  |--------------------------------------------------------------------------
-  */
+   |--------------------------------------------------------------------------
+   | RENDER
+   |--------------------------------------------------------------------------
+   */
 
   return (
     <View style={styles.screen}>
@@ -579,10 +777,9 @@ export default function SecurityScreen() {
             ],
           },
         ]}>
-        {/* =====================================================
-            HEADER
-        ===================================================== */}
+        {/* HEADER */}
 
+        {/*
         <View style={styles.header}>
           <TouchableOpacity
             style={styles.backButton}
@@ -595,10 +792,9 @@ export default function SecurityScreen() {
 
           <View style={styles.headerSpacer} />
         </View>
+        */}
 
-        {/* =====================================================
-            BODY
-        ===================================================== */}
+        {/* BODY */}
 
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -630,7 +826,7 @@ export default function SecurityScreen() {
             </View>
           </View>
 
-          {/* HEADER / LOGOUT ALL */}
+          {/* SECTION HEADER */}
 
           <View style={styles.sectionHeader}>
             <View style={styles.sectionTitleContainer}>
@@ -705,7 +901,7 @@ export default function SecurityScreen() {
               <SessionCard
                 key={session.id ?? session.session_id ?? index}
                 session={session}
-                parseUserAgent={parseUserAgent}
+                getSessionDeviceInfo={getSessionDeviceInfo}
                 getBrowserIcon={getBrowserIcon}
                 getOSIcon={getOSIcon}
                 isActive={isActive}
@@ -717,7 +913,7 @@ export default function SecurityScreen() {
 
           {/* PAGINATION */}
 
-          {!error && totalPages > 1 && (
+          {!error && totalPages > 1 ? (
             <View style={styles.pagination}>
               <TouchableOpacity
                 style={[
@@ -771,7 +967,7 @@ export default function SecurityScreen() {
                 />
               </TouchableOpacity>
             </View>
-          )}
+          ) : null}
 
           {/* INFO */}
 
@@ -794,14 +990,14 @@ export default function SecurityScreen() {
 }
 
 /*
-|--------------------------------------------------------------------------
-| SESSION CARD
-|--------------------------------------------------------------------------
-*/
+ |--------------------------------------------------------------------------
+ | SESSION CARD
+ |--------------------------------------------------------------------------
+ */
 
 function SessionCard({
   session,
-  parseUserAgent,
+  getSessionDeviceInfo,
   getBrowserIcon,
   getOSIcon,
   isActive,
@@ -809,7 +1005,13 @@ function SessionCard({
   onLogout,
   disabled,
 }) {
-  const info = parseUserAgent(session?.user_agent);
+  /*
+   * IMPORTANT:
+   * Use the normalized device information,
+   * exactly like the web version.
+   */
+
+  const info = getSessionDeviceInfo(session);
 
   const active = isActive(session?.expires_at);
 
@@ -819,9 +1021,73 @@ function SessionCard({
 
   const osIcon = getOSIcon(info.os);
 
+  /*
+   * Browser + version
+   */
+
+  const browserText = info.browserVersion
+    ? `${info.browser} ${info.browserVersion}`
+    : info.browser;
+
+  /*
+   * OS + version
+   */
+
+  const osText = info.osVersion ? `${info.os} ${info.osVersion}` : info.os;
+
+  /*
+   * Device type
+   */
+
+  const deviceText = info.deviceType
+    ? info.deviceType.charAt(0).toUpperCase() + info.deviceType.slice(1)
+    : '';
+
+  /*
+   * Brand + model
+   */
+
+  const modelValues = [];
+
+  if (info.brand) {
+    modelValues.push(info.brand);
+  }
+
+  if (info.model && info.model.toLowerCase() !== info.brand?.toLowerCase()) {
+    modelValues.push(info.model);
+  }
+
+  const modelText = modelValues.join(' ');
+
+  /*
+   * Additional information
+   *
+   * Same as web:
+   *
+   * Brand Model
+   * Web / Mobile App
+   * App vX
+   */
+
+  const additionalValues = [];
+
+  if (modelText) {
+    additionalValues.push(modelText);
+  }
+
+  if (info.clientType) {
+    additionalValues.push(info.clientType === 'app' ? 'Mobile App' : 'Web');
+  }
+
+  if (info.appVersion) {
+    additionalValues.push(`App v${info.appVersion}`);
+  }
+
+  const additionalText = additionalValues.join(' • ');
+
   return (
     <View style={styles.sessionCard}>
-      {/* DEVICE ICON */}
+      {/* DEVICE / BROWSER ICON */}
 
       <View style={[styles.deviceIcon, current && styles.deviceIconCurrent]}>
         <Ionicons
@@ -834,18 +1100,22 @@ function SessionCard({
       {/* CONTENT */}
 
       <View style={styles.sessionContent}>
-        {/* DEVICE NAME */}
+        {/* BROWSER + VERSION + STATUS */}
 
         <View style={styles.deviceTopRow}>
           <View style={styles.deviceTitleContainer}>
             <Text style={styles.deviceTitle} numberOfLines={1}>
-              {info.browser}
-              {' • '}
-              {info.os}
+              {browserText}
             </Text>
 
-            <Text style={styles.deviceType}>{info.device}</Text>
+            <Text style={styles.deviceType}>
+              {osText}
+
+              {deviceText ? ` • ${deviceText}` : ''}
+            </Text>
           </View>
+
+          {/* STATUS */}
 
           <View
             style={[
@@ -889,17 +1159,35 @@ function SessionCard({
           </Text>
         </View>
 
-        {/* OS */}
+        {/* OS + DEVICE */}
 
         <View style={styles.detailRow}>
           <Ionicons name={osIcon} size={12} color={COLORS.light} />
 
           <Text style={styles.detailText}>
-            {info.os} • {info.device}
+            {osText}
+
+            {deviceText ? ` • ${deviceText}` : ''}
           </Text>
         </View>
 
-        {/* ACTION */}
+        {/* BRAND / MODEL / CLIENT / APP VERSION */}
+
+        {additionalText ? (
+          <View style={styles.detailRow}>
+            <Ionicons
+              name="information-circle-outline"
+              size={12}
+              color={COLORS.light}
+            />
+
+            <Text style={styles.detailText} numberOfLines={2}>
+              {additionalText}
+            </Text>
+          </View>
+        ) : null}
+
+        {/* CURRENT DEVICE / LOGOUT */}
 
         {active ? (
           current ? (
@@ -930,30 +1218,34 @@ function SessionCard({
 }
 
 /*
-|--------------------------------------------------------------------------
-| STYLES
-|--------------------------------------------------------------------------
-*/
+ |--------------------------------------------------------------------------
+ | STYLES
+ |--------------------------------------------------------------------------
+ */
 
 const styles = StyleSheet.create({
   flex: {
     flex: 1,
   },
+
   screen: {
     flex: 1,
     backgroundColor: COLORS.background,
   },
+
   loadingScreen: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: COLORS.background,
   },
+
   loadingText: {
     marginTop: 12,
     fontSize: 12,
     color: COLORS.secondary,
   },
+
   header: {
     paddingTop: 46,
     paddingHorizontal: 20,
@@ -965,6 +1257,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: COLORS.border,
   },
+
   backButton: {
     width: 39,
     height: 39,
@@ -973,18 +1266,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+
   headerTitle: {
     fontSize: 17,
     fontWeight: '700',
     color: COLORS.text,
   },
+
   headerSpacer: {
     width: 39,
   },
+
   content: {
     padding: 12,
     paddingBottom: 30,
   },
+
   securityBanner: {
     padding: 13,
     borderRadius: 15,
@@ -993,6 +1290,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 14,
   },
+
   securityIcon: {
     width: 40,
     height: 40,
@@ -1002,39 +1300,41 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginRight: 10,
   },
+
   securityText: {
     flex: 1,
   },
+
   bannerTitle: {
     fontSize: 12,
     fontWeight: '700',
     color: COLORS.success,
   },
+
   bannerSubtitle: {
     marginTop: 3,
     fontSize: 12,
     lineHeight: 18,
     color: '#4F745E',
   },
+
   sectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 7,
     paddingHorizontal: 1,
   },
+
   sectionTitleContainer: {
     flex: 1,
   },
+
   sectionTitle: {
     fontSize: 13,
     fontWeight: '700',
     color: COLORS.text,
   },
-  sectionSubtitle: {
-    marginTop: 1,
-    fontSize: 12,
-    color: COLORS.secondary,
-  },
+
   logoutAllButton: {
     height: 32,
     paddingHorizontal: 10,
@@ -1045,11 +1345,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 5,
   },
+
   logoutAllText: {
     fontSize: 12,
     fontWeight: '700',
     color: COLORS.danger,
   },
+
   errorCard: {
     padding: 11,
     borderRadius: 12,
@@ -1058,18 +1360,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 8,
   },
+
   errorText: {
     flex: 1,
     marginHorizontal: 7,
     fontSize: 12,
     color: COLORS.danger,
   },
+
   retryText: {
     fontSize: 12,
     fontWeight: '700',
     color: COLORS.danger,
     textDecorationLine: 'underline',
   },
+
   sessionCard: {
     backgroundColor: COLORS.white,
     borderWidth: 1,
@@ -1082,6 +1387,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.045,
     elevation: 2,
   },
+
   deviceIcon: {
     width: 40,
     height: 40,
@@ -1091,32 +1397,39 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginRight: 9,
   },
+
   deviceIconCurrent: {
     backgroundColor: COLORS.primaryLight,
   },
+
   sessionContent: {
     flex: 1,
     minWidth: 0,
   },
+
   deviceTopRow: {
     flexDirection: 'row',
     alignItems: 'flex-start',
   },
+
   deviceTitleContainer: {
     flex: 1,
     minWidth: 0,
     paddingRight: 7,
   },
+
   deviceTitle: {
     fontSize: 12,
     fontWeight: '700',
     color: COLORS.text,
   },
+
   deviceType: {
     marginTop: 1,
     fontSize: 12,
     color: COLORS.secondary,
   },
+
   statusBadge: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -1124,45 +1437,56 @@ const styles = StyleSheet.create({
     paddingVertical: 3,
     borderRadius: 8,
   },
+
   activeBadge: {
     backgroundColor: COLORS.successLight,
   },
+
   expiredBadge: {
     backgroundColor: COLORS.dangerLight,
   },
+
   statusDot: {
     width: 5,
     height: 5,
     borderRadius: 3,
     marginRight: 4,
   },
+
   activeDot: {
     backgroundColor: COLORS.success,
   },
+
   expiredDot: {
     backgroundColor: COLORS.danger,
   },
+
   statusText: {
     fontSize: 12,
     fontWeight: '700',
   },
+
   activeText: {
     color: COLORS.success,
   },
+
   expiredText: {
     color: COLORS.danger,
   },
+
   detailRow: {
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: 4,
   },
+
   detailText: {
     flex: 1,
     marginLeft: 4,
     fontSize: 12,
     color: COLORS.secondary,
   },
+
   currentDevice: {
     alignSelf: 'flex-start',
     flexDirection: 'row',
@@ -1173,6 +1497,7 @@ const styles = StyleSheet.create({
     borderRadius: 9,
     backgroundColor: COLORS.successLight,
   },
+
   currentDot: {
     width: 6,
     height: 6,
@@ -1180,11 +1505,13 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.success,
     marginRight: 5,
   },
+
   currentDeviceText: {
     fontSize: 12,
     fontWeight: '700',
     color: COLORS.success,
   },
+
   logoutButton: {
     alignSelf: 'flex-start',
     marginTop: 7,
@@ -1197,11 +1524,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 4,
   },
+
   logoutButtonText: {
     fontSize: 12,
     fontWeight: '700',
     color: COLORS.light,
   },
+
   emptyCard: {
     padding: 32,
     alignItems: 'center',
@@ -1213,6 +1542,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.045,
     elevation: 2,
   },
+
   emptyIcon: {
     width: 56,
     height: 56,
@@ -1221,24 +1551,28 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+
   emptyTitle: {
     marginTop: 10,
     fontSize: 12,
     fontWeight: '700',
     color: COLORS.text,
   },
+
   emptySubtitle: {
     marginTop: 5,
     fontSize: 12,
     color: COLORS.secondary,
     textAlign: 'center',
   },
+
   pagination: {
     marginTop: 7,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
   },
+
   pageButton: {
     minWidth: 74,
     height: 35,
@@ -1252,37 +1586,45 @@ const styles = StyleSheet.create({
     gap: 3,
     paddingHorizontal: 8,
   },
+
   disabledPageButton: {
     backgroundColor: '#F3F2F0',
   },
+
   pageButtonText: {
     fontSize: 10,
     fontWeight: '600',
     color: COLORS.text,
   },
+
   disabledPageText: {
     color: '#B7B7B7',
   },
+
   pageIndicator: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
   },
+
   pageCurrent: {
     fontSize: 10,
     fontWeight: '700',
     color: COLORS.primary,
   },
+
   pageSlash: {
     marginHorizontal: 4,
     fontSize: 10,
     color: COLORS.light,
   },
+
   pageTotal: {
     fontSize: 10,
     fontWeight: '600',
     color: COLORS.secondary,
   },
+
   infoCard: {
     marginTop: 13,
     padding: 11,
@@ -1291,6 +1633,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
   },
+
   infoText: {
     flex: 1,
     marginLeft: 7,
