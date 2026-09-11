@@ -41,7 +41,7 @@ const COLORS = {
   successLight: '#EAF7EF',
 
   danger: BRAND.dangerRed,
-  dangerLight: BRAND.dangerLight,
+  dangerLight: '#FDE8E8',
 };
 
 const PAGE_LIMIT = 10;
@@ -50,7 +50,11 @@ export default function SecurityScreen() {
   const router = useRouter();
 
   const { access_token, isAuthenticated, loading: authLoading } = useAuth();
-  const { success: showSuccessAlert, error: showErrorAlert, confirm } = useAppAlert();
+  const {
+    success: showSuccessAlert,
+    error: showErrorAlert,
+    confirm,
+  } = useAppAlert();
 
   /*
   |--------------------------------------------------------------------------
@@ -431,10 +435,7 @@ export default function SecurityScreen() {
 
           console.log('[Security] Logout session:', sessionId);
 
-          const res = await userServices.logoutSession(
-            sessionId,
-            access_token,
-          );
+          const res = await userServices.logoutSession(sessionId, access_token);
 
           console.log('[Security] Logout session response:', res);
 
@@ -936,22 +937,22 @@ function SessionCard({
 
 const styles = StyleSheet.create({
   flex: {
-    flex: 1
+    flex: 1,
   },
   screen: {
     flex: 1,
-    backgroundColor: COLORS.background
+    backgroundColor: COLORS.background,
   },
   loadingScreen: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: COLORS.background
+    backgroundColor: COLORS.background,
   },
   loadingText: {
     marginTop: 12,
     fontSize: 12,
-    color: COLORS.secondary
+    color: COLORS.secondary,
   },
   header: {
     paddingTop: 46,
@@ -962,7 +963,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.border
+    borderBottomColor: COLORS.border,
   },
   backButton: {
     width: 39,
@@ -970,19 +971,19 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: '#F8F7F5',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   headerTitle: {
     fontSize: 17,
     fontWeight: '700',
-    color: COLORS.text
+    color: COLORS.text,
   },
   headerSpacer: {
-    width: 39
+    width: 39,
   },
   content: {
     padding: 12,
-    paddingBottom: 30
+    paddingBottom: 30,
   },
   securityBanner: {
     padding: 13,
@@ -990,7 +991,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.successLight,
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 14
+    marginBottom: 14,
   },
   securityIcon: {
     width: 40,
@@ -999,40 +1000,40 @@ const styles = StyleSheet.create({
     backgroundColor: '#DFF1E5',
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 10
+    marginRight: 10,
   },
   securityText: {
-    flex: 1
+    flex: 1,
   },
   bannerTitle: {
     fontSize: 12,
     fontWeight: '700',
-    color: COLORS.success
+    color: COLORS.success,
   },
   bannerSubtitle: {
     marginTop: 3,
     fontSize: 12,
     lineHeight: 18,
-    color: '#4F745E'
+    color: '#4F745E',
   },
   sectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 7,
-    paddingHorizontal: 1
+    paddingHorizontal: 1,
   },
   sectionTitleContainer: {
-    flex: 1
+    flex: 1,
   },
   sectionTitle: {
     fontSize: 13,
     fontWeight: '700',
-    color: COLORS.text
+    color: COLORS.text,
   },
   sectionSubtitle: {
     marginTop: 1,
     fontSize: 12,
-    color: COLORS.secondary
+    color: COLORS.secondary,
   },
   logoutAllButton: {
     height: 32,
@@ -1042,12 +1043,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 5
+    gap: 5,
   },
   logoutAllText: {
     fontSize: 12,
     fontWeight: '700',
-    color: COLORS.danger
+    color: COLORS.danger,
   },
   errorCard: {
     padding: 11,
@@ -1055,19 +1056,19 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.dangerLight,
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 8
+    marginBottom: 8,
   },
   errorText: {
     flex: 1,
     marginHorizontal: 7,
     fontSize: 12,
-    color: COLORS.danger
+    color: COLORS.danger,
   },
   retryText: {
     fontSize: 12,
     fontWeight: '700',
     color: COLORS.danger,
-    textDecorationLine: 'underline'
+    textDecorationLine: 'underline',
   },
   sessionCard: {
     backgroundColor: COLORS.white,
@@ -1079,7 +1080,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
     shadowOpacity: 0.045,
-    elevation: 2
+    elevation: 2,
   },
   deviceIcon: {
     width: 40,
@@ -1088,79 +1089,79 @@ const styles = StyleSheet.create({
     backgroundColor: '#F3F2F0',
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 9
+    marginRight: 9,
   },
   deviceIconCurrent: {
-    backgroundColor: COLORS.primaryLight
+    backgroundColor: COLORS.primaryLight,
   },
   sessionContent: {
     flex: 1,
-    minWidth: 0
+    minWidth: 0,
   },
   deviceTopRow: {
     flexDirection: 'row',
-    alignItems: 'flex-start'
+    alignItems: 'flex-start',
   },
   deviceTitleContainer: {
     flex: 1,
     minWidth: 0,
-    paddingRight: 7
+    paddingRight: 7,
   },
   deviceTitle: {
     fontSize: 12,
     fontWeight: '700',
-    color: COLORS.text
+    color: COLORS.text,
   },
   deviceType: {
     marginTop: 1,
     fontSize: 12,
-    color: COLORS.secondary
+    color: COLORS.secondary,
   },
   statusBadge: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 6,
     paddingVertical: 3,
-    borderRadius: 8
+    borderRadius: 8,
   },
   activeBadge: {
-    backgroundColor: COLORS.successLight
+    backgroundColor: COLORS.successLight,
   },
   expiredBadge: {
-    backgroundColor: COLORS.dangerLight
+    backgroundColor: COLORS.dangerLight,
   },
   statusDot: {
     width: 5,
     height: 5,
     borderRadius: 3,
-    marginRight: 4
+    marginRight: 4,
   },
   activeDot: {
-    backgroundColor: COLORS.success
+    backgroundColor: COLORS.success,
   },
   expiredDot: {
-    backgroundColor: COLORS.danger
+    backgroundColor: COLORS.danger,
   },
   statusText: {
     fontSize: 12,
-    fontWeight: '700'
+    fontWeight: '700',
   },
   activeText: {
-    color: COLORS.success
+    color: COLORS.success,
   },
   expiredText: {
-    color: COLORS.danger
+    color: COLORS.danger,
   },
   detailRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 4
+    marginTop: 4,
   },
   detailText: {
     flex: 1,
     marginLeft: 4,
     fontSize: 12,
-    color: COLORS.secondary
+    color: COLORS.secondary,
   },
   currentDevice: {
     alignSelf: 'flex-start',
@@ -1170,19 +1171,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: 7,
     paddingVertical: 4,
     borderRadius: 9,
-    backgroundColor: COLORS.successLight
+    backgroundColor: COLORS.successLight,
   },
   currentDot: {
     width: 6,
     height: 6,
     borderRadius: 3,
     backgroundColor: COLORS.success,
-    marginRight: 5
+    marginRight: 5,
   },
   currentDeviceText: {
     fontSize: 12,
     fontWeight: '700',
-    color: COLORS.success
+    color: COLORS.success,
   },
   logoutButton: {
     alignSelf: 'flex-start',
@@ -1194,12 +1195,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 4
+    gap: 4,
   },
   logoutButtonText: {
     fontSize: 12,
     fontWeight: '700',
-    color: COLORS.danger
+    color: COLORS.light,
   },
   emptyCard: {
     padding: 32,
@@ -1210,7 +1211,7 @@ const styles = StyleSheet.create({
     borderColor: hairline,
     borderRadius: 24,
     shadowOpacity: 0.045,
-    elevation: 2
+    elevation: 2,
   },
   emptyIcon: {
     width: 56,
@@ -1218,25 +1219,25 @@ const styles = StyleSheet.create({
     borderRadius: 28,
     backgroundColor: '#F3F2F0',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   emptyTitle: {
     marginTop: 10,
     fontSize: 12,
     fontWeight: '700',
-    color: COLORS.text
+    color: COLORS.text,
   },
   emptySubtitle: {
     marginTop: 5,
     fontSize: 12,
     color: COLORS.secondary,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   pagination: {
     marginTop: 7,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   pageButton: {
     minWidth: 74,
@@ -1249,38 +1250,38 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 3,
-    paddingHorizontal: 8
+    paddingHorizontal: 8,
   },
   disabledPageButton: {
-    backgroundColor: '#F3F2F0'
+    backgroundColor: '#F3F2F0',
   },
   pageButtonText: {
     fontSize: 10,
     fontWeight: '600',
-    color: COLORS.text
+    color: COLORS.text,
   },
   disabledPageText: {
-    color: '#B7B7B7'
+    color: '#B7B7B7',
   },
   pageIndicator: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   pageCurrent: {
     fontSize: 10,
     fontWeight: '700',
-    color: COLORS.primary
+    color: COLORS.primary,
   },
   pageSlash: {
     marginHorizontal: 4,
     fontSize: 10,
-    color: COLORS.light
+    color: COLORS.light,
   },
   pageTotal: {
     fontSize: 10,
     fontWeight: '600',
-    color: COLORS.secondary
+    color: COLORS.secondary,
   },
   infoCard: {
     marginTop: 13,
@@ -1288,13 +1289,13 @@ const styles = StyleSheet.create({
     borderRadius: 13,
     backgroundColor: COLORS.primaryLight,
     flexDirection: 'row',
-    alignItems: 'flex-start'
+    alignItems: 'flex-start',
   },
   infoText: {
     flex: 1,
     marginLeft: 7,
     fontSize: 12,
     lineHeight: 18,
-    color: COLORS.primaryDark
-  }
+    color: COLORS.primaryDark,
+  },
 });
