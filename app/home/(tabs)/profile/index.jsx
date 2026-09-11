@@ -21,6 +21,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { useRouter } from 'expo-router';
 
 import { useAppAlert } from '@/context/AppAlertContext';
+import { useHeaderScrollProps } from '@/context/HeaderScrollContext';
 import { useAuth } from '@/context/AuthContext';
 
 import userServices from '@/lib/services/userServices';
@@ -55,6 +56,7 @@ export default function ProfileScreen() {
   const router = useRouter();
   const { alert, success, error, warning, loading, hide, confirm } =
     useAppAlert();
+  const headerScrollProps = useHeaderScrollProps();
 
   const {
     user,
@@ -544,7 +546,8 @@ export default function ProfileScreen() {
       <View style={styles.screen}>
         <ScrollView
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={styles.guestScrollContent}>
+          contentContainerStyle={styles.guestScrollContent}
+          {...headerScrollProps}>
           <View style={styles.hero}>
             <View style={styles.heroBanner}>
               <View style={styles.heroPatternOne} />
@@ -635,7 +638,8 @@ export default function ProfileScreen() {
                 tintColor={COLORS.primaryDark}
               />
             }
-            contentContainerStyle={styles.scrollContent}>
+            contentContainerStyle={styles.scrollContent}
+            {...headerScrollProps}>
             {/* HERO */}
 
             <Animated.View
@@ -657,7 +661,7 @@ export default function ProfileScreen() {
                 <TouchableOpacity
                   style={styles.heroTopButton}
                   onPress={() => router.back()}>
-                  <Ionicons name="arrow-back" size={20} color={COLORS.white} />
+                  <Ionicons name="arrow-back" size={20} color={COLORS.primaryDark} />
                 </TouchableOpacity>
 
                 <TouchableOpacity
@@ -666,7 +670,7 @@ export default function ProfileScreen() {
                   <Ionicons
                     name={editing ? 'close-outline' : 'create-outline'}
                     size={20}
-                    color={COLORS.white}
+                    color={COLORS.primaryDark}
                   />
                 </TouchableOpacity>
               </View>
@@ -1215,7 +1219,8 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
 
-  /* HERO — same banner + overlapping badge pattern used across the app */
+  /* HERO — warm cream banner with soft blob accents, same language as the
+     Seva page's hero, instead of a flat solid-dark block. */
   hero: {
     alignItems: 'center',
     paddingBottom: spacing.lg,
@@ -1224,7 +1229,7 @@ const styles = StyleSheet.create({
   heroBanner: {
     width: '100%',
     height: 150,
-    backgroundColor: COLORS.primaryDark,
+    backgroundColor: COLORS.primaryLight,
     overflow: 'hidden',
     alignItems: 'center',
     justifyContent: 'center',
@@ -1234,8 +1239,7 @@ const styles = StyleSheet.create({
     width: 170,
     height: 170,
     borderRadius: 85,
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.12)',
+    backgroundColor: `rgba(${RGB.gold}, 0.12)`,
     top: -70,
     left: -50,
   },
@@ -1244,13 +1248,12 @@ const styles = StyleSheet.create({
     width: 210,
     height: 210,
     borderRadius: 105,
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.09)',
+    backgroundColor: `rgba(${RGB.saffron}, 0.08)`,
     right: -85,
     top: -95,
   },
   heroOm: {
-    color: 'rgba(255,255,255,0.14)',
+    color: `rgba(${RGB.gold}, 0.16)`,
     fontSize: 72,
     fontWeight: '700',
   },
@@ -1261,7 +1264,9 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: 'rgba(0,0,0,0.22)',
+    backgroundColor: `rgba(${RGB.maroon}, 0.1)`,
+    borderWidth: 1,
+    borderColor: `rgba(${RGB.gold}, 0.3)`,
     alignItems: 'center',
     justifyContent: 'center',
   },

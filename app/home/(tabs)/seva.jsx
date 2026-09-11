@@ -1,6 +1,7 @@
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
+import { useHeaderScrollProps } from '@/context/HeaderScrollContext';
 import ContactFooter from '../../../components/pledge/ContactFooter';
 import HeroSection from '../../../components/pledge/HeroSection';
 import HowItWorks from '../../../components/pledge/HowItWorks';
@@ -14,6 +15,7 @@ export default function SevaScreen() {
   const [selectedSeva, setSelectedSeva] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const router = useRouter();
+  const headerScrollProps = useHeaderScrollProps();
 
   const handleDonate = seva => {
     // setSelectedSeva(seva);
@@ -26,7 +28,7 @@ export default function SevaScreen() {
 
   return (
     <View style={styles.root}>
-      <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
+      <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false} {...headerScrollProps}>
         <HeroSection />
 
         <HowItWorks />

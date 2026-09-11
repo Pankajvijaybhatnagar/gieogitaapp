@@ -1,5 +1,6 @@
 import TransformInNineSteps from '@/components/dhyanShivir/TransformInNineSteps';
 import ReelCard from '@/components/home/ReelCard.jsx';
+import { useHeaderScrollProps } from '@/context/HeaderScrollContext';
 import { ScrollView, StatusBar, StyleSheet, View } from 'react-native';
 import { COLORS } from '../../../components/home/constant';
 import EventsSection from '../../../components/home/Eventsection';
@@ -15,6 +16,8 @@ import TestimonialsSection from '../../../components/home/TestimonialsSection';
 import Questionseva from '../../../components/questionseva/QuestionSevaForm.jsx';
 
 export default function GieoGitaHome() {
+  const headerScrollProps = useHeaderScrollProps();
+
   return (
     <View style={styles.root}>
       <StatusBar barStyle="dark-content" backgroundColor={COLORS.cream} />
@@ -22,7 +25,8 @@ export default function GieoGitaHome() {
       <ScrollView
         style={styles.container}
         showsVerticalScrollIndicator={false}
-        bounces>
+        bounces
+        {...headerScrollProps}>
         <HeroBanner />
 
        

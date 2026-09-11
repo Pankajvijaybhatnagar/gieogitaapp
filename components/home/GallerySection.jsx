@@ -120,8 +120,8 @@ export default function GallerySection() {
   );
 }
 
-const CARD_WIDTH = 168;
-const CARD_HEIGHT = 210;
+const CARD_WIDTH = 188;
+const CARD_HEIGHT = 235;
 const CARD_GAP = 12;
 
 const styles = StyleSheet.create({

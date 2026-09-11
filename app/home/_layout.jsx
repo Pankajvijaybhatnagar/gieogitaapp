@@ -1,17 +1,30 @@
 import { FontAwesome } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
+import { useFonts } from 'expo-font';
 import { Link, useRouter } from 'expo-router';
 import { Drawer } from 'expo-router/drawer';
-import { StatusBar, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Animated, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import CustomDrawerContent from '@/components/navigation/CustomDrawerContent';
 import SharedTabBar from '@/components/navigation/SharedTabBar';
 import { COLORS, RGB } from '@/constants/brandColors';
-import { radii, shadow, spacing } from '@/constants/theme';
+import { radii, spacing } from '@/constants/theme';
+import { HeaderScrollProvider, useHeaderScrollY } from '@/context/HeaderScrollContext';
 
 function HomeHeader({ navigation }) {
   const router = useRouter();
+  const [fontsLoaded] = useFonts({
+    'GreatVibes-Regular': require('@/assets/fonts/GreatVibes-Regular.ttf'),
+  });
+
+  // Fully transparent at the top of the page, fading in its frosted-glass
+  // blur/tint over the first ~40px of scroll — whichever screen is active
+  // reports its own scroll position via useHeaderScrollProps().
+  const scrollY = useHeaderScrollY();
+  const blurOpacity = scrollY
+    ? scrollY.interpolate({ inputRange: [0, 40], outputRange: [0, 1], extrapolate: 'clamp' })
+    : 1;
 
   return (
     // Shadow lives on this outer, unclipped layer — `overflow: hidden`
@@ -19,8 +32,10 @@ function HomeHeader({ navigation }) {
     // otherwise suppress it.
     <View style={styles.headerShadowWrap}>
       <SafeAreaView edges={['top']} style={styles.header}>
-        <BlurView intensity={65} tint="light" style={StyleSheet.absoluteFill} />
-        <View style={[StyleSheet.absoluteFill, styles.headerTint]} />
+        <Animated.View style={[StyleSheet.absoluteFill, { opacity: blurOpacity }]}>
+          <BlurView intensity={65} tint="light" style={StyleSheet.absoluteFill} />
+          <View style={[StyleSheet.absoluteFill, styles.headerTint]} />
+        </Animated.View>
 
         <View style={styles.topRow}>
           <TouchableOpacity accessibilityRole="button" accessibilityLabel="Open menu" onPress={() => navigation.toggleDrawer()} style={styles.menuButton}>
@@ -28,7 +43,17 @@ function HomeHeader({ navigation }) {
             <View style={[styles.menuBar, styles.menuBarShort]} />
             <View style={styles.menuBar} />
           </TouchableOpacity>
-          <View style={styles.brand} />
+          <View style={styles.brand}>
+            {fontsLoaded ? (
+              <Text
+                style={styles.brandText}
+                numberOfLines={1}
+                adjustsFontSizeToFit
+                minimumFontScale={0.4}>
+                Shri Krishna Kripa
+              </Text>
+            ) : null}
+          </View>
           {__DEV__ && <Link href="/_sitemap" style={styles.sitemap}>S</Link>}
           <TouchableOpacity
             accessibilityRole="button"
@@ -55,6 +80,7 @@ export default function HomeLayout() {
   return (
     <GestureHandlerRootView style={styles.screen}>
       <StatusBar barStyle="dark-content" backgroundColor={COLORS.cream} />
+      <HeaderScrollProvider>
       <View style={styles.screen}>
         <Drawer drawerContent={props => <CustomDrawerContent {...props} />}
           screenOptions={{ headerShown: true, header: props => <HomeHeader {...props} />,
@@ -137,6 +163,7 @@ export default function HomeLayout() {
         </Drawer>
         <SharedTabBar />
       </View>
+      </HeaderScrollProvider>
     </GestureHandlerRootView>
   );
 }
@@ -145,7 +172,6 @@ const styles = StyleSheet.create({
   headerShadowWrap: {
     borderBottomLeftRadius: radii.xl,
     borderBottomRightRadius: radii.xl,
-    ...shadow.card,
   },
   header: {
     overflow: 'hidden',
@@ -185,7 +211,20 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     marginLeft: 12,
   },
-  brand: { flex: 1 },
+  brand: { flex: 1, justifyContent: 'center' },
+  brandText: {
+    width: '100%',
+    fontFamily: 'GreatVibes-Regular',
+    fontWeight: '400',
+    fontSize: 22,
+    lineHeight: 28,
+    color: COLORS.richBrown,
+    textAlign: 'center',
+    letterSpacing: 0.3,
+    textShadowColor: `rgba(${RGB.gold}, 0.45)`,
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 3,
+  },
   sitemap: { color: COLORS.warmBrown, fontSize: 10, padding: 4 },
   notificationDot: { width: 8, height: 8, borderRadius: 4, borderWidth: 1.5, borderColor: COLORS.cream, backgroundColor: COLORS.saffron, position: 'absolute', top: 6, right: 8 },
 });

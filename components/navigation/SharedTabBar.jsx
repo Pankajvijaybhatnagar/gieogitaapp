@@ -284,10 +284,6 @@ const styles = StyleSheet.create({
     borderRadius: radii.xl,
 
     overflow: 'hidden',
-
-    borderWidth: 1,
-
-    borderColor: `rgba(${RGB.gold}, 0.18)`,
   },
 
   // A lighter, more transparent tint than the shared `glass.overlayStrong`

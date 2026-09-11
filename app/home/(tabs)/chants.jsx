@@ -5,6 +5,7 @@ import YourChants from '@/components/chants/YourChants';
 import { COLORS, RGB } from '@/constants/brandColors';
 import { hairline, radii, shadow, spacing, type } from '@/constants/theme';
 import { useAppAlert } from '@/context/AppAlertContext';
+import { useHeaderScrollProps } from '@/context/HeaderScrollContext';
 import { FontAwesome } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { useEffect, useRef, useState } from 'react';
@@ -266,8 +267,10 @@ function EkMinSection() {
 // 5. PAATH DETAIL SCREEN
 // ─────────────────────────────────────────────────────────────────────────────
 function PaathDetailScreen({ setShowPaath, stats, onSubmit }) {
+  const headerScrollProps = useHeaderScrollProps();
+
   return (
-    <ScrollView style={cdStyles.container} showsVerticalScrollIndicator={false}>
+    <ScrollView style={cdStyles.container} showsVerticalScrollIndicator={false} {...headerScrollProps}>
       <View style={cdStyles.header}>
         <TouchableOpacity
           style={cdStyles.backBtn}
@@ -294,6 +297,7 @@ function PaathDetailScreen({ setShowPaath, stats, onSubmit }) {
 export default function EkMinEkSaathScreen() {
   const [showPaath, setShowPaath] = useState(false);
   const { alert, success, error, warning, loading, hide } = useAppAlert();
+  const headerScrollProps = useHeaderScrollProps();
 
   const [stats, setStats] = useState({
     totalChants: 8556,
@@ -349,7 +353,8 @@ export default function EkMinEkSaathScreen() {
   return (
     <ScrollView
       style={mainStyles.container}
-      showsVerticalScrollIndicator={false}>
+      showsVerticalScrollIndicator={false}
+      {...headerScrollProps}>
       {/* ── CAMPAIGN BANNER CARD ── */}
       <View style={mainStyles.quoteCard}>
         <View style={mainStyles.quoteCardInner}>

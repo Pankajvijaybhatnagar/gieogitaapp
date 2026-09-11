@@ -7,7 +7,7 @@ export const transformInNineStepsData = [
     description:
       'Understand the qualities of an ideal teacher through the Sapt Shloki Gita.',
     image:
-      'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=85',
+      'https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&w=900&q=85',
     duration: 'Part 1 of 9',
   },
   {
@@ -18,7 +18,7 @@ export const transformInNineStepsData = [
     description:
       'Learn how to balance education and life in the light of the Gita.',
     image:
-      'https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=900&q=85',
+      'https://images.unsplash.com/photo-1460518451285-97b6aa326961?auto=format&fit=crop&w=900&q=85',
     duration: 'Part 2 of 9',
   },
   {
@@ -29,7 +29,7 @@ export const transformInNineStepsData = [
     description:
       'Inspiration to embrace medicine as a form of service to humanity.',
     image:
-      'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=900&q=85',
+      'https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?auto=format&fit=crop&w=900&q=85',
     duration: 'Part 3 of 9',
   },
   {
@@ -40,7 +40,7 @@ export const transformInNineStepsData = [
     description:
       'Understand the importance of faith and prayer alongside medical treatment.',
     image:
-      'https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=900&q=85',
+      'https://images.unsplash.com/photo-1447619297994-b829cc1ab44a?auto=format&fit=crop&w=900&q=85',
     duration: 'Part 4 of 9',
   },
   {
@@ -51,7 +51,7 @@ export const transformInNineStepsData = [
     description:
       'A journey of moving away from negativity towards goodness.',
     image:
-      'https://images.unsplash.com/photo-1497250681960-ef046c08a56e?auto=format&fit=crop&w=900&q=85',
+      'https://images.unsplash.com/photo-1612821394773-23f0a7d33ede?auto=format&fit=crop&w=900&q=85',
     duration: 'Part 5 of 9',
   },
   {
@@ -62,7 +62,7 @@ export const transformInNineStepsData = [
     description:
       "Inspiration to bring the Gita's values into householder life.",
     image:
-      'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=900&q=85',
+      'https://images.unsplash.com/photo-1730130596425-197566414dc4?auto=format&fit=crop&w=900&q=85',
     duration: 'Part 6 of 9',
   },
   {
@@ -73,7 +73,7 @@ export const transformInNineStepsData = [
     description:
       'A message of courage and resilience for the youth.',
     image:
-      'https://images.unsplash.com/photo-1514222134-b57cbb8ce073?auto=format&fit=crop&w=900&q=85',
+      'https://images.unsplash.com/photo-1640504409849-da005a55cbd3?auto=format&fit=crop&w=900&q=85',
     duration: 'Part 7 of 9',
   },
   {
@@ -84,7 +84,7 @@ export const transformInNineStepsData = [
     description:
       'The path of rising from sorrow towards yoga and peace.',
     image:
-      'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=900&q=85',
+      'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=900&q=85',
     duration: 'Part 8 of 9',
   },
   {
@@ -95,7 +95,7 @@ export const transformInNineStepsData = [
     description:
       'The importance of balance in nature and a pure environment.',
     image:
-      'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=900&q=85',
+      'https://images.unsplash.com/photo-1595104615356-cbe9c4364513?auto=format&fit=crop&w=900&q=85',
     duration: 'Part 9 of 9',
   },
 ];

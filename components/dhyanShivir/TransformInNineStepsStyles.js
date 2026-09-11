@@ -6,7 +6,7 @@ import { Dimensions, StyleSheet } from 'react-native';
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 const CARD_WIDTH = SCREEN_WIDTH * 0.74;
-const CARD_HEIGHT = 510;
+const CARD_HEIGHT = 440;
 
 export const styles = StyleSheet.create({
   section: {

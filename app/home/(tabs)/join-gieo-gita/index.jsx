@@ -27,6 +27,7 @@ import { Link, Stack, useRouter } from 'expo-router';
 
 import joinGieoGitaServices from '@/lib/services/joinGieoGitaServices';
 import { useAppAlert } from '@/context/AppAlertContext';
+import { useHeaderScrollProps } from '@/context/HeaderScrollContext';
 import { COLORS as BASE, RGB } from '@/constants/brandColors';
 import { hairline, radii, shadow, spacing } from '@/constants/theme';
 
@@ -926,6 +927,7 @@ function Checkbox({ checked, onPress }) {
 export default function JoinGieoGitaScreen() {
   const router = useRouter();
   const { success: showSuccessAlert } = useAppAlert();
+  const headerScrollProps = useHeaderScrollProps();
 
   /* ----------------------------------------------------------
      FORM
@@ -1514,7 +1516,8 @@ export default function JoinGieoGitaScreen() {
         <ScrollView
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
-          contentContainerStyle={styles.content}>
+          contentContainerStyle={styles.content}
+          {...headerScrollProps}>
           {/* HERO */}
 
           <View style={styles.hero}>
@@ -1802,6 +1805,7 @@ const styles = StyleSheet.create({
     paddingTop: spacing.sm,
     paddingBottom: spacing.xl
   },
+
   /* HERO */
 
   hero: {
@@ -1815,7 +1819,7 @@ const styles = StyleSheet.create({
   heroBanner: {
     width: '100%',
     height: 118,
-    backgroundColor: COLORS.brown,
+    backgroundColor: COLORS.background,
     overflow: 'hidden',
     alignItems: 'center',
     justifyContent: 'center'
@@ -1825,8 +1829,7 @@ const styles = StyleSheet.create({
     width: 150,
     height: 150,
     borderRadius: 75,
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.12)',
+    backgroundColor: `rgba(${RGB.gold}, 0.12)`,
     top: -60,
     left: -45
   },
@@ -1835,13 +1838,12 @@ const styles = StyleSheet.create({
     width: 190,
     height: 190,
     borderRadius: 95,
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.09)',
+    backgroundColor: `rgba(${RGB.saffron}, 0.08)`,
     right: -75,
     top: -85
   },
   heroOm: {
-    color: 'rgba(255,255,255,0.14)',
+    color: `rgba(${RGB.gold}, 0.16)`,
     fontSize: 64,
     fontWeight: '700'
   },

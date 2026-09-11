@@ -3,9 +3,24 @@ export { COLORS } from '@/constants/brandColors';
 
 // ─── MOCK DATA ────────────────────────────────────────────────────────────────
 export const heroImages = [
-  { id: '3', source: require('@/assets/images/hero3.png') },
-  { id: '1', source: require('@/assets/images/hero1.png') },
-  { id: '2', source: require('@/assets/images/hero2.png') },
+  {
+    id: '3',
+    source: require('@/assets/images/hero3.png'),
+    tag: 'DIVINE DARSHAN',
+    title: 'A Temple of Devotion & Grace',
+  },
+  {
+    id: '1',
+    source: require('@/assets/images/hero1.png'),
+    tag: 'SACRED TEXT',
+    title: 'Live With Gita, Live According to Gita',
+  },
+  {
+    id: '2',
+    source: require('@/assets/images/hero2.png'),
+    tag: 'GITA SATSANG',
+    title: 'Thousands Gathered in Devotion',
+  },
 ];
 
 // ─── GALLERY ──────────────────────────────────────────────────────────────────
