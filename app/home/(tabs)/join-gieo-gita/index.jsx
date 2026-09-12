@@ -1,15 +1,13 @@
 import { DESIGN } from '@/constants/design';
 // app/join-gieo-gita/index.jsx
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import {
   ActivityIndicator,
   Animated,
-  Dimensions,
   Easing,
   KeyboardAvoidingView,
-  Modal,
   Platform,
   Pressable,
   ScrollView,
@@ -25,32 +23,16 @@ import * as Haptics from 'expo-haptics';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Link, Stack, useRouter } from 'expo-router';
 
-import joinGieoGitaServices from '@/lib/services/joinGieoGitaServices';
-import { useAppAlert } from '@/context/AppAlertContext';
-import { useHeaderScrollProps } from '@/context/HeaderScrollContext';
+import ListBottomSheet from '@/components/ui/ListBottomSheet';
 import { COLORS as BASE, RGB } from '@/constants/brandColors';
 import { hairline, radii, shadow, spacing } from '@/constants/theme';
+import { useAppAlert } from '@/context/AppAlertContext';
+import { useHeaderScrollProps } from '@/context/HeaderScrollContext';
+import joinGieoGitaServices from '@/lib/services/joinGieoGitaServices';
 
 /* ============================================================
    SCREEN
 ============================================================ */
-
-const { height: SCREEN_HEIGHT } = Dimensions.get('window');
-
-// A short list (Marital Status, Dikshit, Wing) shouldn't open into a
-// half-empty sheet with a pointless search box — the sheet now sizes
-// itself to its content instead of always claiming ~40-75% of the screen.
-const SHEET_MIN_HEIGHT = 230;
-
-const SHEET_MAX_HEIGHT = SCREEN_HEIGHT * 0.75;
-
-const SHEET_ROW_HEIGHT = 52;
-
-const SHEET_CHROME_HEIGHT = 150;
-
-const SHEET_SEARCH_HEIGHT = 62;
-
-const SHEET_SEARCH_THRESHOLD = 6;
 
 /* ============================================================
    COLORS
@@ -482,271 +464,6 @@ function TextField({
    MAXIMUM = 75%
 ============================================================ */
 
-function OptionSheet({
-  visible,
-  title,
-  options,
-  value,
-  onSelect,
-  onClose,
-  loading = false,
-}) {
-  const translateY = useRef(new Animated.Value(SCREEN_HEIGHT)).current;
-
-  const opacity = useRef(new Animated.Value(0)).current;
-
-  const [search, setSearch] = useState('');
-
-  const searchInputRef = useRef(null);
-
-  const willShowSearch = (options?.length || 0) > SHEET_SEARCH_THRESHOLD;
-
-  useEffect(() => {
-    if (visible) {
-      setSearch('');
-
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-
-      Animated.parallel([
-        Animated.timing(translateY, {
-          toValue: 0,
-          duration: 300,
-          easing: Easing.out(Easing.cubic),
-          useNativeDriver: true,
-        }),
-
-        Animated.timing(opacity, {
-          toValue: 1,
-          duration: 220,
-          useNativeDriver: true,
-        }),
-      ]).start(() => {
-        // Autofocus the search box once the sheet has finished opening —
-        // saves a tap on lists long enough to actually need searching.
-        if (willShowSearch) {
-          searchInputRef.current?.focus();
-        }
-      });
-    } else {
-      Animated.parallel([
-        Animated.timing(translateY, {
-          toValue: SCREEN_HEIGHT,
-          duration: 220,
-          easing: Easing.in(Easing.cubic),
-          useNativeDriver: true,
-        }),
-
-        Animated.timing(opacity, {
-          toValue: 0,
-          duration: 180,
-          useNativeDriver: true,
-        }),
-      ]).start();
-    }
-  }, [visible]);
-
-  const filteredOptions = useMemo(() => {
-    if (!search.trim()) {
-      return options || [];
-    }
-
-    const q = search.trim().toLowerCase();
-
-    return (options || []).filter(item => item.toLowerCase().includes(q));
-  }, [options, search]);
-
-  // Short lists (Marital Status, Dikshit, Wing...) don't need a search box —
-  // it's just extra chrome for something you can scan in one glance.
-  const showSearch = (options?.length || 0) > SHEET_SEARCH_THRESHOLD;
-
-  // Size the sheet to what it actually holds instead of always opening to
-  // ~40-75% of the screen, which left short lists floating in a mostly
-  // empty sheet.
-  const rowsHeight = loading
-    ? 140
-    : filteredOptions.length === 0
-      ? 160
-      : filteredOptions.length * SHEET_ROW_HEIGHT;
-
-  const naturalHeight =
-    SHEET_CHROME_HEIGHT + (showSearch ? SHEET_SEARCH_HEIGHT : 0) + rowsHeight;
-
-  const sheetHeight = Math.min(
-    Math.max(naturalHeight, SHEET_MIN_HEIGHT),
-    SHEET_MAX_HEIGHT,
-  );
-
-  const close = () => {
-    Animated.parallel([
-      Animated.timing(translateY, {
-        toValue: SCREEN_HEIGHT,
-        duration: 220,
-        easing: Easing.in(Easing.cubic),
-        useNativeDriver: true,
-      }),
-
-      Animated.timing(opacity, {
-        toValue: 0,
-        duration: 180,
-        useNativeDriver: true,
-      }),
-    ]).start(() => {
-      onClose?.();
-    });
-  };
-
-  return (
-    <Modal
-      visible={visible}
-      transparent
-      animationType="none"
-      statusBarTranslucent
-      onRequestClose={close}>
-      <View style={styles.sheetRoot}>
-        <Animated.View
-          style={[
-            styles.sheetBackdrop,
-            {
-              opacity,
-            },
-          ]}
-        />
-
-        <Pressable style={styles.sheetCloseArea} onPress={close} />
-
-        <Animated.View
-          style={[
-            styles.bottomSheet,
-            {
-              height: sheetHeight,
-
-              transform: [
-                {
-                  translateY,
-                },
-              ],
-            },
-          ]}>
-          {/* HANDLE */}
-
-          <View style={styles.sheetHandle} />
-
-          {/* HEADER */}
-
-          <View style={styles.sheetHeader}>
-            <View style={styles.sheetTitleIcon}>
-              <Ionicons name="list" size={17} color={COLORS.white} />
-            </View>
-
-            <View
-              style={{
-                flex: 1,
-              }}>
-              <Text style={styles.sheetTitle}>{title}</Text>
-
-              <Text style={styles.sheetCount}>
-                {loading ? 'Loading...' : `${filteredOptions.length} options`}
-              </Text>
-            </View>
-
-            <Pressable onPress={close} hitSlop={12} style={styles.closeButton}>
-              <Ionicons name="close" size={19} color={COLORS.brown} />
-            </Pressable>
-          </View>
-
-          {/* SEARCH — only shown for lists long enough to need it */}
-
-          {showSearch && (
-            <View style={styles.searchContainer}>
-              <Ionicons name="search-outline" size={17} color={COLORS.muted} />
-
-              <TextInput
-                ref={searchInputRef}
-                value={search}
-                onChangeText={setSearch}
-                placeholder={`Search ${title.toLowerCase()}`}
-                placeholderTextColor={COLORS.muted}
-                returnKeyType="search"
-                style={styles.searchInput}
-              />
-
-              {search.length > 0 && (
-                <Pressable onPress={() => setSearch('')}>
-                  <Ionicons name="close-circle" size={17} color={COLORS.muted} />
-                </Pressable>
-              )}
-            </View>
-          )}
-
-          {/* OPTIONS */}
-
-          {loading ? (
-            <View style={styles.loadingView}>
-              <ActivityIndicator size="small" color={COLORS.brown} />
-
-              <Text style={styles.loadingText}>Loading options...</Text>
-            </View>
-          ) : (
-            <ScrollView
-              style={styles.sheetList}
-              contentContainerStyle={styles.sheetListContent}
-              showsVerticalScrollIndicator={false}
-              keyboardShouldPersistTaps="handled">
-              {filteredOptions.length === 0 ? (
-                <View style={styles.noOptions}>
-                  <Ionicons
-                    name="search-outline"
-                    size={27}
-                    color={COLORS.muted}
-                  />
-
-                  <Text style={styles.noOptionsText}>No options found</Text>
-                </View>
-              ) : (
-                filteredOptions.map((item, index) => {
-                  const selected = item === value;
-
-                  return (
-                    <Pressable
-                      key={`${item}-${index}`}
-                      onPress={() => {
-                        Haptics.selectionAsync();
-                        onSelect(item);
-                      }}
-                      style={({ pressed }) => [
-                        styles.optionRow,
-
-                        selected && styles.selectedOption,
-
-                        pressed && styles.optionPressed,
-                      ]}>
-                      <Text
-                        style={[
-                          styles.optionText,
-                          selected && styles.selectedOptionText,
-                        ]}>
-                        {item}
-                      </Text>
-
-                      {selected && (
-                        <Ionicons
-                          name="checkmark-circle"
-                          size={19}
-                          color={COLORS.white}
-                        />
-                      )}
-                    </Pressable>
-                  );
-                })
-              )}
-            </ScrollView>
-          )}
-        </Animated.View>
-      </View>
-    </Modal>
-  );
-}
-
 /* ============================================================
    SELECT FIELD
 ============================================================ */
@@ -804,13 +521,17 @@ function SelectField({
 
         {disabled && hint ? (
           <View style={styles.fieldHintRow}>
-            <Ionicons name="information-circle" size={13} color={COLORS.muted} />
+            <Ionicons
+              name="information-circle"
+              size={13}
+              color={COLORS.muted}
+            />
             <Text style={styles.fieldHintText}>{hint}</Text>
           </View>
         ) : null}
       </View>
 
-      <OptionSheet
+      <ListBottomSheet
         visible={visible}
         title={label}
         options={options || []}
@@ -859,6 +580,9 @@ function DateField({ label, value, onChange, maximumDate }) {
           value={parseDate(value)}
           mode="date"
           display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+          themeVariant="light"
+          accentColor={COLORS.brown}
+          textColor={COLORS.text}
           maximumDate={maximumDate}
           onChange={(event, selectedDate) => {
             setShowPicker(false);
@@ -1529,7 +1253,11 @@ export default function JoinGieoGitaScreen() {
 
             <View style={styles.heroIconRing}>
               <View style={styles.heroIcon}>
-                <Ionicons name="people-outline" size={28} color={COLORS.white} />
+                <Ionicons
+                  name="people-outline"
+                  size={28}
+                  color={COLORS.white}
+                />
               </View>
             </View>
 
@@ -1775,7 +1503,11 @@ export default function JoinGieoGitaScreen() {
                   <Text style={styles.submitText}>Join GIEO Gita</Text>
 
                   <View style={styles.submitArrowBadge}>
-                    <Ionicons name="arrow-forward" size={16} color={COLORS.brown} />
+                    <Ionicons
+                      name="arrow-forward"
+                      size={16}
+                      color={COLORS.brown}
+                    />
                   </View>
                 </>
               )}
@@ -1798,12 +1530,12 @@ export default function JoinGieoGitaScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.background
+    backgroundColor: COLORS.background,
   },
   content: {
     paddingHorizontal: spacing.md,
     paddingTop: spacing.sm,
-    paddingBottom: spacing.xl
+    paddingBottom: spacing.xl,
   },
 
   /* HERO */
@@ -1814,7 +1546,7 @@ const styles = StyleSheet.create({
     // can bleed edge-to-edge instead of sitting as an inset rectangle.
     marginHorizontal: -spacing.md,
     paddingBottom: spacing.lg,
-    marginBottom: spacing.sm
+    marginBottom: spacing.sm,
   },
   heroBanner: {
     width: '100%',
@@ -1822,7 +1554,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.background,
     overflow: 'hidden',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   heroPatternOne: {
     position: 'absolute',
@@ -1831,7 +1563,7 @@ const styles = StyleSheet.create({
     borderRadius: 75,
     backgroundColor: `rgba(${RGB.gold}, 0.12)`,
     top: -60,
-    left: -45
+    left: -45,
   },
   heroPatternTwo: {
     position: 'absolute',
@@ -1840,12 +1572,12 @@ const styles = StyleSheet.create({
     borderRadius: 95,
     backgroundColor: `rgba(${RGB.saffron}, 0.08)`,
     right: -75,
-    top: -85
+    top: -85,
   },
   heroOm: {
     color: `rgba(${RGB.gold}, 0.16)`,
     fontSize: 64,
-    fontWeight: '700'
+    fontWeight: '700',
   },
   heroIconRing: {
     width: 88,
@@ -1856,7 +1588,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: -44,
     ...shadow.raised,
-    shadowColor: COLORS.brown
+    shadowColor: COLORS.brown,
   },
   heroIcon: {
     width: 68,
@@ -1866,15 +1598,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 3,
-    borderColor: COLORS.card
+    borderColor: COLORS.card,
   },
   heroTitle: {
     marginTop: spacing.sm,
     fontSize: 24,
-    fontWeight: "400",
+    fontWeight: '400',
     color: COLORS.darkBrown,
     fontFamily: DESIGN.fonts.editorial,
-    letterSpacing: -0.4
+    letterSpacing: -0.4,
   },
   heroDivider: {
     width: 40,
@@ -1882,14 +1614,14 @@ const styles = StyleSheet.create({
     borderRadius: radii.pill,
     backgroundColor: COLORS.gold,
     marginTop: spacing.sm,
-    marginBottom: spacing.xs
+    marginBottom: spacing.xs,
   },
   heroSubtitle: {
     fontSize: 13,
     color: COLORS.muted,
     marginTop: 2,
     paddingHorizontal: spacing.lg,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   /* SECTION */
 
@@ -1902,7 +1634,7 @@ const styles = StyleSheet.create({
     paddingTop: spacing.md,
     paddingBottom: spacing.xs,
     marginBottom: spacing.md,
-    ...shadow.card
+    ...shadow.card,
   },
   sectionHeader: {
     flexDirection: 'row',
@@ -1910,7 +1642,7 @@ const styles = StyleSheet.create({
     marginBottom: spacing.sm,
     paddingBottom: spacing.sm,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.border
+    borderBottomColor: COLORS.border,
   },
   sectionIcon: {
     width: 36,
@@ -1921,27 +1653,27 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginRight: spacing.sm,
     ...shadow.card,
-    shadowColor: COLORS.brown
+    shadowColor: COLORS.brown,
   },
   sectionTitle: {
     fontSize: 15.5,
-    fontWeight: "700",
-    color: COLORS.darkBrown
+    fontWeight: '700',
+    color: COLORS.darkBrown,
   },
   /* FIELDS */
 
   field: {
-    marginBottom: spacing.sm
+    marginBottom: spacing.sm,
   },
   label: {
     fontSize: 12,
     fontWeight: '700',
     color: COLORS.text,
     marginBottom: 5,
-    paddingLeft: 1
+    paddingLeft: 1,
   },
   required: {
-    color: COLORS.red
+    color: COLORS.red,
   },
   inputContainer: {
     minHeight: 52,
@@ -1956,78 +1688,93 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
     shadowRadius: 6,
-    elevation: 1
+    elevation: 1,
   },
   textInput: {
     flex: 1,
     minHeight: 46,
     fontSize: 15,
     color: COLORS.text,
-    paddingVertical: 4
+    paddingVertical: 4,
   },
   multilineContainer: {
     minHeight: 67,
-    alignItems: 'flex-start'
+    alignItems: 'flex-start',
   },
   multilineInput: {
     minHeight: 60,
     textAlignVertical: 'top',
-    paddingTop: 7
+    paddingTop: 7,
   },
   /* SELECT */
 
   selectContainer: {
-    justifyContent: 'space-between'
+    position: 'relative',
+    paddingRight: spacing.xl + spacing.sm,
+    borderWidth: 1,
+    borderColor: COLORS.brown,
+    borderRadius: radii.lg,
+    backgroundColor: COLORS.card,
   },
   fieldTrailingBadge: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-    backgroundColor: `rgba(${RGB.maroon},0.12)`,
+    width: 28,
+    height: 46,
+    position: 'absolute',
+    right: spacing.sm + 2,
+    top: 2,
+    backgroundColor: 'transparent',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   selectText: {
     flex: 1,
-    fontSize: 13.5,
-    fontWeight: '600',
+    minHeight: 46,
+    fontSize: 15,
+    fontWeight: '400',
     color: COLORS.text,
-    paddingVertical: 5
+    paddingVertical: 4,
   },
   placeholder: {
     color: COLORS.muted,
-    fontWeight: '400'
+    fontWeight: '400',
   },
   fieldHintRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 5,
     marginTop: 5,
-    paddingLeft: 1
+    paddingLeft: 1,
   },
   fieldHintText: {
     fontSize: 11,
-    color: COLORS.muted
+    color: COLORS.muted,
   },
   disabledInput: {
     backgroundColor: COLORS.background,
-    opacity: 0.62
+    opacity: 0.62,
   },
   pressedInput: {
     borderColor: COLORS.brown,
     borderWidth: 1.5,
-    backgroundColor: COLORS.background
+    backgroundColor: COLORS.background,
   },
   /* DATE */
 
   dateContainer: {
-    justifyContent: 'space-between'
+    position: 'relative',
+    paddingRight: spacing.xl + spacing.sm,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    borderRadius: radii.lg,
+    backgroundColor: COLORS.card,
   },
   dateText: {
     flex: 1,
-    fontSize: 12.5,
+    minHeight: 46,
+    fontSize: 15,
+    fontWeight: '400',
     color: COLORS.text,
-    paddingVertical: 5
+    paddingVertical: 4,
   },
   /* PROFILE */
 
@@ -2040,7 +1787,7 @@ const styles = StyleSheet.create({
     borderRadius: radii.md,
     paddingHorizontal: spacing.sm,
     paddingVertical: spacing.sm,
-    marginBottom: spacing.sm
+    marginBottom: spacing.sm,
   },
   profileExistsText: {
     flex: 1,
@@ -2048,7 +1795,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: COLORS.green,
     fontWeight: '700',
-    lineHeight: 18
+    lineHeight: 18,
   },
   /* ERROR */
 
@@ -2061,170 +1808,14 @@ const styles = StyleSheet.create({
     borderRadius: radii.md,
     paddingHorizontal: spacing.sm,
     paddingVertical: spacing.sm,
-    marginBottom: spacing.md
+    marginBottom: spacing.md,
   },
   errorText: {
     flex: 1,
     marginLeft: spacing.sm,
     color: COLORS.red,
     fontSize: 12,
-    lineHeight: 18
-  },
-  /* ========================================================
-       BOTTOM SHEET
-    ======================================================== */
-
-  sheetRoot: {
-    flex: 1,
-    justifyContent: 'flex-end'
-  },
-  sheetBackdrop: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: `rgba(${RGB.deepBrown},0.55)`
-  },
-  sheetCloseArea: {
-    ...StyleSheet.absoluteFillObject
-  },
-  bottomSheet: {
-    width: '100%',
-    minHeight: SHEET_MIN_HEIGHT,
-    maxHeight: SHEET_MAX_HEIGHT,
-    backgroundColor: COLORS.card,
-    borderTopLeftRadius: radii.xl,
-    borderTopRightRadius: radii.xl,
-    paddingTop: spacing.sm + 2,
-    paddingBottom: Platform.OS === 'ios' ? 27 : 12,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: -4
-    },
-    shadowOpacity: 0.18,
-    shadowRadius: 12,
-    elevation: 18
-  },
-  sheetHandle: {
-    width: 44,
-    height: 5,
-    borderRadius: 3,
-    backgroundColor: `rgba(${RGB.maroon},0.22)`,
-    alignSelf: 'center',
-    marginBottom: spacing.md
-  },
-  sheetHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: spacing.md,
-    paddingBottom: spacing.sm,
-    gap: spacing.sm
-  },
-  sheetTitleIcon: {
-    width: 34,
-    height: 34,
-    borderRadius: 17,
-    backgroundColor: COLORS.brown,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  sheetTitle: {
-    fontSize: 18,
-    fontWeight: "700",
-    color: COLORS.darkBrown
-  },
-  sheetCount: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: COLORS.brown,
-    marginTop: 1
-  },
-  closeButton: {
-    width: 34,
-    height: 34,
-    borderRadius: 17,
-    backgroundColor: COLORS.background,
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  searchContainer: {
-    height: 48,
-    marginHorizontal: spacing.md,
-    marginBottom: spacing.md,
-    borderRadius: radii.lg,
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    backgroundColor: COLORS.background,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: spacing.sm + 2,
-    gap: spacing.xs
-  },
-  searchInput: {
-    flex: 1,
-    fontSize: 15,
-    color: COLORS.text,
-    paddingVertical: 0
-  },
-  sheetList: {
-    flex: 1
-  },
-  sheetListContent: {
-    paddingHorizontal: spacing.sm,
-    paddingBottom: spacing.sm
-  },
-  optionRow: {
-    minHeight: 54,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: spacing.sm + 2,
-    marginBottom: 6,
-    borderRadius: radii.lg,
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    backgroundColor: COLORS.background
-  },
-  selectedOption: {
-    backgroundColor: COLORS.brown,
-    borderColor: COLORS.brown,
-    ...shadow.card,
-    shadowColor: COLORS.brown,
-    shadowOpacity: 0.28
-  },
-  optionPressed: {
-    opacity: 0.85
-  },
-  optionText: {
-    flex: 1,
-    fontSize: 14,
-    fontWeight: '600',
-    color: COLORS.text,
-    paddingRight: 8
-  },
-  selectedOptionText: {
-    color: COLORS.white,
-    fontWeight: "700"
-  },
-  loadingView: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  loadingText: {
-    fontSize: 12,
-    color: COLORS.muted,
-    marginTop: 7
-  },
-  noOptions: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingTop: 45
-  },
-  noOptionsText: {
-    fontSize: 12,
-    color: COLORS.muted,
-    marginTop: 7
+    lineHeight: 18,
   },
   /* TERMS */
 
@@ -2238,7 +1829,7 @@ const styles = StyleSheet.create({
     marginTop: spacing.xs,
     marginBottom: spacing.md,
     paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.sm
+    paddingVertical: spacing.sm,
   },
   checkbox: {
     width: 20,
@@ -2248,22 +1839,22 @@ const styles = StyleSheet.create({
     borderColor: COLORS.brown,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: COLORS.white
+    backgroundColor: COLORS.white,
   },
   checkboxChecked: {
     backgroundColor: COLORS.brown,
-    borderColor: COLORS.brown
+    borderColor: COLORS.brown,
   },
   termsText: {
     flex: 1,
     fontSize: 12,
     color: COLORS.text,
     marginLeft: 7,
-    lineHeight: 18
+    lineHeight: 18,
   },
   termsLink: {
     color: COLORS.brown,
-    fontWeight: "600"
+    fontWeight: '600',
   },
   /* SUBMIT */
 
@@ -2274,7 +1865,7 @@ const styles = StyleSheet.create({
     shadowColor: COLORS.brown,
     shadowOpacity: 0.32,
     shadowRadius: 16,
-    minHeight: 58
+    minHeight: 58,
   },
   submitGradient: {
     flex: 1,
@@ -2282,7 +1873,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 10,
-    paddingHorizontal: spacing.lg
+    paddingHorizontal: spacing.lg,
   },
   submitArrowBadge: {
     width: 26,
@@ -2290,22 +1881,24 @@ const styles = StyleSheet.create({
     borderRadius: 13,
     backgroundColor: COLORS.white,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   submitPressed: {
-    transform: [{
-      scale: 0.985
-    }],
-    opacity: 0.92
+    transform: [
+      {
+        scale: 0.985,
+      },
+    ],
+    opacity: 0.92,
   },
   submitDisabled: {
-    opacity: 0.6
+    opacity: 0.6,
   },
   submitText: {
     color: COLORS.white,
     fontSize: 16,
-    fontWeight: "700",
-    letterSpacing: 0.2
+    fontWeight: '700',
+    letterSpacing: 0.2,
   },
   footer: {
     textAlign: 'center',
@@ -2313,6 +1906,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     letterSpacing: 0.3,
     color: COLORS.goldDark,
-    marginTop: spacing.lg
-  }
+    marginTop: spacing.lg,
+  },
 });
