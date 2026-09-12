@@ -20,9 +20,9 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import * as Haptics from 'expo-haptics';
-import { LinearGradient } from 'expo-linear-gradient';
 import { Link, Stack, useRouter } from 'expo-router';
 
+import Button from '@/components/ui/Button';
 import ListBottomSheet from '@/components/ui/ListBottomSheet';
 import { COLORS as BASE, RGB } from '@/constants/brandColors';
 import { hairline, radii, shadow, spacing } from '@/constants/theme';
@@ -650,7 +650,12 @@ function Checkbox({ checked, onPress }) {
 
 export default function JoinGieoGitaScreen() {
   const router = useRouter();
-  const { success: showSuccessAlert } = useAppAlert();
+  const {
+    success: showSuccessAlert,
+    error: showErrorAlert,
+    showLoading,
+    hide: hideAlert,
+  } = useAppAlert();
   const headerScrollProps = useHeaderScrollProps();
 
   /* ----------------------------------------------------------
@@ -717,15 +722,11 @@ export default function JoinGieoGitaScreen() {
   const [existingProfile, setExistingProfile] = useState(null);
   const [existingProfileData, setExistingProfileData] = useState({});
 
-  const [error, setError] = useState('');
-
   /* ==========================================================
      UPDATE FIELD
   ========================================================== */
 
   const updateField = useCallback((key, value) => {
-    setError('');
-
     setFormData(previous => ({
       ...previous,
       [key]: value,
@@ -761,115 +762,141 @@ export default function JoinGieoGitaScreen() {
 
       setCountries([]);
 
+      showErrorAlert(
+        'Unable to load countries',
+        'Please check your connection and try again.',
+      );
+
       return [];
     } finally {
       setLoadingCountries(false);
     }
-  }, []);
+  }, [showErrorAlert]);
 
   /* ==========================================================
      STATES
 ========================================================== */
 
-  const loadStates = useCallback(async country => {
-    if (!country) {
-      return;
-    }
+  const loadStates = useCallback(
+    async country => {
+      if (!country) {
+        return;
+      }
 
-    try {
-      setLoadingStates(true);
+      try {
+        setLoadingStates(true);
 
-      locationLog('Loading states for country', country);
+        locationLog('Loading states for country', country);
 
-      const response = await joinGieoGitaServices.getLocationOptions(country);
+        const response = await joinGieoGitaServices.getLocationOptions(country);
 
-      const list = extractLocationList(response, 'state');
+        const list = extractLocationList(response, 'state');
 
-      locationLog(`States for ${country}`, list);
+        locationLog(`States for ${country}`, list);
 
-      setStates(list);
-    } catch (error) {
-      console.log('[JOIN-GIEO-GITA] States API ERROR:', error);
+        setStates(list);
+      } catch (error) {
+        console.log('[JOIN-GIEO-GITA] States API ERROR:', error);
 
-      setStates([]);
-    } finally {
-      setLoadingStates(false);
-    }
-  }, []);
+        setStates([]);
+        showErrorAlert(
+          'Unable to load states',
+          'Please try selecting the country again.',
+        );
+      } finally {
+        setLoadingStates(false);
+      }
+    },
+    [showErrorAlert],
+  );
 
   /* ==========================================================
      DISTRICTS
 ========================================================== */
 
-  const loadDistricts = useCallback(async (country, state) => {
-    if (!country || !state) {
-      return;
-    }
+  const loadDistricts = useCallback(
+    async (country, state) => {
+      if (!country || !state) {
+        return;
+      }
 
-    try {
-      setLoadingDistricts(true);
+      try {
+        setLoadingDistricts(true);
 
-      locationLog('Loading districts', {
-        country,
-        state,
-      });
+        locationLog('Loading districts', {
+          country,
+          state,
+        });
 
-      const response = await joinGieoGitaServices.getLocationOptions(
-        country,
-        state,
-      );
+        const response = await joinGieoGitaServices.getLocationOptions(
+          country,
+          state,
+        );
 
-      const list = extractLocationList(response, 'district');
+        const list = extractLocationList(response, 'district');
 
-      locationLog('Districts extracted', list);
+        locationLog('Districts extracted', list);
 
-      setDistricts(list);
-    } catch (error) {
-      console.log('[JOIN-GIEO-GITA] District API ERROR:', error);
+        setDistricts(list);
+      } catch (error) {
+        console.log('[JOIN-GIEO-GITA] District API ERROR:', error);
 
-      setDistricts([]);
-    } finally {
-      setLoadingDistricts(false);
-    }
-  }, []);
+        setDistricts([]);
+        showErrorAlert(
+          'Unable to load districts',
+          'Please try selecting the state again.',
+        );
+      } finally {
+        setLoadingDistricts(false);
+      }
+    },
+    [showErrorAlert],
+  );
 
   /* ==========================================================
      TEHSIL / CITY
 ========================================================== */
 
-  const loadTehsils = useCallback(async (country, state, district) => {
-    if (!country || !state || !district) {
-      return;
-    }
+  const loadTehsils = useCallback(
+    async (country, state, district) => {
+      if (!country || !state || !district) {
+        return;
+      }
 
-    try {
-      setLoadingTehsils(true);
+      try {
+        setLoadingTehsils(true);
 
-      locationLog('Loading tehsil/city', {
-        country,
-        state,
-        district,
-      });
+        locationLog('Loading tehsil/city', {
+          country,
+          state,
+          district,
+        });
 
-      const response = await joinGieoGitaServices.getLocationOptions(
-        country,
-        state,
-        district,
-      );
+        const response = await joinGieoGitaServices.getLocationOptions(
+          country,
+          state,
+          district,
+        );
 
-      const list = extractLocationList(response, 'tehsil');
+        const list = extractLocationList(response, 'tehsil');
 
-      locationLog('Tehsil/city extracted', list);
+        locationLog('Tehsil/city extracted', list);
 
-      setTehsils(list);
-    } catch (error) {
-      console.log('[JOIN-GIEO-GITA] Tehsil API ERROR:', error);
+        setTehsils(list);
+      } catch (error) {
+        console.log('[JOIN-GIEO-GITA] Tehsil API ERROR:', error);
 
-      setTehsils([]);
-    } finally {
-      setLoadingTehsils(false);
-    }
-  }, []);
+        setTehsils([]);
+        showErrorAlert(
+          'Unable to load cities',
+          'Please try selecting the district again.',
+        );
+      } finally {
+        setLoadingTehsils(false);
+      }
+    },
+    [showErrorAlert],
+  );
 
   /* ==========================================================
      INITIAL LOCATION
@@ -966,6 +993,10 @@ export default function JoinGieoGitaScreen() {
         setEducations(educationList);
       } catch (error) {
         console.log('[JOIN-GIEO-GITA] Occupation/Education ERROR:', error);
+        showErrorAlert(
+          'Unable to load options',
+          'Some form options could not be loaded. Please try again.',
+        );
       } finally {
         if (mounted) {
           setLoadingOtherOptions(false);
@@ -978,7 +1009,7 @@ export default function JoinGieoGitaScreen() {
     return () => {
       mounted = false;
     };
-  }, []);
+  }, [showErrorAlert]);
 
   /* ==========================================================
      COUNTRY CHANGE
@@ -1076,6 +1107,10 @@ export default function JoinGieoGitaScreen() {
       }
     } catch (error) {
       console.log('[JOIN-GIEO-GITA] Phone check error:', error);
+      showErrorAlert(
+        'Unable to check WhatsApp number',
+        'Please continue filling the form and try again later.',
+      );
     } finally {
       setCheckingPhone(false);
     }
@@ -1104,20 +1139,23 @@ export default function JoinGieoGitaScreen() {
 
     for (const [key, label] of required) {
       if (!String(formData[key] || '').trim()) {
-        setError(`${label} is required.`);
+        showErrorAlert('Required field', `${label} is required.`);
 
         return false;
       }
     }
 
     if (formData.maritalStatus === 'Married' && !formData.anniver_date) {
-      setError('Anniversary Date is required.');
+      showErrorAlert('Required field', 'Anniversary Date is required.');
 
       return false;
     }
 
     if (!formData.terms) {
-      setError('Please accept the Terms and Privacy Policy.');
+      showErrorAlert(
+        'Terms required',
+        'Please accept the Terms and Privacy Policy.',
+      );
 
       return false;
     }
@@ -1134,14 +1172,16 @@ export default function JoinGieoGitaScreen() {
       return;
     }
 
-    setError('');
-
     if (!validate()) {
       return;
     }
 
     try {
       setSubmitting(true);
+      showLoading(
+        'Creating profile',
+        'Please wait while we save your details.',
+      );
 
       const payload = {
         country: formData.country,
@@ -1192,8 +1232,10 @@ export default function JoinGieoGitaScreen() {
       const hashId = response?.data?.hash_id;
 
       if (hashId) {
+        hideAlert();
         router.push(`/home/(tabs)/join-gieo-gita/${hashId}`);
       } else {
+        hideAlert();
         showSuccessAlert(
           'Success',
           'Your GIEO Gita profile has been created successfully.',
@@ -1201,8 +1243,11 @@ export default function JoinGieoGitaScreen() {
       }
     } catch (error) {
       console.log('[JOIN-GIEO-GITA] SUBMIT ERROR:', error);
-
-      setError(error?.message || 'Something went wrong. Please try again.');
+      hideAlert();
+      showErrorAlert(
+        'Unable to create profile',
+        error?.message || 'Something went wrong. Please try again.',
+      );
     } finally {
       setSubmitting(false);
     }
@@ -1461,58 +1506,20 @@ export default function JoinGieoGitaScreen() {
             onPress={() => updateField('terms', !formData.terms)}
           />
 
-          {/* ERROR */}
-
-          {error ? (
-            <View style={styles.errorBox}>
-              <Ionicons
-                name="alert-circle-outline"
-                size={18}
-                color={COLORS.red}
-              />
-
-              <Text style={styles.errorText}>{error}</Text>
-            </View>
-          ) : null}
-
           {/* SUBMIT */}
 
-          <Pressable
+          <Button
+            title={submitting ? 'Submitting...' : 'Join GIEO Gita'}
             onPress={handleSubmit}
             disabled={submitting || existingProfile}
-            style={({ pressed }) => [
-              styles.submitButton,
-
-              pressed && !submitting && styles.submitPressed,
-
-              submitting && styles.submitDisabled,
-            ]}>
-            <LinearGradient
-              colors={[COLORS.mediumBrown, COLORS.brown, COLORS.darkBrown]}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={styles.submitGradient}>
-              {submitting ? (
-                <>
-                  <ActivityIndicator size="small" color={COLORS.white} />
-
-                  <Text style={styles.submitText}>Submitting...</Text>
-                </>
-              ) : (
-                <>
-                  <Text style={styles.submitText}>Join GIEO Gita</Text>
-
-                  <View style={styles.submitArrowBadge}>
-                    <Ionicons
-                      name="arrow-forward"
-                      size={16}
-                      color={COLORS.brown}
-                    />
-                  </View>
-                </>
-              )}
-            </LinearGradient>
-          </Pressable>
+            loading={submitting}
+            pill
+            icon={
+              <Ionicons name="arrow-forward" size={16} color={COLORS.white} />
+            }
+            style={styles.submitButton}
+            textStyle={styles.submitText}
+          />
 
           <Text style={styles.footer}>
             GIEO Gita • Spreading the message of Shri Bhagavad Gita
@@ -1659,21 +1666,6 @@ const styles = StyleSheet.create({
     fontSize: 15.5,
     fontWeight: '700',
     color: COLORS.darkBrown,
-  },
-  /* FIELDS */
-
-  field: {
-    marginBottom: spacing.sm,
-  },
-  label: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: COLORS.text,
-    marginBottom: 5,
-    paddingLeft: 1,
-  },
-  required: {
-    color: COLORS.red,
   },
   inputContainer: {
     minHeight: 52,
@@ -1859,40 +1851,11 @@ const styles = StyleSheet.create({
   /* SUBMIT */
 
   submitButton: {
-    borderRadius: radii.pill,
-    overflow: 'hidden',
     ...shadow.raised,
     shadowColor: COLORS.brown,
     shadowOpacity: 0.32,
     shadowRadius: 16,
     minHeight: 58,
-  },
-  submitGradient: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 10,
-    paddingHorizontal: spacing.lg,
-  },
-  submitArrowBadge: {
-    width: 26,
-    height: 26,
-    borderRadius: 13,
-    backgroundColor: COLORS.white,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  submitPressed: {
-    transform: [
-      {
-        scale: 0.985,
-      },
-    ],
-    opacity: 0.92,
-  },
-  submitDisabled: {
-    opacity: 0.6,
   },
   submitText: {
     color: COLORS.white,
