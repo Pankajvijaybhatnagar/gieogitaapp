@@ -8,22 +8,22 @@
 import * as Notifications from 'expo-notifications';
 import { router } from 'expo-router';
 import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
+    createContext,
+    useCallback,
+    useContext,
+    useEffect,
+    useRef,
+    useState,
 } from 'react';
 
 import { useAuth } from '@/context/AuthContext';
-import notificationServices from '@/lib/services/notificationServices';
 import {
-  getNotificationPreferenceAsync,
-  registerForPushNotificationsAsync,
-  setNotificationPreferenceAsync,
-  unregisterForPushNotificationsAsync,
+    getNotificationPreferenceAsync,
+    registerForPushNotificationsAsync,
+    setNotificationPreferenceAsync,
+    unregisterForPushNotificationsAsync,
 } from '@/lib/notifications/pushNotifications';
+import notificationServices from '@/lib/services/notificationServices';
 
 const PAGE_LIMIT = 20;
 
@@ -33,7 +33,9 @@ export const useNotifications = () => {
   const context = useContext(NotificationContext);
 
   if (!context) {
-    throw new Error('useNotifications must be used within a NotificationProvider');
+    throw new Error(
+      'useNotifications must be used within a NotificationProvider',
+    );
   }
 
   return context;
@@ -118,9 +120,10 @@ export const NotificationProvider = ({ children }) => {
     [access_token, page],
   );
 
-  const refresh = useCallback(() => fetchNotifications({ reset: true }), [
-    fetchNotifications,
-  ]);
+  const refresh = useCallback(
+    () => fetchNotifications({ reset: true }),
+    [fetchNotifications],
+  );
 
   const loadMore = useCallback(() => {
     if (loading || refreshing || !hasMore) return;
@@ -201,9 +204,9 @@ export const NotificationProvider = ({ children }) => {
   // TOGGLE NOTIFICATIONS ON/OFF
   // =========================
 
-  // Returns the state that actually ended up applied — turning "on" can
-  // fail (permission denied), in which case the caller should reflect
-  // that back to the user instead of assuming success.
+  // Returns both the applied state and the OS permission state. A missing
+  // token can mean permission was denied, but it can also mean token/backend
+  // registration failed after permission was already granted.
   const setNotificationsEnabled = useCallback(
     async enabled => {
       if (!enabled) {
@@ -213,7 +216,7 @@ export const NotificationProvider = ({ children }) => {
 
         await setNotificationPreferenceAsync(false);
         setNotificationsEnabledState(false);
-        return true;
+        return { applied: true, permissionGranted: true };
       }
 
       const token = access_token
@@ -221,10 +224,12 @@ export const NotificationProvider = ({ children }) => {
         : null;
 
       const applied = Boolean(token);
+      const permission = await Notifications.getPermissionsAsync();
+      const permissionGranted = permission.status === 'granted';
 
       await setNotificationPreferenceAsync(applied);
       setNotificationsEnabledState(applied);
-      return applied;
+      return { applied, permissionGranted };
     },
     [access_token],
   );

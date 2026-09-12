@@ -1703,10 +1703,6 @@ const styles = StyleSheet.create({
   selectContainer: {
     position: 'relative',
     paddingRight: spacing.xl + spacing.sm,
-    borderWidth: 1,
-    borderColor: COLORS.brown,
-    borderRadius: radii.lg,
-    backgroundColor: COLORS.card,
   },
   fieldTrailingBadge: {
     width: 28,
@@ -1755,10 +1751,6 @@ const styles = StyleSheet.create({
   dateContainer: {
     position: 'relative',
     paddingRight: spacing.xl + spacing.sm,
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    borderRadius: radii.lg,
-    backgroundColor: COLORS.card,
   },
   dateText: {
     flex: 1,

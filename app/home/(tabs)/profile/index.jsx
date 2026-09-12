@@ -1,19 +1,20 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import {
-  ActivityIndicator,
-  Animated,
-  Easing,
-  KeyboardAvoidingView,
-  Platform,
-  RefreshControl,
-  ScrollView,
-  StyleSheet,
-  Switch,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
+    ActivityIndicator,
+    Animated,
+    Easing,
+    KeyboardAvoidingView,
+    Linking,
+    Platform,
+    RefreshControl,
+    ScrollView,
+    StyleSheet,
+    Switch,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
 } from 'react-native';
 
 import { Ionicons } from '@expo/vector-icons';
@@ -22,8 +23,8 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { useRouter } from 'expo-router';
 
 import { useAppAlert } from '@/context/AppAlertContext';
-import { useHeaderScrollProps } from '@/context/HeaderScrollContext';
 import { useAuth } from '@/context/AuthContext';
+import { useHeaderScrollProps } from '@/context/HeaderScrollContext';
 import { useNotifications } from '@/context/NotificationContext';
 
 import userServices from '@/lib/services/userServices';
@@ -503,16 +504,48 @@ export default function ProfileScreen() {
     setNotificationsToggling(true);
 
     try {
-      const applied = await setNotificationsEnabled(value);
+      const result = await setNotificationsEnabled(value);
+      const applied = typeof result === 'boolean' ? result : result.applied;
+      const permissionGranted =
+        typeof result === 'boolean' ? result : result.permissionGranted;
 
       // Reconcile with whatever actually happened (e.g. permission denied
       // when turning on) instead of trusting the optimistic tap.
       setSwitchValue(applied);
 
       if (value && !applied) {
-        alert(
+        if (permissionGranted) {
+          alert(
+            'Notifications Unavailable',
+            'Notification permission is already enabled, but this device could not be registered for push notifications. Please try again shortly.',
+          );
+          return;
+        }
+
+        confirm(
           'Notifications Disabled',
-          'We could not enable push notifications. Please allow notifications for this app in your device settings.',
+          `Please allow notifications for this app in ${
+            Platform.OS === 'ios' ? 'iPhone' : 'Android'
+          } Settings to receive updates and donation receipts.`,
+          async () => {
+            try {
+              await Linking.openSettings();
+            } catch (settingsError) {
+              console.error(
+                '[Profile] Open notification settings error:',
+                settingsError,
+              );
+              alert(
+                'Unable to Open Settings',
+                "Please open this app's notification settings manually.",
+              );
+            }
+          },
+          {
+            buttonText: 'Open Settings',
+            secondaryButtonText: 'Not Now',
+            icon: 'notifications-outline',
+          },
         );
       }
     } finally {
@@ -735,7 +768,11 @@ export default function ProfileScreen() {
                 <TouchableOpacity
                   style={styles.heroTopButton}
                   onPress={() => router.back()}>
-                  <Ionicons name="arrow-back" size={20} color={COLORS.primaryDark} />
+                  <Ionicons
+                    name="arrow-back"
+                    size={20}
+                    color={COLORS.primaryDark}
+                  />
                 </TouchableOpacity>
 
                 <TouchableOpacity
