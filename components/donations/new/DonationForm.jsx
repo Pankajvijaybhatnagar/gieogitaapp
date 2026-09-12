@@ -4,24 +4,25 @@ import { useEffect, useState } from 'react';
 
 import { useAppAlert } from '@/context/AppAlertContext';
 import {
-  ActivityIndicator,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View
+    ActivityIndicator,
+    KeyboardAvoidingView,
+    Platform,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
 } from 'react-native';
 
+import Spacer from '@/components/ui/Spacer';
+import { COLORS, RGB } from '@/constants/brandColors';
+import { hairline, radii, shadow, type } from '@/constants/theme';
 import AmountSelector from './AmountSelector';
 import CityAutocomplete from './CityAutocomplete';
 import DonationConsent from './DonationConsent';
 import FormField from './FormField';
 import IdentityFields from './IdentityFields';
 import SevaTypeSelector from './SevaTypeSelector';
-import { COLORS, RGB } from '@/constants/brandColors';
-import { hairline, radii, shadow, type } from '@/constants/theme';
 
 const DonationForm = ({ profile, submitting, serverError, onSubmit }) => {
   const { alert, success, error, warning, loading, hide, confirm } =
@@ -272,7 +273,11 @@ const DonationForm = ({ profile, submitting, serverError, onSubmit }) => {
 
         {serverError ? (
           <View style={styles.errorBox}>
-            <Ionicons name="alert-circle-outline" size={16} color={COLORS.dangerRed} />
+            <Ionicons
+              name="alert-circle-outline"
+              size={16}
+              color={COLORS.dangerRed}
+            />
 
             <Text style={styles.errorText}>{serverError}</Text>
           </View>
@@ -451,13 +456,18 @@ const DonationForm = ({ profile, submitting, serverError, onSubmit }) => {
         </TouchableOpacity>
 
         <View style={styles.secureRow}>
-          <Ionicons name="shield-checkmark-outline" size={13} color={COLORS.warmBrown} />
+          <Ionicons
+            name="shield-checkmark-outline"
+            size={13}
+            color={COLORS.warmBrown}
+          />
 
           <Text style={styles.secureText}>
             Your payment will be processed securely through the authorized
             payment gateway.
           </Text>
         </View>
+        <Spacer height={120} />
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -467,18 +477,18 @@ export default DonationForm;
 
 const styles = StyleSheet.create({
   flex: {
-    flex: 1
+    flex: 1,
   },
   scrollContent: {
     paddingHorizontal: 24,
     paddingTop: 24,
-    paddingBottom: 40
+    paddingBottom: 40,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'flex-start',
     marginBottom: 28,
-    gap: 4
+    gap: 4,
   },
   headerIcon: {
     width: 50,
@@ -486,30 +496,30 @@ const styles = StyleSheet.create({
     borderRadius: 17,
     backgroundColor: COLORS.richBrown,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   headerContent: {
     flex: 1,
-    marginLeft: 11
+    marginLeft: 11,
   },
   eyebrow: {
     ...type.caption,
-    color: COLORS.saffron
+    color: COLORS.saffron,
   },
   title: {
     marginTop: 2,
     fontSize: 29,
-    fontWeight: "400",
+    fontWeight: '400',
     color: COLORS.deepBrown,
     fontFamily: DESIGN.fonts.editorial,
     letterSpacing: -0.4,
-    lineHeight: 36
+    lineHeight: 36,
   },
   subtitle: {
     marginTop: 4,
     fontSize: 13,
     lineHeight: 20,
-    color: COLORS.warmBrown
+    color: COLORS.warmBrown,
   },
   sectionTitleRow: {
     marginTop: 4,
@@ -517,18 +527,18 @@ const styles = StyleSheet.create({
     marginHorizontal: 4,
     flexDirection: 'row',
     alignItems: 'center',
-    flexWrap: "wrap",
-    gap: 6
+    flexWrap: 'wrap',
+    gap: 6,
   },
   sectionTitle: {
     fontSize: 16,
-    fontWeight: "600",
-    color: COLORS.deepBrown
+    fontWeight: '600',
+    color: COLORS.deepBrown,
   },
   sectionHint: {
     marginLeft: 'auto',
     fontSize: 11,
-    color: COLORS.warmBrown
+    color: COLORS.warmBrown,
   },
   card: {
     marginBottom: 20,
@@ -539,14 +549,14 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.white,
     ...shadow.card,
     shadowOpacity: 0.045,
-    elevation: 2
+    elevation: 2,
   },
   twoColumn: {
-    flexDirection: "column",
-    gap: 4
+    flexDirection: 'column',
+    gap: 4,
   },
   column: {
-    flex: 1
+    flex: 1,
   },
   errorBox: {
     marginBottom: 12,
@@ -555,13 +565,13 @@ const styles = StyleSheet.create({
     backgroundColor: `rgba(${RGB.dangerRed},0.08)`,
     flexDirection: 'row',
     gap: 7,
-    alignItems: 'center'
+    alignItems: 'center',
   },
   errorText: {
     flex: 1,
     fontSize: 12,
     lineHeight: 18,
-    color: COLORS.dangerRed
+    color: COLORS.dangerRed,
   },
   submitButton: {
     minHeight: 56,
@@ -573,10 +583,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 7,
-    ...shadow.raised
+    ...shadow.raised,
   },
   submitDisabled: {
-    opacity: 0.65
+    opacity: 0.65,
   },
   submitText: {
     flex: 1,
@@ -584,20 +594,20 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '700',
     color: COLORS.white,
-    lineHeight: 22
+    lineHeight: 22,
   },
   secureRow: {
     marginTop: 11,
     paddingHorizontal: 12,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   secureText: {
     marginLeft: 5,
     fontSize: 11,
     lineHeight: 18,
     textAlign: 'center',
-    color: COLORS.warmBrown
-  }
+    color: COLORS.warmBrown,
+  },
 });

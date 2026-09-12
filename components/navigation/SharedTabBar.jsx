@@ -1,11 +1,17 @@
-import { useEffect, useRef } from 'react';
+import { COLORS, RGB } from '@/constants/brandColors';
+import { radii, spacing } from '@/constants/theme';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
 import { usePathname, useRouter } from 'expo-router';
-import { Animated, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useEffect, useRef } from 'react';
+import {
+  Animated,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { COLORS, RGB } from '@/constants/brandColors';
-import { radii, spacing } from '@/constants/theme';
 
 const TABS = [
   {
@@ -76,7 +82,9 @@ export default function SharedTabBar() {
   |
   */
 
-  const tabAnims = useRef(TABS.map(tab => new Animated.Value(isTabActive(tab.route) ? 1 : 0))).current;
+  const tabAnims = useRef(
+    TABS.map(tab => new Animated.Value(isTabActive(tab.route) ? 1 : 0)),
+  ).current;
 
   useEffect(() => {
     TABS.forEach((tab, index) => {
@@ -104,82 +112,89 @@ export default function SharedTabBar() {
       <View style={styles.tabBarFloating}>
         {/* CLIPPED BACKGROUND — rounded corners cut the blur/tint cleanly */}
         <View style={styles.tabBarClip}>
-          <BlurView intensity={65} tint="light" style={StyleSheet.absoluteFill} />
-          <View style={[StyleSheet.absoluteFill, styles.tabBarOverlay]} />
+          <BlurView
+            intensity={98}
+            tint="light"
+            style={StyleSheet.absoluteFill}>
+            <View style={[StyleSheet.absoluteFill, styles.tabBarOverlay]} />
 
-          <View style={styles.tabBar}>
-            {TABS.map((tab, index) => {
-              // The Seva tab renders as a floating overlay below (outside
-              // the clip) so its notch can pop above the bar — reserve an
-              // equal-width empty slot here to keep the other tabs centered.
-              if (tab.label === 'Seva') {
-                return <View key={index} style={styles.centerSpacer} />;
-              }
+            <View style={styles.tabBar}>
+              {TABS.map((tab, index) => {
+                // The Seva tab renders as a floating overlay below (outside
+                // the clip) so its notch can pop above the bar — reserve an
+                // equal-width empty slot here to keep the other tabs centered.
+                if (tab.label === 'Seva') {
+                  return <View key={index} style={styles.centerSpacer} />;
+                }
 
-              const isActive = isTabActive(tab.route);
-              const anim = tabAnims[index];
+                const isActive = isTabActive(tab.route);
+                const anim = tabAnims[index];
 
-              return (
-                <TouchableOpacity
-                  key={index}
-                  activeOpacity={0.75}
-                  onPress={() => router.push(tab.route)}
-                  style={styles.tabItem}>
-                  <View style={styles.iconSlot}>
-                    {/* Pill highlight — fades + grows in behind the icon
+                return (
+                  <TouchableOpacity
+                    key={index}
+                    activeOpacity={0.75}
+                    onPress={() => router.push(tab.route)}
+                    style={styles.tabItem}>
+                    <View style={styles.iconSlot}>
+                      {/* Pill highlight — fades + grows in behind the icon
                         for whichever page the person is currently on. */}
-                    <Animated.View
-                      pointerEvents="none"
-                      style={[
-                        styles.iconPill,
-                        {
-                          opacity: anim,
+                      <Animated.View
+                        pointerEvents="none"
+                        style={[
+                          styles.iconPill,
+                          {
+                            opacity: anim,
+                            transform: [
+                              {
+                                scale: anim.interpolate({
+                                  inputRange: [0, 1],
+                                  outputRange: [0.6, 1],
+                                }),
+                              },
+                            ],
+                          },
+                        ]}
+                      />
+
+                      <Animated.View
+                        style={{
                           transform: [
+                            {
+                              translateY: anim.interpolate({
+                                inputRange: [0, 1],
+                                outputRange: [0, -2],
+                              }),
+                            },
                             {
                               scale: anim.interpolate({
                                 inputRange: [0, 1],
-                                outputRange: [0.6, 1],
+                                outputRange: [1, 1.12],
                               }),
                             },
                           ],
-                        },
-                      ]}
-                    />
+                        }}>
+                        <MaterialCommunityIcons
+                          name={isActive ? tab.iconFocused : tab.icon}
+                          size={22}
+                          color={isActive ? COLORS.richBrown : COLORS.warmBrown}
+                        />
+                      </Animated.View>
+                    </View>
 
-                    <Animated.View
-                      style={{
-                        transform: [
-                          {
-                            translateY: anim.interpolate({
-                              inputRange: [0, 1],
-                              outputRange: [0, -2],
-                            }),
-                          },
-                          {
-                            scale: anim.interpolate({
-                              inputRange: [0, 1],
-                              outputRange: [1, 1.12],
-                            }),
-                          },
-                        ],
-                      }}>
-                      <MaterialCommunityIcons
-                        name={isActive ? tab.iconFocused : tab.icon}
-                        size={22}
-                        color={isActive ? COLORS.richBrown : COLORS.warmBrown}
-                      />
-                    </Animated.View>
-                  </View>
-
-                  <Text
-                    numberOfLines={1}
-                    style={[styles.tabLabel, isActive && styles.tabLabelActive]}>
-                    {tab.label}
-                  </Text>
-                </TouchableOpacity>
-              );
-            })}
-          </View>
+                    <Text
+                      numberOfLines={1}
+                      style={[
+                        styles.tabLabel,
+                        isActive && styles.tabLabelActive,
+                      ]}>
+                      {tab.label}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+          </BlurView>
         </View>
 
         {/* ───────────────────────────────────────
@@ -242,19 +257,20 @@ const styles = StyleSheet.create({
   tabBarWrapper: {
     width: '100%',
 
-    position: 'relative',
+    position: 'absolute',
 
     overflow: 'visible',
 
     zIndex: 999,
 
-    elevation: 20,
+    elevation: 15,
 
     // Side + bottom breathing room so the bar reads as a floating pill
     // instead of a bar glued to the screen edges.
     paddingHorizontal: spacing.md,
 
     paddingTop: spacing.xs,
+    bottom: 0,
   },
 
   // Unclipped outer layer — holds the "lifted" shadow. Overflow stays
@@ -274,7 +290,8 @@ const styles = StyleSheet.create({
 
     shadowRadius: 20,
 
-    elevation: 15,
+    elevation: 17,
+    borderWidth: 0,
   },
 
   // Clipped inner layer — rounds the blur/tint to a clean pill shape.

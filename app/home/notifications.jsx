@@ -8,15 +8,16 @@ import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { useCallback, useEffect, useRef } from 'react';
 import {
-  ActivityIndicator,
-  FlatList,
-  RefreshControl,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
+    ActivityIndicator,
+    FlatList,
+    RefreshControl,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
 } from 'react-native';
 
+import Spacer from '@/components/ui/Spacer';
 import { COLORS, RGB } from '@/constants/brandColors';
 import { radii, shadow, spacing, type } from '@/constants/theme';
 import { useNotifications } from '@/context/NotificationContext';
@@ -48,7 +49,11 @@ function NotificationItem({ item, onPress }) {
       {!item.is_read && <View style={styles.unreadDot} />}
 
       <View style={styles.cardIconRing}>
-        <Ionicons name="notifications-outline" size={18} color={COLORS.richBrown} />
+        <Ionicons
+          name="notifications-outline"
+          size={18}
+          color={COLORS.richBrown}
+        />
       </View>
 
       <View style={styles.cardBody}>
@@ -124,7 +129,9 @@ export default function NotificationsScreen() {
       <FlatList
         data={notifications}
         keyExtractor={item => String(item.id)}
-        renderItem={({ item }) => <NotificationItem item={item} onPress={handleOpen} />}
+        renderItem={({ item }) => (
+          <NotificationItem item={item} onPress={handleOpen} />
+        )}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
         onEndReachedThreshold={0.4}
@@ -161,7 +168,11 @@ export default function NotificationsScreen() {
 
             <View style={styles.heroIconRing}>
               <View style={styles.heroIcon}>
-                <Ionicons name="notifications" size={30} color={COLORS.richBrown} />
+                <Ionicons
+                  name="notifications"
+                  size={30}
+                  color={COLORS.richBrown}
+                />
               </View>
             </View>
 
@@ -173,22 +184,32 @@ export default function NotificationsScreen() {
           !loading && !refreshing ? (
             <View style={styles.emptyState}>
               <View style={styles.emptyIconRing}>
-                <Ionicons name="notifications-off-outline" size={36} color={COLORS.warmBrown} />
+                <Ionicons
+                  name="notifications-off-outline"
+                  size={36}
+                  color={COLORS.warmBrown}
+                />
               </View>
 
               <Text style={styles.emptyTitle}>You&apos;re All Caught Up</Text>
 
               <Text style={styles.emptyText}>
-                You don&apos;t have any notifications right now. We&apos;ll let you know
-                here as soon as there&apos;s something new.
+                You don&apos;t have any notifications right now. We&apos;ll let
+                you know here as soon as there&apos;s something new.
               </Text>
             </View>
           ) : null
         }
         ListFooterComponent={
-          loading && notifications.length > 0 ? (
-            <ActivityIndicator style={styles.footerLoader} color={COLORS.richBrown} />
-          ) : null
+          <>
+            {loading && notifications.length > 0 ? (
+              <ActivityIndicator
+                style={styles.footerLoader}
+                color={COLORS.richBrown}
+              />
+            ) : null}
+            <Spacer height={120} />
+          </>
         }
       />
     </View>

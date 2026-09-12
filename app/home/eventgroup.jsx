@@ -2,20 +2,29 @@ import { DESIGN } from '@/constants/design';
 import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRef, useState } from 'react';
 import {
-  Dimensions,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
+    Dimensions,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
 } from 'react-native';
 
+import Spacer from '@/components/ui/Spacer';
 import { COLORS, RGB } from '@/constants/brandColors';
-import { hairline, radii, shadow, spacing, type } from '@/constants/theme';
+import { hairline, radii, shadow, spacing } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
-const CATEGORIES = ['All', 'Upcoming', 'Live', 'Satsang', 'Aarti', 'Pravachan', 'Festival'];
+const CATEGORIES = [
+  'All',
+  'Upcoming',
+  'Live',
+  'Satsang',
+  'Aarti',
+  'Pravachan',
+  'Festival',
+];
 
 const EVENTS = [
   {
@@ -140,9 +149,30 @@ const EVENTS = [
 ];
 
 const PAST_EVENTS = [
-  { id: 'p1', title: 'Gita Jayanti 2024', date: 'Dec 2024', location: 'Kurukshetra', icon: '🏮', attendees: '12,000+' },
-  { id: 'p2', title: 'Navratri Satsang 2024', date: 'Oct 2024', location: 'Vrindavan', icon: '🪔', attendees: '5,400+' },
-  { id: 'p3', title: 'Guru Purnima Mahotsav', date: 'Jul 2024', location: 'Haridwar', icon: '🙏', attendees: '8,200+' },
+  {
+    id: 'p1',
+    title: 'Gita Jayanti 2024',
+    date: 'Dec 2024',
+    location: 'Kurukshetra',
+    icon: '🏮',
+    attendees: '12,000+',
+  },
+  {
+    id: 'p2',
+    title: 'Navratri Satsang 2024',
+    date: 'Oct 2024',
+    location: 'Vrindavan',
+    icon: '🪔',
+    attendees: '5,400+',
+  },
+  {
+    id: 'p3',
+    title: 'Guru Purnima Mahotsav',
+    date: 'Jul 2024',
+    location: 'Haridwar',
+    icon: '🙏',
+    attendees: '8,200+',
+  },
 ];
 
 // ── Status pill ───────────────────────────────────────────────────────────────
@@ -165,15 +195,25 @@ function StatusPill({ status }) {
 // ── Event Card ────────────────────────────────────────────────────────────────
 function EventCard({ item, onRegister }) {
   const [expanded, setExpanded] = useState(false);
-  const pct = item.seats === 'Open' ? 0
-    : Math.round((parseInt(item.registered?.replace(/,/g,'') || 0) /
-        parseInt(item.seats.replace(/,/g,'') || 1)) * 100);
+  const pct =
+    item.seats === 'Open'
+      ? 0
+      : Math.round(
+          (parseInt(item.registered?.replace(/,/g, '') || 0) /
+            parseInt(item.seats.replace(/,/g, '') || 1)) *
+            100,
+        );
 
   return (
-    <View style={[styles.eventCard, item.highlight && styles.eventCardHighlight]}>
+    <View
+      style={[styles.eventCard, item.highlight && styles.eventCardHighlight]}>
       {item.highlight && (
         <View style={styles.featuredBanner}>
-          <MaterialCommunityIcons name="star-four-points" size={10} color={COLORS.white} />
+          <MaterialCommunityIcons
+            name="star-four-points"
+            size={10}
+            color={COLORS.white}
+          />
           <Text style={styles.featuredBannerText}>FEATURED EVENT</Text>
         </View>
       )}
@@ -187,10 +227,13 @@ function EventCard({ item, onRegister }) {
           <StatusPill status={item.status} />
           <Text style={styles.eventCategory}>{item.category}</Text>
         </View>
-        <TouchableOpacity onPress={() => setExpanded(!expanded)} style={styles.expandBtn}>
+        <TouchableOpacity
+          onPress={() => setExpanded(!expanded)}
+          style={styles.expandBtn}>
           <MaterialCommunityIcons
             name={expanded ? 'chevron-up' : 'chevron-down'}
-            size={18} color={COLORS.goldDark}
+            size={18}
+            color={COLORS.goldDark}
           />
         </TouchableOpacity>
       </View>
@@ -201,22 +244,36 @@ function EventCard({ item, onRegister }) {
       {/* Date / time / location row */}
       <View style={styles.eventMetaGrid}>
         <View style={styles.eventMetaItem}>
-          <MaterialCommunityIcons name="calendar-outline" size={13} color={COLORS.saffron} />
+          <MaterialCommunityIcons
+            name="calendar-outline"
+            size={13}
+            color={COLORS.saffron}
+          />
           <Text style={styles.eventMetaText}>{item.date}</Text>
         </View>
         <View style={styles.eventMetaItem}>
-          <MaterialCommunityIcons name="clock-outline" size={13} color={COLORS.saffron} />
+          <MaterialCommunityIcons
+            name="clock-outline"
+            size={13}
+            color={COLORS.saffron}
+          />
           <Text style={styles.eventMetaText}>{item.time}</Text>
         </View>
         <View style={[styles.eventMetaItem, { flex: 1 }]}>
-          <MaterialCommunityIcons name="map-marker-outline" size={13} color={COLORS.saffron} />
-          <Text style={styles.eventMetaText} numberOfLines={1}>{item.location}</Text>
+          <MaterialCommunityIcons
+            name="map-marker-outline"
+            size={13}
+            color={COLORS.saffron}
+          />
+          <Text style={styles.eventMetaText} numberOfLines={1}>
+            {item.location}
+          </Text>
         </View>
       </View>
 
       {/* Tags */}
       <View style={styles.tagsRow}>
-        {item.tags.map((t) => (
+        {item.tags.map(t => (
           <View key={t} style={styles.tag}>
             <Text style={styles.tagText}>{t}</Text>
           </View>
@@ -232,9 +289,15 @@ function EventCard({ item, onRegister }) {
 
           {/* Speakers */}
           <View style={styles.speakersRow}>
-            <MaterialCommunityIcons name="microphone-variant" size={13} color={COLORS.saffron} />
+            <MaterialCommunityIcons
+              name="microphone-variant"
+              size={13}
+              color={COLORS.saffron}
+            />
             <Text style={styles.speakersLabel}>Speakers: </Text>
-            <Text style={styles.speakersNames}>{item.speakers.join(' • ')}</Text>
+            <Text style={styles.speakersNames}>
+              {item.speakers.join(' • ')}
+            </Text>
           </View>
 
           {/* Seats progress */}
@@ -242,13 +305,24 @@ function EventCard({ item, onRegister }) {
             <View style={styles.seatsBox}>
               <View style={styles.seatsTopRow}>
                 <Text style={styles.seatsLabel}>Seats Registered</Text>
-                <Text style={styles.seatsCount}>{item.registered} / {item.seats}</Text>
+                <Text style={styles.seatsCount}>
+                  {item.registered} / {item.seats}
+                </Text>
               </View>
               <View style={styles.progressBg}>
-                <View style={[styles.progressFill, { width: `${Math.min(pct, 100)}%` }]} />
+                <View
+                  style={[
+                    styles.progressFill,
+                    { width: `${Math.min(pct, 100)}%` },
+                  ]}
+                />
               </View>
               <Text style={styles.seatsHint}>
-                {pct >= 90 ? '🔥 Almost full!' : pct >= 70 ? '⚡ Filling fast' : '✅ Seats available'}
+                {pct >= 90
+                  ? '🔥 Almost full!'
+                  : pct >= 70
+                    ? '⚡ Filling fast'
+                    : '✅ Seats available'}
               </Text>
             </View>
           )}
@@ -258,10 +332,12 @@ function EventCard({ item, onRegister }) {
       {/* Footer */}
       <View style={styles.eventFooter}>
         <TouchableOpacity
-          style={[styles.registerBtn, item.status === 'live' && styles.registerBtnLive]}
+          style={[
+            styles.registerBtn,
+            item.status === 'live' && styles.registerBtnLive,
+          ]}
           activeOpacity={0.85}
-          onPress={() => onRegister(item)}
-        >
+          onPress={() => onRegister(item)}>
           <FontAwesome
             name={item.status === 'live' ? 'play-circle' : 'calendar-check-o'}
             size={13}
@@ -272,7 +348,11 @@ function EventCard({ item, onRegister }) {
           </Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.shareBtn} activeOpacity={0.8}>
-          <MaterialCommunityIcons name="share-variant-outline" size={16} color={COLORS.goldDark} />
+          <MaterialCommunityIcons
+            name="share-variant-outline"
+            size={16}
+            color={COLORS.goldDark}
+          />
         </TouchableOpacity>
       </View>
     </View>
@@ -289,36 +369,61 @@ function RegisterModal({ event, onClose }) {
         <View style={styles.modalHeader}>
           <Text style={styles.modalIcon}>{event.icon}</Text>
           <View style={{ flex: 1 }}>
-            <Text style={styles.modalTitle} numberOfLines={2}>{event.title}</Text>
-            <Text style={styles.modalDate}>{event.date} • {event.location}</Text>
+            <Text style={styles.modalTitle} numberOfLines={2}>
+              {event.title}
+            </Text>
+            <Text style={styles.modalDate}>
+              {event.date} • {event.location}
+            </Text>
           </View>
           <TouchableOpacity onPress={onClose} style={styles.modalCloseBtn}>
-            <MaterialCommunityIcons name="close" size={18} color={COLORS.goldDark} />
+            <MaterialCommunityIcons
+              name="close"
+              size={18}
+              color={COLORS.goldDark}
+            />
           </TouchableOpacity>
         </View>
 
         <View style={styles.modalSuccessBox}>
-          <MaterialCommunityIcons name="check-circle" size={40} color="#4CAF50" />
+          <MaterialCommunityIcons
+            name="check-circle"
+            size={40}
+            color="#4CAF50"
+          />
           <Text style={styles.modalSuccessTitle}>Registration Confirmed!</Text>
           <Text style={styles.modalSuccessDesc}>
-            You have successfully registered for this event. We will send you a reminder
-            before the event begins. 🙏
+            You have successfully registered for this event. We will send you a
+            reminder before the event begins. 🙏
           </Text>
         </View>
 
         <View style={styles.modalInfoRow}>
-          <MaterialCommunityIcons name="calendar-check" size={14} color={COLORS.saffron} />
+          <MaterialCommunityIcons
+            name="calendar-check"
+            size={14}
+            color={COLORS.saffron}
+          />
           <Text style={styles.modalInfoText}>
             {event.date} at {event.time.split('–')[0].trim()}
           </Text>
         </View>
         <View style={styles.modalInfoRow}>
-          <MaterialCommunityIcons name="map-marker" size={14} color={COLORS.saffron} />
+          <MaterialCommunityIcons
+            name="map-marker"
+            size={14}
+            color={COLORS.saffron}
+          />
           <Text style={styles.modalInfoText}>{event.location}</Text>
         </View>
 
-        <TouchableOpacity style={styles.modalDoneBtn} onPress={onClose} activeOpacity={0.85}>
-          <Text style={styles.modalDoneBtnText}>Done • Jai Shri Krishna 🙏</Text>
+        <TouchableOpacity
+          style={styles.modalDoneBtn}
+          onPress={onClose}
+          activeOpacity={0.85}>
+          <Text style={styles.modalDoneBtnText}>
+            Done • Jai Shri Krishna 🙏
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -328,40 +433,44 @@ function RegisterModal({ event, onClose }) {
 // ── MAIN SCREEN ───────────────────────────────────────────────────────────────
 export default function EventGroupScreen() {
   const [activeCategory, setActiveCategory] = useState('All');
-  const [selectedEvent,  setSelectedEvent]  = useState(null);
+  const [selectedEvent, setSelectedEvent] = useState(null);
   const scrollRef = useRef(null);
 
-  const filtered = activeCategory === 'All'
-    ? EVENTS
-    : EVENTS.filter((e) =>
-        e.category === activeCategory || e.status === activeCategory.toLowerCase()
-      );
+  const filtered =
+    activeCategory === 'All'
+      ? EVENTS
+      : EVENTS.filter(
+          e =>
+            e.category === activeCategory ||
+            e.status === activeCategory.toLowerCase(),
+        );
 
-  const liveEvents     = EVENTS.filter((e) => e.status === 'live');
-  const upcomingEvents = EVENTS.filter((e) => e.status === 'upcoming');
+  const liveEvents = EVENTS.filter(e => e.status === 'live');
+  const upcomingEvents = EVENTS.filter(e => e.status === 'upcoming');
 
   return (
     <View style={styles.root}>
       <ScrollView
         ref={scrollRef}
         style={styles.scroll}
-        showsVerticalScrollIndicator={false}
-      >
-
+        showsVerticalScrollIndicator={false}>
         {/* ── Hero ── */}
         <View style={styles.hero}>
           <View style={styles.heroBadge}>
-            <MaterialCommunityIcons name="calendar-star" size={12} color={COLORS.saffron} />
+            <MaterialCommunityIcons
+              name="calendar-star"
+              size={12}
+              color={COLORS.saffron}
+            />
             <Text style={styles.heroBadgeText}>Events & Satsangs</Text>
           </View>
           <Text style={styles.heroHeading}>
-            Divine{' '}
-            <Text style={styles.heroAccent}>Gatherings</Text>
+            Divine <Text style={styles.heroAccent}>Gatherings</Text>
             {'\n'}& Sacred Events
           </Text>
           <Text style={styles.heroDesc}>
-            Join Maharaj Ji and thousands of devotees at satsangs, aartis, pravachans,
-            and spiritual festivals across India.
+            Join Maharaj Ji and thousands of devotees at satsangs, aartis,
+            pravachans, and spiritual festivals across India.
           </Text>
 
           {/* Quick stats */}
@@ -399,8 +508,7 @@ export default function EventGroupScreen() {
             <TouchableOpacity
               style={styles.joinLiveBtn}
               activeOpacity={0.85}
-              onPress={() => setSelectedEvent(liveEvents[0])}
-            >
+              onPress={() => setSelectedEvent(liveEvents[0])}>
               <FontAwesome name="play-circle" size={14} color={COLORS.white} />
               <Text style={styles.joinLiveBtnText}>Join</Text>
             </TouchableOpacity>
@@ -411,16 +519,21 @@ export default function EventGroupScreen() {
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.categoriesRow}
-        >
-          {CATEGORIES.map((cat) => (
+          contentContainerStyle={styles.categoriesRow}>
+          {CATEGORIES.map(cat => (
             <TouchableOpacity
               key={cat}
-              style={[styles.categoryChip, activeCategory === cat && styles.categoryChipActive]}
+              style={[
+                styles.categoryChip,
+                activeCategory === cat && styles.categoryChipActive,
+              ]}
               onPress={() => setActiveCategory(cat)}
-              activeOpacity={0.8}
-            >
-              <Text style={[styles.categoryChipText, activeCategory === cat && styles.categoryChipTextActive]}>
+              activeOpacity={0.8}>
+              <Text
+                style={[
+                  styles.categoryChipText,
+                  activeCategory === cat && styles.categoryChipTextActive,
+                ]}>
                 {cat}
               </Text>
             </TouchableOpacity>
@@ -433,18 +546,22 @@ export default function EventGroupScreen() {
             {filtered.length} event{filtered.length !== 1 ? 's' : ''} found
           </Text>
           <TouchableOpacity style={styles.sortBtn}>
-            <MaterialCommunityIcons name="sort-calendar-ascending" size={14} color={COLORS.goldDark} />
+            <MaterialCommunityIcons
+              name="sort-calendar-ascending"
+              size={14}
+              color={COLORS.goldDark}
+            />
             <Text style={styles.sortText}>By Date</Text>
           </TouchableOpacity>
         </View>
 
         {/* ── Event Cards ── */}
         <View style={styles.eventsList}>
-          {filtered.map((item) => (
+          {filtered.map(item => (
             <EventCard
               key={item.id}
               item={item}
-              onRegister={(e) => setSelectedEvent(e)}
+              onRegister={e => setSelectedEvent(e)}
             />
           ))}
         </View>
@@ -452,18 +569,29 @@ export default function EventGroupScreen() {
         {/* ── Past Events ── */}
         <View style={styles.pastSection}>
           <View style={styles.pastHeader}>
-            <MaterialCommunityIcons name="history" size={16} color={COLORS.warmBrown} />
+            <MaterialCommunityIcons
+              name="history"
+              size={16}
+              color={COLORS.warmBrown}
+            />
             <Text style={styles.pastHeaderTitle}>Past Events</Text>
           </View>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.pastRow}>
-            {PAST_EVENTS.map((e) => (
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.pastRow}>
+            {PAST_EVENTS.map(e => (
               <View key={e.id} style={styles.pastCard}>
                 <Text style={styles.pastCardIcon}>{e.icon}</Text>
-                <Text style={styles.pastCardTitle} numberOfLines={2}>{e.title}</Text>
+                <Text style={styles.pastCardTitle} numberOfLines={2}>
+                  {e.title}
+                </Text>
                 <Text style={styles.pastCardDate}>{e.date}</Text>
                 <View style={styles.pastCardAttendees}>
                   <FontAwesome name="users" size={9} color={COLORS.goldDark} />
-                  <Text style={styles.pastCardAttendeesText}>{e.attendees}</Text>
+                  <Text style={styles.pastCardAttendeesText}>
+                    {e.attendees}
+                  </Text>
                 </View>
               </View>
             ))}
@@ -475,17 +603,21 @@ export default function EventGroupScreen() {
           <Text style={styles.ctaEmoji}>🔔</Text>
           <Text style={styles.ctaHeading}>Never Miss an Event</Text>
           <Text style={styles.ctaDesc}>
-            Get notified about upcoming satsangs, live aartis, and festivals
-            by Maharaj Ji directly on your device.
+            Get notified about upcoming satsangs, live aartis, and festivals by
+            Maharaj Ji directly on your device.
           </Text>
           <TouchableOpacity style={styles.ctaBtn} activeOpacity={0.85}>
-            <MaterialCommunityIcons name="bell-ring-outline" size={15} color={COLORS.white} />
+            <MaterialCommunityIcons
+              name="bell-ring-outline"
+              size={15}
+              color={COLORS.white}
+            />
             <Text style={styles.ctaBtnText}>Enable Event Notifications</Text>
           </TouchableOpacity>
-          <Text style={styles.ctaNote}>🕉️  Jai Shri Krishna • GIEO Gita</Text>
+          <Text style={styles.ctaNote}>🕉️ Jai Shri Krishna • GIEO Gita</Text>
         </View>
 
-        <View style={{ height: 30 }} />
+        <Spacer height={120} />
       </ScrollView>
 
       {/* ── Registration Modal ── */}
@@ -503,17 +635,17 @@ export default function EventGroupScreen() {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: COLORS.cream
+    backgroundColor: COLORS.cream,
   },
   scroll: {
-    flex: 1
+    flex: 1,
   },
   /* Hero */
   hero: {
     backgroundColor: COLORS.creamDark,
     margin: spacing.lg,
     borderRadius: radii.lg,
-    padding: spacing.md
+    padding: spacing.md,
   },
   heroBadge: {
     alignSelf: 'flex-start',
@@ -524,55 +656,55 @@ const styles = StyleSheet.create({
     borderRadius: radii.pill,
     paddingHorizontal: 12,
     paddingVertical: 5,
-    marginBottom: spacing.sm
+    marginBottom: spacing.sm,
   },
   heroBadgeText: {
     color: COLORS.saffron,
     fontSize: 10,
-    fontWeight: '700'
+    fontWeight: '700',
   },
   heroHeading: {
     color: COLORS.deepBrown,
     fontSize: 22,
-    fontWeight: "400",
+    fontWeight: '400',
     lineHeight: 30,
     marginBottom: spacing.sm,
     fontFamily: DESIGN.fonts.editorial,
-    letterSpacing: -0.4
+    letterSpacing: -0.4,
   },
   heroAccent: {
-    color: COLORS.saffron
+    color: COLORS.saffron,
   },
   heroDesc: {
     color: COLORS.warmBrown,
     fontSize: 12,
     lineHeight: 18,
-    marginBottom: spacing.md
+    marginBottom: spacing.md,
   },
   heroStatsRow: {
     flexDirection: 'row',
     backgroundColor: COLORS.cream,
     borderRadius: radii.md,
     paddingVertical: spacing.sm,
-    ...shadow.card
+    ...shadow.card,
   },
   heroStat: {
     flex: 1,
-    alignItems: 'center'
+    alignItems: 'center',
   },
   heroStatBorder: {
     borderLeftWidth: 1,
-    borderLeftColor: hairline
+    borderLeftColor: hairline,
   },
   heroStatVal: {
     color: COLORS.saffron,
     fontSize: 16,
-    fontWeight: "600"
+    fontWeight: '600',
   },
   heroStatLabel: {
     color: COLORS.warmBrown,
     fontSize: 12,
-    marginTop: 2
+    marginTop: 2,
   },
   /* Live banner */
   liveBanner: {
@@ -586,10 +718,10 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
     borderColor: COLORS.liveRed,
     gap: 12,
-    ...shadow.card
+    ...shadow.card,
   },
   liveBannerLeft: {
-    flex: 1
+    flex: 1,
   },
   livePillLarge: {
     flexDirection: 'row',
@@ -600,29 +732,29 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     paddingHorizontal: 9,
     paddingVertical: 3,
-    marginBottom: 6
+    marginBottom: 6,
   },
   liveDotLarge: {
     width: 7,
     height: 7,
     borderRadius: 4,
-    backgroundColor: COLORS.liveRed
+    backgroundColor: COLORS.liveRed,
   },
   livePillLargeText: {
     color: COLORS.liveRed,
     fontSize: 10,
-    fontWeight: "600",
-    letterSpacing: 1
+    fontWeight: '600',
+    letterSpacing: 1,
   },
   liveBannerTitle: {
     color: COLORS.deepBrown,
     fontSize: 13,
     fontWeight: '700',
-    marginBottom: 3
+    marginBottom: 3,
   },
   liveBannerSub: {
     color: COLORS.warmBrown,
-    fontSize: 12
+    fontSize: 12,
   },
   joinLiveBtn: {
     flexDirection: 'row',
@@ -631,37 +763,37 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.liveRed,
     borderRadius: radii.sm,
     paddingVertical: 10,
-    paddingHorizontal: 14
+    paddingHorizontal: 14,
   },
   joinLiveBtnText: {
     color: COLORS.white,
     fontSize: 12,
-    fontWeight: "600"
+    fontWeight: '600',
   },
   /* Categories */
   categoriesRow: {
     paddingHorizontal: spacing.lg,
     gap: 8,
     marginBottom: 4,
-    paddingBottom: 4
+    paddingBottom: 4,
   },
   categoryChip: {
     backgroundColor: COLORS.creamDark,
     borderRadius: radii.pill,
     paddingHorizontal: 14,
-    paddingVertical: 7
+    paddingVertical: 7,
   },
   categoryChipActive: {
-    backgroundColor: COLORS.saffron
+    backgroundColor: COLORS.saffron,
   },
   categoryChipText: {
     color: COLORS.warmBrown,
     fontSize: 12,
-    fontWeight: '600'
+    fontWeight: '600',
   },
   categoryChipTextActive: {
     color: COLORS.white,
-    fontWeight: "600"
+    fontWeight: '600',
   },
   /* Count row */
   countRow: {
@@ -670,28 +802,28 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginHorizontal: spacing.lg,
     marginTop: spacing.sm,
-    marginBottom: spacing.sm
+    marginBottom: spacing.sm,
   },
   countText: {
     color: COLORS.deepBrown,
     fontSize: 12,
-    fontWeight: '700'
+    fontWeight: '700',
   },
   sortBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 5
+    gap: 5,
   },
   sortText: {
     color: COLORS.goldDark,
     fontSize: 12,
-    fontWeight: '600'
+    fontWeight: '600',
   },
   /* Event cards */
   eventsList: {
     marginHorizontal: spacing.lg,
     gap: 14,
-    marginBottom: spacing.sm
+    marginBottom: spacing.sm,
   },
   eventCard: {
     backgroundColor: DESIGN.colors.surface,
@@ -701,11 +833,11 @@ const styles = StyleSheet.create({
     borderColor: DESIGN.colors.border,
     borderWidth: 1,
     shadowOpacity: 0.045,
-    elevation: 2
+    elevation: 2,
   },
   eventCardHighlight: {
     borderColor: COLORS.saffron,
-    borderWidth: 1.5
+    borderWidth: 1.5,
   },
   featuredBanner: {
     flexDirection: 'row',
@@ -714,20 +846,20 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.saffron,
     paddingHorizontal: 12,
     paddingVertical: 5,
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   featuredBannerText: {
     color: COLORS.white,
     fontSize: 12,
-    fontWeight: "600",
-    letterSpacing: 1.5
+    fontWeight: '600',
+    letterSpacing: 1.5,
   },
   eventTop: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
     padding: 14,
-    paddingBottom: 8
+    paddingBottom: 8,
   },
   eventIconBox: {
     width: 44,
@@ -735,14 +867,14 @@ const styles = StyleSheet.create({
     borderRadius: 22,
     backgroundColor: COLORS.creamDark,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   eventIconText: {
-    fontSize: 22
+    fontSize: 22,
   },
   eventTopMid: {
     flex: 1,
-    gap: 4
+    gap: 4,
   },
   livePill: {
     flexDirection: 'row',
@@ -752,148 +884,148 @@ const styles = StyleSheet.create({
     borderRadius: radii.pill,
     alignSelf: 'flex-start',
     paddingHorizontal: 8,
-    paddingVertical: 3
+    paddingVertical: 3,
   },
   liveDot: {
     width: 6,
     height: 6,
     borderRadius: 3,
-    backgroundColor: COLORS.liveRed
+    backgroundColor: COLORS.liveRed,
   },
   livePillText: {
     color: COLORS.liveRed,
     fontSize: 10,
-    fontWeight: "600",
-    letterSpacing: 1
+    fontWeight: '600',
+    letterSpacing: 1,
   },
   upcomingPill: {
     alignSelf: 'flex-start',
     backgroundColor: `rgba(${RGB.saffron},0.1)`,
     borderRadius: radii.pill,
     paddingHorizontal: 8,
-    paddingVertical: 3
+    paddingVertical: 3,
   },
   upcomingPillText: {
     color: COLORS.saffron,
     fontSize: 10,
     fontWeight: '700',
-    letterSpacing: 0.5
+    letterSpacing: 0.5,
   },
   eventCategory: {
     color: COLORS.warmBrown,
-    fontSize: 12
+    fontSize: 12,
   },
   expandBtn: {
-    padding: 4
+    padding: 4,
   },
   eventTitle: {
     color: COLORS.deepBrown,
     fontSize: 15,
-    fontWeight: "600",
+    fontWeight: '600',
     paddingHorizontal: 14,
     marginBottom: 10,
-    lineHeight: 20
+    lineHeight: 20,
   },
   eventMetaGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 6,
     paddingHorizontal: 14,
-    marginBottom: 10
+    marginBottom: 10,
   },
   eventMetaItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4
+    gap: 4,
   },
   eventMetaText: {
     color: COLORS.warmBrown,
-    fontSize: 12
+    fontSize: 12,
   },
   tagsRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 6,
     paddingHorizontal: 14,
-    marginBottom: 12
+    marginBottom: 12,
   },
   tag: {
     backgroundColor: COLORS.creamDark,
     borderRadius: 6,
     paddingHorizontal: 8,
-    paddingVertical: 3
+    paddingVertical: 3,
   },
   tagText: {
     color: COLORS.warmBrown,
     fontSize: 10,
-    fontWeight: '600'
+    fontWeight: '600',
   },
   expandedSection: {
     paddingHorizontal: 14,
-    paddingBottom: 4
+    paddingBottom: 4,
   },
   expandDivider: {
     height: 1,
     backgroundColor: hairline,
-    marginBottom: 12
+    marginBottom: 12,
   },
   eventDesc: {
     color: COLORS.warmBrown,
     fontSize: 12,
     lineHeight: 18,
-    marginBottom: 12
+    marginBottom: 12,
   },
   speakersRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 5,
     marginBottom: 12,
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
   },
   speakersLabel: {
     color: COLORS.warmBrown,
-    fontSize: 12
+    fontSize: 12,
   },
   speakersNames: {
     color: COLORS.deepBrown,
     fontSize: 12,
     fontWeight: '700',
-    flex: 1
+    flex: 1,
   },
   seatsBox: {
     backgroundColor: COLORS.creamDark,
     borderRadius: radii.sm,
     padding: 10,
-    marginBottom: 10
+    marginBottom: 10,
   },
   seatsTopRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 6
+    marginBottom: 6,
   },
   seatsLabel: {
     color: COLORS.warmBrown,
-    fontSize: 12
+    fontSize: 12,
   },
   seatsCount: {
     color: COLORS.deepBrown,
     fontSize: 12,
-    fontWeight: '700'
+    fontWeight: '700',
   },
   progressBg: {
     height: 6,
     backgroundColor: hairline,
     borderRadius: 3,
-    marginBottom: 5
+    marginBottom: 5,
   },
   progressFill: {
     height: 6,
     backgroundColor: COLORS.saffron,
-    borderRadius: 3
+    borderRadius: 3,
   },
   seatsHint: {
     color: COLORS.warmBrown,
-    fontSize: 12
+    fontSize: 12,
   },
   eventFooter: {
     flexDirection: 'row',
@@ -902,7 +1034,7 @@ const styles = StyleSheet.create({
     padding: 14,
     paddingTop: 10,
     borderTopWidth: 1,
-    borderTopColor: hairline
+    borderTopColor: hairline,
   },
   registerBtn: {
     flex: 1,
@@ -912,15 +1044,15 @@ const styles = StyleSheet.create({
     gap: 7,
     backgroundColor: COLORS.richBrown,
     borderRadius: radii.sm,
-    paddingVertical: 11
+    paddingVertical: 11,
   },
   registerBtnLive: {
-    backgroundColor: COLORS.liveRed
+    backgroundColor: COLORS.liveRed,
   },
   registerBtnText: {
     color: COLORS.white,
     fontSize: 12,
-    fontWeight: "600"
+    fontWeight: '600',
   },
   shareBtn: {
     width: 40,
@@ -928,28 +1060,28 @@ const styles = StyleSheet.create({
     borderRadius: radii.sm,
     backgroundColor: COLORS.creamDark,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   /* Past events */
   pastSection: {
     marginTop: spacing.md,
-    marginBottom: spacing.sm
+    marginBottom: spacing.sm,
   },
   pastHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
     marginHorizontal: spacing.lg,
-    marginBottom: spacing.sm
+    marginBottom: spacing.sm,
   },
   pastHeaderTitle: {
     color: COLORS.deepBrown,
     fontSize: 15,
-    fontWeight: "600"
+    fontWeight: '600',
   },
   pastRow: {
     paddingHorizontal: spacing.lg,
-    gap: 10
+    gap: 10,
   },
   pastCard: {
     width: 140,
@@ -960,33 +1092,33 @@ const styles = StyleSheet.create({
     borderColor: DESIGN.colors.border,
     borderWidth: 1,
     shadowOpacity: 0.045,
-    elevation: 2
+    elevation: 2,
   },
   pastCardIcon: {
     fontSize: 26,
-    marginBottom: spacing.sm
+    marginBottom: spacing.sm,
   },
   pastCardTitle: {
     color: COLORS.deepBrown,
     fontSize: 12,
     fontWeight: '700',
     marginBottom: 4,
-    lineHeight: 18
+    lineHeight: 18,
   },
   pastCardDate: {
     color: COLORS.warmBrown,
     fontSize: 12,
-    marginBottom: 6
+    marginBottom: 6,
   },
   pastCardAttendees: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 5
+    gap: 5,
   },
   pastCardAttendeesText: {
     color: COLORS.goldDark,
     fontSize: 12,
-    fontWeight: '700'
+    fontWeight: '700',
   },
   /* CTA */
   ctaCard: {
@@ -999,25 +1131,25 @@ const styles = StyleSheet.create({
     borderColor: DESIGN.colors.border,
     borderWidth: 1,
     shadowOpacity: 0.045,
-    elevation: 2
+    elevation: 2,
   },
   ctaEmoji: {
     fontSize: 36,
-    marginBottom: spacing.sm
+    marginBottom: spacing.sm,
   },
   ctaHeading: {
     color: COLORS.deepBrown,
     fontSize: 17,
-    fontWeight: "600",
+    fontWeight: '600',
     textAlign: 'center',
-    marginBottom: spacing.sm
+    marginBottom: spacing.sm,
   },
   ctaDesc: {
     color: COLORS.warmBrown,
     fontSize: 12,
     textAlign: 'center',
     lineHeight: 18,
-    marginBottom: spacing.md
+    marginBottom: spacing.md,
   },
   ctaBtn: {
     flexDirection: 'row',
@@ -1027,16 +1159,16 @@ const styles = StyleSheet.create({
     borderRadius: radii.sm,
     paddingVertical: 13,
     paddingHorizontal: 24,
-    marginBottom: spacing.sm
+    marginBottom: spacing.sm,
   },
   ctaBtnText: {
     color: COLORS.white,
     fontSize: 13,
-    fontWeight: "600"
+    fontWeight: '600',
   },
   ctaNote: {
     color: COLORS.warmBrown,
-    fontSize: 12
+    fontSize: 12,
   },
   /* Modal */
   modalOverlay: {
@@ -1046,7 +1178,7 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     backgroundColor: 'rgba(0,0,0,0.5)',
-    justifyContent: 'flex-end'
+    justifyContent: 'flex-end',
   },
   modalSheet: {
     backgroundColor: COLORS.cream,
@@ -1054,7 +1186,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: radii.xl,
     padding: spacing.lg,
     paddingBottom: 36,
-    ...shadow.raised
+    ...shadow.raised,
   },
   modalHandle: {
     width: 40,
@@ -1062,27 +1194,27 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     backgroundColor: hairline,
     alignSelf: 'center',
-    marginBottom: spacing.md
+    marginBottom: spacing.md,
   },
   modalHeader: {
     flexDirection: 'row',
     alignItems: 'flex-start',
     gap: 12,
-    marginBottom: spacing.lg
+    marginBottom: spacing.lg,
   },
   modalIcon: {
-    fontSize: 32
+    fontSize: 32,
   },
   modalTitle: {
     color: COLORS.deepBrown,
     fontSize: 15,
-    fontWeight: "600",
+    fontWeight: '600',
     lineHeight: 20,
-    marginBottom: 4
+    marginBottom: 4,
   },
   modalDate: {
     color: COLORS.warmBrown,
-    fontSize: 12
+    fontSize: 12,
   },
   modalCloseBtn: {
     width: 32,
@@ -1090,27 +1222,27 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     backgroundColor: COLORS.creamDark,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   modalSuccessBox: {
     alignItems: 'center',
     backgroundColor: 'rgba(76,175,80,0.08)',
     borderRadius: radii.md,
     padding: spacing.md,
-    marginBottom: spacing.md
+    marginBottom: spacing.md,
   },
   modalSuccessTitle: {
     color: COLORS.deepBrown,
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: '600',
     marginTop: spacing.sm,
-    marginBottom: spacing.sm
+    marginBottom: spacing.sm,
   },
   modalSuccessDesc: {
     color: COLORS.warmBrown,
     fontSize: 12,
     textAlign: 'center',
-    lineHeight: 18
+    lineHeight: 18,
   },
   modalInfoRow: {
     flexDirection: 'row',
@@ -1118,11 +1250,11 @@ const styles = StyleSheet.create({
     gap: 8,
     paddingVertical: spacing.sm,
     borderBottomWidth: 1,
-    borderBottomColor: hairline
+    borderBottomColor: hairline,
   },
   modalInfoText: {
     color: COLORS.warmBrown,
-    fontSize: 12
+    fontSize: 12,
   },
   modalDoneBtn: {
     flexDirection: 'row',
@@ -1131,11 +1263,11 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.richBrown,
     borderRadius: radii.md,
     paddingVertical: spacing.md,
-    marginTop: spacing.md
+    marginTop: spacing.md,
   },
   modalDoneBtnText: {
     color: COLORS.white,
     fontSize: 13,
-    fontWeight: "600"
-  }
+    fontWeight: '600',
+  },
 });

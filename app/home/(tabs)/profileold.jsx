@@ -1,3 +1,4 @@
+import Spacer from '@/components/ui/Spacer';
 import { FontAwesome } from '@expo/vector-icons';
 import { Link, useRouter } from 'expo-router';
 import {
@@ -66,7 +67,7 @@ export default function ProfileScreen() {
         {/* ── SHLOKA FOOTER ── */}
         <FooterVerse />
 
-        <View style={{ height: 40 }} />
+        <Spacer height={120} />
       </ScrollView>
 
       {/* Floating close button */}
@@ -80,17 +81,17 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: C.cream
+    backgroundColor: C.cream,
   },
   scroll: {
-    flex: 1
+    flex: 1,
   },
   hero: {
     backgroundColor: C.deepBrown,
     paddingBottom: 30,
     alignItems: 'center',
     position: 'relative',
-    overflow: 'hidden'
+    overflow: 'hidden',
   },
   heroBlob1: {
     position: 'absolute',
@@ -99,7 +100,7 @@ const styles = StyleSheet.create({
     borderRadius: 140,
     backgroundColor: 'rgba(179,149,98,0.06)',
     top: -100,
-    right: -80
+    right: -80,
   },
   heroBlob2: {
     position: 'absolute',
@@ -108,7 +109,7 @@ const styles = StyleSheet.create({
     borderRadius: 90,
     backgroundColor: 'rgba(74,44,13,0.2)',
     bottom: -60,
-    left: -50
+    left: -50,
   },
   heroArc: {
     position: 'absolute',
@@ -118,7 +119,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(179,149,98,0.06)',
     top: -100,
-    left: -80
+    left: -80,
   },
   heroOm: {
     position: 'absolute',
@@ -126,7 +127,7 @@ const styles = StyleSheet.create({
     top: 60,
     fontSize: 90,
     color: 'rgba(179,149,98,0.05)',
-    lineHeight: 100
+    lineHeight: 100,
   },
   topBar: {
     width: '100%',
@@ -135,7 +136,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 20,
     paddingTop: 54,
-    paddingBottom: 20
+    paddingBottom: 20,
   },
   backBtn: {
     width: 38,
@@ -145,16 +146,16 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: C.goldBorder,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   topBarTitle: {
-    alignItems: 'center'
+    alignItems: 'center',
   },
   topBarTitleText: {
     fontSize: 12,
-    fontWeight: "600",
+    fontWeight: '600',
     color: C.goldLight,
-    letterSpacing: 3
+    letterSpacing: 3,
   },
   closeBtn: {
     position: 'absolute',
@@ -168,6 +169,6 @@ const styles = StyleSheet.create({
     borderColor: C.goldBorder,
     alignItems: 'center',
     justifyContent: 'center',
-    zIndex: 99
-  }
+    zIndex: 99,
+  },
 });

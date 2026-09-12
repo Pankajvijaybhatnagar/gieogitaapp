@@ -7,10 +7,17 @@
 
 import { Ionicons } from '@expo/vector-icons';
 import { router, useLocalSearchParams } from 'expo-router';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+    ScrollView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
+} from 'react-native';
 
 import AshtaDashShalokiGita from '@/components/join/AshtaDashShalokiGita';
 import Card from '@/components/ui/Card';
+import Spacer from '@/components/ui/Spacer';
 import { COLORS, RGB } from '@/constants/brandColors';
 import { radii, shadow, spacing, type } from '@/constants/theme';
 
@@ -23,26 +30,28 @@ import { radii, shadow, spacing, type } from '@/constants/theme';
 ============================================================ */
 
 const EXCLUSIVE_DETAILS = {
-  '2': {
+  2: {
     icon: '📿',
     title: 'Ashtadash Shaloki Gita',
     subtitle: 'Eighteen verses said to hold the essence of the Bhagavad Gita',
     render: 'ashtadash',
   },
-  '3': {
+  3: {
     icon: '🪔',
     title: 'Purushottam Yoga',
-    subtitle: 'Chapter 15 of the Bhagavad Gita — the Yoga of the Supreme Person',
+    subtitle:
+      'Chapter 15 of the Bhagavad Gita — the Yoga of the Supreme Person',
     body: [
       'In this chapter, Shri Krishna describes the eternal tree of the material world — its roots above and its branches spread below — and explains how one must cut this tree with the axe of detachment to reach the imperishable, original position.',
       'He then reveals the nature of the Purushottama, the Supreme Person who is beyond both the perishable material world and the imperishable individual soul, and who pervades and sustains the entire universe.',
       'Reflecting on the teachings of this chapter is said to remove doubt and lead one towards a clear understanding of one’s highest duty and the ultimate goal of life.',
     ],
   },
-  '4': {
+  4: {
     icon: '📖',
     title: 'Sapta Shloki Gita',
-    subtitle: 'Seven verses said to carry the complete essence of the Bhagavad Gita',
+    subtitle:
+      'Seven verses said to carry the complete essence of the Bhagavad Gita',
     body: [
       'Sapta Shloki Gita is a small, traditional collection of seven verses drawn from the Bhagavad Gita, believed by many devotees to condense the scripture’s teaching into a form that can be easily remembered and recited every day.',
       'These verses are often chanted as a daily reminder of the Gita’s core message — performing one’s duty without attachment to results, and surrendering with devotion to the Divine.',
@@ -52,8 +61,8 @@ const EXCLUSIVE_DETAILS = {
 
 // Cards that already have a proper home elsewhere in the app.
 const REDIRECTS = {
-  '1': '/home/(tabs)/reading',
-  '5': '/home/(tabs)/chants',
+  1: '/home/(tabs)/reading',
+  5: '/home/(tabs)/chants',
 };
 
 export default function ExclusiveDetail() {
@@ -96,7 +105,9 @@ export default function ExclusiveDetail() {
 
   return (
     <View style={styles.root}>
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.scrollContent}>
         {/* HERO BANNER — same premium banner + overlapping badge pattern
             used across the app (Join GIEO Gita, Profile screen). */}
         <View style={styles.hero}>
@@ -144,7 +155,7 @@ export default function ExclusiveDetail() {
           </Card>
         )}
 
-        <View style={{ height: spacing.xl }} />
+        <Spacer height={120} />
       </ScrollView>
     </View>
   );

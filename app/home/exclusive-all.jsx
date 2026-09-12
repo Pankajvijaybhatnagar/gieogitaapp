@@ -5,25 +5,29 @@
 // list in a two-column gallery. Tapping a card opens the same detail
 // page the home-page cards already use.
 
-import {
-  FlatList,
-  ImageBackground,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
+import {
+    FlatList,
+    ImageBackground,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
+} from 'react-native';
 
-import Card from '@/components/ui/Card';
 import { exclusiveContent } from '@/components/home/constant';
+import Card from '@/components/ui/Card';
+import Spacer from '@/components/ui/Spacer';
 import { COLORS, RGB } from '@/constants/brandColors';
 import { radii, shadow, spacing, type } from '@/constants/theme';
 
 function GridCard({ item, onPress }) {
   return (
-    <TouchableOpacity activeOpacity={0.85} onPress={onPress} style={styles.cardWrap}>
+    <TouchableOpacity
+      activeOpacity={0.85}
+      onPress={onPress}
+      style={styles.cardWrap}>
       <Card radius={radii.lg} style={styles.card}>
         <ImageBackground
           source={require('@/assets/images/krishna-bg.jpg')}
@@ -95,6 +99,7 @@ export default function ExclusiveAllScreen() {
       contentContainerStyle={styles.listContent}
       showsVerticalScrollIndicator={false}
       ListHeaderComponent={<Hero count={exclusiveContent.length} />}
+      ListFooterComponent={<Spacer height={120} />}
       renderItem={({ item }) => (
         <GridCard
           item={item}

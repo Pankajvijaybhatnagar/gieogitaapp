@@ -4,17 +4,17 @@ import { DESIGN } from '@/constants/design';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import {
-  ActivityIndicator,
-  Animated,
-  Easing,
-  KeyboardAvoidingView,
-  Platform,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
+    ActivityIndicator,
+    Animated,
+    Easing,
+    KeyboardAvoidingView,
+    Platform,
+    Pressable,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    View,
 } from 'react-native';
 
 import { Ionicons } from '@expo/vector-icons';
@@ -24,6 +24,7 @@ import { Link, Stack, useRouter } from 'expo-router';
 
 import Button from '@/components/ui/Button';
 import ListBottomSheet from '@/components/ui/ListBottomSheet';
+import Spacer from '@/components/ui/Spacer';
 import { COLORS as BASE, RGB } from '@/constants/brandColors';
 import { hairline, radii, shadow, spacing } from '@/constants/theme';
 import { useAppAlert } from '@/context/AppAlertContext';
@@ -1524,6 +1525,7 @@ export default function JoinGieoGitaScreen() {
           <Text style={styles.footer}>
             GIEO Gita • Spreading the message of Shri Bhagavad Gita
           </Text>
+          <Spacer height={120} />
         </ScrollView>
       </KeyboardAvoidingView>
     </>

@@ -4,21 +4,22 @@ import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useEffect, useRef } from 'react';
 
 import {
-  Animated,
-  Dimensions,
-  Image,
-  Linking,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
+    Animated,
+    Dimensions,
+    Image,
+    Linking,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
 } from 'react-native';
 
 import { WebView } from 'react-native-webview';
 
+import Spacer from '@/components/ui/Spacer';
 import { COLORS } from '@/constants/brandColors';
-import { hairline, radii, shadow, spacing, type } from '@/constants/theme';
+import { hairline, radii, shadow } from '@/constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -446,11 +447,7 @@ export default function PromotionalScreen() {
         <View style={styles.hero}>
           <View style={styles.heroTopRow}>
             <View style={styles.heroBadge}>
-              <FontAwesome
-                name="youtube-play"
-                size={13}
-                color={YOUTUBE_RED}
-              />
+              <FontAwesome name="youtube-play" size={13} color={YOUTUBE_RED} />
 
               <Text style={styles.heroBadgeText}>{YT_HANDLE}</Text>
             </View>
@@ -669,7 +666,7 @@ export default function PromotionalScreen() {
           <Text style={styles.ctaBrand}>GIEO GITA</Text>
         </View>
 
-        <View style={styles.bottomSpace} />
+        <Spacer height={120} />
       </ScrollView>
     </View>
   );
@@ -686,19 +683,19 @@ const styles = StyleSheet.create({
 
   root: {
     flex: 1,
-    backgroundColor: COLORS.cream
+    backgroundColor: COLORS.cream,
   },
   scroll: {
-    flex: 1
+    flex: 1,
   },
   scrollContent: {
-    paddingBottom: 10
+    paddingBottom: 10,
   },
   pulseDot: {
     width: 7,
     height: 7,
     borderRadius: 4,
-    backgroundColor: YOUTUBE_RED
+    backgroundColor: YOUTUBE_RED,
   },
   // =========================================================
   // SECTION HEADER
@@ -710,12 +707,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginHorizontal: 18,
     marginTop: 24,
-    marginBottom: 11
+    marginBottom: 11,
   },
   sectionHeadLeft: {
     flex: 1,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   sectionIconBox: {
     width: 38,
@@ -724,26 +721,26 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 10,
-    backgroundColor: COLORS.creamDark
+    backgroundColor: COLORS.creamDark,
   },
   sectionIcon: {
     color: COLORS.saffron,
     fontSize: 16,
-    fontWeight: "600"
+    fontWeight: '600',
   },
   sectionHeadingText: {
-    flex: 1
+    flex: 1,
   },
   sectionTitle: {
     color: COLORS.deepBrown,
     fontSize: 15,
-    fontWeight: "600"
+    fontWeight: '600',
   },
   sectionAccent: {
     color: COLORS.warmBrown,
     fontSize: 12,
     fontWeight: '600',
-    marginTop: 1
+    marginTop: 1,
   },
   sectionActionBtn: {
     flexDirection: 'row',
@@ -751,13 +748,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: radii.pill,
-    backgroundColor: COLORS.creamDark
+    backgroundColor: COLORS.creamDark,
   },
   sectionActionText: {
     color: COLORS.saffron,
     fontSize: 12,
-    fontWeight: "600",
-    marginRight: 2
+    fontWeight: '600',
+    marginRight: 2,
   },
   // =========================================================
   // HERO
@@ -771,13 +768,13 @@ const styles = StyleSheet.create({
     paddingBottom: 18,
     borderRadius: radii.xl,
     backgroundColor: COLORS.cream,
-    ...shadow.raised
+    ...shadow.raised,
   },
   heroTopRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 18
+    marginBottom: 18,
   },
   heroBadge: {
     flexDirection: 'row',
@@ -785,13 +782,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: radii.pill,
-    backgroundColor: COLORS.creamDark
+    backgroundColor: COLORS.creamDark,
   },
   heroBadgeText: {
     color: COLORS.warmBrown,
     marginLeft: 6,
     fontSize: 10,
-    fontWeight: '700'
+    fontWeight: '700',
   },
   officialBadge: {
     flexDirection: 'row',
@@ -799,76 +796,76 @@ const styles = StyleSheet.create({
     paddingHorizontal: 9,
     paddingVertical: 5,
     borderRadius: radii.pill,
-    backgroundColor: COLORS.creamDark
+    backgroundColor: COLORS.creamDark,
   },
   officialDot: {
     width: 5,
     height: 5,
     borderRadius: 3,
     marginRight: 5,
-    backgroundColor: COLORS.saffron
+    backgroundColor: COLORS.saffron,
   },
   officialBadgeText: {
     color: COLORS.saffron,
     fontSize: 10,
-    fontWeight: "600",
-    letterSpacing: 1
+    fontWeight: '600',
+    letterSpacing: 1,
   },
   heroSmallTitle: {
     color: COLORS.saffron,
     fontSize: 12,
-    fontWeight: "600",
+    fontWeight: '600',
     letterSpacing: 1.8,
-    marginBottom: 7
+    marginBottom: 7,
   },
   heroHeading: {
     color: COLORS.deepBrown,
     fontSize: 25,
-    fontWeight: "400",
+    fontWeight: '400',
     lineHeight: 31,
     fontFamily: DESIGN.fonts.editorial,
-    letterSpacing: -0.4
+    letterSpacing: -0.4,
   },
   heroAccent: {
     color: COLORS.saffron,
     fontSize: 23,
     lineHeight: 30,
     fontWeight: '700',
-    marginBottom: 11
+    marginBottom: 11,
   },
   heroDesc: {
     maxWidth: 360,
     color: COLORS.warmBrown,
     fontSize: 12,
     lineHeight: 18,
-    marginBottom: 17
+    marginBottom: 17,
   },
   heroStats: {
     flexDirection: 'row',
     marginBottom: 16,
     borderRadius: radii.md,
     overflow: 'hidden',
-    backgroundColor: COLORS.creamDark
+    backgroundColor: COLORS.creamDark,
   },
   heroStat: {
     flex: 1,
     alignItems: 'center',
-    paddingVertical: 12
+    paddingVertical: 12,
   },
   heroStatMiddle: {
     borderLeftWidth: 1,
     borderRightWidth: 1,
-    borderColor: hairline
+    borderColor: hairline,
   },
   heroStatVal: {
     color: COLORS.saffron,
     fontSize: 15,
-    fontWeight: "600"
+    fontWeight: '600',
   },
   heroStatLabel: {
     color: COLORS.warmBrown,
     fontSize: 12,
-    marginTop: 3
+    marginTop: 3,
   },
   heroBtn: {
     minHeight: 48,
@@ -876,13 +873,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: radii.md,
-    backgroundColor: COLORS.richBrown
+    backgroundColor: COLORS.richBrown,
   },
   heroBtnText: {
     color: COLORS.white,
     marginHorizontal: 8,
     fontSize: 12.5,
-    fontWeight: "600"
+    fontWeight: '600',
   },
   // =========================================================
   // WEBVIEW / PLAYLIST
@@ -891,7 +888,7 @@ const styles = StyleSheet.create({
   webView: {
     width: '100%',
     height: 212,
-    backgroundColor: '#000'
+    backgroundColor: '#000',
   },
   embedCard: {
     marginHorizontal: 18,
@@ -902,7 +899,7 @@ const styles = StyleSheet.create({
     borderColor: DESIGN.colors.border,
     borderWidth: 1,
     shadowOpacity: 0.045,
-    elevation: 2
+    elevation: 2,
   },
   embedCardHeader: {
     minHeight: 49,
@@ -910,7 +907,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 13,
     borderBottomWidth: 1,
-    borderBottomColor: hairline
+    borderBottomColor: hairline,
   },
   embedLivePill: {
     flexDirection: 'row',
@@ -919,21 +916,21 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: radii.pill,
-    backgroundColor: '#FFF0F2'
+    backgroundColor: '#FFF0F2',
   },
   embedLivePillText: {
     color: YOUTUBE_RED,
     marginLeft: 5,
     fontSize: 10,
-    fontWeight: "600",
-    letterSpacing: 0.5
+    fontWeight: '600',
+    letterSpacing: 0.5,
   },
   embedCardTitle: {
     flex: 1,
     color: COLORS.deepBrown,
     fontSize: 12,
     fontWeight: '700',
-    marginRight: 7
+    marginRight: 7,
   },
   embedCardFooter: {
     minHeight: 44,
@@ -942,41 +939,41 @@ const styles = StyleSheet.create({
     paddingHorizontal: 13,
     backgroundColor: COLORS.creamDark,
     borderTopWidth: 1,
-    borderTopColor: hairline
+    borderTopColor: hairline,
   },
   embedCardFooterText: {
     flex: 1,
     color: COLORS.warmBrown,
     fontSize: 12,
-    marginLeft: 7
+    marginLeft: 7,
   },
   // =========================================================
   // VIDEOS
   // =========================================================
 
   videosList: {
-    marginHorizontal: 18
+    marginHorizontal: 18,
   },
   videoCard: {
     marginBottom: 13,
     overflow: 'hidden',
     borderRadius: radii.md,
     backgroundColor: COLORS.cream,
-    ...shadow.card
+    ...shadow.card,
   },
   videoThumbWrap: {
     width: '100%',
     height: width > 500 ? 240 : 188,
     position: 'relative',
-    backgroundColor: '#000'
+    backgroundColor: '#000',
   },
   videoThumbImg: {
     width: '100%',
-    height: '100%'
+    height: '100%',
   },
   videoThumbOverlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(20,12,5,0.24)'
+    backgroundColor: 'rgba(20,12,5,0.24)',
   },
   videoPlayBtn: {
     position: 'absolute',
@@ -989,7 +986,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: COLORS.richBrown,
     borderWidth: 2,
-    borderColor: 'rgba(255,255,255,0.80)'
+    borderColor: 'rgba(255,255,255,0.80)',
   },
   videoDurationBadge: {
     position: 'absolute',
@@ -998,12 +995,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 7,
     paddingVertical: 4,
     borderRadius: 5,
-    backgroundColor: 'rgba(20,12,5,0.86)'
+    backgroundColor: 'rgba(20,12,5,0.86)',
   },
   videoDurationText: {
     color: COLORS.white,
     fontSize: 12,
-    fontWeight: '700'
+    fontWeight: '700',
   },
   videoYTBadge: {
     position: 'absolute',
@@ -1014,56 +1011,56 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 5,
     borderRadius: radii.pill,
-    backgroundColor: 'rgba(255,255,255,0.94)'
+    backgroundColor: 'rgba(255,255,255,0.94)',
   },
   videoYTBadgeText: {
     color: COLORS.deepBrown,
     fontSize: 10,
-    fontWeight: "600",
-    marginLeft: 4
+    fontWeight: '600',
+    marginLeft: 4,
   },
   videoMeta: {
     paddingHorizontal: 13,
-    paddingVertical: 12
+    paddingVertical: 12,
   },
   videoTitle: {
     color: COLORS.deepBrown,
     fontSize: 13,
-    fontWeight: "600",
+    fontWeight: '600',
     lineHeight: 20,
-    marginBottom: 8
+    marginBottom: 8,
   },
   videoMetaRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 8
+    marginBottom: 8,
   },
   videoViews: {
     color: COLORS.warmBrown,
     marginLeft: 4,
-    fontSize: 12
+    fontSize: 12,
   },
   metaDot: {
     width: 3,
     height: 3,
     borderRadius: 2,
     marginHorizontal: 7,
-    backgroundColor: hairline
+    backgroundColor: hairline,
   },
   videoDurationMeta: {
     color: COLORS.warmBrown,
     marginLeft: 4,
-    fontSize: 12
+    fontSize: 12,
   },
   videoOpenRow: {
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   videoOpenText: {
     color: COLORS.saffron,
     marginRight: 4,
     fontSize: 12,
-    fontWeight: '700'
+    fontWeight: '700',
   },
   // =========================================================
   // SHORTS
@@ -1071,7 +1068,7 @@ const styles = StyleSheet.create({
 
   shortsRow: {
     paddingHorizontal: 18,
-    paddingBottom: 3
+    paddingBottom: 3,
   },
   shortCard: {
     width: 145,
@@ -1083,21 +1080,21 @@ const styles = StyleSheet.create({
     borderColor: DESIGN.colors.border,
     borderWidth: 1,
     shadowOpacity: 0.045,
-    elevation: 2
+    elevation: 2,
   },
   shortThumbWrap: {
     width: '100%',
     height: 228,
     position: 'relative',
-    backgroundColor: '#000'
+    backgroundColor: '#000',
   },
   shortThumbImg: {
     width: '100%',
-    height: '100%'
+    height: '100%',
   },
   shortThumbOverlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(24,14,6,0.20)'
+    backgroundColor: 'rgba(24,14,6,0.20)',
   },
   shortTopBadge: {
     position: 'absolute',
@@ -1108,13 +1105,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 7,
     paddingVertical: 4,
     borderRadius: radii.pill,
-    backgroundColor: 'rgba(255,255,255,0.94)'
+    backgroundColor: 'rgba(255,255,255,0.94)',
   },
   shortTopBadgeText: {
     color: COLORS.deepBrown,
     marginLeft: 4,
     fontSize: 10,
-    fontWeight: "600"
+    fontWeight: '600',
   },
   shortPlayBtn: {
     position: 'absolute',
@@ -1127,7 +1124,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: 'rgba(41,35,40,0.7)',
     borderWidth: 1.5,
-    borderColor: 'rgba(255,255,255,0.8)'
+    borderColor: 'rgba(255,255,255,0.8)',
   },
   shortDurationBadge: {
     position: 'absolute',
@@ -1136,19 +1133,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: 6,
     paddingVertical: 3,
     borderRadius: 4,
-    backgroundColor: 'rgba(20,12,5,0.84)'
+    backgroundColor: 'rgba(20,12,5,0.84)',
   },
   shortDurationText: {
     color: COLORS.white,
     fontSize: 12,
-    fontWeight: '700'
+    fontWeight: '700',
   },
   shortBottom: {
     minHeight: 50,
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 9,
-    paddingVertical: 8
+    paddingVertical: 8,
   },
   shortTitle: {
     flex: 1,
@@ -1156,7 +1153,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '700',
     lineHeight: 18,
-    marginRight: 3
+    marginRight: 3,
   },
   // =========================================================
   // NOTE
@@ -1174,7 +1171,7 @@ const styles = StyleSheet.create({
     borderColor: DESIGN.colors.border,
     borderWidth: 1,
     shadowOpacity: 0.045,
-    elevation: 2
+    elevation: 2,
   },
   noteIconBox: {
     width: 31,
@@ -1183,13 +1180,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 9,
-    backgroundColor: COLORS.cream
+    backgroundColor: COLORS.cream,
   },
   noteText: {
     flex: 1,
     color: COLORS.warmBrown,
     fontSize: 12,
-    lineHeight: 18
+    lineHeight: 18,
   },
   // =========================================================
   // CTA
@@ -1207,7 +1204,7 @@ const styles = StyleSheet.create({
     borderColor: DESIGN.colors.border,
     borderWidth: 1,
     shadowOpacity: 0.045,
-    elevation: 2
+    elevation: 2,
   },
   ctaIcon: {
     width: 58,
@@ -1216,16 +1213,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 13,
-    backgroundColor: COLORS.creamDark
+    backgroundColor: COLORS.creamDark,
   },
   ctaHeading: {
     color: COLORS.deepBrown,
     fontSize: 18,
-    fontWeight: "400",
+    fontWeight: '400',
     textAlign: 'center',
     marginBottom: 7,
     fontFamily: DESIGN.fonts.editorial,
-    letterSpacing: -0.4
+    letterSpacing: -0.4,
   },
   ctaDesc: {
     maxWidth: 320,
@@ -1233,7 +1230,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 18,
     textAlign: 'center',
-    marginBottom: 17
+    marginBottom: 17,
   },
   ctaBtn: {
     width: '100%',
@@ -1242,13 +1239,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: radii.md,
-    backgroundColor: COLORS.saffron
+    backgroundColor: COLORS.saffron,
   },
   ctaBtnText: {
     color: COLORS.white,
     marginLeft: 8,
     fontSize: 12.5,
-    fontWeight: "600"
+    fontWeight: '600',
   },
   ctaBellRow: {
     flexDirection: 'row',
@@ -1257,32 +1254,32 @@ const styles = StyleSheet.create({
     paddingHorizontal: 11,
     paddingVertical: 7,
     borderRadius: radii.pill,
-    backgroundColor: COLORS.creamDark
+    backgroundColor: COLORS.creamDark,
   },
   ctaBellText: {
     color: COLORS.saffron,
     fontSize: 12,
     fontWeight: '600',
-    marginLeft: 6
+    marginLeft: 6,
   },
   ctaDivider: {
     width: 40,
     height: 1,
     marginTop: 17,
     marginBottom: 9,
-    backgroundColor: hairline
+    backgroundColor: hairline,
   },
   ctaBrand: {
     color: COLORS.warmBrown,
     fontSize: 12,
-    fontWeight: "600",
-    letterSpacing: 2
+    fontWeight: '600',
+    letterSpacing: 2,
   },
   // =========================================================
   // END SPACE
   // =========================================================
 
   bottomSpace: {
-    height: 28
-  }
+    height: 28,
+  },
 });

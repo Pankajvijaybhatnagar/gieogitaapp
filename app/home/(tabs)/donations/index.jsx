@@ -1,6 +1,6 @@
-import { DESIGN } from '@/constants/design';
 import DonationCard from '@/components/donations/DonationCard';
 import DonationListFooter from '@/components/donations/DonationListFooter';
+import { DESIGN } from '@/constants/design';
 import { useAuth } from '@/context/AuthContext';
 import donationServices from '@/lib/services/donationServices';
 
@@ -9,18 +9,19 @@ import { useRouter } from 'expo-router';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import {
-  ActivityIndicator,
-  FlatList,
-  RefreshControl,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import Spacer from '@/components/ui/Spacer';
 import { COLORS, RGB } from '@/constants/brandColors';
 import { hairline, radii, shadow, spacing, type } from '@/constants/theme';
+import {
+    ActivityIndicator,
+    FlatList,
+    RefreshControl,
+    SafeAreaView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
+} from 'react-native';
 
 const LIMIT = 10;
 
@@ -253,7 +254,11 @@ const DonationHistoryScreen = () => {
       <SafeAreaView style={styles.container}>
         <View style={styles.loadingContainer}>
           <View style={styles.loadingIcon}>
-            <Ionicons name="person-circle-outline" size={34} color={COLORS.saffron} />
+            <Ionicons
+              name="person-circle-outline"
+              size={34}
+              color={COLORS.saffron}
+            />
           </View>
 
           <ActivityIndicator size="small" color={COLORS.saffron} />
@@ -276,7 +281,11 @@ const DonationHistoryScreen = () => {
         <View style={styles.guestContainer}>
           <View style={styles.guestIconWrapper}>
             <View style={styles.guestIcon}>
-              <Ionicons name="receipt-outline" size={38} color={COLORS.saffron} />
+              <Ionicons
+                name="receipt-outline"
+                size={38}
+                color={COLORS.saffron}
+              />
             </View>
           </View>
 
@@ -292,7 +301,11 @@ const DonationHistoryScreen = () => {
           <View style={styles.guestFeatures}>
             <View style={styles.featureRow}>
               <View style={styles.featureIcon}>
-                <Ionicons name="time-outline" size={18} color={COLORS.saffron} />
+                <Ionicons
+                  name="time-outline"
+                  size={18}
+                  color={COLORS.saffron}
+                />
               </View>
 
               <View style={styles.featureContent}>
@@ -468,7 +481,11 @@ const DonationHistoryScreen = () => {
                   style={styles.retryButton}
                   onPress={handleRetry}
                   activeOpacity={0.85}>
-                  <Ionicons name="refresh-outline" size={18} color={COLORS.white} />
+                  <Ionicons
+                    name="refresh-outline"
+                    size={18}
+                    color={COLORS.white}
+                  />
 
                   <Text style={styles.retryButtonText}>Try Again</Text>
                 </TouchableOpacity>
@@ -476,7 +493,11 @@ const DonationHistoryScreen = () => {
             ) : (
               <>
                 <View style={styles.emptyIcon}>
-                  <Ionicons name="heart-outline" size={36} color={COLORS.warmBrown} />
+                  <Ionicons
+                    name="heart-outline"
+                    size={36}
+                    color={COLORS.warmBrown}
+                  />
                 </View>
 
                 <Text style={styles.emptyTitle}>No donations yet</Text>
@@ -490,11 +511,14 @@ const DonationHistoryScreen = () => {
           </View>
         }
         ListFooterComponent={
-          <DonationListFooter
-            loading={loadingMore}
-            hasDonations={donations.length > 0}
-            hasMore={page < totalPages}
-          />
+          <>
+            <DonationListFooter
+              loading={loadingMore}
+              hasDonations={donations.length > 0}
+              hasMore={page < totalPages}
+            />
+            <Spacer height={120} />
+          </>
         }
       />
     </SafeAreaView>
@@ -506,7 +530,7 @@ export default DonationHistoryScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.creamDark
+    backgroundColor: COLORS.creamDark,
   },
   /*
   |--------------------------------------------------------------------------
@@ -516,10 +540,10 @@ const styles = StyleSheet.create({
 
   listContent: {
     paddingHorizontal: 16,
-    paddingBottom: 40
+    paddingBottom: 40,
   },
   emptyListContent: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   /*
   |--------------------------------------------------------------------------
@@ -529,30 +553,30 @@ const styles = StyleSheet.create({
 
   header: {
     paddingTop: 10,
-    paddingBottom: 5
+    paddingBottom: 5,
   },
   headerTop: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   headerText: {
-    flex: 1
+    flex: 1,
   },
   eyebrow: {
     ...type.caption,
     color: COLORS.saffron,
-    marginBottom: 5
+    marginBottom: 5,
   },
   title: {
     ...type.title,
-    color: COLORS.deepBrown
+    color: COLORS.deepBrown,
   },
   description: {
     fontSize: 12,
     color: COLORS.warmBrown,
     marginTop: 0,
-    maxWidth: '55%'
+    maxWidth: '55%',
   },
   headerIcon: {
     width: 30,
@@ -560,7 +584,7 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     backgroundColor: COLORS.saffron,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   /*
   |--------------------------------------------------------------------------
@@ -573,7 +597,7 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     paddingVertical: 1,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   summaryIcon: {
     width: 42,
@@ -582,22 +606,22 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.creamDark,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 10
+    marginRight: 10,
   },
   summaryTextContainer: {
     flex: 1,
-    marginLeft: 12
+    marginLeft: 12,
   },
   summaryLabel: {
     color: COLORS.warmBrown,
     fontSize: 12,
-    fontWeight: '500'
+    fontWeight: '500',
   },
   summaryValue: {
     color: COLORS.deepBrown,
     fontSize: 12,
     fontWeight: '700',
-    marginTop: 2
+    marginTop: 2,
   },
   summaryHeart: {
     width: 34,
@@ -605,7 +629,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     backgroundColor: COLORS.creamDark,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   /*
   |--------------------------------------------------------------------------
@@ -617,7 +641,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 30
+    paddingHorizontal: 30,
   },
   loadingIcon: {
     width: 64,
@@ -626,12 +650,12 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.creamDark,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 20
+    marginBottom: 20,
   },
   loadingText: {
     color: COLORS.warmBrown,
     fontSize: 14,
-    marginTop: 12
+    marginTop: 12,
   },
   /*
   |--------------------------------------------------------------------------
@@ -643,11 +667,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     paddingHorizontal: 26,
-    paddingBottom: 35
+    paddingBottom: 35,
   },
   guestIconWrapper: {
     alignItems: 'center',
-    marginBottom: 25
+    marginBottom: 25,
   },
   guestIcon: {
     width: 82,
@@ -657,18 +681,18 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: hairline,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   guestEyebrow: {
     textAlign: 'center',
     ...type.caption,
     color: COLORS.saffron,
-    marginBottom: 8
+    marginBottom: 8,
   },
   guestTitle: {
     textAlign: 'center',
     ...type.title,
-    color: COLORS.deepBrown
+    color: COLORS.deepBrown,
   },
   guestDescription: {
     textAlign: 'center',
@@ -676,7 +700,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     lineHeight: 21,
     paddingHorizontal: 15,
-    marginTop: 10
+    marginTop: 10,
   },
   guestFeatures: {
     backgroundColor: COLORS.cream,
@@ -686,12 +710,12 @@ const styles = StyleSheet.create({
     padding: spacing.md,
     marginTop: spacing.xl,
     marginBottom: spacing.lg,
-    ...shadow.card
+    ...shadow.card,
   },
   featureRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 9
+    paddingVertical: 9,
   },
   featureIcon: {
     width: 38,
@@ -699,22 +723,22 @@ const styles = StyleSheet.create({
     borderRadius: 13,
     backgroundColor: COLORS.creamDark,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   featureContent: {
     flex: 1,
-    marginLeft: 12
+    marginLeft: 12,
   },
   featureTitle: {
     fontSize: 13,
     fontWeight: '700',
-    color: COLORS.deepBrown
+    color: COLORS.deepBrown,
   },
   featureDescription: {
     fontSize: 12,
     lineHeight: 18,
     color: COLORS.warmBrown,
-    marginTop: 2
+    marginTop: 2,
   },
   loginButton: {
     width: 200,
@@ -725,20 +749,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginHorizontal: 'auto',
-    minHeight: 52
+    minHeight: 52,
   },
   loginButtonText: {
     flex: 1,
     textAlign: 'center',
     color: COLORS.white,
     fontSize: 14,
-    fontWeight: '700'
+    fontWeight: '700',
   },
   loginHint: {
     fontSize: 12,
     color: COLORS.warmBrown,
     textAlign: 'center',
-    marginTop: 12
+    marginTop: 12,
   },
   /*
   |--------------------------------------------------------------------------
@@ -751,7 +775,7 @@ const styles = StyleSheet.create({
     minHeight: 360,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 30
+    paddingHorizontal: 30,
   },
   emptyIcon: {
     width: 76,
@@ -760,15 +784,15 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.creamDark,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 18
+    marginBottom: 18,
   },
   emptyTitle: {
     fontSize: 19,
-    fontWeight: "400",
+    fontWeight: '400',
     color: COLORS.deepBrown,
     textAlign: 'center',
     fontFamily: DESIGN.fonts.editorial,
-    letterSpacing: -0.4
+    letterSpacing: -0.4,
   },
   emptyDescription: {
     fontSize: 13,
@@ -776,7 +800,7 @@ const styles = StyleSheet.create({
     color: COLORS.warmBrown,
     textAlign: 'center',
     marginTop: 7,
-    maxWidth: 300
+    maxWidth: 300,
   },
   /*
   |--------------------------------------------------------------------------
@@ -793,12 +817,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 7,
-    marginTop: 18
+    marginTop: 18,
   },
   retryButtonText: {
     color: COLORS.white,
     fontSize: 13,
-    fontWeight: '600'
+    fontWeight: '600',
   },
   /*
   |--------------------------------------------------------------------------
@@ -813,13 +837,13 @@ const styles = StyleSheet.create({
     backgroundColor: `rgba(${RGB.dangerRed},0.08)`,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8
+    gap: 8,
   },
   inlineErrorText: {
     color: COLORS.dangerRed,
     fontSize: 12,
     flex: 1,
-    lineHeight: 18
+    lineHeight: 18,
   },
   addDonationButton: {
     height: 34,
@@ -831,11 +855,11 @@ const styles = StyleSheet.create({
     gap: 4,
     backgroundColor: COLORS.richBrown,
     borderWidth: 1,
-    borderColor: COLORS.white
+    borderColor: COLORS.white,
   },
   addDonationText: {
     fontSize: 12,
     fontWeight: '700',
-    color: COLORS.white
-  }
+    color: COLORS.white,
+  },
 });

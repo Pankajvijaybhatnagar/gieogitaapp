@@ -4,19 +4,20 @@
 // navigation destinations (the same list the drawer menu uses) rather
 // than a fake/mock dataset — typing filters, tapping actually navigates.
 
-import { useMemo, useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
+import { useMemo, useState } from 'react';
 import {
-  FlatList,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
+    FlatList,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
 } from 'react-native';
 
 import { DRAWER_ITEMS } from '@/components/navigation/CustomDrawerContent';
+import Spacer from '@/components/ui/Spacer';
 import { COLORS, RGB } from '@/constants/brandColors';
 import { hairline, radii, spacing, type } from '@/constants/theme';
 
@@ -63,7 +64,11 @@ export default function SearchScreen() {
 
           {query.length > 0 && (
             <TouchableOpacity onPress={() => setQuery('')}>
-              <Ionicons name="close-circle" size={18} color={COLORS.warmBrown} />
+              <Ionicons
+                name="close-circle"
+                size={18}
+                color={COLORS.warmBrown}
+              />
             </TouchableOpacity>
           )}
         </View>
@@ -83,14 +88,20 @@ export default function SearchScreen() {
         ListEmptyComponent={
           <View style={styles.emptyState}>
             <View style={styles.emptyIconRing}>
-              <Ionicons name="search-outline" size={30} color={COLORS.warmBrown} />
+              <Ionicons
+                name="search-outline"
+                size={30}
+                color={COLORS.warmBrown}
+              />
             </View>
             <Text style={styles.emptyTitle}>No results found</Text>
             <Text style={styles.emptyText}>
-              We couldn&apos;t find anything matching &quot;{query.trim()}&quot;.
+              We couldn&apos;t find anything matching &quot;{query.trim()}
+              &quot;.
             </Text>
           </View>
         }
+        ListFooterComponent={<Spacer height={120} />}
         renderItem={({ item }) => (
           <TouchableOpacity
             activeOpacity={0.75}
@@ -106,7 +117,11 @@ export default function SearchScreen() {
 
             <Text style={styles.resultLabel}>{item.label}</Text>
 
-            <Ionicons name="chevron-forward" size={16} color={COLORS.warmBrown} />
+            <Ionicons
+              name="chevron-forward"
+              size={16}
+              color={COLORS.warmBrown}
+            />
           </TouchableOpacity>
         )}
       />

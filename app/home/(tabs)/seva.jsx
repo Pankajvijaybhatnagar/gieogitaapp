@@ -1,13 +1,13 @@
+import Spacer from '@/components/ui/Spacer';
+import { useHeaderScrollProps } from '@/context/HeaderScrollContext';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import { useHeaderScrollProps } from '@/context/HeaderScrollContext';
 import ContactFooter from '../../../components/pledge/ContactFooter';
 import HeroSection from '../../../components/pledge/HeroSection';
 import HowItWorks from '../../../components/pledge/HowItWorks';
 import PaymentModal from '../../../components/pledge/PaymentModal';
 import SevaList from '../../../components/pledge/SevaList';
-import { GoldDivider } from '../../../components/pledge/SharedUI';
 import TrustSection from '../../../components/pledge/TrustSection';
 import { C } from '../../../components/pledge/constants';
 
@@ -28,7 +28,10 @@ export default function SevaScreen() {
 
   return (
     <View style={styles.root}>
-      <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false} {...headerScrollProps}>
+      <ScrollView
+        style={styles.scroll}
+        showsVerticalScrollIndicator={false}
+        {...headerScrollProps}>
         <HeroSection />
 
         <HowItWorks />
@@ -47,7 +50,7 @@ export default function SevaScreen() {
 
         <ContactFooter />
 
-        <View style={{ height: 30 }} />
+        <Spacer height={120} />
       </ScrollView>
 
       <PaymentModal
@@ -62,9 +65,9 @@ export default function SevaScreen() {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: C.cream
+    backgroundColor: C.cream,
   },
   scroll: {
-    flex: 1
-  }
+    flex: 1,
+  },
 });

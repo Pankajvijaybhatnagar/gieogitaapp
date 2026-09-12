@@ -2,15 +2,16 @@ import { DESIGN } from '@/constants/design';
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import {
-  ActivityIndicator,
-  FlatList,
-  Pressable,
-  RefreshControl,
-  StyleSheet,
-  Text,
-  View,
+    ActivityIndicator,
+    FlatList,
+    Pressable,
+    RefreshControl,
+    StyleSheet,
+    Text,
+    View,
 } from 'react-native';
 
+import Spacer from '@/components/ui/Spacer';
 import { COLORS, RGB } from '@/constants/brandColors';
 import { radii, spacing, type } from '@/constants/theme';
 
@@ -33,11 +34,7 @@ function BhajanItem({ item, active, isPlaying, onPress }) {
           />
         ) : (
           <View style={styles.coverPlaceholder}>
-            <Ionicons
-              name="musical-notes"
-              size={24}
-              color={COLORS.saffron}
-            />
+            <Ionicons name="musical-notes" size={24} color={COLORS.saffron} />
           </View>
         )}
 
@@ -142,6 +139,7 @@ export default function BhajanList({
       )}
       showsVerticalScrollIndicator={false}
       contentContainerStyle={styles.list}
+      ListFooterComponent={<Spacer height={120} />}
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }
@@ -153,7 +151,7 @@ const styles = StyleSheet.create({
   list: {
     paddingHorizontal: spacing.md,
     paddingTop: spacing.sm,
-    paddingBottom: 180
+    paddingBottom: 180,
   },
   item: {
     flexDirection: 'row',
@@ -161,88 +159,88 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.sm,
     paddingHorizontal: spacing.sm + 2,
     borderRadius: radii.md,
-    marginBottom: 2
+    marginBottom: 2,
   },
   activeItem: {
-    backgroundColor: `rgba(${RGB.saffron}, 0.08)`
+    backgroundColor: `rgba(${RGB.saffron}, 0.08)`,
   },
   pressedItem: {
-    opacity: 0.75
+    opacity: 0.75,
   },
   coverContainer: {
     width: 52,
     height: 52,
     borderRadius: radii.sm,
-    overflow: 'hidden'
+    overflow: 'hidden',
   },
   cover: {
     width: '100%',
-    height: '100%'
+    height: '100%',
   },
   coverPlaceholder: {
     flex: 1,
     backgroundColor: COLORS.creamDark,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   playingOverlay: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: 'rgba(0,0,0,0.38)',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   details: {
     flex: 1,
     marginLeft: spacing.md - 4,
-    minWidth: 0
+    minWidth: 0,
   },
   title: {
     ...type.subhead,
     fontSize: 15,
     fontWeight: '700',
-    color: COLORS.deepBrown
+    color: COLORS.deepBrown,
   },
   activeTitle: {
-    color: COLORS.saffron
+    color: COLORS.saffron,
   },
   subtitle: {
     ...type.footnote,
     fontSize: 13,
     color: COLORS.warmBrown,
-    marginTop: 3
+    marginTop: 3,
   },
   stats: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    marginTop: 4
+    marginTop: 4,
   },
   statsText: {
     ...type.caption,
     fontWeight: '400',
     letterSpacing: 0,
-    color: COLORS.warmBrown
+    color: COLORS.warmBrown,
   },
   right: {
     alignItems: 'flex-end',
     gap: 6,
-    marginLeft: spacing.sm
+    marginLeft: spacing.sm,
   },
   duration: {
     ...type.caption,
     fontWeight: '400',
     letterSpacing: 0,
-    color: COLORS.warmBrown
+    color: COLORS.warmBrown,
   },
   center: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: spacing.xl - 2
+    padding: spacing.xl - 2,
   },
   loadingText: {
     marginTop: spacing.md - 4,
-    color: COLORS.warmBrown
+    color: COLORS.warmBrown,
   },
   emptyTitle: {
     ...type.headline,
@@ -250,14 +248,14 @@ const styles = StyleSheet.create({
     color: COLORS.deepBrown,
     marginTop: spacing.md - 2,
     fontFamily: DESIGN.fonts.editorial,
-    fontWeight: "400",
-    letterSpacing: -0.4
+    fontWeight: '400',
+    letterSpacing: -0.4,
   },
   emptyText: {
     ...type.body,
     fontSize: 14,
     color: COLORS.warmBrown,
     marginTop: spacing.xs + 1,
-    textAlign: 'center'
-  }
+    textAlign: 'center',
+  },
 });

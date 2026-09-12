@@ -30,6 +30,7 @@ import { useNotifications } from '@/context/NotificationContext';
 import userServices from '@/lib/services/userServices';
 
 import Card from '@/components/ui/Card';
+import Spacer from '@/components/ui/Spacer';
 import { COLORS as BRAND, RGB } from '@/constants/brandColors';
 import { radii, shadow, spacing, type } from '@/constants/theme';
 
@@ -699,6 +700,7 @@ export default function ProfileScreen() {
               <Text style={styles.loginButtonText}>Login</Text>
             </TouchableOpacity>
           </Card>
+          <Spacer height={120} />
         </ScrollView>
       </View>
     );
@@ -1245,6 +1247,7 @@ export default function ProfileScreen() {
             </Animated.View>
 
             <View style={styles.bottomSpace} />
+            <Spacer height={120} />
           </ScrollView>
         </Animated.View>
       </KeyboardAvoidingView>

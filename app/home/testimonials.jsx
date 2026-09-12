@@ -8,6 +8,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 
+import Spacer from '@/components/ui/Spacer';
 import { COLORS, RGB } from '@/constants/brandColors';
 import { radii, shadow, spacing, type } from '@/constants/theme';
 import { testimonials } from '@/lib/data/testimonialsData';
@@ -92,6 +93,7 @@ export default function TestimonialsScreen() {
       ListHeaderComponent={<Hero count={testimonials.length} />}
       renderItem={({ item }) => <TestimonialCard item={item} />}
       ItemSeparatorComponent={() => <View style={{ height: spacing.md }} />}
+      ListFooterComponent={<Spacer height={120} />}
     />
   );
 }

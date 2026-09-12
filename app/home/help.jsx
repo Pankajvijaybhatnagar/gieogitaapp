@@ -1,20 +1,21 @@
 import { useState } from 'react';
 
 import {
-  Linking,
-  Platform,
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
+    Linking,
+    Platform,
+    SafeAreaView,
+    ScrollView,
+    StatusBar,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
 } from 'react-native';
 
 import { useAppAlert } from '@/context/AppAlertContext';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 
+import Spacer from '@/components/ui/Spacer';
 import { COLORS } from '@/constants/brandColors';
 import { hairline, radii, shadow, spacing, type } from '@/constants/theme';
 
@@ -354,6 +355,7 @@ export default function Help() {
 
             <Text style={styles.footerText}>We are here to help</Text>
           </View>
+          <Spacer height={120} />
         </ScrollView>
       </View>
     </SafeAreaView>
@@ -371,17 +373,17 @@ const styles = StyleSheet.create({
 
   safeArea: {
     flex: 1,
-    backgroundColor: COLORS.cream
+    backgroundColor: COLORS.cream,
   },
   root: {
     flex: 1,
-    backgroundColor: COLORS.cream
+    backgroundColor: COLORS.cream,
   },
   scroll: {
-    flex: 1
+    flex: 1,
   },
   scrollContent: {
-    paddingBottom: Platform.OS === 'ios' ? 35 : 25
+    paddingBottom: Platform.OS === 'ios' ? 35 : 25,
   },
   // ==========================================================
   // HEADER
@@ -393,29 +395,29 @@ const styles = StyleSheet.create({
     paddingTop: 18,
     paddingBottom: spacing.lg,
     borderBottomLeftRadius: radii.xl,
-    borderBottomRightRadius: radii.xl
+    borderBottomRightRadius: radii.xl,
   },
   headerDecoration: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: spacing.md
+    marginBottom: spacing.md,
   },
   headerDecorationLine: {
     width: 37,
     height: 2,
     borderRadius: 2,
-    backgroundColor: COLORS.saffron
+    backgroundColor: COLORS.saffron,
   },
   headerDecorationDot: {
     width: 5,
     height: 5,
     borderRadius: 3,
     marginLeft: 5,
-    backgroundColor: COLORS.saffron
+    backgroundColor: COLORS.saffron,
   },
   headerTop: {
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   headerIcon: {
     width: 50,
@@ -424,26 +426,26 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 13,
-    backgroundColor: COLORS.saffron
+    backgroundColor: COLORS.saffron,
   },
   headerTextArea: {
-    flex: 1
+    flex: 1,
   },
   headerTitle: {
     ...type.title,
-    color: COLORS.deepBrown
+    color: COLORS.deepBrown,
   },
   headerSubtitle: {
     color: COLORS.warmBrown,
     fontSize: 12,
-    marginTop: 3
+    marginTop: 3,
   },
   headerDescription: {
     maxWidth: 350,
     marginTop: spacing.md,
     color: COLORS.warmBrown,
     fontSize: 12,
-    lineHeight: 18
+    lineHeight: 18,
   },
   // ==========================================================
   // SECTION HEADER
@@ -452,27 +454,27 @@ const styles = StyleSheet.create({
   sectionHeader: {
     marginHorizontal: 18,
     marginTop: 22,
-    marginBottom: 11
+    marginBottom: 11,
   },
   faqSectionHeader: {
-    marginTop: 25
+    marginTop: 25,
   },
   sectionTitle: {
     color: COLORS.deepBrown,
     fontSize: 16,
-    fontWeight: "600"
+    fontWeight: '600',
   },
   sectionSubtitle: {
     color: COLORS.warmBrown,
     fontSize: 12,
-    marginTop: 2
+    marginTop: 2,
   },
   // ==========================================================
   // QUICK HELP
   // ==========================================================
 
   quickHelpContainer: {
-    marginHorizontal: 18
+    marginHorizontal: 18,
   },
   quickHelpCard: {
     minHeight: 71,
@@ -487,7 +489,7 @@ const styles = StyleSheet.create({
     borderColor: hairline,
     borderWidth: 1,
     shadowOpacity: 0.045,
-    elevation: 2
+    elevation: 2,
   },
   quickIconBox: {
     width: 42,
@@ -496,29 +498,29 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 11,
-    backgroundColor: COLORS.creamDark
+    backgroundColor: COLORS.creamDark,
   },
   quickTextArea: {
     flex: 1,
-    paddingRight: 7
+    paddingRight: 7,
   },
   quickTitle: {
     color: COLORS.deepBrown,
     fontSize: 12.5,
-    fontWeight: "600",
-    marginBottom: 3
+    fontWeight: '600',
+    marginBottom: 3,
   },
   quickSubtitle: {
     color: COLORS.warmBrown,
     fontSize: 12,
-    lineHeight: 18
+    lineHeight: 18,
   },
   // ==========================================================
   // FAQ
   // ==========================================================
 
   faqContainer: {
-    marginHorizontal: 18
+    marginHorizontal: 18,
   },
   faqCard: {
     marginBottom: 9,
@@ -529,20 +531,20 @@ const styles = StyleSheet.create({
     borderColor: hairline,
     borderWidth: 1,
     shadowOpacity: 0.045,
-    elevation: 2
+    elevation: 2,
   },
   faqHeader: {
     minHeight: 57,
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 12,
-    paddingVertical: 9
+    paddingVertical: 9,
   },
   faqQuestionArea: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    paddingRight: 8
+    paddingRight: 8,
   },
   questionCircle: {
     width: 29,
@@ -551,19 +553,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 9,
-    backgroundColor: COLORS.creamDark
+    backgroundColor: COLORS.creamDark,
   },
   questionMark: {
     color: COLORS.saffron,
     fontSize: 14,
-    fontWeight: "600"
+    fontWeight: '600',
   },
   faqQuestion: {
     flex: 1,
     color: COLORS.deepBrown,
     fontSize: 12,
     lineHeight: 18,
-    fontWeight: '700'
+    fontWeight: '700',
   },
   expandButton: {
     width: 27,
@@ -571,27 +573,27 @@ const styles = StyleSheet.create({
     borderRadius: radii.sm,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: COLORS.creamDark
+    backgroundColor: COLORS.creamDark,
   },
   expandButtonActive: {
-    backgroundColor: COLORS.richBrown
+    backgroundColor: COLORS.richBrown,
   },
   answerContainer: {
     flexDirection: 'row',
     paddingHorizontal: 13,
-    paddingBottom: 13
+    paddingBottom: 13,
   },
   answerLine: {
     width: 3,
     borderRadius: 2,
     marginRight: 10,
-    backgroundColor: COLORS.saffron
+    backgroundColor: COLORS.saffron,
   },
   answerText: {
     flex: 1,
     color: COLORS.warmBrown,
     fontSize: 12,
-    lineHeight: 18
+    lineHeight: 18,
   },
   // ==========================================================
   // SUPPORT CTA
@@ -609,7 +611,7 @@ const styles = StyleSheet.create({
     borderColor: hairline,
     borderWidth: 1,
     shadowOpacity: 0.045,
-    elevation: 2
+    elevation: 2,
   },
   supportIconBox: {
     width: 56,
@@ -618,13 +620,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 11,
-    backgroundColor: COLORS.creamDark
+    backgroundColor: COLORS.creamDark,
   },
   supportTitle: {
     color: COLORS.deepBrown,
     fontSize: 17,
-    fontWeight: "600",
-    marginBottom: 6
+    fontWeight: '600',
+    marginBottom: 6,
   },
   supportDescription: {
     maxWidth: 290,
@@ -632,10 +634,10 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 18,
     textAlign: 'center',
-    marginBottom: 16
+    marginBottom: 16,
   },
   supportActions: {
-    width: '100%'
+    width: '100%',
   },
   primaryButton: {
     width: '100%',
@@ -645,13 +647,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 16,
     marginBottom: 9,
-    backgroundColor: COLORS.richBrown
+    backgroundColor: COLORS.richBrown,
   },
   primaryButtonText: {
     color: COLORS.white,
     fontSize: 12,
-    fontWeight: "600",
-    marginLeft: 7
+    fontWeight: '600',
+    marginLeft: 7,
   },
   secondaryButton: {
     width: '100%',
@@ -662,13 +664,13 @@ const styles = StyleSheet.create({
     borderRadius: radii.md,
     backgroundColor: COLORS.creamDark,
     borderWidth: 1,
-    borderColor: hairline
+    borderColor: hairline,
   },
   secondaryButtonText: {
     color: COLORS.saffron,
     fontSize: 12,
-    fontWeight: "600",
-    marginLeft: 7
+    fontWeight: '600',
+    marginLeft: 7,
   },
   // ==========================================================
   // FOOTER
@@ -676,23 +678,23 @@ const styles = StyleSheet.create({
 
   footer: {
     alignItems: 'center',
-    marginTop: 27
+    marginTop: 27,
   },
   footerLine: {
     width: 34,
     height: 1,
     marginBottom: 9,
-    backgroundColor: hairline
+    backgroundColor: hairline,
   },
   footerBrand: {
     color: COLORS.saffron,
     fontSize: 12,
-    fontWeight: "600",
-    letterSpacing: 2
+    fontWeight: '600',
+    letterSpacing: 2,
   },
   footerText: {
     color: COLORS.warmBrown,
     fontSize: 12,
-    marginTop: 4
-  }
+    marginTop: 4,
+  },
 });

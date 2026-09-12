@@ -2,15 +2,15 @@ import { DESIGN } from '@/constants/design';
 import { useEffect, useMemo, useState } from 'react';
 
 import {
-  ActivityIndicator,
-  Dimensions,
-  Image,
-  Linking,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
+    ActivityIndicator,
+    Dimensions,
+    Image,
+    Linking,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
 } from 'react-native';
 
 import { router, useLocalSearchParams } from 'expo-router';
@@ -18,6 +18,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import RenderHTML from 'react-native-render-html';
 
 import { COLORS } from '@/components/home/constant';
+import Spacer from '@/components/ui/Spacer';
 import { hairline, radii, shadow } from '@/constants/theme';
 
 import eventServices from '@/lib/services/eventServices';
@@ -178,9 +179,9 @@ export default function Event() {
 
     let value = '';
     // returnng null if start and end tie is 00
-    if(event.start_time=='00:00:00' || event.end_time=='00:00:00'){
-      value='';
-      return
+    if (event.start_time == '00:00:00' || event.end_time == '00:00:00') {
+      value = '';
+      return;
     }
 
     if (event.start_time) {
@@ -598,7 +599,7 @@ export default function Event() {
           </TouchableOpacity>
         ) : null}
 
-        <View style={styles.bottomSpace} />
+        <Spacer height={120} />
       </ScrollView>
     </View>
   );
@@ -615,12 +616,12 @@ const styles = StyleSheet.create({
 
   container: {
     flex: 1,
-    backgroundColor: COLORS.cream
+    backgroundColor: COLORS.cream,
   },
   scrollContent: {
     paddingHorizontal: 8,
     paddingTop: 8,
-    paddingBottom: 24
+    paddingBottom: 24,
   },
   // =========================================================
   // TOP ROW
@@ -630,7 +631,7 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     // alignItems: 'center',
-    marginBottom: 14
+    marginBottom: 14,
   },
   // =========================================================
   // BACK BUTTON
@@ -646,13 +647,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 8,
-    flexShrink: 0
+    flexShrink: 0,
   },
   backArrow: {
     color: COLORS.saffron,
     fontSize: 32,
     lineHeight: 35,
-    marginTop: -4
+    marginTop: -4,
   },
   // =========================================================
   // IMAGE
@@ -665,11 +666,11 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     backgroundColor: COLORS.creamDark,
     borderWidth: 1,
-    borderColor: hairline
+    borderColor: hairline,
   },
   coverImage: {
     width: '100%',
-    height: '100%'
+    height: '100%',
   },
   imagePlaceholder: {
     flex: 1,
@@ -679,10 +680,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: hairline,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   placeholderIcon: {
-    fontSize: 38
+    fontSize: 38,
   },
   // =========================================================
   // TITLE
@@ -692,10 +693,10 @@ const styles = StyleSheet.create({
     color: COLORS.deepBrown,
     fontSize: 24,
     lineHeight: 32,
-    fontWeight: "400",
+    fontWeight: '400',
     marginBottom: 16,
     fontFamily: DESIGN.fonts.editorial,
-    letterSpacing: -0.4
+    letterSpacing: -0.4,
   },
   // =========================================================
   // INFO CARD
@@ -710,11 +711,11 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     ...shadow.card,
     shadowOpacity: 0.045,
-    elevation: 2
+    elevation: 2,
   },
   infoRow: {
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   iconBox: {
     width: 40,
@@ -723,42 +724,42 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.creamDark,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 11
+    marginRight: 11,
   },
   icon: {
-    fontSize: 18
+    fontSize: 18,
   },
   infoContent: {
-    flex: 1
+    flex: 1,
   },
   infoLabel: {
     color: COLORS.warmBrown,
     fontSize: 12,
-    marginBottom: 3
+    marginBottom: 3,
   },
   infoValue: {
     color: COLORS.deepBrown,
     fontSize: 13,
     fontWeight: '600',
-    lineHeight: 19
+    lineHeight: 19,
   },
   divider: {
     height: 1,
     backgroundColor: hairline,
-    marginVertical: 12
+    marginVertical: 12,
   },
   // =========================================================
   // SECTION
   // =========================================================
 
   section: {
-    marginBottom: 20
+    marginBottom: 20,
   },
   sectionTitle: {
     color: COLORS.deepBrown,
     fontSize: 16,
-    fontWeight: "600",
-    marginBottom: 9
+    fontWeight: '600',
+    marginBottom: 9,
   },
   // =========================================================
   // LOCATION
@@ -772,18 +773,18 @@ const styles = StyleSheet.create({
     borderColor: hairline,
     ...shadow.card,
     shadowOpacity: 0.045,
-    elevation: 2
+    elevation: 2,
   },
   locationName: {
     color: COLORS.deepBrown,
     fontSize: 16,
     fontWeight: '700',
-    marginBottom: 6
+    marginBottom: 6,
   },
   locationAddress: {
     color: COLORS.warmBrown,
     fontSize: 13,
-    lineHeight: 20
+    lineHeight: 20,
   },
   mapButton: {
     marginTop: 13,
@@ -791,12 +792,12 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.richBrown,
     borderRadius: radii.sm,
     paddingHorizontal: 12,
-    paddingVertical: 8
+    paddingVertical: 8,
   },
   mapButtonText: {
     color: COLORS.white,
     fontSize: 12,
-    fontWeight: '700'
+    fontWeight: '700',
   },
   // =========================================================
   // DESCRIPTION
@@ -811,7 +812,7 @@ const styles = StyleSheet.create({
     borderColor: hairline,
     ...shadow.card,
     shadowOpacity: 0.045,
-    elevation: 2
+    elevation: 2,
   },
   // =========================================================
   // PRIMARY BUTTON
@@ -824,12 +825,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 2,
-    minHeight: 52
+    minHeight: 52,
   },
   primaryButtonText: {
     color: COLORS.white,
     fontSize: 14,
-    fontWeight: "600"
+    fontWeight: '600',
   },
   // =========================================================
   // LOADING
@@ -839,12 +840,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.cream,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   loadingText: {
     marginTop: 10,
     color: COLORS.warmBrown,
-    fontSize: 12
+    fontSize: 12,
   },
   // =========================================================
   // EMPTY
@@ -855,7 +856,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.cream,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 24
+    paddingHorizontal: 24,
   },
   errorBackButton: {
     position: 'absolute',
@@ -868,39 +869,39 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: hairline,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   emptyIcon: {
     fontSize: 42,
-    marginBottom: 12
+    marginBottom: 12,
   },
   emptyTitle: {
     color: COLORS.deepBrown,
     fontSize: 20,
-    fontWeight: "400",
+    fontWeight: '400',
     marginBottom: 8,
     fontFamily: DESIGN.fonts.editorial,
-    letterSpacing: -0.4
+    letterSpacing: -0.4,
   },
   emptyText: {
     color: COLORS.warmBrown,
     fontSize: 13,
     textAlign: 'center',
     lineHeight: 20,
-    marginBottom: 20
+    marginBottom: 20,
   },
   backButton: {
     backgroundColor: COLORS.richBrown,
     borderRadius: radii.lg,
     paddingHorizontal: 20,
-    paddingVertical: 11
+    paddingVertical: 11,
   },
   backButtonText: {
     color: COLORS.white,
     fontSize: 13,
-    fontWeight: "600"
+    fontWeight: '600',
   },
   bottomSpace: {
-    height: 16
-  }
+    height: 16,
+  },
 });

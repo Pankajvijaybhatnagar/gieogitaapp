@@ -1,15 +1,15 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import {
-  ActivityIndicator,
-  Animated,
-  Easing,
-  RefreshControl,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
+    ActivityIndicator,
+    Animated,
+    Easing,
+    RefreshControl,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
 } from 'react-native';
 
 import { Ionicons } from '@expo/vector-icons';
@@ -21,6 +21,7 @@ import { useAuth } from '@/context/AuthContext';
 
 import userServices from '@/lib/services/userServices';
 
+import Spacer from '@/components/ui/Spacer';
 import { COLORS as BRAND } from '@/constants/brandColors';
 import { hairline } from '@/constants/theme';
 
@@ -983,6 +984,7 @@ export default function SecurityScreen() {
               session immediately and change your password.
             </Text>
           </View>
+          <Spacer height={120} />
         </ScrollView>
       </Animated.View>
     </View>

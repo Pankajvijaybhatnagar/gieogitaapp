@@ -1,8 +1,9 @@
-import { DESIGN } from '@/constants/design';
 import { PaathCounter } from '@/components/chants/PaathCounter';
 import { TotalPaath } from '@/components/chants/TotalPaath';
 import YourChants from '@/components/chants/YourChants';
+import Spacer from '@/components/ui/Spacer';
 import { COLORS, RGB } from '@/constants/brandColors';
+import { DESIGN } from '@/constants/design';
 import { hairline, radii, shadow, spacing, type } from '@/constants/theme';
 import { useAppAlert } from '@/context/AppAlertContext';
 import { useHeaderScrollProps } from '@/context/HeaderScrollContext';
@@ -16,7 +17,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
 } from 'react-native';
 
 const { width } = Dimensions.get('window');
@@ -185,10 +186,10 @@ function EkMinSection() {
           </Text>
         </Text>
         <Text style={pmStyles.significanceDesc}>
-          &quot;Ek Min Ek Saath Gita Paath&quot; is a global initiative by GIEO Gita where
-          millions of devotees pause together for one minute every day to recite
-          a verse from the Bhagavad Gita — creating a powerful wave of
-          collective consciousness and divine energy.
+          &quot;Ek Min Ek Saath Gita Paath&quot; is a global initiative by GIEO
+          Gita where millions of devotees pause together for one minute every
+          day to recite a verse from the Bhagavad Gita — creating a powerful
+          wave of collective consciousness and divine energy.
         </Text>
         <View style={pmStyles.shlokaBox}>
           <Text style={pmStyles.shlokaDevanagari}>
@@ -270,7 +271,10 @@ function PaathDetailScreen({ setShowPaath, stats, onSubmit }) {
   const headerScrollProps = useHeaderScrollProps();
 
   return (
-    <ScrollView style={cdStyles.container} showsVerticalScrollIndicator={false} {...headerScrollProps}>
+    <ScrollView
+      style={cdStyles.container}
+      showsVerticalScrollIndicator={false}
+      {...headerScrollProps}>
       <View style={cdStyles.header}>
         <TouchableOpacity
           style={cdStyles.backBtn}
@@ -286,7 +290,7 @@ function PaathDetailScreen({ setShowPaath, stats, onSubmit }) {
 
       <GoldDivider />
       <PaathCounter todayPaath={stats.todayChants} onSubmit={onSubmit} />
-      <View style={{ height: 30 }} />
+      <Spacer height={120} />
     </ScrollView>
   );
 }
@@ -445,7 +449,7 @@ export default function EkMinEkSaathScreen() {
         </TouchableOpacity>
       </View>
 
-      <View style={{ height: 28 }} />
+      <Spacer height={120} />
     </ScrollView>
   );
 }
@@ -464,7 +468,7 @@ const adhyayStyles = StyleSheet.create({
     borderColor: hairline,
     ...shadow.card,
     shadowOpacity: 0.045,
-    elevation: 2
+    elevation: 2,
   },
   numBadge: {
     width: 28,
@@ -473,16 +477,16 @@ const adhyayStyles = StyleSheet.create({
     backgroundColor: COLORS.gold,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 6
+    marginBottom: 6,
   },
   numText: {
     fontSize: 12,
-    fontWeight: "600",
-    color: COLORS.deepBrown
+    fontWeight: '600',
+    color: COLORS.deepBrown,
   },
   icon: {
     fontSize: 22,
-    marginBottom: 6
+    marginBottom: 6,
   },
   name: {
     fontSize: 12,
@@ -490,12 +494,12 @@ const adhyayStyles = StyleSheet.create({
     color: COLORS.deepBrown,
     textAlign: 'center',
     marginBottom: 4,
-    lineHeight: 18
+    lineHeight: 18,
   },
   verses: {
     fontSize: 12,
-    color: COLORS.warmBrown
-  }
+    color: COLORS.warmBrown,
+  },
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -506,26 +510,26 @@ const sharedStyles = StyleSheet.create({
     height: 1,
     backgroundColor: hairline,
     marginHorizontal: spacing.lg,
-    marginVertical: spacing.lg
+    marginVertical: spacing.lg,
   },
   sectionLabelRow: {
     flexDirection: 'row',
     alignItems: 'center',
     marginHorizontal: 20,
-    marginBottom: 14
+    marginBottom: 14,
   },
   sectionLabelLine: {
     flex: 1,
     height: 1,
-    backgroundColor: hairline
+    backgroundColor: hairline,
   },
   sectionLabelText: {
     fontSize: 12,
     letterSpacing: 2,
-    fontWeight: "600",
+    fontWeight: '600',
     color: COLORS.goldDark,
-    marginHorizontal: 10
-  }
+    marginHorizontal: 10,
+  },
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -533,7 +537,7 @@ const sharedStyles = StyleSheet.create({
 // ─────────────────────────────────────────────────────────────────────────────
 const pmStyles = StyleSheet.create({
   wrapper: {
-    marginBottom: 4
+    marginBottom: 4,
   },
   heroBanner: {
     backgroundColor: COLORS.cream,
@@ -546,7 +550,7 @@ const pmStyles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 14,
     position: 'relative',
-    ...shadow.card
+    ...shadow.card,
   },
   decCircle1: {
     position: 'absolute',
@@ -555,7 +559,7 @@ const pmStyles = StyleSheet.create({
     borderRadius: 90,
     backgroundColor: `rgba(${RGB.saffron},0.08)`,
     top: -60,
-    right: -60
+    right: -60,
   },
   decCircle2: {
     position: 'absolute',
@@ -564,7 +568,7 @@ const pmStyles = StyleSheet.create({
     borderRadius: 60,
     backgroundColor: `rgba(${RGB.gold},0.08)`,
     bottom: -40,
-    left: -30
+    left: -30,
   },
   sacredTag: {
     backgroundColor: COLORS.creamDark,
@@ -573,31 +577,31 @@ const pmStyles = StyleSheet.create({
     borderRadius: radii.pill,
     paddingHorizontal: 14,
     paddingVertical: 4,
-    marginBottom: 14
+    marginBottom: 14,
   },
   sacredTagText: {
     fontSize: 10,
     color: COLORS.warmBrown,
     letterSpacing: 2,
-    fontWeight: "600"
+    fontWeight: '600',
   },
   deityEmoji: {
     fontSize: 56,
-    marginBottom: 10
+    marginBottom: 10,
   },
   heroTitle: {
     fontSize: 34,
-    fontWeight: "400",
+    fontWeight: '400',
     color: COLORS.deepBrown,
     textAlign: 'center',
     lineHeight: 45,
     letterSpacing: -0.4,
-    fontFamily: DESIGN.fonts.editorial
+    fontFamily: DESIGN.fonts.editorial,
   },
   heroTitleAccent: {
     color: COLORS.saffron,
     fontSize: 34,
-    fontWeight: "600"
+    fontWeight: '600',
   },
   heroSubtitle: {
     ...type.subhead,
@@ -606,14 +610,14 @@ const pmStyles = StyleSheet.create({
     marginTop: 4,
     marginBottom: 10,
     textTransform: 'uppercase',
-    textAlign: 'center'
+    textAlign: 'center',
   },
   heroDesc: {
     ...type.body,
     color: COLORS.warmBrown,
     textAlign: 'center',
     maxWidth: 280,
-    marginBottom: 14
+    marginBottom: 14,
   },
   datePill: {
     flexDirection: 'row',
@@ -624,12 +628,12 @@ const pmStyles = StyleSheet.create({
     borderColor: hairline,
     borderRadius: radii.pill,
     paddingHorizontal: 14,
-    paddingVertical: 6
+    paddingVertical: 6,
   },
   datePillText: {
     fontSize: 11,
     color: COLORS.warmBrown,
-    fontWeight: '600'
+    fontWeight: '600',
   },
   significanceBox: {
     backgroundColor: COLORS.cream,
@@ -639,56 +643,56 @@ const pmStyles = StyleSheet.create({
     borderWidth: 1,
     borderColor: hairline,
     marginBottom: 14,
-    ...shadow.card
+    ...shadow.card,
   },
   pmSectionLabel: {
     fontSize: 12,
     letterSpacing: 2,
     color: COLORS.saffron,
-    fontWeight: "600",
-    marginBottom: 6
+    fontWeight: '600',
+    marginBottom: 6,
   },
   significanceTitle: {
     ...type.title,
     color: COLORS.deepBrown,
-    marginBottom: 10
+    marginBottom: 10,
   },
   significanceTitleAccent: {
-    color: COLORS.saffron
+    color: COLORS.saffron,
   },
   significanceDesc: {
     ...type.body,
     color: COLORS.warmBrown,
-    marginBottom: 14
+    marginBottom: 14,
   },
   shlokaBox: {
     backgroundColor: COLORS.creamDark,
     borderRadius: radii.md,
     padding: 14,
     borderLeftWidth: 3,
-    borderLeftColor: COLORS.saffron
+    borderLeftColor: COLORS.saffron,
   },
   shlokaDevanagari: {
     fontSize: 12,
     color: COLORS.richBrown,
     lineHeight: 20,
     fontWeight: '600',
-    marginBottom: 8
+    marginBottom: 8,
   },
   shlokaTranslation: {
     fontSize: 12,
     color: COLORS.warmBrown,
-    lineHeight: 18
+    lineHeight: 18,
   },
   benefitsSection: {
     paddingHorizontal: 16,
-    marginBottom: 14
+    marginBottom: 14,
   },
   benefitsGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 10,
-    marginTop: 8
+    marginTop: 8,
   },
   benefitCard: {
     width: (width - 52) / 2,
@@ -700,24 +704,24 @@ const pmStyles = StyleSheet.create({
     alignItems: 'center',
     ...shadow.card,
     shadowOpacity: 0.045,
-    elevation: 2
+    elevation: 2,
   },
   benefitIcon: {
     fontSize: 28,
-    marginBottom: 8
+    marginBottom: 8,
   },
   benefitTitle: {
     fontSize: 12,
-    fontWeight: "600",
+    fontWeight: '600',
     color: COLORS.deepBrown,
     textAlign: 'center',
-    marginBottom: 4
+    marginBottom: 4,
   },
   benefitDesc: {
     fontSize: 12,
     color: COLORS.warmBrown,
     textAlign: 'center',
-    lineHeight: 18
+    lineHeight: 18,
   },
   observanceBox: {
     backgroundColor: COLORS.cream,
@@ -727,13 +731,13 @@ const pmStyles = StyleSheet.create({
     borderWidth: 1,
     borderColor: hairline,
     marginBottom: 14,
-    ...shadow.card
+    ...shadow.card,
   },
   observanceRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
-    marginTop: 10
+    marginTop: 10,
   },
   observanceIconBox: {
     width: 36,
@@ -741,16 +745,16 @@ const pmStyles = StyleSheet.create({
     borderRadius: 18,
     backgroundColor: COLORS.creamDark,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   observanceIcon: {
-    fontSize: 16
+    fontSize: 16,
   },
   observanceText: {
     flex: 1,
     fontSize: 13,
     color: COLORS.warmBrown,
-    lineHeight: 20
+    lineHeight: 20,
   },
   ctaBtn: {
     backgroundColor: COLORS.saffron,
@@ -758,14 +762,14 @@ const pmStyles = StyleSheet.create({
     borderRadius: radii.pill,
     paddingVertical: 15,
     alignItems: 'center',
-    marginBottom: 6
+    marginBottom: 6,
   },
   ctaBtnText: {
     color: COLORS.white,
     fontSize: 14,
-    fontWeight: "600",
-    letterSpacing: 0.3
-  }
+    fontWeight: '600',
+    letterSpacing: 0.3,
+  },
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -774,7 +778,7 @@ const pmStyles = StyleSheet.create({
 const cdStyles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.cream
+    backgroundColor: COLORS.cream,
   },
   header: {
     backgroundColor: COLORS.cream,
@@ -785,7 +789,7 @@ const cdStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     borderBottomWidth: 1,
-    borderBottomColor: hairline
+    borderBottomColor: hairline,
   },
   backBtn: {
     width: 36,
@@ -795,14 +799,14 @@ const cdStyles = StyleSheet.create({
     borderWidth: 1,
     borderColor: hairline,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   headerTitle: {
     color: COLORS.deepBrown,
     fontSize: 16,
-    fontWeight: "600",
-    letterSpacing: 1
-  }
+    fontWeight: '600',
+    letterSpacing: 1,
+  },
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -811,7 +815,7 @@ const cdStyles = StyleSheet.create({
 const mainStyles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.cream
+    backgroundColor: COLORS.cream,
   },
   header: {
     backgroundColor: COLORS.cream,
@@ -819,19 +823,19 @@ const mainStyles = StyleSheet.create({
     paddingBottom: 18,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   greetingSmall: {
     fontSize: 12,
     color: COLORS.goldDark,
     letterSpacing: 0.5,
-    marginBottom: 2
+    marginBottom: 2,
   },
   greeting: {
     fontSize: 22,
-    fontWeight: "600",
+    fontWeight: '600',
     color: COLORS.deepBrown,
-    letterSpacing: 0.5
+    letterSpacing: 0.5,
   },
   notifBtn: {
     width: 38,
@@ -841,7 +845,7 @@ const mainStyles = StyleSheet.create({
     borderWidth: 1,
     borderColor: hairline,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   notifDot: {
     position: 'absolute',
@@ -852,33 +856,33 @@ const mainStyles = StyleSheet.create({
     borderRadius: 4,
     backgroundColor: COLORS.saffron,
     borderWidth: 1,
-    borderColor: COLORS.cream
+    borderColor: COLORS.cream,
   },
   quoteCard: {
-    margin: 0
+    margin: 0,
   },
   quoteCardInner: {
     backgroundColor: COLORS.cream,
     borderEndEndRadius: 70,
-    overflow: 'hidden'
+    overflow: 'hidden',
   },
   quoteTopStrip: {
     backgroundColor: COLORS.creamDark,
     paddingVertical: 7,
     alignItems: 'center',
     borderBottomWidth: 1,
-    borderBottomColor: hairline
+    borderBottomColor: hairline,
   },
   quoteTopLabel: {
     fontSize: 15,
     color: COLORS.saffron,
     letterSpacing: 2,
-    fontWeight: '700'
+    fontWeight: '700',
   },
   quoteImage: {
     width: '100%',
     height: 180,
-    backgroundColor: COLORS.creamDark
+    backgroundColor: COLORS.creamDark,
   },
   quoteOverlay: {
     position: 'absolute',
@@ -886,46 +890,46 @@ const mainStyles = StyleSheet.create({
     left: 0,
     right: 0,
     height: 180,
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
   },
   quoteBody: {
     paddingHorizontal: 16,
     paddingTop: 16,
-    paddingBottom: 16
+    paddingBottom: 16,
   },
   quoteIconText: {
     fontSize: 32,
     color: COLORS.gold,
     lineHeight: 36,
-    marginBottom: 4
+    marginBottom: 4,
   },
   quoteText: {
     ...type.body,
     color: COLORS.warmBrown,
-    marginBottom: 16
+    marginBottom: 16,
   },
   startDayBtn: {
     backgroundColor: COLORS.richBrown,
     paddingVertical: 11,
     paddingHorizontal: 24,
     borderRadius: radii.pill,
-    alignSelf: 'flex-start'
+    alignSelf: 'flex-start',
   },
   startDayBtnText: {
     color: COLORS.white,
-    fontWeight: "600",
+    fontWeight: '600',
     fontSize: 13,
-    letterSpacing: 0.3
+    letterSpacing: 0.3,
   },
   liveSection: {
     paddingHorizontal: 16,
-    marginBottom: 4
+    marginBottom: 4,
   },
   liveTitleRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
-    marginBottom: 12
+    marginBottom: 12,
   },
   liveBadge: {
     flexDirection: 'row',
@@ -936,24 +940,24 @@ const mainStyles = StyleSheet.create({
     borderColor: 'rgba(214,72,58,0.35)',
     borderRadius: 10,
     paddingHorizontal: 8,
-    paddingVertical: 3
+    paddingVertical: 3,
   },
   liveDot: {
     width: 6,
     height: 6,
     borderRadius: 3,
-    backgroundColor: COLORS.liveRed
+    backgroundColor: COLORS.liveRed,
   },
   liveBadgeText: {
     fontSize: 10,
     color: COLORS.liveRed,
-    fontWeight: "600",
-    letterSpacing: 1
+    fontWeight: '600',
+    letterSpacing: 1,
   },
   liveTitle: {
     ...type.headline,
     color: COLORS.deepBrown,
-    letterSpacing: 0.3
+    letterSpacing: 0.3,
   },
   liveCard: {
     backgroundColor: COLORS.white,
@@ -963,12 +967,12 @@ const mainStyles = StyleSheet.create({
     borderColor: hairline,
     ...shadow.card,
     shadowOpacity: 0.045,
-    elevation: 2
+    elevation: 2,
   },
   liveImage: {
     width: '100%',
     height: 160,
-    backgroundColor: COLORS.creamDark
+    backgroundColor: COLORS.creamDark,
   },
   livePlayOverlay: {
     position: 'absolute',
@@ -978,7 +982,7 @@ const mainStyles = StyleSheet.create({
     height: 160,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: `rgba(${RGB.deepBrown},0.35)`
+    backgroundColor: `rgba(${RGB.deepBrown},0.35)`,
   },
   livePlayBtn: {
     width: 52,
@@ -988,20 +992,20 @@ const mainStyles = StyleSheet.create({
     borderWidth: 2,
     borderColor: COLORS.gold,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   liveCardBody: {
-    padding: 14
+    padding: 14,
   },
   liveDesc: {
     ...type.body,
     color: COLORS.warmBrown,
-    marginBottom: 10
+    marginBottom: 10,
   },
   liveMetaRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   liveTag: {
     backgroundColor: `rgba(${RGB.saffron},0.15)`,
@@ -1009,17 +1013,17 @@ const mainStyles = StyleSheet.create({
     borderColor: `rgba(${RGB.saffron},0.35)`,
     borderRadius: 10,
     paddingHorizontal: 9,
-    paddingVertical: 3
+    paddingVertical: 3,
   },
   liveTagText: {
     fontSize: 10,
     color: COLORS.saffron,
-    fontWeight: "600",
-    letterSpacing: 0.5
+    fontWeight: '600',
+    letterSpacing: 0.5,
   },
   liveWatching: {
     fontSize: 12,
-    color: COLORS.warmBrown
+    color: COLORS.warmBrown,
   },
   chantsSection: {
     backgroundColor: COLORS.cream,
@@ -1029,15 +1033,15 @@ const mainStyles = StyleSheet.create({
     borderWidth: 1,
     borderColor: hairline,
     alignItems: 'center',
-    ...shadow.card
+    ...shadow.card,
   },
   chantsSectionTitle: {
     ...type.title,
     color: COLORS.deepBrown,
-    marginBottom: 6
+    marginBottom: 6,
   },
   chantsSectionAccent: {
-    color: COLORS.saffron
+    color: COLORS.saffron,
   },
   chantsSectionDesc: {
     fontSize: 12,
@@ -1045,18 +1049,18 @@ const mainStyles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 18,
     marginBottom: 16,
-    maxWidth: 260
+    maxWidth: 260,
   },
   chantsBtn: {
     backgroundColor: COLORS.richBrown,
     paddingVertical: 13,
     paddingHorizontal: 32,
-    borderRadius: radii.pill
+    borderRadius: radii.pill,
   },
   chantsBtnText: {
     color: COLORS.white,
-    fontWeight: "600",
+    fontWeight: '600',
     fontSize: 14,
-    letterSpacing: 0.3
-  }
+    letterSpacing: 0.3,
+  },
 });

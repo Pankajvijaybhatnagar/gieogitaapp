@@ -10,16 +10,23 @@ import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
-import { COLORS, RGB } from '@/constants/brandColors';
+import Spacer from '@/components/ui/Spacer';
+import { COLORS } from '@/constants/brandColors';
 import { radii, shadow, spacing, type } from '@/constants/theme';
 
-const HERO_IMAGE = 'https://gieogita.org/assets/images/services/gieo-gurukul%20copy.jpg';
+const HERO_IMAGE =
+  'https://gieogita.org/assets/images/services/gieo-gurukul%20copy.jpg';
 
 export default function GurukulScreen() {
   return (
     <ScrollView style={styles.root} showsVerticalScrollIndicator={false}>
       <View style={styles.heroWrap}>
-        <Image source={{ uri: HERO_IMAGE }} style={styles.heroImage} contentFit="cover" transition={200} />
+        <Image
+          source={{ uri: HERO_IMAGE }}
+          style={styles.heroImage}
+          contentFit="cover"
+          transition={200}
+        />
         <View style={styles.heroOverlay} />
 
         <View style={styles.heroIconRing}>
@@ -51,6 +58,7 @@ export default function GurukulScreen() {
           ))}
         </View>
       </View>
+      <Spacer height={120} />
     </ScrollView>
   );
 }

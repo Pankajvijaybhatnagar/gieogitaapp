@@ -3,9 +3,10 @@
 // Full gallery page — a grid of every photo from galleryServices.getPublicGallery(),
 // with a tap-to-open, swipe-between full-screen viewer.
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { useLocalSearchParams } from 'expo-router';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Dimensions,
@@ -17,12 +18,12 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 
-import galleryServices from '@/lib/services/galleryServices';
 import { galleryPhotos } from '@/components/home/constant';
+import Spacer from '@/components/ui/Spacer';
 import { COLORS, RGB } from '@/constants/brandColors';
 import { radii, shadow, spacing, type } from '@/constants/theme';
+import galleryServices from '@/lib/services/galleryServices';
 
 const GALLERY_FOLDER = 'gallery';
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -39,7 +40,8 @@ function normalizeImages(raw) {
         return { id: String(index), uri: item, caption: '' };
       }
 
-      const uri = item?.image || item?.url || item?.file || item?.path || item?.src || '';
+      const uri =
+        item?.image || item?.url || item?.file || item?.path || item?.src || '';
 
       return {
         id: String(item?.id ?? index),
@@ -94,7 +96,11 @@ export default function GalleryScreen() {
 
         const response = await galleryServices.getPublicGallery(GALLERY_FOLDER);
 
-        const raw = response?.data?.data || response?.data?.images || response?.data || [];
+        const raw =
+          response?.data?.data ||
+          response?.data?.images ||
+          response?.data ||
+          [];
 
         const fetched = response?.success ? normalizeImages(raw) : [];
 
@@ -146,19 +152,29 @@ export default function GalleryScreen() {
             </View>
           ) : (
             <View style={styles.stateBox}>
-              <Ionicons name="images-outline" size={32} color={COLORS.warmBrown} />
+              <Ionicons
+                name="images-outline"
+                size={32}
+                color={COLORS.warmBrown}
+              />
               <Text style={styles.stateText}>No photos available yet.</Text>
             </View>
           )
         }
         contentContainerStyle={styles.listContent}
         showsVerticalScrollIndicator={false}
+        ListFooterComponent={<Spacer height={120} />}
         renderItem={({ item, index }) => (
           <TouchableOpacity
             activeOpacity={0.85}
             style={styles.tile}
             onPress={() => setViewerIndex(index)}>
-            <Image source={{ uri: item.uri }} style={styles.tileImage} contentFit="cover" transition={200} />
+            <Image
+              source={{ uri: item.uri }}
+              style={styles.tileImage}
+              contentFit="cover"
+              transition={200}
+            />
           </TouchableOpacity>
         )}
       />
@@ -184,7 +200,9 @@ export default function GalleryScreen() {
               index,
             })}
             onMomentumScrollEnd={event => {
-              const index = Math.round(event.nativeEvent.contentOffset.x / SCREEN_WIDTH);
+              const index = Math.round(
+                event.nativeEvent.contentOffset.x / SCREEN_WIDTH,
+              );
               setViewerIndex(index);
             }}
             renderItem={({ item }) => (
@@ -203,7 +221,10 @@ export default function GalleryScreen() {
             )}
           />
 
-          <Pressable style={styles.viewerClose} onPress={closeViewer} hitSlop={12}>
+          <Pressable
+            style={styles.viewerClose}
+            onPress={closeViewer}
+            hitSlop={12}>
             <Ionicons name="close" size={22} color={COLORS.white} />
           </Pressable>
 

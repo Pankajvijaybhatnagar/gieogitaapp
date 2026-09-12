@@ -2,28 +2,29 @@ import { DESIGN } from '@/constants/design';
 import { useEffect, useRef, useState } from 'react';
 
 import {
-  ActivityIndicator,
-  Animated,
-  Easing,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
+    ActivityIndicator,
+    Animated,
+    Easing,
+    KeyboardAvoidingView,
+    Platform,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
 } from 'react-native';
 
 import { Ionicons } from '@expo/vector-icons';
 
 import { useRouter } from 'expo-router';
 
-import { useAuth } from '@/context/AuthContext';
 import { useAppAlert } from '@/context/AppAlertContext';
+import { useAuth } from '@/context/AuthContext';
 
 import userServices from '@/lib/services/userServices';
 
+import Spacer from '@/components/ui/Spacer';
 import { COLORS as BRAND } from '@/constants/brandColors';
 import { hairline } from '@/constants/theme';
 
@@ -256,10 +257,7 @@ export default function PasswordScreen() {
     }
 
     if (newPassword !== confirmPassword) {
-      error(
-        'Password Mismatch',
-        'New password and confirmation do not match.',
-      );
+      error('Password Mismatch', 'New password and confirmation do not match.');
 
       return;
     }
@@ -529,6 +527,7 @@ export default function PasswordScreen() {
                 </Text>
               </View>
             </Animated.View>
+            <Spacer height={120} />
           </ScrollView>
         </Animated.View>
       </KeyboardAvoidingView>
@@ -600,22 +599,22 @@ function Requirement({ text, valid }) {
 
 const styles = StyleSheet.create({
   flex: {
-    flex: 1
+    flex: 1,
   },
   screen: {
     flex: 1,
-    backgroundColor: COLORS.background
+    backgroundColor: COLORS.background,
   },
   loadingScreen: {
     flex: 1,
     backgroundColor: COLORS.background,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   loadingText: {
     marginTop: 12,
     fontSize: 12,
-    color: COLORS.secondary
+    color: COLORS.secondary,
   },
   header: {
     paddingTop: 46,
@@ -626,7 +625,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.border
+    borderBottomColor: COLORS.border,
   },
   backButton: {
     width: 39,
@@ -634,19 +633,19 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: '#F8F7F5',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   headerTitle: {
     fontSize: 17,
     fontWeight: '700',
-    color: COLORS.text
+    color: COLORS.text,
   },
   headerSpacer: {
-    width: 39
+    width: 39,
   },
   content: {
     padding: 20,
-    paddingBottom: 35
+    paddingBottom: 35,
   },
   securityIcon: {
     alignSelf: 'center',
@@ -657,31 +656,31 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 10,
-    marginBottom: 16
+    marginBottom: 16,
   },
   title: {
     fontSize: 22,
-    fontWeight: "400",
+    fontWeight: '400',
     textAlign: 'center',
     color: COLORS.text,
     fontFamily: DESIGN.fonts.editorial,
-    letterSpacing: -0.4
+    letterSpacing: -0.4,
   },
   subtitle: {
     marginTop: 5,
     textAlign: 'center',
     fontSize: 12,
     lineHeight: 18,
-    color: COLORS.secondary
+    color: COLORS.secondary,
   },
   field: {
-    marginTop: 18
+    marginTop: 18,
   },
   label: {
     fontSize: 12,
     fontWeight: '600',
     color: '#4A4A4A',
-    marginBottom: 5
+    marginBottom: 5,
   },
   inputWrapper: {
     height: 52,
@@ -690,51 +689,51 @@ const styles = StyleSheet.create({
     borderColor: COLORS.border,
     backgroundColor: COLORS.white,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   inputIcon: {
     marginLeft: 13,
-    marginRight: 3
+    marginRight: 3,
   },
   input: {
     flex: 1,
     height: '100%',
     paddingHorizontal: 9,
     fontSize: 15,
-    color: COLORS.text
+    color: COLORS.text,
   },
   eyeButton: {
     width: 43,
     height: '100%',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   strengthContainer: {
-    marginTop: 9
+    marginTop: 9,
   },
   strengthHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 5
+    marginBottom: 5,
   },
   strengthLabel: {
     fontSize: 12,
-    color: COLORS.secondary
+    color: COLORS.secondary,
   },
   strengthValue: {
     fontSize: 12,
-    fontWeight: '700'
+    fontWeight: '700',
   },
   strengthTrack: {
     height: 4,
     borderRadius: 2,
     backgroundColor: '#EAE8E5',
-    overflow: 'hidden'
+    overflow: 'hidden',
   },
   strengthProgress: {
     height: '100%',
-    borderRadius: 2
+    borderRadius: 2,
   },
   requirements: {
     marginTop: 17,
@@ -742,18 +741,18 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     backgroundColor: COLORS.white,
     borderWidth: 1,
-    borderColor: COLORS.border
+    borderColor: COLORS.border,
   },
   requirementsTitle: {
     fontSize: 12,
     fontWeight: '700',
     color: COLORS.text,
-    marginBottom: 8
+    marginBottom: 8,
   },
   requirement: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 5
+    marginBottom: 5,
   },
   requirementIcon: {
     width: 17,
@@ -762,17 +761,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#F0EFED',
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 7
+    marginRight: 7,
   },
   requirementIconValid: {
-    backgroundColor: COLORS.success
+    backgroundColor: COLORS.success,
   },
   requirementText: {
     fontSize: 12,
-    color: COLORS.secondary
+    color: COLORS.secondary,
   },
   requirementTextValid: {
-    color: COLORS.success
+    color: COLORS.success,
   },
   updateButton: {
     height: 49,
@@ -787,18 +786,18 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 5
+      height: 5,
     },
     shadowOpacity: 0.1,
-    shadowRadius: 8
+    shadowRadius: 8,
   },
   disabledButton: {
-    opacity: 0.65
+    opacity: 0.65,
   },
   updateText: {
     fontSize: 13,
     fontWeight: '700',
-    color: COLORS.white
+    color: COLORS.white,
   },
   securityNote: {
     marginTop: 14,
@@ -806,13 +805,13 @@ const styles = StyleSheet.create({
     borderRadius: 13,
     backgroundColor: COLORS.successLight,
     flexDirection: 'row',
-    alignItems: 'flex-start'
+    alignItems: 'flex-start',
   },
   securityNoteText: {
     flex: 1,
     marginLeft: 7,
     fontSize: 12,
     lineHeight: 18,
-    color: '#4C735B'
-  }
+    color: '#4C735B',
+  },
 });

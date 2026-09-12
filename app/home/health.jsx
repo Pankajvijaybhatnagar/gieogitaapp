@@ -1,3 +1,4 @@
+import Spacer from '@/components/ui/Spacer';
 import { useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import AboutMedanta from '../../components/health/AboutMedanta';
@@ -41,7 +42,7 @@ export default function HealthScreen() {
 
         <ContactSection />
 
-        <View style={{ height: 30 }} />
+        <Spacer height={120} />
       </ScrollView>
 
       {/* <BookingModal
@@ -56,9 +57,9 @@ export default function HealthScreen() {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: C.cream
+    backgroundColor: C.cream,
   },
   scroll: {
-    flex: 1
-  }
+    flex: 1,
+  },
 });

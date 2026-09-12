@@ -6,22 +6,23 @@
 // Shows the real events from the same API the home section already
 // calls, not mock/sample data.
 
+import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
 import {
-  ActivityIndicator,
-  FlatList,
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
+    ActivityIndicator,
+    FlatList,
+    Image,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
 } from 'react-native';
-import { router } from 'expo-router';
 
 import Card from '@/components/ui/Card';
-import eventServices from '@/lib/services/eventServices';
+import Spacer from '@/components/ui/Spacer';
 import { COLORS, RGB } from '@/constants/brandColors';
 import { radii, shadow, spacing, type } from '@/constants/theme';
+import eventServices from '@/lib/services/eventServices';
 
 function formatEventTime(time) {
   if (!time) return '';
@@ -220,11 +221,14 @@ export default function EventsListScreen() {
         )
       }
       ListFooterComponent={
-        loading ? (
-          <View style={styles.loadingContainer}>
-            <ActivityIndicator size="small" color={COLORS.richBrown} />
-          </View>
-        ) : null
+        <>
+          {loading ? (
+            <View style={styles.loadingContainer}>
+              <ActivityIndicator size="small" color={COLORS.richBrown} />
+            </View>
+          ) : null}
+          <Spacer height={120} />
+        </>
       }
     />
   );

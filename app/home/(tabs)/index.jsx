@@ -1,5 +1,6 @@
 import TransformInNineSteps from '@/components/dhyanShivir/TransformInNineSteps';
 import ReelCard from '@/components/home/ReelCard.jsx';
+import Spacer from '@/components/ui/Spacer';
 import { useHeaderScrollProps } from '@/context/HeaderScrollContext';
 import { ScrollView, StatusBar, StyleSheet, View } from 'react-native';
 import { COLORS } from '../../../components/home/constant';
@@ -29,7 +30,6 @@ export default function GieoGitaHome() {
         {...headerScrollProps}>
         <HeroBanner />
 
-       
         <GoldDivider />
 
         <ExclusiveContent />
@@ -41,19 +41,15 @@ export default function GieoGitaHome() {
 
         <ServicesSection />
         <GoldDivider />
-       <MaharajSection />
-       
+        <MaharajSection />
 
         <GoldDivider />
 
         {/* <AdhyaySection /> */}
         <SevaSection />
-            <GoldDivider />
+        <GoldDivider />
         <Questionseva />
 
-    
-
-        
         <GoldDivider />
 
         <LiveDarshan />
@@ -63,7 +59,7 @@ export default function GieoGitaHome() {
         <GoldDivider />
 
         <TestimonialsSection />
-         <GoldDivider />
+        <GoldDivider />
 
         <GallerySection />
 
@@ -72,7 +68,7 @@ export default function GieoGitaHome() {
         {/* <InitiativesSection /> */}
         <ReelCard />
 
-        <View style={{ height: 32 }} />
+        <Spacer height={120} />
       </ScrollView>
     </View>
   );
@@ -81,10 +77,10 @@ export default function GieoGitaHome() {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: COLORS.cream
+    backgroundColor: COLORS.cream,
   },
   container: {
     flex: 1,
-    backgroundColor: COLORS.cream
-  }
+    backgroundColor: COLORS.cream,
+  },
 });

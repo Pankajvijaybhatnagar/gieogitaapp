@@ -1,14 +1,15 @@
 import { useRouter } from 'expo-router';
 import {
-  RefreshControl,
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  View,
+    RefreshControl,
+    SafeAreaView,
+    ScrollView,
+    StatusBar,
+    StyleSheet,
+    Text,
+    View,
 } from 'react-native';
 
+import Spacer from '@/components/ui/Spacer';
 import { COLORS } from '@/constants/brandColors';
 import { spacing, type } from '@/constants/theme';
 import AshtaDashShalokiGita from './AshtaDashShalokiGita';
@@ -61,6 +62,7 @@ const JoinGitaProfile = ({ profile, onRefresh }) => {
             Transforming lives through the wisdom of Gita
           </Text>
         </View>
+        <Spacer height={120} />
       </ScrollView>
     </SafeAreaView>
   );
@@ -69,35 +71,35 @@ const JoinGitaProfile = ({ profile, onRefresh }) => {
 const styles = StyleSheet.create({
   safe: {
     flex: 1,
-    backgroundColor: COLORS.cream
+    backgroundColor: COLORS.cream,
   },
   scroll: {
     flex: 1,
-    backgroundColor: COLORS.creamDark
+    backgroundColor: COLORS.creamDark,
   },
   content: {
-    paddingBottom: 40
+    paddingBottom: 40,
   },
   footer: {
     alignItems: 'center',
     marginHorizontal: spacing.md + 2,
     marginTop: spacing.sm + 2,
     paddingTop: spacing.lg + 4,
-    paddingBottom: spacing.sm + 2
+    paddingBottom: spacing.sm + 2,
   },
   footerText: {
     marginTop: spacing.xs,
     ...type.subhead,
     fontSize: 14,
     color: COLORS.deepBrown,
-    letterSpacing: 2
+    letterSpacing: 2,
   },
   footerSubtext: {
     color: COLORS.warmBrown,
     fontSize: 12,
     marginTop: spacing.xs,
-    textAlign: 'center'
-  }
+    textAlign: 'center',
+  },
 });
 
 export default JoinGitaProfile;

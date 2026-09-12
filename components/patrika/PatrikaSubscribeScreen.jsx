@@ -2,22 +2,23 @@ import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
 import {
-  ActivityIndicator,
-  KeyboardAvoidingView,
-  Platform,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
+    ActivityIndicator,
+    KeyboardAvoidingView,
+    Platform,
+    SafeAreaView,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
 } from 'react-native';
 
-import { useAuth } from '@/context/AuthContext';
 import { useAppAlert } from '@/context/AppAlertContext';
+import { useAuth } from '@/context/AuthContext';
 import masikPatrikaServices from '@/lib/services/masikPatrikaServices';
 
+import Spacer from '@/components/ui/Spacer';
 import { COLORS } from '@/constants/brandColors';
 import { hairline } from '@/constants/theme';
 
@@ -83,10 +84,7 @@ export default function PatrikaSubscribeScreen() {
     }
 
     if (!/^[0-9]{10}$/.test(phone)) {
-      error(
-        'Invalid Number',
-        'Please enter a valid 10-digit WhatsApp number.',
-      );
+      error('Invalid Number', 'Please enter a valid 10-digit WhatsApp number.');
       return false;
     }
 
@@ -386,6 +384,7 @@ export default function PatrikaSubscribeScreen() {
               </>
             )}
           </TouchableOpacity>
+          <Spacer height={120} />
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -395,21 +394,21 @@ export default function PatrikaSubscribeScreen() {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: COLORS.creamDark
+    backgroundColor: COLORS.creamDark,
   },
   keyboard: {
-    flex: 1
+    flex: 1,
   },
   content: {
     padding: 16,
-    paddingBottom: 40
+    paddingBottom: 40,
   },
   header: {
     minHeight: 46,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 10
+    marginBottom: 10,
   },
   backButton: {
     width: 38,
@@ -417,12 +416,12 @@ const styles = StyleSheet.create({
     borderRadius: 19,
     backgroundColor: COLORS.cream,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   headerTitle: {
     fontSize: 15,
-    fontWeight: "600",
-    color: COLORS.deepBrown
+    fontWeight: '600',
+    color: COLORS.deepBrown,
   },
   heroCard: {
     alignItems: 'center',
@@ -430,7 +429,7 @@ const styles = StyleSheet.create({
     borderRadius: 22,
     backgroundColor: COLORS.cream,
     borderWidth: 1,
-    borderColor: hairline
+    borderColor: hairline,
   },
   bookIcon: {
     width: 64,
@@ -439,26 +438,26 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.richBrown,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 13
+    marginBottom: 13,
   },
   eyebrow: {
     fontSize: 10,
     letterSpacing: 1.8,
     color: COLORS.saffron,
-    fontWeight: "600"
+    fontWeight: '600',
   },
   title: {
     marginTop: 7,
     fontSize: 24,
-    fontWeight: "700",
-    color: COLORS.deepBrown
+    fontWeight: '700',
+    color: COLORS.deepBrown,
   },
   issueTitle: {
     marginTop: 5,
     fontSize: 12,
     color: COLORS.saffron,
     fontWeight: '700',
-    textAlign: 'center'
+    textAlign: 'center',
   },
   description: {
     marginTop: 10,
@@ -466,16 +465,16 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 18,
     color: COLORS.warmBrown,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   section: {
-    marginTop: 15
+    marginTop: 15,
   },
   sectionTitle: {
     fontSize: 13,
-    fontWeight: "600",
+    fontWeight: '600',
     color: COLORS.deepBrown,
-    marginBottom: 9
+    marginBottom: 9,
   },
   subscriptionOption: {
     minHeight: 76,
@@ -486,11 +485,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: hairline,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   subscriptionOptionActive: {
     borderColor: COLORS.gold,
-    backgroundColor: '#FFFDF7'
+    backgroundColor: '#FFFDF7',
   },
   radioOuter: {
     width: 22,
@@ -499,32 +498,32 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: COLORS.goldDark,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   radioInner: {
     width: 11,
     height: 11,
     borderRadius: 6,
-    backgroundColor: COLORS.goldDark
+    backgroundColor: COLORS.goldDark,
   },
   subscriptionInfo: {
     flex: 1,
-    marginLeft: 11
+    marginLeft: 11,
   },
   subscriptionTitle: {
     fontSize: 13,
-    fontWeight: "600",
-    color: COLORS.deepBrown
+    fontWeight: '600',
+    color: COLORS.deepBrown,
   },
   subscriptionText: {
     marginTop: 3,
     fontSize: 12,
-    color: COLORS.warmBrown
+    color: COLORS.warmBrown,
   },
   subscriptionPrice: {
     fontSize: 16,
-    fontWeight: "600",
-    color: COLORS.warmBrown
+    fontWeight: '600',
+    color: COLORS.warmBrown,
   },
   issueCard: {
     marginTop: 15,
@@ -536,7 +535,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     shadowOpacity: 0.045,
-    elevation: 2
+    elevation: 2,
   },
   issueIcon: {
     width: 42,
@@ -544,30 +543,30 @@ const styles = StyleSheet.create({
     borderRadius: 13,
     backgroundColor: COLORS.cream,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   issueInfo: {
     flex: 1,
-    marginLeft: 10
+    marginLeft: 10,
   },
   issueLabel: {
     fontSize: 12,
-    fontWeight: "600",
+    fontWeight: '600',
     letterSpacing: 1,
-    color: COLORS.warmBrown
+    color: COLORS.warmBrown,
   },
   issueName: {
     marginTop: 3,
     fontSize: 12,
     lineHeight: 18,
-    fontWeight: "600",
-    color: COLORS.deepBrown
+    fontWeight: '600',
+    color: COLORS.deepBrown,
   },
   issuePrice: {
     marginLeft: 8,
     fontSize: 13,
-    fontWeight: "600",
-    color: COLORS.warmBrown
+    fontWeight: '600',
+    color: COLORS.warmBrown,
   },
   formCard: {
     marginTop: 15,
@@ -577,28 +576,28 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: hairline,
     shadowOpacity: 0.045,
-    elevation: 2
+    elevation: 2,
   },
   formTitle: {
     fontSize: 15,
-    fontWeight: "600",
-    color: COLORS.deepBrown
+    fontWeight: '600',
+    color: COLORS.deepBrown,
   },
   formSubtitle: {
     marginTop: 4,
     marginBottom: 15,
     fontSize: 12,
     lineHeight: 18,
-    color: COLORS.warmBrown
+    color: COLORS.warmBrown,
   },
   inputGroup: {
-    marginBottom: 13
+    marginBottom: 13,
   },
   inputLabel: {
     marginBottom: 6,
     fontSize: 12,
-    fontWeight: "600",
-    color: COLORS.warmBrown
+    fontWeight: '600',
+    color: COLORS.warmBrown,
   },
   inputWrapper: {
     minHeight: 48,
@@ -608,14 +607,14 @@ const styles = StyleSheet.create({
     borderColor: hairline,
     backgroundColor: COLORS.creamDark,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   input: {
     flex: 1,
     marginLeft: 9,
     paddingVertical: 0,
     fontSize: 15,
-    color: COLORS.deepBrown
+    color: COLORS.deepBrown,
   },
   note: {
     marginTop: 14,
@@ -624,13 +623,13 @@ const styles = StyleSheet.create({
     gap: 7,
     padding: 12,
     borderRadius: 13,
-    backgroundColor: COLORS.cream
+    backgroundColor: COLORS.cream,
   },
   noteText: {
     flex: 1,
     fontSize: 12,
     lineHeight: 18,
-    color: COLORS.warmBrown
+    color: COLORS.warmBrown,
   },
   subscribeButton: {
     marginTop: 18,
@@ -640,14 +639,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 9
+    gap: 9,
   },
   subscribeButtonText: {
     color: '#FFFFFF',
     fontSize: 13,
-    fontWeight: "600"
+    fontWeight: '600',
   },
   disabled: {
-    opacity: 0.6
-  }
+    opacity: 0.6,
+  },
 });

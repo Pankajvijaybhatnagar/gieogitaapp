@@ -8,10 +8,11 @@ import {
     View,
 } from 'react-native';
 
+import Spacer from '@/components/ui/Spacer';
+import { COLORS } from '@/constants/brandColors';
+import { radii, spacing, type } from '@/constants/theme';
 import getDeviceHeaders from '@/lib/api/deviceHeaders';
 import ChantCounter from '../../../components/chants/ChantCounter2';
-import { COLORS } from '@/constants/brandColors';
-import { hairline, radii, spacing, type } from '@/constants/theme';
 
 const Index = () => {
   const [deviceInfo, setDeviceInfo] = useState(null);
@@ -55,7 +56,7 @@ const Index = () => {
       contentContainerStyle={styles.contentContainer}>
       <Text style={styles.title}>Device Information</Text>
 
-      <ChantCounter/>
+      <ChantCounter />
 
       {Object.entries(deviceInfo).map(([key, value]) => (
         <View key={key} style={styles.infoCard}>
@@ -75,6 +76,7 @@ const Index = () => {
           {JSON.stringify(deviceInfo, null, 2)}
         </Text>
       </View>
+      <Spacer height={120} />
     </ScrollView>
   );
 };
@@ -84,28 +86,28 @@ export default Index;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.cream
+    backgroundColor: COLORS.cream,
   },
   contentContainer: {
     padding: spacing.lg,
-    paddingBottom: 40
+    paddingBottom: 40,
   },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: COLORS.cream,
-    padding: spacing.lg
+    padding: spacing.lg,
   },
   loadingText: {
     marginTop: spacing.sm,
     ...type.body,
-    color: COLORS.warmBrown
+    color: COLORS.warmBrown,
   },
   title: {
     ...type.largeTitle,
     marginBottom: spacing.lg,
-    color: COLORS.deepBrown
+    color: COLORS.deepBrown,
   },
   infoCard: {
     backgroundColor: DESIGN.colors.surface,
@@ -115,33 +117,33 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: DESIGN.colors.border,
     shadowOpacity: 0.045,
-    elevation: 2
+    elevation: 2,
   },
   key: {
     fontSize: 14,
     fontWeight: '600',
     color: COLORS.warmBrown,
-    marginBottom: 6
+    marginBottom: 6,
   },
   value: {
     fontSize: 17,
-    color: COLORS.deepBrown
+    color: COLORS.deepBrown,
   },
   sectionTitle: {
     ...type.title,
     marginTop: spacing.lg,
     marginBottom: spacing.sm,
-    color: COLORS.deepBrown
+    color: COLORS.deepBrown,
   },
   jsonContainer: {
     backgroundColor: COLORS.deepBrown,
     borderRadius: radii.sm,
-    padding: 15
+    padding: 15,
   },
   jsonText: {
     color: COLORS.cream,
     fontSize: 13,
     lineHeight: 20,
-    fontFamily: 'monospace'
-  }
+    fontFamily: 'monospace',
+  },
 });

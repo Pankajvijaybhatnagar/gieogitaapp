@@ -2,13 +2,13 @@ import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { useCallback, useState } from 'react';
 import {
-  ActivityIndicator,
-  RefreshControl,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View
+    ActivityIndicator,
+    RefreshControl,
+    SafeAreaView,
+    ScrollView,
+    StyleSheet,
+    Text,
+    View,
 } from 'react-native';
 
 import { useAuth } from '@/context/AuthContext';
@@ -17,6 +17,7 @@ import masikPatrikaServices from '@/lib/services/masikPatrikaServices';
 import PatrikaGrid from './PatrikaGrid';
 import PatrikaStatusCard, { normalizeSubscription } from './PatrikaStatusCard';
 
+import Spacer from '@/components/ui/Spacer';
 import { COLORS } from '@/constants/brandColors';
 
 function normalizePatrikaResponse(response) {
@@ -264,6 +265,7 @@ export default function PatrikaLibraryScreen({
             Paid issues are view-only inside the app.
           </Text>
         </View>
+        <Spacer height={120} />
       </ScrollView>
     </SafeAreaView>
   );
@@ -272,18 +274,18 @@ export default function PatrikaLibraryScreen({
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: COLORS.creamDark
+    backgroundColor: COLORS.creamDark,
   },
   content: {
     paddingHorizontal: 14,
     paddingTop: 10,
-    paddingBottom: 35
+    paddingBottom: 35,
   },
   hero: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 7,
-    marginBottom: 18
+    marginBottom: 18,
   },
   heroIcon: {
     width: 52,
@@ -291,28 +293,28 @@ const styles = StyleSheet.create({
     borderRadius: 17,
     backgroundColor: COLORS.saffron,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   heroText: {
     flex: 1,
-    marginLeft: 12
+    marginLeft: 12,
   },
   eyebrow: {
     fontSize: 10,
-    fontWeight: "600",
+    fontWeight: '600',
     letterSpacing: 1.6,
-    color: COLORS.warmBrown
+    color: COLORS.warmBrown,
   },
   title: {
     marginTop: 2,
     fontSize: 23,
-    fontWeight: "700",
-    color: COLORS.deepBrown
+    fontWeight: '700',
+    color: COLORS.deepBrown,
   },
   subtitle: {
     marginTop: 3,
     fontSize: 12,
-    color: COLORS.warmBrown
+    color: COLORS.warmBrown,
   },
   errorBox: {
     flexDirection: 'row',
@@ -321,34 +323,34 @@ const styles = StyleSheet.create({
     marginBottom: 14,
     padding: 11,
     borderRadius: 12,
-    backgroundColor: '#FBEDEA'
+    backgroundColor: '#FBEDEA',
   },
   errorText: {
     flex: 1,
     fontSize: 12,
-    color: COLORS.dangerRed
+    color: COLORS.dangerRed,
   },
   sectionHeader: {
     marginTop: 8,
     marginBottom: 9,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   sectionTitle: {
     fontSize: 13,
-    fontWeight: "600",
-    color: COLORS.deepBrown
+    fontWeight: '600',
+    color: COLORS.deepBrown,
   },
   sectionSubtitle: {
     marginTop: 2,
     fontSize: 12,
-    color: COLORS.warmBrown
+    color: COLORS.warmBrown,
   },
   count: {
     fontSize: 12,
     color: COLORS.goldDark,
-    fontWeight: '700'
+    fontWeight: '700',
   },
   securityNote: {
     marginTop: 7,
@@ -356,10 +358,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    gap: 5
+    gap: 5,
   },
   securityText: {
     fontSize: 12,
-    color: COLORS.warmBrown
-  }
+    color: COLORS.warmBrown,
+  },
 });
