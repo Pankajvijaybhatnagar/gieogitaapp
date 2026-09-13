@@ -7,6 +7,7 @@ import {
     Animated,
     Dimensions,
     Easing,
+    Keyboard,
     Modal,
     PanResponder,
     Platform,
@@ -58,6 +59,7 @@ export default function ListBottomSheet({
   const opacity = useRef(new Animated.Value(0)).current;
   const searchInputRef = useRef(null);
   const [search, setSearch] = useState('');
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   const filteredOptions = useMemo(() => {
     const query = search.trim().toLowerCase();
@@ -112,8 +114,28 @@ export default function ListBottomSheet({
   ).current;
 
   useEffect(() => {
+    const handleKeyboardShow = event => {
+      setKeyboardHeight(event.endCoordinates?.height || 0);
+    };
+    const handleKeyboardHide = () => setKeyboardHeight(0);
+    const showEvent =
+      Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow';
+    const hideEvent =
+      Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide';
+    const showSubscription = Keyboard.addListener(
+      showEvent,
+      handleKeyboardShow,
+    );
+    const hideSubscription = Keyboard.addListener(
+      hideEvent,
+      handleKeyboardHide,
+    );
+
     if (!visible) {
       animateClose(false);
+      setKeyboardHeight(0);
+      showSubscription.remove();
+      hideSubscription.remove();
       return undefined;
     }
 
@@ -132,16 +154,26 @@ export default function ListBottomSheet({
         duration: 220,
         useNativeDriver: true,
       }),
-    ]).start(() => searchInputRef.current?.focus());
+    ]).start();
 
-    return undefined;
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
   }, [animateClose, opacity, translateY, visible]);
 
   const rowsHeight =
     loading || filteredOptions.length === 0 ? 160 : filteredOptions.length * 60;
+  const availableHeight = Math.max(
+    SHEET_MIN_HEIGHT,
+    SCREEN_HEIGHT - keyboardHeight,
+  );
+  const maxSheetHeight = keyboardHeight
+    ? Math.max(SHEET_MIN_HEIGHT, availableHeight * 0.8)
+    : SHEET_MAX_HEIGHT;
   const sheetHeight = Math.min(
     Math.max(250 + rowsHeight, SHEET_MIN_HEIGHT),
-    SHEET_MAX_HEIGHT,
+    maxSheetHeight,
   );
 
   return (
