@@ -487,9 +487,10 @@ function SelectField({
       <View style={styles.field}>
         <Label required={required}>{label}</Label>
 
-        <View style={{
-          borderWidth: 0,
-        }}>
+        <View
+          style={{
+            borderWidth: 0,
+          }}>
           <Pressable
             disabled={disabled || loading}
             onPress={() => {
@@ -504,22 +505,31 @@ function SelectField({
 
               pressed && !disabled && styles.pressedInput,
             ]}>
-            <Text
-              numberOfLines={1}
-              style={[styles.selectText, !value && styles.placeholder]}>
-              {value || placeholder}
-            </Text>
+            <View
+              style={{
+                borderWidth: 1,
+                borderColor: 'rgba(0,0,0,0.1)',
+                borderRadius: radii.md,
+                // paddingVertical: spacing.xs,
+                paddingHorizontal: spacing.sm,
+              }}>
+              <Text
+                numberOfLines={1}
+                style={[styles.selectText, !value && styles.placeholder]}>
+                {value || placeholder}
+              </Text>
 
-            <View style={styles.fieldTrailingBadge}>
-              {loading ? (
-                <ActivityIndicator size="small" color={COLORS.brown} />
-              ) : (
-                <Ionicons
-                  name="chevron-down"
-                  size={15}
-                  color={disabled ? COLORS.muted : COLORS.brown}
-                />
-              )}
+              <View style={styles.fieldTrailingBadge}>
+                {loading ? (
+                  <ActivityIndicator size="small" color={COLORS.brown} />
+                ) : (
+                  <Ionicons
+                    name="chevron-down"
+                    size={15}
+                    color={disabled ? COLORS.muted : COLORS.brown}
+                  />
+                )}
+              </View>
             </View>
           </Pressable>
         </View>
