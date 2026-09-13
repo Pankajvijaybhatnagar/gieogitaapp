@@ -26,7 +26,7 @@ export default function HomeHeader({ navigation }) {
   const blurOpacity = scrollY
     ? scrollY.interpolate({
         inputRange: [0, 40],
-        outputRange: [0, 1],
+        outputRange: [0.55, 1],
         extrapolate: 'clamp',
       })
     : 1;
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: radii.xl,
   },
   headerTint: {
-    backgroundColor: `rgba(${RGB.cream},0.38)`,
+    backgroundColor: `rgba(${RGB.cream},0.28)`,
   },
   topRow: { flexDirection: 'row', alignItems: 'center', minHeight: 46, gap: 2 },
   iconButton: {
