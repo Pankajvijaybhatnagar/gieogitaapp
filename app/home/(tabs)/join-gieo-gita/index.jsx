@@ -4,17 +4,17 @@ import { DESIGN } from '@/constants/design';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import {
-    ActivityIndicator,
-    Animated,
-    Easing,
-    KeyboardAvoidingView,
-    Platform,
-    Pressable,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    View,
+  ActivityIndicator,
+  Animated,
+  Easing,
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
 } from 'react-native';
 
 import { Ionicons } from '@expo/vector-icons';
@@ -487,38 +487,42 @@ function SelectField({
       <View style={styles.field}>
         <Label required={required}>{label}</Label>
 
-        <Pressable
-          disabled={disabled || loading}
-          onPress={() => {
-            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-            setVisible(true);
-          }}
-          style={({ pressed }) => [
-            styles.inputContainer,
-            styles.selectContainer,
+        <View style={{
+          borderWidth: 0,
+        }}>
+          <Pressable
+            disabled={disabled || loading}
+            onPress={() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              setVisible(true);
+            }}
+            style={({ pressed }) => [
+              styles.inputContainer,
+              styles.selectContainer,
 
-            disabled && styles.disabledInput,
+              disabled && styles.disabledInput,
 
-            pressed && !disabled && styles.pressedInput,
-          ]}>
-          <Text
-            numberOfLines={1}
-            style={[styles.selectText, !value && styles.placeholder]}>
-            {value || placeholder}
-          </Text>
+              pressed && !disabled && styles.pressedInput,
+            ]}>
+            <Text
+              numberOfLines={1}
+              style={[styles.selectText, !value && styles.placeholder]}>
+              {value || placeholder}
+            </Text>
 
-          <View style={styles.fieldTrailingBadge}>
-            {loading ? (
-              <ActivityIndicator size="small" color={COLORS.brown} />
-            ) : (
-              <Ionicons
-                name="chevron-down"
-                size={15}
-                color={disabled ? COLORS.muted : COLORS.brown}
-              />
-            )}
-          </View>
-        </Pressable>
+            <View style={styles.fieldTrailingBadge}>
+              {loading ? (
+                <ActivityIndicator size="small" color={COLORS.brown} />
+              ) : (
+                <Ionicons
+                  name="chevron-down"
+                  size={15}
+                  color={disabled ? COLORS.muted : COLORS.brown}
+                />
+              )}
+            </View>
+          </Pressable>
+        </View>
 
         {disabled && hint ? (
           <View style={styles.fieldHintRow}>
@@ -1705,6 +1709,9 @@ const styles = StyleSheet.create({
   selectContainer: {
     position: 'relative',
     paddingRight: spacing.xl + spacing.sm,
+    borderWidth: 10,
+    borderColor: '#000',
+    backgroundColor: COLORS.card,
   },
   fieldTrailingBadge: {
     width: 28,
@@ -1741,10 +1748,11 @@ const styles = StyleSheet.create({
   },
   disabledInput: {
     backgroundColor: COLORS.background,
+    borderColor: COLORS.goldDark,
     opacity: 0.62,
   },
   pressedInput: {
-    borderColor: COLORS.brown,
+    borderColor: COLORS.saffron,
     borderWidth: 1.5,
     backgroundColor: COLORS.background,
   },
