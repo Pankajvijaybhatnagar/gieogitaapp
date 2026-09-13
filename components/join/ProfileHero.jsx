@@ -1,10 +1,10 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { COLORS } from '@/constants/brandColors';
 import { hairline, radii, shadow, spacing, type } from '@/constants/theme';
+import ProfilePicture from './ProfilePicture';
 
 export default function ProfileHero({ profile }) {
   const router = useRouter();
@@ -27,22 +27,7 @@ export default function ProfileHero({ profile }) {
       </View>
 
       <View style={styles.card}>
-        <View style={styles.avatarOuter}>
-          <View style={styles.avatarInner}>
-            {profile?.pic ? (
-              <Image
-                source={{ uri: profile.pic }}
-                style={styles.avatar}
-                contentFit="cover"
-                transition={300}
-              />
-            ) : (
-              <View style={styles.avatarFallback}>
-                <Ionicons name="person" size={58} color={COLORS.warmBrown} />
-              </View>
-            )}
-          </View>
-        </View>
+        <ProfilePicture profile={profile} />
 
         <View style={styles.memberBadge}>
           <Ionicons name="checkmark-circle" size={15} color={COLORS.white} />
@@ -82,14 +67,14 @@ export default function ProfileHero({ profile }) {
 
 const styles = StyleSheet.create({
   wrapper: {
-    marginBottom: spacing.sm + 4
+    marginBottom: spacing.sm + 4,
   },
   banner: {
     height: 140,
     backgroundColor: COLORS.richBrown,
     position: 'relative',
     overflow: 'hidden',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   backButton: {
     position: 'absolute',
@@ -101,7 +86,7 @@ const styles = StyleSheet.create({
     borderRadius: 21,
     backgroundColor: 'rgba(0,0,0,0.22)',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   patternOne: {
     position: 'absolute',
@@ -111,7 +96,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(255,255,255,0.08)',
     top: -85,
-    left: -65
+    left: -65,
   },
   patternTwo: {
     position: 'absolute',
@@ -121,13 +106,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(255,255,255,0.07)',
     right: -100,
-    top: -115
+    top: -115,
   },
   om: {
     color: 'rgba(255,255,255,0.09)',
     fontSize: 88,
     fontWeight: '700',
-    marginTop: 6
+    marginTop: 6,
   },
   card: {
     marginHorizontal: spacing.md,
@@ -142,34 +127,7 @@ const styles = StyleSheet.create({
     borderColor: hairline,
     borderWidth: 1,
     shadowOpacity: 0.045,
-    elevation: 2
-  },
-  avatarOuter: {
-    position: 'absolute',
-    top: -63,
-    width: 130,
-    height: 130,
-    borderRadius: radii.pill,
-    padding: 5,
-    backgroundColor: COLORS.creamDark
-  },
-  avatarInner: {
-    flex: 1,
-    borderRadius: radii.pill,
-    backgroundColor: COLORS.cream,
-    padding: 3
-  },
-  avatar: {
-    width: '100%',
-    height: '100%',
-    borderRadius: radii.pill
-  },
-  avatarFallback: {
-    flex: 1,
-    borderRadius: radii.pill,
-    backgroundColor: COLORS.creamDark,
-    alignItems: 'center',
-    justifyContent: 'center'
+    elevation: 2,
   },
   memberBadge: {
     flexDirection: 'row',
@@ -178,38 +136,38 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.goldDark,
     borderRadius: radii.pill,
     paddingHorizontal: spacing.sm + 3,
-    paddingVertical: spacing.xs + 1
+    paddingVertical: spacing.xs + 1,
   },
   memberBadgeText: {
     color: COLORS.white,
     fontSize: 10,
-    fontWeight: "600",
-    letterSpacing: 1
+    fontWeight: '600',
+    letterSpacing: 1,
   },
   name: {
     marginTop: spacing.sm + 5,
     ...type.title,
     fontSize: 25,
     color: COLORS.deepBrown,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   designation: {
     marginTop: spacing.xs,
     color: COLORS.goldDark,
     fontSize: 14,
-    fontWeight: '700'
+    fontWeight: '700',
   },
   locationRow: {
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: spacing.sm + 1,
-    gap: 4
+    gap: 4,
   },
   location: {
     color: COLORS.warmBrown,
     fontSize: 13,
     textAlign: 'center',
-    maxWidth: 280
+    maxWidth: 280,
   },
   wingBadge: {
     marginTop: spacing.md - 1,
@@ -219,17 +177,17 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.sm,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 7
+    gap: 7,
   },
   wingLabel: {
     color: COLORS.warmBrown,
     fontSize: 12,
-    fontWeight: "600",
-    letterSpacing: 1.4
+    fontWeight: '600',
+    letterSpacing: 1.4,
   },
   wingValue: {
     color: COLORS.deepBrown,
     fontSize: 12,
-    fontWeight: "600"
-  }
+    fontWeight: '600',
+  },
 });

@@ -1,12 +1,11 @@
-import { useRouter } from 'expo-router';
 import {
-    RefreshControl,
-    SafeAreaView,
-    ScrollView,
-    StatusBar,
-    StyleSheet,
-    Text,
-    View,
+  RefreshControl,
+  SafeAreaView,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  View,
 } from 'react-native';
 
 import Spacer from '@/components/ui/Spacer';
@@ -19,8 +18,6 @@ import ProfileInfoCard from './ProfileInfoCard';
 import RastSuchna from './RastSuchna';
 
 const JoinGitaProfile = ({ profile, onRefresh }) => {
-  const router = useRouter();
-
   console.log('COMPONENT CHECK:', {
     ProfileHero: typeof ProfileHero,
     ProfileInfoCard: typeof ProfileInfoCard,

@@ -9,8 +9,8 @@ import ForgotPasswordScreen from '@/components/login2/ForgotPasswordScreen';
 import LoginScreen from '@/components/login2/LoginScreen';
 import VerifyCodeScreen from '@/components/login2/VerifyCodeScreen';
 
-import { useAuth } from '@/context/AuthContext';
 import { RGB } from '@/constants/brandColors';
+import { useAuth } from '@/context/AuthContext';
 import {
   Animated,
   Dimensions,
@@ -605,7 +605,7 @@ const Login2 = () => {
   |--------------------------------------------------------------------------
   */
 
-  const handleGoogleLogin = async (id_token) => {
+  const handleGoogleLogin = async id_token => {
     try {
       setIsSubmitting(true);
 
@@ -933,11 +933,11 @@ const Login2 = () => {
 const styles = StyleSheet.create({
   modalRoot: {
     flex: 1,
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
   },
   glassTint: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: `rgba(${RGB.cream},0.25)`
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
   },
   sheet: {
     position: 'absolute',
@@ -952,15 +952,15 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: -10
+      height: -10,
     },
     shadowOpacity: 0.16,
     shadowRadius: 24,
-    elevation: 20
+    elevation: 20,
   },
   sheetGlass: {
     flex: 1,
-    backgroundColor: `rgba(${RGB.cream},0.72)`
+    backgroundColor: `rgba(${RGB.cream},0.72)`,
   },
   grabberTouchArea: {
     position: 'absolute',
@@ -970,15 +970,15 @@ const styles = StyleSheet.create({
     height: 48,
     alignItems: 'center',
     justifyContent: 'flex-start',
-    zIndex: 100
+    zIndex: 100,
   },
   grabber: {
     marginTop: 10,
     width: 46,
     height: 5,
     borderRadius: 4,
-    backgroundColor: 'rgba(70,70,70,0.24)'
-  }
+    backgroundColor: 'rgba(70,70,70,0.24)',
+  },
 });
 
 export default Login2;
