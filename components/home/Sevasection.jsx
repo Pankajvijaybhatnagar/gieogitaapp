@@ -71,7 +71,7 @@ export default function SevaSection() {
 
 const styles = StyleSheet.create({
   wrapper: {
-    marginHorizontal: 24
+    marginHorizontal: 24,
   },
   sevaBg: {
     backgroundColor: DESIGN.colors.surface,
@@ -79,40 +79,40 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 24,
     shadowOpacity: 0.045,
-    elevation: 2
+    elevation: 2,
   },
   sevaContent: {
     paddingTop: 24,
-    paddingHorizontal: 24
+    paddingHorizontal: 24,
   },
   sevaLabel: {
     ...type.caption,
     color: COLORS.saffron,
     marginBottom: 8,
     fontSize: 10,
-    letterSpacing: 1.5
+    letterSpacing: 1.5,
   },
   sevaTitle: {
     ...type.title,
     fontSize: 28,
     color: COLORS.deepBrown,
     fontFamily: DESIGN.fonts.editorial,
-    fontWeight: "400",
+    fontWeight: '400',
     letterSpacing: -0.4,
-    lineHeight: 36
+    lineHeight: 36,
   },
   sevaTitleAccent: {
-    color: DESIGN.colors.plum
+    color: DESIGN.colors.plum,
   },
   imageWrapper: {
     overflow: 'hidden',
     marginTop: 20,
     marginHorizontal: 12,
-    borderRadius: 16
+    borderRadius: 16,
   },
   sevaImage: {
     width: '100%',
-    aspectRatio: 16 / 9
+    aspectRatio: 9 / 9,
   },
   bottomButton: {
     margin: 12,
@@ -124,19 +124,19 @@ const styles = StyleSheet.create({
     backgroundColor: DESIGN.colors.plum,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   buttonSmallText: {
     ...type.caption,
     fontSize: 10,
     color: 'rgba(255,255,255,0.75)',
     marginBottom: 2,
-    letterSpacing: 1.1
+    letterSpacing: 1.1,
   },
   buttonText: {
     ...type.headline,
     fontSize: 16,
-    color: COLORS.white
+    color: COLORS.white,
   },
   arrowCircle: {
     width: 36,
@@ -144,12 +144,12 @@ const styles = StyleSheet.create({
     borderRadius: radii.pill,
     backgroundColor: 'rgba(255,255,255,0.18)',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   arrow: {
     color: COLORS.white,
     fontSize: 26,
     lineHeight: 28,
-    fontWeight: '300'
-  }
+    fontWeight: '300',
+  },
 });

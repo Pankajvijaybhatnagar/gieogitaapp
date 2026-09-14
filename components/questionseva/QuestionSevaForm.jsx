@@ -1,4 +1,5 @@
 import { DESIGN } from '@/constants/design';
+import Spacer from '@/components/ui/Spacer';
 import { useEffect, useState } from 'react';
 
 import {
@@ -6,6 +7,7 @@ import {
     KeyboardAvoidingView,
     Platform,
     SafeAreaView,
+    ScrollView,
     StatusBar,
     StyleSheet,
     Text,
@@ -275,8 +277,15 @@ export default function QuestionSevaForm() {
 
       <KeyboardAvoidingView
         style={styles.keyboardView}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-        <View style={[styles.screen, isSmallScreen && styles.screenSmall]}>
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}>
+        <ScrollView
+          contentContainerStyle={[
+            styles.screen,
+            isSmallScreen && styles.screenSmall,
+          ]}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}>
           {/* =================================================
               HEADER
           ================================================= */}
@@ -501,7 +510,9 @@ export default function QuestionSevaForm() {
               )}
             </TouchableOpacity>
           </View>
-        </View>
+
+          <Spacer height={120} />
+        </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
@@ -532,16 +543,16 @@ const styles = StyleSheet.create({
     flex: 1
   },
   screen: {
-    flex: 1,
+    flexGrow: 1,
     justifyContent: 'center',
     backgroundColor: DESIGN.colors.canvas,
     paddingHorizontal: 24,
-    paddingTop: 6,
-    paddingBottom: 6
+    paddingTop: 16,
+    paddingBottom: 32
   },
   screenSmall: {
-    paddingTop: 5,
-    paddingBottom: 5
+    paddingTop: 10,
+    paddingBottom: 24
   },
   tabletWidth: {
     width: '100%',

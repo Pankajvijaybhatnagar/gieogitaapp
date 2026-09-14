@@ -18,32 +18,9 @@ export const heroImages = [
   {
     id: '2',
     source: require('@/assets/images/hero2.png'),
-    tag: 'GITA SATSANG',
-    title: 'Thousands Gathered in Devotion',
+    tag: 'GITA CHANTING',
+    title: 'Thousands Gathered ',
   },
-];
-
-// ─── GALLERY ──────────────────────────────────────────────────────────────────
-// Real photos already live on gieogita.org — used as the gallery's content
-// until the backend's admin-managed gallery folder actually has photos in it
-// (galleryServices.getPublicGallery() currently returns an empty list for
-// every folder tried; this is the real, live fallback in the meantime).
-export const galleryPhotos = [
-  { id: 'g1', uri: 'https://gieogita.org/assets/images/project/project-4-1.jpg', caption: '' },
-  { id: 'g2', uri: 'https://gieogita.org/assets/images/project/project-4-2.jpg', caption: '' },
-  { id: 'g3', uri: 'https://gieogita.org/assets/images/project/project-4-3.jpg', caption: '' },
-  { id: 'g4', uri: 'https://gieogita.org/assets/images/project/project-4-31.jpg', caption: '' },
-  { id: 'g5', uri: 'https://gieogita.org/assets/images/project/project-4-4.jpg', caption: '' },
-  { id: 'g6', uri: 'https://gieogita.org/assets/images/project/project-4-5.jpg', caption: '' },
-  { id: 'g7', uri: 'https://gieogita.org/assets/images/project/project-4-6.jpg', caption: '' },
-  { id: 'g8', uri: 'https://gieogita.org/assets/images/services/bal%20sanskar.jpg', caption: 'Bal Sanskar' },
-  { id: 'g9', uri: 'https://gieogita.org/assets/images/services/dhyanam.jpg', caption: 'Dhyanam' },
-  { id: 'g10', uri: 'https://gieogita.org/assets/images/services/aanpurna%20copy.jpg', caption: 'Annapurna Seva' },
-  { id: 'g11', uri: 'https://gieogita.org/assets/images/services/join.jpg', caption: 'Join GIEO Gita' },
-  { id: 'g12', uri: 'https://gieogita.org/assets/images/services/gieo-gurukul%20copy.jpg', caption: 'GIEO Gurukul' },
-  { id: 'g13', uri: 'https://gieogita.org/assets/images/resources/seminar%20copy.jpg', caption: '' },
-  { id: 'g14', uri: 'https://gieogita.org/assets/images/resources/seminar%20kuk%20copy.jpg', caption: '' },
-  { id: 'g15', uri: 'https://gieogita.org/assets/images/resources/spritual%20copy.jpg', caption: '' },
 ];
 
 export const exclusiveContent = [
@@ -253,7 +230,8 @@ export const servicesList = [
     title: 'GIEO Gurukul',
     desc: 'Blending ancient Gurukul values with modern learning for holistic education',
     route: '/home/gurukul',
-    image: 'https://gieogita.org/assets/images/services/gieo-gurukul%20copy.jpg',
+    image:
+      'https://gieogita.org/assets/images/services/gieo-gurukul%20copy.jpg',
   },
   {
     icon: 'book-outline',

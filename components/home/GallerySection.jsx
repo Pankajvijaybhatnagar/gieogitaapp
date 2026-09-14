@@ -11,40 +11,33 @@ import {
 } from 'react-native';
 import galleryServices from '@/lib/services/galleryServices';
 import { radii, shadow, spacing, type } from '@/constants/theme';
-import { COLORS, galleryPhotos } from './constant';
+import { COLORS } from './constant';
 import { SectionHeader } from './Sharedui';
 
-const GALLERY_FOLDER = 'gallery';
+const FOLDERS_PREVIEW_LIMIT = 10;
 
-// The gallery API can plausibly hand back a few different shapes
-// (an array of URL strings, or objects with image/url/file/path/src) —
-// normalize whatever comes back instead of assuming one exact shape.
-function normalizeImages(raw) {
+function formatAlbumName(name) {
+  return String(name || '')
+    .replace(/[_-]+/g, ' ')
+    .trim();
+}
+
+function normalizeFolders(raw) {
   const list = Array.isArray(raw) ? raw : [];
 
   return list
-    .map((item, index) => {
-      if (typeof item === 'string') {
-        return { id: String(index), uri: item, caption: '' };
-      }
-
-      const uri = item?.image || item?.url || item?.file || item?.path || item?.src || '';
-
-      return {
-        id: String(item?.id ?? index),
-        uri,
-        caption: item?.title || item?.caption || item?.name || '',
-      };
-    })
-    .filter(image => !!image.uri);
+    .map((item, index) => ({
+      id: String(item?.name ?? index),
+      name: item?.name || '',
+      thumbnail: item?.thumbnail || '',
+    }))
+    .filter(album => !!album.name);
 }
 
 export default function GallerySection() {
   const router = useRouter();
 
-  // Real photos already live on gieogita.org, shown immediately and
-  // replaced automatically once the backend's own gallery has content.
-  const [images, setImages] = useState(galleryPhotos);
+  const [albums, setAlbums] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -54,17 +47,20 @@ export default function GallerySection() {
       try {
         setLoading(true);
 
-        const response = await galleryServices.getPublicGallery(GALLERY_FOLDER);
+        const response = await galleryServices.getGalleryFolders(
+          1,
+          FOLDERS_PREVIEW_LIMIT,
+        );
 
-        const raw = response?.data?.data || response?.data?.images || response?.data || [];
+        const fetched = response?.status
+          ? normalizeFolders(response?.data?.folders)
+          : [];
 
-        const fetched = response?.success ? normalizeImages(raw) : [];
-
-        if (!cancelled && fetched.length > 0) {
-          setImages(fetched);
+        if (!cancelled) {
+          setAlbums(fetched);
         }
       } catch (error) {
-        console.error('Error fetching gallery:', error);
+        console.error('Error fetching gallery albums:', error);
       } finally {
         if (!cancelled) {
           setLoading(false);
@@ -97,21 +93,26 @@ export default function GallerySection() {
           snapToInterval={CARD_WIDTH + CARD_GAP}
           snapToAlignment="start"
           contentContainerStyle={styles.hScrollContent}>
-          {images.slice(0, 12).map((item, index) => (
+          {albums.map(item => (
             <TouchableOpacity
               key={item.id}
               activeOpacity={0.85}
-              onPress={() => router.push({ pathname: '/home/gallery', params: { index } })}
+              onPress={() =>
+                router.push(`/home/gallery/${encodeURIComponent(item.name)}`)
+              }
               style={styles.card}>
-              <Image source={{ uri: item.uri }} style={styles.image} contentFit="cover" transition={200} />
+              <Image
+                source={{ uri: item.thumbnail }}
+                style={styles.image}
+                contentFit="cover"
+                transition={200}
+              />
 
-              {!!item.caption && (
-                <View style={styles.captionBar}>
-                  <Text style={styles.captionText} numberOfLines={1}>
-                    {item.caption}
-                  </Text>
-                </View>
-              )}
+              <View style={styles.captionBar}>
+                <Text style={styles.captionText} numberOfLines={1}>
+                  {formatAlbumName(item.name)}
+                </Text>
+              </View>
             </TouchableOpacity>
           ))}
         </ScrollView>
@@ -162,5 +163,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '700',
     color: COLORS.white,
+    textTransform: 'capitalize',
   },
 });

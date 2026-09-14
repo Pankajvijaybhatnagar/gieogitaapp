@@ -14,7 +14,7 @@ import ServicesSection from '../../../components/home/ServicesSection';
 import SevaSection from '../../../components/home/Sevasection';
 import { GoldDivider } from '../../../components/home/Sharedui';
 import TestimonialsSection from '../../../components/home/TestimonialsSection';
-import Questionseva from '../../../components/questionseva/QuestionSevaForm.jsx';
+import QuestionSevaSection from '../../../components/questionseva/QuestionSevaSection.jsx';
 
 export default function GieoGitaHome() {
   const headerScrollProps = useHeaderScrollProps();
@@ -31,11 +31,12 @@ export default function GieoGitaHome() {
         <HeroBanner />
 
         <GoldDivider />
-
-        <ExclusiveContent />
-        <GoldDivider />
-
         <EventsSection />
+        <GoldDivider />
+        <QuestionSevaSection />
+
+        <GoldDivider />
+        <ExclusiveContent />
 
         <GoldDivider />
 
@@ -48,8 +49,7 @@ export default function GieoGitaHome() {
         {/* <AdhyaySection /> */}
         <SevaSection />
         <GoldDivider />
-        <Questionseva />
-
+        <ReelCard />
         <GoldDivider />
 
         <LiveDarshan />
@@ -58,15 +58,14 @@ export default function GieoGitaHome() {
 
         <GoldDivider />
 
-        <TestimonialsSection />
         <GoldDivider />
 
         <GallerySection />
 
         <GoldDivider />
+        <TestimonialsSection />
 
         {/* <InitiativesSection /> */}
-        <ReelCard />
 
         <Spacer height={120} />
       </ScrollView>

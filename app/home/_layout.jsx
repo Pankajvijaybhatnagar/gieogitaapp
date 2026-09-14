@@ -49,6 +49,14 @@ export default function HomeLayout() {
             />
 
             <Drawer.Screen
+              name="gallery"
+              options={{
+                drawerLabel: 'Gallery',
+                title: 'Gallery',
+              }}
+            />
+
+            <Drawer.Screen
               name="balSanskar"
               options={{
                 drawerLabel: 'Bal Sanskar',

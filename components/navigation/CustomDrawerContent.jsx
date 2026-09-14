@@ -30,6 +30,7 @@ export const DRAWER_ITEMS = [
   { label: 'Events', icon: 'calendar', route: '/home/eventgroup' },
   { label: 'Bhajans', icon: 'music', route: '/home/bhajans' },
   { label: 'Live Darshan', icon: 'video-camera', route: '/home/livedarshan' },
+  { label: 'Gallery', icon: 'image', route: '/home/gallery' },
   { label: 'Bal Sanskar', icon: 'child', route: '/home/balSanskar' },
   { label: 'Gaushala', icon: 'leaf', route: '/home/GieoGaushala' },
   { label: 'Join Gieo Gita', icon: 'users', route: '/home/join-gieo-gita' },

@@ -93,7 +93,7 @@ export default function LiveDarshan() {
 
 const styles = StyleSheet.create({
   wrapper: {
-    marginHorizontal: spacing.md
+    marginHorizontal: spacing.lg
   },
   // Shadow lives on this outer layer — the image needs its own rounded
   // clipping (via `imageStyle`), which would otherwise suppress the shadow.

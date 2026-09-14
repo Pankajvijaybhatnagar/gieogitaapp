@@ -9,13 +9,13 @@
 import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
 import {
-    ActivityIndicator,
-    FlatList,
-    Image,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  ActivityIndicator,
+  FlatList,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 
 import Card from '@/components/ui/Card';
@@ -94,7 +94,7 @@ function Hero({ count, loading }) {
       <View style={styles.heroBanner}>
         <View style={styles.heroPatternOne} />
         <View style={styles.heroPatternTwo} />
-        <Text style={styles.heroOm}>ॐ</Text>
+        <Text style={styles.heroOm}>GITA SATSANG</Text>
       </View>
 
       <View style={styles.heroIconRing}>
@@ -279,7 +279,7 @@ const styles = StyleSheet.create({
   },
   heroOm: {
     color: 'rgba(255,255,255,0.14)',
-    fontSize: 68,
+    fontSize: 28,
     fontWeight: '700',
   },
   heroIconRing: {

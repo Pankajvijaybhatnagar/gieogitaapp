@@ -56,7 +56,7 @@ export default function MaharajSection() {
 
 const styles = StyleSheet.create({
   wrapper: {
-    paddingHorizontal: spacing.md,
+    paddingHorizontal: spacing.lg,
   },
   panel: {
     backgroundColor: COLORS.richBrown,
