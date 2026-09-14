@@ -8,13 +8,13 @@ import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { useCallback, useEffect, useRef } from 'react';
 import {
-    ActivityIndicator,
-    FlatList,
-    RefreshControl,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  ActivityIndicator,
+  FlatList,
+  RefreshControl,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 
 import Spacer from '@/components/ui/Spacer';
@@ -333,7 +333,13 @@ const styles = StyleSheet.create({
     ...shadow.card,
   },
   cardUnread: {
-    backgroundColor: `rgba(${RGB.saffron},0.05)`,
+    backgroundColor: COLORS.white,
+    borderWidth: 1,
+    borderColor: `rgba(${RGB.saffron},0.22)`,
+    shadowColor: 'transparent',
+    shadowOpacity: 0,
+    shadowRadius: 0,
+    elevation: 0,
   },
   unreadDot: {
     position: 'absolute',
