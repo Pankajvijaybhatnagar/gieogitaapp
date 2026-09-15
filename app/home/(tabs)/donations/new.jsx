@@ -6,18 +6,17 @@ import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
 
+import { COLORS } from '@/constants/brandColors';
+import { radii, type } from '@/constants/theme';
 import { useAppAlert } from '@/context/AppAlertContext';
 import {
   ActivityIndicator,
-  Alert,
   SafeAreaView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-import { COLORS } from '@/constants/brandColors';
-import { radii, type } from '@/constants/theme';
 
 export default function NewDonationScreen() {
   const router = useRouter();
@@ -352,7 +351,7 @@ export default function NewDonationScreen() {
       // =====================================================
 
       router.push({
-        pathname: '/home/(tabs)/donations/payment/[tranCtx]',
+        Pathname: '/home/(tabs)/donations/payment/[tranCtx]',
         params: {
           tranCtx,
           merchantTxnNo,
@@ -477,23 +476,23 @@ export default function NewDonationScreen() {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: COLORS.creamDark
+    backgroundColor: COLORS.creamDark,
   },
   center: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   loadingText: {
     marginTop: 10,
     fontSize: 12,
-    color: COLORS.warmBrown
+    color: COLORS.warmBrown,
   },
   loginContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 28
+    paddingHorizontal: 28,
   },
   loginIcon: {
     width: 72,
@@ -502,16 +501,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: COLORS.creamDark,
-    marginBottom: 20
+    marginBottom: 20,
   },
   loginEyebrow: {
     ...type.caption,
-    color: COLORS.saffron
+    color: COLORS.saffron,
   },
   loginTitle: {
     marginTop: 7,
     ...type.largeTitle,
-    color: COLORS.deepBrown
+    color: COLORS.deepBrown,
   },
   loginDescription: {
     marginTop: 9,
@@ -519,7 +518,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 13,
     lineHeight: 20,
-    color: COLORS.warmBrown
+    color: COLORS.warmBrown,
   },
   loginButton: {
     marginTop: 24,
@@ -530,11 +529,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 7,
-    minHeight: 52
+    minHeight: 52,
   },
   loginButtonText: {
     color: COLORS.white,
     fontSize: 13,
-    fontWeight: '700'
-  }
+    fontWeight: '700',
+  },
 });

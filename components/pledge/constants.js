@@ -1,24 +1,24 @@
 // ─── COLOR PALETTE ────────────────────────────────────────────────────────────
 export const C = {
-  deepBrown:    '#292328', // warm near-black text (not a panel bg)
-  warmBrown:    '#74696A', // secondary/muted text
-  richBrown:    '#55334A', // temple maroon accent — small strips/badges only
-  gold:         '#B39562',
-  goldLight:    '#DFC99F',
-  goldDark:     '#80653B',
-  goldPale:     'rgba(179,149,98,0.12)',
-  goldBorder:   'rgba(179,149,98,0.30)',
-  cream:        '#FFFFFF', // main background = white
-  creamDark:    '#F0EAE2', // warm off-white secondary surface
-  saffron:      '#A65338',
+  deepBrown: '#292328', // warm near-black text (not a panel bg)
+  warmBrown: '#74696A', // secondary/muted text
+  richBrown: '#55334A', // temple maroon accent — small strips/badges only
+  gold: '#B39562',
+  goldLight: '#DFC99F',
+  goldDark: '#80653B',
+  goldPale: 'rgba(179,149,98,0.12)',
+  goldBorder: 'rgba(179,149,98,0.30)',
+  cream: '#FFFFFF', // main background = white
+  creamDark: '#F0EAE2', // warm off-white secondary surface
+  saffron: '#A65338',
   saffronLight: '#CD8B6E',
-  white:        '#FFFFFF',
-  green:        '#27AE60',
-  greenLight:   '#2ECC71',
+  white: '#FFFFFF',
+  green: '#27AE60',
+  greenLight: '#2ECC71',
 };
 
 // ─── UPI CONFIG ───────────────────────────────────────────────────────────────
-export const UPI_ID   = 'gieogita@upi';   // ← replace with real UPI ID
+export const UPI_ID = 'gieogita@upi'; // ← replace with real UPI ID
 export const UPI_NAME = 'GIEO GITA Trust';
 
 // ─── SEVA DATA ────────────────────────────────────────────────────────────────
@@ -28,9 +28,9 @@ export const SEVA_LIST = [
     name: 'Shringaar Seva',
     icon: '👑',
     amount: 501,
-    desc: 'Offer divine adornments — flowers, jewels & silken garments to Shri Krishna. This seva beautifies the Lord and brings blessings of beauty, grace and prosperity to the devotee.',
+    desc: 'Offer divine adornments — flowers, jewels & silken garments to Shri Krishan. This seva beautifies the Lord and brings blessings of beauty, grace and prosperity to the devotee.',
     benefit: 'Beauty & Grace',
-    category: 'Krishna Seva',
+    category: 'Krishan Seva',
   },
   {
     id: '2',
@@ -88,30 +88,30 @@ export const SEVA_LIST = [
   },
   {
     id: '8',
-    name: 'Krishna Rajbhog Seva',
+    name: 'Krishan Rajbhog Seva',
     icon: '🍱',
     amount: 1001,
-    desc: 'Offer a grand midday Rajbhog (royal feast) to Shri Krishna including 56 types of dishes. Your name is announced during the offering. Ideal for birthdays and anniversaries.',
+    desc: 'Offer a grand midday Rajbhog (royal feast) to Shri Krishan including 56 types of dishes. Your name is announced during the offering. Ideal for birthdays and anniversaries.',
     benefit: 'Abundance',
-    category: 'Krishna Seva',
+    category: 'Krishan Seva',
   },
   {
     id: '9',
-    name: 'Krishna Phool Bangla Seva',
+    name: 'Krishan Phool Bangla Seva',
     icon: '🌺',
     amount: 2101,
-    desc: "Sponsor a magnificent floral decoration (Phool Bangla) for Krishna — the deity's sanctum is beautifully adorned with fresh flowers in your honour on the requested date.",
+    desc: "Sponsor a magnificent floral decoration (Phool Bangla) for Krishan — the deity's sanctum is beautifully adorned with fresh flowers in your honour on the requested date.",
     benefit: 'Joy & Celebration',
-    category: 'Krishna Seva',
+    category: 'Krishan Seva',
   },
   {
     id: '10',
-    name: 'Krishna Bhog Seva',
+    name: 'Krishan Bhog Seva',
     icon: '🥣',
     amount: 501,
-    desc: 'Offer a special Bhog (sacred food) to Shri Krishna. Prepared with love and devotion in the temple kitchen and offered with Vedic mantras before being distributed as Prasad.',
+    desc: 'Offer a special Bhog (sacred food) to Shri Krishan. Prepared with love and devotion in the temple kitchen and offered with Vedic mantras before being distributed as Prasad.',
     benefit: 'Fulfilment of Wishes',
-    category: 'Krishna Seva',
+    category: 'Krishan Seva',
   },
   {
     id: '11',
@@ -143,31 +143,73 @@ export const SEVA_LIST = [
 ];
 
 // ─── CATEGORIES ───────────────────────────────────────────────────────────────
-export const CATEGORIES = ['All', 'Krishna Seva', 'Gau Seva', 'Mandir Seva', 'Charity'];
+export const CATEGORIES = [
+  'All',
+  'Krishan Seva',
+  'Gau Seva',
+  'Mandir Seva',
+  'Charity',
+];
 
 // ─── OCCASIONS ────────────────────────────────────────────────────────────────
 export const OCCASIONS = [
-  { label: 'Birthday',         icon: '🎂' },
-  { label: 'Anniversary',      icon: '💍' },
-  { label: 'In Memory Of',     icon: '🙏' },
-  { label: 'Festival',         icon: '🪔' },
+  { label: 'Birthday', icon: '🎂' },
+  { label: 'Anniversary', icon: '💍' },
+  { label: 'In Memory Of', icon: '🙏' },
+  { label: 'Festival', icon: '🪔' },
   { label: 'General Donation', icon: '💛' },
 ];
 
 // ─── HOW IT WORKS STEPS ───────────────────────────────────────────────────────
 export const HOW_STEPS = [
-  { num: '01', icon: '🙏', title: 'Choose Seva',    desc: 'Pick any seva from the list below'               },
-  { num: '02', icon: '📝', title: 'Your Occasion',  desc: 'Birthday, anniversary, in memory of a loved one' },
-  { num: '03', icon: '💸', title: 'Donate via UPI', desc: 'Pay instantly with Google Pay, BHIM, PhonePe'    },
-  { num: '04', icon: '🪷', title: 'Seva Performed', desc: 'Ritual done at temple in your name on that date' },
+  {
+    num: '01',
+    icon: '🙏',
+    title: 'Choose Seva',
+    desc: 'Pick any seva from the list below',
+  },
+  {
+    num: '02',
+    icon: '📝',
+    title: 'Your Occasion',
+    desc: 'Birthday, anniversary, in memory of a loved one',
+  },
+  {
+    num: '03',
+    icon: '💸',
+    title: 'Donate via UPI',
+    desc: 'Pay instantly with Google Pay, BHIM, PhonePe',
+  },
+  {
+    num: '04',
+    icon: '🪷',
+    title: 'Seva Performed',
+    desc: 'Ritual done at temple in your name on that date',
+  },
 ];
 
 // ─── TRUST ITEMS ──────────────────────────────────────────────────────────────
 export const TRUST_ITEMS = [
-  { icon: '🛡️', title: '100% Transparent', desc: 'All donations go directly to temple seva'       },
-  { icon: '📜', title: 'Tax Exemption',     desc: '80G certificate available on request'          },
-  { icon: '🏛️', title: 'Registered Trust',  desc: 'GIEO Gita is a registered charitable trust'   },
-  { icon: '🤝', title: 'Seva Receipt',      desc: 'Digital seva confirmation sent to your number' },
+  {
+    icon: '🛡️',
+    title: '100% Transparent',
+    desc: 'All donations go directly to temple seva',
+  },
+  {
+    icon: '📜',
+    title: 'Tax Exemption',
+    desc: '80G certificate available on request',
+  },
+  {
+    icon: '🏛️',
+    title: 'Registered Trust',
+    desc: 'GIEO Gita is a registered charitable trust',
+  },
+  {
+    icon: '🤝',
+    title: 'Seva Receipt',
+    desc: 'Digital seva confirmation sent to your number',
+  },
 ];
 
 // ─── BIRTHDAY POINTS ──────────────────────────────────────────────────────────

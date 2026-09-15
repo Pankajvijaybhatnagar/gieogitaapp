@@ -23,7 +23,7 @@ const CATEGORIES = [
   'Live',
   'Satsang',
   'Aarti',
-  'Pravachan',
+  'Satsang',
   'Festival',
 ];
 
@@ -37,7 +37,7 @@ const EVENTS = [
     day: 'Thursday',
     time: '6:00 AM – 10:00 PM',
     location: 'Kurukshetra, Haryana',
-    desc: 'Grand celebration of the divine birth of the Bhagwad Gita. Pravachans, cultural programs, and mass shloka recitation by thousands of devotees.',
+    desc: 'Grand celebration of the divine birth of the Bhagwad Gita. Satsang, cultural programs, and mass shloka recitation by thousands of devotees.',
     icon: '🏮',
     speakers: ['Swami Giananand Ji', 'Pujya Maharaj Ji'],
     seats: '10,000+',
@@ -64,14 +64,14 @@ const EVENTS = [
   },
   {
     id: '3',
-    title: 'Bhagwad Gita Pravachan Series',
-    category: 'Pravachan',
+    title: 'Bhagwad Gita Satsang Series',
+    category: 'Satsang',
     status: 'upcoming',
     date: '1 Jan 2026',
     day: 'Thursday',
     time: '7:00 PM – 9:00 PM',
     location: 'Online & Vrindavan Ashram',
-    desc: 'A 7-day deep-dive pravachan series on the 18 chapters of the Bhagwad Gita. Open to all seekers of spiritual wisdom.',
+    desc: 'A 7-day deep-dive Satsang series on the 18 Paths of the Bhagwad Gita. Open to all seekers of spiritual wisdom.',
     icon: '📖',
     speakers: ['Swami Giananand Ji'],
     seats: '500',
@@ -133,7 +133,7 @@ const EVENTS = [
   {
     id: '7',
     title: 'Gita Gyan Shivir — 5 Day Camp',
-    category: 'Pravachan',
+    category: 'Satsang',
     status: 'upcoming',
     date: '1 Feb 2026',
     day: 'Sunday',
@@ -423,7 +423,7 @@ function RegisterModal({ event, onClose }) {
           onPress={onClose}
           activeOpacity={0.85}>
           <Text style={styles.modalDoneBtnText}>
-            Done • Jai Shri Krishna 🙏
+            Done • Jai Shri Krishan 🙏
           </Text>
         </TouchableOpacity>
       </View>
@@ -471,7 +471,7 @@ export default function EventGroupScreen() {
           </Text>
           <Text style={styles.heroDesc}>
             Join Maharaj Ji and thousands of devotees at satsangs, aartis,
-            pravachans, and spiritual festivals across India.
+            Satsang, and spiritual festivals across India.
           </Text>
 
           {/* Quick stats */}
@@ -616,7 +616,7 @@ export default function EventGroupScreen() {
             <Text style={styles.ctaBtnText}>Enable Event Notifications</Text>
           </TouchableOpacity>
           <Text style={styles.ctaNote}>
-            <GitaText /> Jai Shri Krishna • GIEO Gita
+            <GitaText /> Jai Shri Krishan • GIEO Gita
           </Text>
         </View>
 

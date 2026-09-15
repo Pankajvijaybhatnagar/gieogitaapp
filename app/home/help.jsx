@@ -1,15 +1,15 @@
 import { useState } from 'react';
 
 import {
-    Linking,
-    Platform,
-    SafeAreaView,
-    ScrollView,
-    StatusBar,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  Linking,
+  Platform,
+  SafeAreaView,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 
 import { useAppAlert } from '@/context/AppAlertContext';
@@ -40,7 +40,7 @@ const FAQS = [
     id: 3,
     question: 'Where can I watch Maharaj Ji’s videos?',
     answer:
-      'You can watch pravachans, satsangs and other spiritual videos from the video section available inside the app.',
+      'You can watch Satsang, satsangs and other spiritual videos from the video section available inside the app.',
   },
   {
     id: 4,
@@ -261,12 +261,12 @@ export default function Help() {
 
             <QuickHelpItem
               icon="play-circle-outline"
-              title="Videos & Pravachan"
+              title="Videos & Satsang"
               subtitle="Help with spiritual videos and content"
               onPress={() =>
                 success(
-                  'Videos & Pravachan',
-                  'Open the videos section to watch available pravachans and spiritual content.',
+                  'Videos & Satsang',
+                  'Open the videos section to watch available Satsang and spiritual content.',
                 )
               }
             />

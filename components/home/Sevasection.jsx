@@ -19,7 +19,7 @@ export default function SevaSection() {
 
     // Better Expo Router way:
     // router.push({
-    //   pathname: '/home/(tabs)/seva',
+    //   Pathname: '/home/(tabs)/seva',
     //   params: {
     //     type: 'gau-seva',
     //   },
@@ -28,7 +28,7 @@ export default function SevaSection() {
 
   return (
     <>
-      <SectionHeader title="🙏 Choose Your" accent="Seva" />
+      <SectionHeader title="Choose Your" accent="Seva" icon="heart-outline" />
 
       <TouchableOpacity
         activeOpacity={0.88}

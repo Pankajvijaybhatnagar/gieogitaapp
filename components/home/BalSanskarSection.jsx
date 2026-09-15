@@ -11,7 +11,7 @@ const curriculum = [
   {
     icon: '📖',
     title: 'Gita Shloka Recitation',
-    desc: 'Daily memorisation and chanting of all 18 chapters',
+    desc: 'Daily memorisation and chanting of all 18 Paths',
     level: 'Foundation',
   },
   {

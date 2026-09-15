@@ -368,8 +368,8 @@ const YourChants = () => {
           label="Today"
           description="Chants completed today"
           value={today}
-          iconBackground="#FFF0D5"
-          iconColor="#B87316"
+          iconBackground={`rgba(${RGB.gold},0.18)`}
+          iconColor={BASE.goldDark}
         />
 
         <StatCapsule
@@ -377,7 +377,7 @@ const YourChants = () => {
           label="Last 7 Days"
           description="Your weekly chanting"
           value={last7Days}
-          iconBackground="#F2E5D7"
+          iconBackground={`rgba(${RGB.saffron},0.14)`}
           iconColor={COLORS.primary}
         />
 
@@ -386,8 +386,8 @@ const YourChants = () => {
           label="Last 30 Days"
           description="Your monthly chanting"
           value={last30Days}
-          iconBackground="#F8E3DA"
-          iconColor="#A75838"
+          iconBackground={`rgba(${RGB.maroon},0.12)`}
+          iconColor={BASE.richBrown}
         />
       </View>
 

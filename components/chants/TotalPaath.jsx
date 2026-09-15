@@ -309,7 +309,7 @@ const styles = StyleSheet.create({
     marginVertical: 12,
     borderWidth: 1,
     borderColor: hairline,
-    ...shadow.card
+    ...shadow.card,
   },
   bgCircle1: {
     position: 'absolute',
@@ -318,7 +318,7 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     backgroundColor: `rgba(${RGB.saffron},0.06)`,
     right: -75,
-    top: -85
+    top: -85,
   },
   bgCircle2: {
     position: 'absolute',
@@ -327,18 +327,18 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     backgroundColor: `rgba(${RGB.gold},0.06)`,
     left: -50,
-    bottom: -45
+    bottom: -45,
   },
   loadingContainer: {
     minHeight: 190,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: COLORS.cream
+    backgroundColor: COLORS.cream,
   },
   loadingText: {
     fontSize: 12,
     color: COLORS.muted,
-    marginTop: 8
+    marginTop: 8,
   },
   errorContainer: {
     margin: 16,
@@ -346,29 +346,29 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: COLORS.cream,
     alignItems: 'center',
-    gap: 7
+    gap: 7,
   },
   errorText: {
     fontSize: 12,
     color: COLORS.muted,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   topRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   eyebrow: {
     fontSize: 11,
-    fontWeight: "600",
+    fontWeight: '600',
     letterSpacing: 1.1,
-    color: COLORS.primary
+    color: COLORS.primary,
   },
   label: {
     fontSize: 20,
-    fontWeight: "600",
+    fontWeight: '600',
     color: COLORS.text,
-    marginTop: 3
+    marginTop: 3,
   },
   liveCapsule: {
     flexDirection: 'row',
@@ -377,19 +377,19 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.creamDark,
     paddingHorizontal: 9,
     paddingVertical: 6,
-    borderRadius: radii.pill
+    borderRadius: radii.pill,
   },
   liveDot: {
     width: 6,
     height: 6,
     borderRadius: 3,
-    backgroundColor: COLORS.primary
+    backgroundColor: COLORS.primary,
   },
   liveText: {
     fontSize: 12,
-    fontWeight: "600",
+    fontWeight: '600',
     letterSpacing: 1,
-    color: COLORS.primary
+    color: COLORS.primary,
   },
   countBox: {
     marginTop: 18,
@@ -398,24 +398,24 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderBottomWidth: 1,
     borderColor: hairline,
-    paddingVertical: 12
+    paddingVertical: 12,
   },
   countLabel: {
     fontSize: 12,
     fontWeight: '700',
     letterSpacing: 1,
-    color: COLORS.muted
+    color: COLORS.muted,
   },
   countText: {
     fontSize: 43,
     lineHeight: 52,
     fontWeight: '900',
     letterSpacing: -1,
-    color: COLORS.text
+    color: COLORS.text,
   },
   subText: {
     fontSize: 12,
-    color: COLORS.muted
+    color: COLORS.muted,
   },
   peopleRow: {
     marginTop: 17,
@@ -423,7 +423,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: COLORS.creamDark,
     padding: 10,
-    borderRadius: radii.lg
+    borderRadius: radii.lg,
   },
   peopleIcon: {
     width: 39,
@@ -431,42 +431,42 @@ const styles = StyleSheet.create({
     borderRadius: 13,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: `rgba(${RGB.saffron},0.12)`
+    backgroundColor: `rgba(${RGB.saffron},0.12)`,
   },
   peopleContent: {
     flex: 1,
-    marginLeft: 10
+    marginLeft: 10,
   },
   peopleLabel: {
     fontSize: 12,
     fontWeight: '700',
-    color: COLORS.text
+    color: COLORS.text,
   },
   peopleDescription: {
     fontSize: 12,
     color: COLORS.muted,
-    marginTop: 1
+    marginTop: 1,
   },
   peopleValue: {
     fontSize: 18,
     fontWeight: '900',
-    color: COLORS.primary
+    color: COLORS.primary,
   },
   divider: {
     height: 1,
     backgroundColor: 'rgba(255,255,255,0.12)',
-    marginVertical: 17
+    marginVertical: 17,
   },
   sectionMiniTitle: {
     fontSize: 12,
-    fontWeight: "600",
+    fontWeight: '600',
     letterSpacing: 1.3,
     color: COLORS.goldLight,
-    marginBottom: 9
+    marginBottom: 9,
   },
   yearCards: {
     flexDirection: 'row',
-    gap: 9
+    gap: 9,
   },
   yearCard: {
     flex: 1,
@@ -476,13 +476,13 @@ const styles = StyleSheet.create({
     borderColor: hairline,
     borderWidth: 1,
     shadowOpacity: 0.045,
-    elevation: 2
+    elevation: 2,
   },
   yearHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 7,
-    marginBottom: 10
+    marginBottom: 10,
   },
   calendarIcon: {
     width: 29,
@@ -490,81 +490,81 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: COLORS.creamDark,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   year: {
     fontSize: 13,
-    fontWeight: "600",
-    color: COLORS.primary
+    fontWeight: '600',
+    color: COLORS.primary,
   },
   yearCardLabel: {
     fontSize: 12,
-    color: COLORS.muted
+    color: COLORS.muted,
   },
   yearChants: {
     fontSize: 20,
     fontWeight: '900',
     color: COLORS.text,
-    marginTop: 1
+    marginTop: 1,
   },
   yearUserRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    marginTop: 7
+    marginTop: 7,
   },
   yearUsers: {
     fontSize: 12,
     color: COLORS.muted,
-    flexShrink: 1
+    flexShrink: 1,
   },
   historyBox: {
     marginTop: 10,
     backgroundColor: 'rgba(255,255,255,0.08)',
     borderRadius: 19,
     paddingHorizontal: 13,
-    paddingTop: 12
+    paddingTop: 12,
   },
   historyTitleRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingBottom: 7
+    paddingBottom: 7,
   },
   historyTitle: {
     fontSize: 12,
-    fontWeight: "600",
-    color: COLORS.white
+    fontWeight: '600',
+    color: COLORS.white,
   },
   historyRow: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 9,
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(255,255,255,0.08)'
+    borderBottomColor: 'rgba(255,255,255,0.08)',
   },
   historyRowLast: {
-    borderBottomWidth: 0
+    borderBottomWidth: 0,
   },
   historyYear: {
     width: 48,
     fontSize: 12,
-    fontWeight: "600",
-    color: COLORS.goldLight
+    fontWeight: '600',
+    color: COLORS.goldLight,
   },
   historyData: {
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   historyChants: {
     fontSize: 12,
     fontWeight: '700',
-    color: COLORS.white
+    color: COLORS.white,
   },
   historyUsers: {
     fontSize: 12,
-    color: '#CFB6A6'
-  }
+    color: '#CFB6A6',
+  },
 });

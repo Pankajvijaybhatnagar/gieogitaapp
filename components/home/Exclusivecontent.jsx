@@ -1,3 +1,8 @@
+import { RGB } from '@/constants/brandColors';
+import { DESIGN } from '@/constants/design';
+import { radii, spacing, type } from '@/constants/theme';
+import { useAppAlert } from '@/context/AppAlertContext';
+import { LinearGradient } from 'expo-linear-gradient';
 import {
   ImageBackground,
   ScrollView,
@@ -6,22 +11,24 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import { useRouter } from 'expo-router';
-import { RGB } from '@/constants/brandColors';
-import { DESIGN } from '@/constants/design';
-import { radii, spacing, type } from '@/constants/theme';
 import { COLORS, exclusiveContent } from './constant';
 import { SectionHeader } from './Sharedui';
 
-function ExclusiveCard({ item }) {
-  const router = useRouter();
+// Exclusive content is not live yet — every entry point here (card taps
+// and "See all") shows this instead of navigating, without touching the
+// underlying /home/(tabs)/exclusive and /home/exclusive-all routes.
+function showComingSoon(alert) {
+  alert('Coming Soon', 'Exclusive Content is coming soon. Stay tuned!', {
+    icon: 'sparkles-outline',
+  });
+}
 
+function ExclusiveCard({ item, onPress }) {
   return (
     <TouchableOpacity
       activeOpacity={0.88}
       style={styles.excCardShadow}
-      onPress={() => router.push(`/home/(tabs)/exclusive/${item.id}`)}>
+      onPress={onPress}>
       <ImageBackground
         source={require('@/assets/images/krishna-bg.jpg')}
         resizeMode="cover"
@@ -67,21 +74,26 @@ function ExclusiveCard({ item }) {
 }
 
 export default function ExclusiveContent() {
-  const router = useRouter();
+  const { alert } = useAppAlert();
 
   return (
     <>
       <SectionHeader
-        title="✦ Exclusive"
+        title="Exclusive"
         accent="Content"
-        onSeeAll={() => router.push('/home/exclusive-all')}
+        icon="sparkles-outline"
+        onSeeAll={() => showComingSoon(alert)}
       />
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.hScrollContent}>
         {exclusiveContent.map(item => (
-          <ExclusiveCard key={item.id} item={item} />
+          <ExclusiveCard
+            key={item.id}
+            item={item}
+            onPress={() => showComingSoon(alert)}
+          />
         ))}
       </ScrollView>
     </>
@@ -92,7 +104,7 @@ const styles = StyleSheet.create({
   hScrollContent: {
     paddingHorizontal: spacing.md,
     paddingBottom: spacing.xs,
-    gap: spacing.md
+    gap: spacing.md,
   },
   // Shadow lives on this outer layer — the image itself needs its own
   // rounded-corner clipping (via `imageStyle`), which would otherwise
@@ -104,7 +116,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.2,
     shadowRadius: 14,
-    elevation: 6
+    elevation: 6,
   },
   excCardImg: {
     width: '100%',
@@ -115,15 +127,15 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: `rgba(${RGB.gold}, 0.4)`,
     overflow: 'hidden',
-    padding: spacing.sm + 2
+    padding: spacing.sm + 2,
   },
   excCardImageRadius: {
-    borderRadius: radii.lg
+    borderRadius: radii.lg,
   },
   topRow: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   eyebrowPill: {
     backgroundColor: 'rgba(20,10,8,0.5)',
@@ -132,30 +144,30 @@ const styles = StyleSheet.create({
     borderRadius: radii.pill,
     paddingHorizontal: 9,
     paddingVertical: 4,
-    maxWidth: '78%'
+    maxWidth: '78%',
   },
   eyebrowText: {
     ...type.caption,
     fontSize: 9,
     letterSpacing: 1,
-    color: '#FFFFFF'
+    color: '#FFFFFF',
   },
   excBadge: {
     backgroundColor: COLORS.saffron,
     borderRadius: radii.pill,
     paddingHorizontal: 8,
-    paddingVertical: 3
+    paddingVertical: 3,
   },
   excBadgeText: {
     color: COLORS.white,
     ...type.caption,
-    fontSize: 10
+    fontSize: 10,
   },
   bottomRow: {
     flexDirection: 'row',
     alignItems: 'flex-end',
     justifyContent: 'space-between',
-    gap: spacing.sm
+    gap: spacing.sm,
   },
   excCardTitle: {
     flex: 1,
@@ -166,7 +178,7 @@ const styles = StyleSheet.create({
     letterSpacing: -0.2,
     textShadowColor: 'rgba(0,0,0,0.35)',
     textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 4
+    textShadowRadius: 4,
   },
   playCircle: {
     width: 30,
@@ -174,11 +186,11 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     backgroundColor: 'rgba(255,255,255,0.92)',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   playGlyph: {
     fontSize: 11,
     color: COLORS.richBrown,
-    marginLeft: 2
-  }
+    marginLeft: 2,
+  },
 });

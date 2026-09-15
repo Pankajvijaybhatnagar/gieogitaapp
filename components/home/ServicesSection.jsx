@@ -55,7 +55,7 @@ export default function ServicesSection() {
 
   return (
     <>
-      <SectionHeader title="🙏 Our" accent="Services" />
+      <SectionHeader title="Our" accent="Services" icon="apps-outline" />
 
       <ScrollView
         horizontal

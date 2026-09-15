@@ -194,8 +194,9 @@ export default function EventsSection() {
   return (
     <View style={styles.section}>
       <SectionHeader
-        title=""
+        title="Upcoming"
         accent="Events"
+        icon="calendar-outline"
         onSeeAll={() => {
           router.push('/home/events');
         }}

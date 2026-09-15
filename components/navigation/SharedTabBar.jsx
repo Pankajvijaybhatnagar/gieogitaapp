@@ -48,7 +48,7 @@ const TABS = [
 
 export default function SharedTabBar() {
   const router = useRouter();
-  const pathname = usePathname();
+  const Pathname = usePathname();
   const insets = useSafeAreaInsets();
 
   const isTabActive = route => {
@@ -56,15 +56,15 @@ export default function SharedTabBar() {
 
     if (segment === '/') {
       return (
-        pathname === '/' ||
-        pathname === '/index' ||
-        pathname === '/home' ||
-        pathname.endsWith('/(tabs)') ||
-        pathname.endsWith('/index')
+        Pathname === '/' ||
+        Pathname === '/index' ||
+        Pathname === '/home' ||
+        Pathname.endsWith('/(tabs)') ||
+        Pathname.endsWith('/index')
       );
     }
 
-    return pathname.endsWith(segment.replace('/', ''));
+    return Pathname.endsWith(segment.replace('/', ''));
   };
 
   const sevaIndex = TABS.findIndex(tab => tab.label === 'Seva');
@@ -96,7 +96,7 @@ export default function SharedTabBar() {
       }).start();
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname]);
+  }, [Pathname]);
 
   return (
     <View
@@ -112,10 +112,7 @@ export default function SharedTabBar() {
       <View style={styles.tabBarFloating}>
         {/* CLIPPED BACKGROUND — rounded corners cut the blur/tint cleanly */}
         <View style={styles.tabBarClip}>
-          <BlurView
-            intensity={98}
-            tint="light"
-            style={StyleSheet.absoluteFill}>
+          <BlurView intensity={98} tint="light" style={StyleSheet.absoluteFill}>
             <View style={[StyleSheet.absoluteFill, styles.tabBarOverlay]} />
 
             <View style={styles.tabBar}>

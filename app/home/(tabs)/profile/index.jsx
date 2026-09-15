@@ -29,6 +29,7 @@ import { useNotifications } from '@/context/NotificationContext';
 
 import userServices from '@/lib/services/userServices';
 
+import ConsentCheckboxes from '@/components/common/ConsentCheckboxes';
 import Card from '@/components/ui/Card';
 import Spacer from '@/components/ui/Spacer';
 import { COLORS as BRAND, RGB } from '@/constants/brandColors';
@@ -101,6 +102,10 @@ export default function ProfileScreen() {
   const [editing, setEditing] = useState(false);
 
   const [saving, setSaving] = useState(false);
+
+  const [termsAccepted, setTermsAccepted] = useState(false);
+
+  const [privacyAccepted, setPrivacyAccepted] = useState(false);
 
   const [refreshing, setRefreshing] = useState(false);
 
@@ -385,6 +390,9 @@ export default function ProfileScreen() {
   const handleEdit = () => {
     copyToForm(profile);
 
+    setTermsAccepted(false);
+    setPrivacyAccepted(false);
+
     setEditing(true);
   };
 
@@ -424,6 +432,15 @@ export default function ProfileScreen() {
 
     if (!name.trim()) {
       alert('Required', 'Please enter your name.');
+
+      return;
+    }
+
+    if (!termsAccepted || !privacyAccepted) {
+      alert(
+        'Terms required',
+        'Please accept the Terms & Conditions and Privacy Policy.',
+      );
 
       return;
     }
@@ -1060,6 +1077,14 @@ export default function ProfileScreen() {
 
             {editing && (
               <Animated.View style={styles.actions}>
+                <ConsentCheckboxes
+                  termsAccepted={termsAccepted}
+                  onToggleTerms={() => setTermsAccepted(prev => !prev)}
+                  privacyAccepted={privacyAccepted}
+                  onTogglePrivacy={() => setPrivacyAccepted(prev => !prev)}
+                  disabled={saving}
+                />
+
                 <TouchableOpacity
                   style={[styles.saveButton, saving && styles.disabledButton]}
                   onPress={handleSave}

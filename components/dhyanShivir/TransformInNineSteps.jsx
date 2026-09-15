@@ -7,6 +7,7 @@ import {
   View,
 } from 'react-native';
 
+import { SectionHeader } from '@/components/home/Sharedui';
 import TransformInNineStepsCard from './TransformInNineStepsCard';
 import { transformInNineStepsData } from './TransformInNineStepsData';
 import { styles } from './TransformInNineStepsStyles';
@@ -86,13 +87,16 @@ export default function TransformInNineSteps() {
 
   return (
     <View style={styles.section}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Transform Your Life</Text>
+      <SectionHeader
+        title="Transform Your Life in"
+        accent="9 Steps"
+        icon="leaf-outline"
+      />
 
+      <View style={styles.header}>
         <Text style={styles.headerSubtitle}>
-          in <Text style={styles.headerHighlight}>9 Steps</Text> with
+          with <Text style={styles.headerHighlight}>Gita Manishi</Text>
         </Text>
-        <Text style={styles.headerTitleName}>Gita Manishi</Text>
       </View>
 
       {loading ? (

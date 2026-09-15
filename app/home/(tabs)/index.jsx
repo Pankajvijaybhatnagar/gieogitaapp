@@ -36,12 +36,7 @@ export default function GieoGitaHome() {
         <QuestionSevaSection />
 
         <GoldDivider />
-        <ExclusiveContent />
 
-        <GoldDivider />
-
-        <ServicesSection />
-        <GoldDivider />
         <MaharajSection />
 
         <GoldDivider />
@@ -53,6 +48,10 @@ export default function GieoGitaHome() {
         <GoldDivider />
 
         <LiveDarshan />
+        <GoldDivider />
+
+        <ServicesSection />
+        <GoldDivider />
 
         <TransformInNineSteps />
 
@@ -61,6 +60,9 @@ export default function GieoGitaHome() {
         <GoldDivider />
 
         <GallerySection />
+
+        <GoldDivider />
+        <ExclusiveContent />
 
         <GoldDivider />
         <TestimonialsSection />

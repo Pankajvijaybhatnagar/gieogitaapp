@@ -356,7 +356,7 @@ export default function GieoGitaHome() {
           title="📖 Bhagwad Gita"
           accent="Adhyay"
           onSeeAll={() => {}}
-          seeAllLabel="18 Chapters »"
+          seeAllLabel="18 Paths »"
         />
         <ScrollView
           horizontal

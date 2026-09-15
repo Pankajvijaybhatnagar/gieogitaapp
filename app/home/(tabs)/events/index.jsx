@@ -6,8 +6,9 @@
 // Shows the real events from the same API the home section already
 // calls, not mock/sample data.
 
+import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -23,6 +24,16 @@ import Spacer from '@/components/ui/Spacer';
 import { COLORS, RGB } from '@/constants/brandColors';
 import { radii, shadow, spacing, type } from '@/constants/theme';
 import eventServices from '@/lib/services/eventServices';
+
+const PAGE_LIMIT = 10;
+
+// Matches the `/v1/events` API's `upcoming`/`past` boolean filters — 'all'
+// simply omits both so the endpoint returns everything.
+const TABS = [
+  { key: 'all', label: 'All' },
+  { key: 'upcoming', label: 'Upcoming' },
+  { key: 'past', label: 'Past' },
+];
 
 function formatEventTime(time) {
   if (!time) return '';
@@ -88,28 +99,60 @@ function formatEvent(event) {
   };
 }
 
-function Hero({ count, loading }) {
+function Hero() {
   return (
     <View style={styles.hero}>
       <View style={styles.heroBanner}>
         <View style={styles.heroPatternOne} />
         <View style={styles.heroPatternTwo} />
         <Text style={styles.heroOm}>GITA SATSANG</Text>
+
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={() => router.back()}
+          hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+          style={styles.backButton}>
+          <Ionicons name="chevron-back" size={20} color={COLORS.white} />
+        </TouchableOpacity>
       </View>
 
       <View style={styles.heroIconRing}>
         <View style={styles.heroIcon}>
-          <Text style={styles.heroIconText}>📅</Text>
+          <Ionicons
+            name="calendar-outline"
+            size={20}
+            color={COLORS.richBrown}
+          />
         </View>
       </View>
 
       <Text style={styles.heroTitle}>Events &amp; Satsangs</Text>
-      <View style={styles.heroDivider} />
-      <Text style={styles.heroSubtitle}>
-        {loading
-          ? 'Loading events...'
-          : `${count} event${count !== 1 ? 's' : ''} coming up`}
-      </Text>
+    </View>
+  );
+}
+
+function TabBar({ active, onChange }) {
+  return (
+    <View style={styles.tabBar}>
+      {TABS.map(tab => {
+        const isActive = tab.key === active;
+
+        return (
+          <TouchableOpacity
+            key={tab.key}
+            activeOpacity={0.85}
+            onPress={() => onChange(tab.key)}
+            style={[styles.tabPill, isActive && styles.tabPillActive]}>
+            <Text
+              style={[
+                styles.tabPillText,
+                isActive && styles.tabPillTextActive,
+              ]}>
+              {tab.label}
+            </Text>
+          </TouchableOpacity>
+        );
+      })}
     </View>
   );
 }
@@ -163,40 +206,80 @@ function EventRow({ item }) {
 }
 
 export default function EventsListScreen() {
+  const [activeTab, setActiveTab] = useState('all');
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
+  // Guards against a slow earlier request (e.g. from a tab the user has
+  // since left) overwriting the list once a newer one has already landed.
+  const requestIdRef = useRef(0);
+
+  const fetchPage = useCallback(async (tab, pageNum, append = false) => {
+    const requestId = ++requestIdRef.current;
+
+    if (append) {
+      setLoadingMore(true);
+    } else {
+      setLoading(true);
+    }
+
+    try {
+      const filters = { page: pageNum, limit: PAGE_LIMIT };
+
+      if (tab === 'upcoming') filters.upcoming = true;
+      if (tab === 'past') filters.past = true;
+
+      const response = await eventServices.getPublicEvents(filters);
+
+      if (requestId !== requestIdRef.current) return;
+
+      const body = response?.data;
+      const raw = body?.data;
+
+      if (response?.success && body?.status && Array.isArray(raw)) {
+        const formatted = raw.map(formatEvent);
+
+        setEvents(prev => (append ? [...prev, ...formatted] : formatted));
+        setTotalPages(body.total_pages || 1);
+        setPage(pageNum);
+      } else if (!append) {
+        setEvents([]);
+        setTotalPages(1);
+      }
+    } catch (error) {
+      console.error('Error fetching events list:', error);
+
+      if (!append) setEvents([]);
+    } finally {
+      if (requestId === requestIdRef.current) {
+        setLoading(false);
+        setLoadingMore(false);
+      }
+    }
+  }, []);
 
   useEffect(() => {
-    let mounted = true;
+    fetchPage(activeTab, 1);
+  }, [activeTab, fetchPage]);
 
-    const load = async () => {
-      try {
-        setLoading(true);
+  const handleTabChange = tab => {
+    if (tab === activeTab || loading) return;
 
-        const response = await eventServices.getPublicEvents({});
+    setEvents([]);
+    setPage(1);
+    setTotalPages(1);
+    setActiveTab(tab);
+  };
 
-        const raw = response?.data?.data;
+  const handleEndReached = () => {
+    if (loading || loadingMore) return;
+    if (page >= totalPages) return;
 
-        if (response?.success && response?.data?.status && Array.isArray(raw)) {
-          if (mounted) setEvents(raw.map(formatEvent));
-        } else if (mounted) {
-          setEvents([]);
-        }
-      } catch (error) {
-        console.error('Error fetching events list:', error);
-
-        if (mounted) setEvents([]);
-      } finally {
-        if (mounted) setLoading(false);
-      }
-    };
-
-    load();
-
-    return () => {
-      mounted = false;
-    };
-  }, []);
+    fetchPage(activeTab, page + 1, true);
+  };
 
   return (
     <FlatList
@@ -205,27 +288,42 @@ export default function EventsListScreen() {
       keyExtractor={item => item.id}
       contentContainerStyle={styles.listContent}
       showsVerticalScrollIndicator={false}
-      ListHeaderComponent={<Hero count={events.length} loading={loading} />}
+      ListHeaderComponent={
+        <>
+          <Hero />
+          <TabBar active={activeTab} onChange={handleTabChange} />
+        </>
+      }
       renderItem={({ item }) => <EventRow item={item} />}
+      onEndReachedThreshold={0.4}
+      onEndReached={handleEndReached}
       ListEmptyComponent={
         !loading && (
           <View style={styles.emptyState}>
             <View style={styles.emptyIconRing}>
-              <Text style={styles.emptyIconText}>📅</Text>
+              <Ionicons
+                name="calendar-outline"
+                size={30}
+                color={COLORS.warmBrown}
+              />
             </View>
             <Text style={styles.emptyTitle}>No Events Found</Text>
             <Text style={styles.emptyText}>
-              There are no upcoming events right now. Please check back soon.
+              {activeTab === 'past'
+                ? 'There are no past events to show yet.'
+                : 'There are no upcoming events right now. Please check back soon.'}
             </Text>
           </View>
         )
       }
       ListFooterComponent={
         <>
-          {loading ? (
+          {loading || loadingMore ? (
             <View style={styles.loadingContainer}>
               <ActivityIndicator size="small" color={COLORS.richBrown} />
             </View>
+          ) : events.length > 0 && page >= totalPages ? (
+            <Text style={styles.endText}>No more events</Text>
           ) : null}
           <Spacer height={120} />
         </>
@@ -246,12 +344,11 @@ const styles = StyleSheet.create({
   /* HERO */
   hero: {
     alignItems: 'center',
-    paddingBottom: spacing.lg,
-    marginBottom: spacing.sm,
+    paddingBottom: spacing.xs,
   },
   heroBanner: {
     width: '100%',
-    height: 128,
+    height: 74,
     backgroundColor: COLORS.richBrown,
     overflow: 'hidden',
     alignItems: 'center',
@@ -259,73 +356,97 @@ const styles = StyleSheet.create({
   },
   heroPatternOne: {
     position: 'absolute',
+    width: 130,
+    height: 130,
+    borderRadius: 65,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.12)',
+    top: -50,
+    left: -40,
+  },
+  heroPatternTwo: {
+    position: 'absolute',
     width: 160,
     height: 160,
     borderRadius: 80,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.12)',
-    top: -65,
-    left: -50,
-  },
-  heroPatternTwo: {
-    position: 'absolute',
-    width: 200,
-    height: 200,
-    borderRadius: 100,
-    borderWidth: 1,
     borderColor: 'rgba(255,255,255,0.09)',
-    right: -80,
-    top: -90,
+    right: -60,
+    top: -70,
   },
   heroOm: {
     color: 'rgba(255,255,255,0.14)',
-    fontSize: 28,
+    fontSize: 20,
     fontWeight: '700',
   },
+  backButton: {
+    position: 'absolute',
+    top: spacing.md,
+    left: spacing.sm + 2,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: 'rgba(255,255,255,0.16)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   heroIconRing: {
-    width: 88,
-    height: 88,
-    borderRadius: 44,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
     backgroundColor: COLORS.cream,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: -44,
+    marginTop: -28,
     ...shadow.raised,
     shadowColor: COLORS.richBrown,
   },
   heroIcon: {
-    width: 68,
-    height: 68,
-    borderRadius: 34,
+    width: 42,
+    height: 42,
+    borderRadius: 21,
     backgroundColor: `rgba(${RGB.maroon},0.1)`,
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 3,
+    borderWidth: 2,
     borderColor: COLORS.cream,
   },
-  heroIconText: {
-    fontSize: 30,
-  },
   heroTitle: {
-    marginTop: spacing.sm,
+    marginTop: 6,
     ...type.title,
-    fontSize: 23,
+    fontSize: 17,
     color: COLORS.deepBrown,
     textAlign: 'center',
   },
-  heroDivider: {
-    width: 40,
-    height: 3,
-    borderRadius: radii.pill,
-    backgroundColor: COLORS.gold,
+  /* TABS */
+  tabBar: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: 8,
+    paddingHorizontal: spacing.md,
     marginTop: spacing.sm,
-    marginBottom: spacing.xs,
+    marginBottom: spacing.md,
   },
-  heroSubtitle: {
-    ...type.subhead,
+  tabPill: {
+    paddingHorizontal: 16,
+    paddingVertical: 7,
+    borderRadius: radii.pill,
+    backgroundColor: COLORS.creamDark,
+    borderWidth: 1,
+    borderColor: `rgba(${RGB.gold},0.35)`,
+  },
+  tabPillActive: {
+    backgroundColor: COLORS.richBrown,
+    borderColor: COLORS.richBrown,
+  },
+  tabPillText: {
+    ...type.caption,
+    fontSize: 12,
+    fontWeight: '600',
     color: COLORS.warmBrown,
-    marginTop: 2,
-    textAlign: 'center',
+  },
+  tabPillTextActive: {
+    color: COLORS.white,
   },
 
   /* EVENT CARDS */
@@ -400,6 +521,12 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.lg,
     alignItems: 'center',
   },
+  endText: {
+    ...type.footnote,
+    color: COLORS.warmBrown,
+    textAlign: 'center',
+    marginTop: spacing.md,
+  },
   emptyState: {
     alignItems: 'center',
     paddingHorizontal: spacing.xl,
@@ -413,9 +540,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: spacing.md,
-  },
-  emptyIconText: {
-    fontSize: 30,
   },
   emptyTitle: {
     ...type.headline,

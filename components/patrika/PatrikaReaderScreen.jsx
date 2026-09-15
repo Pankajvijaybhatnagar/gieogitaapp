@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
+import * as FileSystem from 'expo-file-system/legacy';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import * as Sharing from 'expo-sharing';
@@ -12,9 +13,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import Pdf from 'react-native-pdf';
-import * as FileSystem from 'expo-file-system/legacy';
 import Reanimated, {
   Easing,
   runOnJS,
@@ -22,9 +21,10 @@ import Reanimated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { useAuth } from '@/context/AuthContext';
 import { useAppAlert } from '@/context/AppAlertContext';
+import { useAuth } from '@/context/AuthContext';
 import masikPatrikaServices from '@/lib/services/masikPatrikaServices';
 
 import { COLORS } from '@/constants/brandColors';
@@ -103,14 +103,20 @@ export default function PatrikaReaderScreen() {
   const rotateB = useSharedValue(0);
 
   const layerRefs = useMemo(() => ({ A: pdfRefA, B: pdfRefB }), []);
-  const layerRotate = useMemo(() => ({ A: rotateA, B: rotateB }), [rotateA, rotateB]);
+  const layerRotate = useMemo(
+    () => ({ A: rotateA, B: rotateB }),
+    [rotateA, rotateB],
+  );
 
-  const finishFlip = useCallback((settledKey, newPage) => {
-    layerRotate[settledKey].value = 0;
-    setTopLayer(prev => (prev === 'A' ? 'B' : 'A'));
-    setCurrentPage(newPage);
-    setFlipping(false);
-  }, [layerRotate]);
+  const finishFlip = useCallback(
+    (settledKey, newPage) => {
+      layerRotate[settledKey].value = 0;
+      setTopLayer(prev => (prev === 'A' ? 'B' : 'A'));
+      setCurrentPage(newPage);
+      setFlipping(false);
+    },
+    [layerRotate],
+  );
 
   const performFlip = useCallback(
     direction => {
@@ -141,7 +147,16 @@ export default function PatrikaReaderScreen() {
         },
       );
     },
-    [flipping, pdfReady, currentPage, numberOfPages, topLayer, layerRefs, layerRotate, finishFlip],
+    [
+      flipping,
+      pdfReady,
+      currentPage,
+      numberOfPages,
+      topLayer,
+      layerRefs,
+      layerRotate,
+      finishFlip,
+    ],
   );
 
   const handlePageTap = useCallback(
@@ -235,7 +250,7 @@ export default function PatrikaReaderScreen() {
         );
       }
 
-      localFilePath.current = response?.data?.path || '';
+      localFilePath.current = response?.data?.Path || '';
 
       setFileUri(response?.data?.fileUri || '');
       setIsPreview(!!response?.isPreview);
@@ -261,7 +276,9 @@ export default function PatrikaReaderScreen() {
       // Cache files aren't auto-removed — clean up the downloaded PDF once
       // the reader is left.
       if (localFilePath.current) {
-        FileSystem.deleteAsync(localFilePath.current, { idempotent: true }).catch(() => {});
+        FileSystem.deleteAsync(localFilePath.current, {
+          idempotent: true,
+        }).catch(() => {});
       }
     };
   }, [loadPatrika]);
@@ -279,7 +296,10 @@ export default function PatrikaReaderScreen() {
       const available = await Sharing.isAvailableAsync();
 
       if (!available) {
-        showErrorAlert('Sharing Unavailable', 'Sharing is not available on this device.');
+        showErrorAlert(
+          'Sharing Unavailable',
+          'Sharing is not available on this device.',
+        );
         return;
       }
 
@@ -289,7 +309,10 @@ export default function PatrikaReaderScreen() {
         UTI: 'com.adobe.pdf',
       });
     } catch (err) {
-      showErrorAlert('Unable to Share', err?.message || 'Unable to share the Patrika PDF.');
+      showErrorAlert(
+        'Unable to Share',
+        err?.message || 'Unable to share the Patrika PDF.',
+      );
     } finally {
       setSharing(false);
     }
@@ -311,10 +334,17 @@ export default function PatrikaReaderScreen() {
           <Text style={styles.loadingText}>Preparing your Patrika...</Text>
 
           <View style={styles.progressTrack}>
-            <View style={[styles.progressFill, { width: `${Math.round(progress * 100)}%` }]} />
+            <View
+              style={[
+                styles.progressFill,
+                { width: `${Math.round(progress * 100)}%` },
+              ]}
+            />
           </View>
 
-          <Text style={styles.progressLabel}>{Math.round(progress * 100)}%</Text>
+          <Text style={styles.progressLabel}>
+            {Math.round(progress * 100)}%
+          </Text>
         </View>
       </SafeAreaView>
     );
@@ -329,7 +359,11 @@ export default function PatrikaReaderScreen() {
       <SafeAreaView style={styles.screen}>
         <View style={styles.center}>
           <View style={styles.errorIcon}>
-            <Ionicons name="alert-circle-outline" size={34} color={COLORS.dangerRed} />
+            <Ionicons
+              name="alert-circle-outline"
+              size={34}
+              color={COLORS.dangerRed}
+            />
           </View>
 
           <Text style={styles.errorTitle}>Unable to Load Patrika</Text>
@@ -341,7 +375,9 @@ export default function PatrikaReaderScreen() {
               <Text style={styles.retryButtonText}>Try Again</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
+            <TouchableOpacity
+              style={styles.backButton}
+              onPress={() => router.back()}>
               <Ionicons name="arrow-back" size={16} color={COLORS.deepBrown} />
               <Text style={styles.backButtonText}>Go Back</Text>
             </TouchableOpacity>
@@ -367,11 +403,18 @@ export default function PatrikaReaderScreen() {
           {
             opacity: chromeAnim,
             transform: [
-              { translateY: chromeAnim.interpolate({ inputRange: [0, 1], outputRange: [-16, 0] }) },
+              {
+                translateY: chromeAnim.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [-16, 0],
+                }),
+              },
             ],
           },
         ]}>
-        <TouchableOpacity style={styles.headerButton} onPress={() => router.back()}>
+        <TouchableOpacity
+          style={styles.headerButton}
+          onPress={() => router.back()}>
           <Ionicons name="arrow-back" size={20} color={COLORS.deepBrown} />
         </TouchableOpacity>
 
@@ -383,7 +426,10 @@ export default function PatrikaReaderScreen() {
         </View>
 
         <TouchableOpacity
-          style={[styles.headerButton, (!fileUri || sharing) && styles.headerButtonDisabled]}
+          style={[
+            styles.headerButton,
+            (!fileUri || sharing) && styles.headerButtonDisabled,
+          ]}
           onPress={handleShare}
           disabled={!fileUri || sharing}>
           {sharing ? (
@@ -442,7 +488,10 @@ export default function PatrikaReaderScreen() {
                   }}
                   onPageSingleTap={(_page, x) => handlePageTap(x)}
                   onError={err => {
-                    setError((err && err.message) || 'This PDF could not be displayed.');
+                    setError(
+                      (err && err.message) ||
+                        'This PDF could not be displayed.',
+                    );
                   }}
                   renderActivityIndicator={() => (
                     <View style={styles.pdfLoading}>
@@ -465,7 +514,11 @@ export default function PatrikaReaderScreen() {
             ))
           ) : (
             <View style={styles.pdfLoading}>
-              <Ionicons name="document-text-outline" size={40} color={COLORS.warmBrown} />
+              <Ionicons
+                name="document-text-outline"
+                size={40}
+                color={COLORS.warmBrown}
+              />
               <Text style={styles.loadingText}>PDF not available yet.</Text>
             </View>
           )}
@@ -503,23 +556,45 @@ export default function PatrikaReaderScreen() {
           <>
             <Animated.View
               pointerEvents={chromeVisible ? 'auto' : 'none'}
-              style={[styles.navButtonWrap, styles.navButtonLeft, { opacity: chromeAnim }]}>
+              style={[
+                styles.navButtonWrap,
+                styles.navButtonLeft,
+                { opacity: chromeAnim },
+              ]}>
               <TouchableOpacity
-                style={[styles.navButton, currentPage <= 1 && styles.navButtonDisabled]}
+                style={[
+                  styles.navButton,
+                  currentPage <= 1 && styles.navButtonDisabled,
+                ]}
                 onPress={() => performFlip(-1)}
                 disabled={currentPage <= 1 || flipping}>
-                <Ionicons name="chevron-back" size={20} color={COLORS.deepBrown} />
+                <Ionicons
+                  name="chevron-back"
+                  size={20}
+                  color={COLORS.deepBrown}
+                />
               </TouchableOpacity>
             </Animated.View>
 
             <Animated.View
               pointerEvents={chromeVisible ? 'auto' : 'none'}
-              style={[styles.navButtonWrap, styles.navButtonRight, { opacity: chromeAnim }]}>
+              style={[
+                styles.navButtonWrap,
+                styles.navButtonRight,
+                { opacity: chromeAnim },
+              ]}>
               <TouchableOpacity
-                style={[styles.navButton, currentPage >= numberOfPages && styles.navButtonDisabled]}
+                style={[
+                  styles.navButton,
+                  currentPage >= numberOfPages && styles.navButtonDisabled,
+                ]}
                 onPress={() => performFlip(1)}
                 disabled={currentPage >= numberOfPages || flipping}>
-                <Ionicons name="chevron-forward" size={20} color={COLORS.deepBrown} />
+                <Ionicons
+                  name="chevron-forward"
+                  size={20}
+                  color={COLORS.deepBrown}
+                />
               </TouchableOpacity>
             </Animated.View>
           </>
@@ -529,7 +604,12 @@ export default function PatrikaReaderScreen() {
       {/* READING PROGRESS RIBBON */}
       {pdfReady && numberOfPages > 0 ? (
         <View style={styles.progressRibbonTrack}>
-          <View style={[styles.progressRibbonFill, { width: `${Math.max(readProgress * 100, 4)}%` }]} />
+          <View
+            style={[
+              styles.progressRibbonFill,
+              { width: `${Math.max(readProgress * 100, 4)}%` },
+            ]}
+          />
         </View>
       ) : null}
     </SafeAreaView>

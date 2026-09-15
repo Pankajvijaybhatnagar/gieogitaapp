@@ -7,11 +7,11 @@ import { BlurView } from 'expo-blur';
 import { useFonts } from 'expo-font';
 import { Link, useRouter } from 'expo-router';
 import {
-    Animated,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  Animated,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -61,7 +61,7 @@ export default function HomeHeader({ navigation }) {
                 numberOfLines={1}
                 adjustsFontSizeToFit
                 minimumFontScale={0.4}>
-                Shri Krishna Kripa
+                Shri Krishan Kripa
               </Text>
             ) : null}
           </View>

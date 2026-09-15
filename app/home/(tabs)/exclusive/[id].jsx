@@ -40,11 +40,11 @@ const EXCLUSIVE_DETAILS = {
   3: {
     icon: '🪔',
     title: 'Purushottam Yoga',
-    subtitle: 'Chapter 15 of the Bhagwad Gita — the Yoga of the Supreme Person',
+    subtitle: 'Path 15 of the Bhagwad Gita — the Yoga of the Supreme Person',
     body: [
-      'In this chapter, Shri Krishna describes the eternal tree of the material world — its roots above and its branches spread below — and explains how one must cut this tree with the axe of detachment to reach the imperishable, original position.',
+      'In this Path, Shri Krishan describes the eternal tree of the material world — its roots above and its branches spread below — and explains how one must cut this tree with the axe of detachment to reach the imperishable, original position.',
       'He then reveals the nature of the Purushottama, the Supreme Person who is beyond both the perishable material world and the imperishable individual soul, and who pervades and sustains the entire universe.',
-      'Reflecting on the teachings of this chapter is said to remove doubt and lead one towards a clear understanding of one’s highest duty and the ultimate goal of life.',
+      'Reflecting on the teachings of this Path is said to remove doubt and lead one towards a clear understanding of one’s highest duty and the ultimate goal of life.',
     ],
   },
   4: {

@@ -1,9 +1,9 @@
+import { COLORS } from '@/constants/brandColors';
+import { hairline, radii, shadow } from '@/constants/theme';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import DonationReceiptButton from './DonationReceiptButton';
-import { COLORS } from '@/constants/brandColors';
-import { hairline, radii, shadow } from '@/constants/theme';
 
 const DonationCard = ({ donation }) => {
   const router = useRouter();
@@ -170,7 +170,7 @@ const DonationCard = ({ donation }) => {
             activeOpacity={0.85}
             onPress={() =>
               router.push({
-                pathname: '/home/(tabs)/donations/payment/[tranCtx]',
+                Pathname: '/home/(tabs)/donations/payment/[tranCtx]',
                 params: {
                   tranCtx: donation?.tranCtx,
                   merchantTxnNo:
@@ -208,7 +208,11 @@ const DonationCard = ({ donation }) => {
         </View>
 
         <View style={styles.detailItem}>
-          <Ionicons name="location-outline" size={13} color={COLORS.warmBrown} />
+          <Ionicons
+            name="location-outline"
+            size={13}
+            color={COLORS.warmBrown}
+          />
 
           <View style={styles.detailContent}>
             <Text style={styles.detailLabel}>Location</Text>
@@ -229,7 +233,11 @@ const DonationCard = ({ donation }) => {
           </Text>
         </View>
 
-        <Ionicons name="shield-checkmark-outline" size={16} color={COLORS.warmBrown} />
+        <Ionicons
+          name="shield-checkmark-outline"
+          size={16}
+          color={COLORS.warmBrown}
+        />
       </View>
     </View>
   );
@@ -247,11 +255,11 @@ const styles = StyleSheet.create({
     borderColor: hairline,
     ...shadow.card,
     shadowOpacity: 0.045,
-    elevation: 2
+    elevation: 2,
   },
   topRow: {
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   iconBox: {
     width: 34,
@@ -259,22 +267,22 @@ const styles = StyleSheet.create({
     borderRadius: 11,
     backgroundColor: COLORS.creamDark,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   headingArea: {
     flex: 1,
     marginLeft: 9,
-    marginRight: 6
+    marginRight: 6,
   },
   type: {
     fontSize: 13,
     fontWeight: '700',
-    color: COLORS.deepBrown
+    color: COLORS.deepBrown,
   },
   date: {
     fontSize: 12,
     color: COLORS.warmBrown,
-    marginTop: 2
+    marginTop: 2,
   },
   statusBadge: {
     minHeight: 23,
@@ -282,58 +290,58 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 3
+    gap: 3,
   },
   statusText: {
     fontSize: 12,
     fontWeight: '700',
-    textTransform: 'capitalize'
+    textTransform: 'capitalize',
   },
   amountContainer: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    marginTop: 11
+    marginTop: 11,
   },
   currency: {
     color: COLORS.warmBrown,
     fontSize: 14,
     fontWeight: '600',
     marginTop: 2,
-    marginRight: 1
+    marginRight: 1,
   },
   amount: {
     fontSize: 24,
     fontWeight: '700',
     color: COLORS.deepBrown,
-    lineHeight: 28
+    lineHeight: 28,
   },
   divider: {
     height: 1,
     backgroundColor: hairline,
-    marginVertical: 10
+    marginVertical: 10,
   },
   detailRow: {
     flexDirection: 'row',
-    gap: 8
+    gap: 8,
   },
   detailItem: {
     flex: 1,
     flexDirection: 'row',
-    alignItems: 'flex-start'
+    alignItems: 'flex-start',
   },
   detailContent: {
     flex: 1,
-    marginLeft: 5
+    marginLeft: 5,
   },
   detailLabel: {
     fontSize: 12,
     color: COLORS.warmBrown,
-    marginBottom: 1
+    marginBottom: 1,
   },
   detailValue: {
     color: COLORS.deepBrown,
     fontSize: 12,
-    fontWeight: '600'
+    fontWeight: '600',
   },
   transactionBox: {
     marginTop: 10,
@@ -342,22 +350,22 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 7,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   transactionTextContainer: {
     flex: 1,
-    paddingRight: 8
+    paddingRight: 8,
   },
   transactionLabel: {
     fontSize: 12,
     color: COLORS.warmBrown,
     textTransform: 'uppercase',
-    letterSpacing: 0.5
+    letterSpacing: 0.5,
   },
   transactionValue: {
     fontSize: 12,
     color: COLORS.deepBrown,
     fontWeight: '600',
-    marginTop: 2
-  }
+    marginTop: 2,
+  },
 });

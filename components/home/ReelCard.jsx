@@ -1,4 +1,3 @@
-import { DESIGN } from '@/constants/design';
 import { useRef, useState } from 'react';
 import {
   ActivityIndicator,
@@ -10,6 +9,7 @@ import {
 } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { COLORS } from '@/constants/brandColors';
+import { SectionHeader } from './Sharedui';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -170,7 +170,7 @@ export default function InstagramReelsSection() {
 
   return (
     <View style={styles.section}>
-      <Text style={styles.heading}>Reels</Text>
+      <SectionHeader title="Watch" accent="Reels" icon="film-outline" />
 
       <FlatList
         ref={listRef}
@@ -207,15 +207,6 @@ export default function InstagramReelsSection() {
 const styles = StyleSheet.create({
   section: {
     paddingVertical: 16
-  },
-  heading: {
-    marginLeft: SIDE_PADDING,
-    marginBottom: 10,
-    color: COLORS.richBrown,
-    fontSize: 18,
-    fontWeight: "400",
-    fontFamily: DESIGN.fonts.editorial,
-    letterSpacing: -0.4
   },
   listContent: {
     paddingHorizontal: SIDE_PADDING

@@ -19,8 +19,9 @@ import {
   View,
 } from 'react-native';
 
+import ConsentCheckboxes from '@/components/common/ConsentCheckboxes';
 import { COLORS } from '@/constants/brandColors';
-import { hairline, radii } from '@/constants/theme';
+import { hairline } from '@/constants/theme';
 
 const PRIMARY_BROWN = COLORS.richBrown;
 
@@ -52,6 +53,8 @@ export default function CreateAccountScreen({
   const [confirmPassword, setConfirmPassword] = useState('');
 
   const [agreeTerms, setAgreeTerms] = useState(false);
+
+  const [agreePrivacy, setAgreePrivacy] = useState(false);
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -139,6 +142,7 @@ export default function CreateAccountScreen({
       password,
       confirmPassword,
       agreeTerms,
+      agreePrivacy,
     });
   };
 
@@ -317,25 +321,14 @@ export default function CreateAccountScreen({
 
               {/* TERMS */}
 
-              <TouchableOpacity
-                style={styles.termsRow}
-                onPress={() => setAgreeTerms(prev => !prev)}
-                disabled={loading}>
-                <Animated.View
-                  style={[
-                    styles.checkbox,
-                    agreeTerms && styles.checkboxSelected,
-                  ]}>
-                  {agreeTerms ? (
-                    <Ionicons name="checkmark" size={14} color={COLORS.white} />
-                  ) : null}
-                </Animated.View>
-
-                <Text style={styles.agreeText}>
-                  Agree with{' '}
-                  <Text style={styles.termsText}>Terms & Condition</Text>
-                </Text>
-              </TouchableOpacity>
+              <ConsentCheckboxes
+                termsAccepted={agreeTerms}
+                onToggleTerms={() => setAgreeTerms(prev => !prev)}
+                privacyAccepted={agreePrivacy}
+                onTogglePrivacy={() => setAgreePrivacy(prev => !prev)}
+                disabled={loading}
+                style={styles.consentWrap}
+              />
 
               {/* MESSAGE */}
 
@@ -525,33 +518,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
-  termsRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
+  consentWrap: {
     marginTop: 15
-  },
-  checkbox: {
-    width: 20,
-    height: 20,
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: hairline,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 8
-  },
-  checkboxSelected: {
-    backgroundColor: PRIMARY_BROWN,
-    borderColor: PRIMARY_BROWN
-  },
-  agreeText: {
-    fontSize: 12,
-    color: COLORS.warmBrown
-  },
-  termsText: {
-    color: DARK_BROWN,
-    fontWeight: '700',
-    textDecorationLine: 'underline'
   },
   primaryButton: {
     borderRadius: 16,

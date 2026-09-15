@@ -24,15 +24,15 @@ import Spacer from '../ui/Spacer';
 export const DRAWER_ITEMS = [
   { label: 'Home', icon: 'home', route: '/home/(tabs)' },
   { label: 'Chants', icon: 'music', route: '/home/(tabs)/chants' },
-  { label: 'My Donations', icon: 'music', route: '/home/(tabs)/donations' },
-  { label: 'Patrika', icon: 'book', route: '/home/patrika' },
+  { label: 'My Donations', icon: 'gift', route: '/home/(tabs)/donations' },
+  { label: 'Patrika', icon: 'newspaper-o', route: '/home/patrika' },
   { label: 'Reading', icon: 'book', route: '/home/(tabs)/reading' },
   { label: 'Events', icon: 'calendar', route: '/home/eventgroup' },
-  { label: 'Bhajans', icon: 'music', route: '/home/bhajans' },
+  { label: 'Bhajans', icon: 'headphones', route: '/home/bhajans' },
   { label: 'Live Darshan', icon: 'video-camera', route: '/home/livedarshan' },
   { label: 'Gallery', icon: 'image', route: '/home/gallery' },
   { label: 'Bal Sanskar', icon: 'child', route: '/home/balSanskar' },
-  { label: 'Gaushala', icon: 'leaf', route: '/home/GieoGaushala' },
+  { label: 'Gaushala', icon: 'paw', route: '/home/GieoGaushala' },
   { label: 'Join Gieo Gita', icon: 'users', route: '/home/join-gieo-gita' },
   { label: 'Health', icon: 'medkit', route: '/home/health' },
   { label: 'Promotional', icon: 'bullhorn', route: '/home/promotional' },
@@ -42,7 +42,7 @@ export const DRAWER_ITEMS = [
 
 export default function CustomDrawerContent({ navigation }) {
   const router = useRouter();
-  const pathname = usePathname().replace('/(tabs)', '');
+  const Pathname = usePathname().replace('/(tabs)', '');
   const insets = useSafeAreaInsets();
   const { user, access_token, logout } = useAuth();
   const { confirm } = useAppAlert();
@@ -103,11 +103,11 @@ export default function CustomDrawerContent({ navigation }) {
             key={index}
             accessibilityRole="button"
             accessibilityState={{
-              selected: pathname === item.route.replace('/(tabs)', ''),
+              selected: Pathname === item.route.replace('/(tabs)', ''),
             }}
             style={[
               drawerStyles.drawerItem,
-              pathname === item.route.replace('/(tabs)', '') && {
+              Pathname === item.route.replace('/(tabs)', '') && {
                 backgroundColor: `rgba(${RGB.saffron},0.12)`,
               },
             ]}
@@ -117,7 +117,11 @@ export default function CustomDrawerContent({ navigation }) {
             }}
             activeOpacity={0.72}>
             <View style={drawerStyles.drawerItemIconBox}>
-              <FontAwesome name={item.icon} size={15} color={COLORS.goldDark} />
+              <FontAwesome
+                name={item.icon}
+                size={15}
+                color={COLORS.richBrown}
+              />
             </View>
 
             <Text style={drawerStyles.drawerItemLabel}>{item.label}</Text>
@@ -245,7 +249,7 @@ const drawerStyles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 10,
     marginHorizontal: 14,
-    marginVertical: 3,
+    marginVertical: 1,
     borderRadius: 16,
     gap: 12,
     minHeight: 56,

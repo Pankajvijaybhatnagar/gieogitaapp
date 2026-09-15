@@ -2,17 +2,17 @@ import { DESIGN } from '@/constants/design';
 import { useEffect, useRef, useState } from 'react';
 
 import {
-    ActivityIndicator,
-    Animated,
-    Easing,
-    KeyboardAvoidingView,
-    Platform,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  ActivityIndicator,
+  Animated,
+  Easing,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 
 import { Ionicons } from '@expo/vector-icons';
@@ -368,49 +368,46 @@ export default function PasswordScreen() {
               ],
             },
           ]}>
-          {/* HEADER */}
+          {/* BACK BUTTON — absolutely positioned so it doesn't reserve its
+              own header row; content starts right under it instead. */}
 
-          <View style={styles.header}>
-            <TouchableOpacity
-              style={styles.backButton}
-              onPress={() => router.replace('/home/profile')}>
-              <Ionicons name="arrow-back" size={20} color={COLORS.text} />
-            </TouchableOpacity>
-
-            <Text style={styles.headerTitle}>Change Password</Text>
-
-            <View style={styles.headerSpacer} />
-          </View>
+          <TouchableOpacity
+            style={styles.backButton}
+            onPress={() => router.replace('/home/profile')}>
+            <Ionicons name="arrow-back" size={20} color={COLORS.text} />
+          </TouchableOpacity>
 
           <ScrollView
             showsVerticalScrollIndicator={false}
             keyboardShouldPersistTaps="handled"
             contentContainerStyle={styles.content}>
-            <Animated.View
-              style={[
-                styles.securityIcon,
-                {
-                  transform: [
-                    {
-                      scale: iconScale,
-                    },
-                  ],
-                },
-              ]}>
-              <Ionicons
-                name="lock-closed-outline"
-                size={29}
-                color={COLORS.primary}
-              />
-            </Animated.View>
+            <View>
+              <Animated.View
+                style={[
+                  styles.securityIcon,
+                  {
+                    transform: [
+                      {
+                        scale: iconScale,
+                      },
+                    ],
+                  },
+                ]}>
+                <Ionicons
+                  name="lock-closed-outline"
+                  size={29}
+                  color={COLORS.primary}
+                />
+              </Animated.View>
 
-            <Text style={styles.title}>Create a New Password</Text>
+              <Text style={styles.title}>Create a New Password</Text>
 
-            <Text style={styles.subtitle}>
-              Choose a strong password to keep
-            </Text>
+              <Text style={styles.subtitle}>
+                Choose a strong password to keep
+              </Text>
 
-            <Text style={styles.subtitle}>your account secure.</Text>
+              <Text style={styles.subtitle}>your account secure.</Text>
+            </View>
 
             <Animated.View
               style={{
@@ -616,35 +613,29 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: COLORS.secondary,
   },
-  header: {
-    paddingTop: 46,
-    paddingHorizontal: 20,
-    paddingBottom: 10,
-    backgroundColor: COLORS.white,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    borderBottomWidth: 1,
-    borderBottomColor: COLORS.border,
-  },
   backButton: {
+    position: 'absolute',
+    top: 14,
+    left: 20,
+    zIndex: 10,
     width: 39,
     height: 39,
     borderRadius: 20,
     backgroundColor: '#F8F7F5',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  headerTitle: {
-    fontSize: 17,
-    fontWeight: '700',
-    color: COLORS.text,
-  },
-  headerSpacer: {
-    width: 39,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.06,
+    shadowRadius: 5,
   },
   content: {
-    padding: 20,
+    paddingHorizontal: 20,
+    paddingTop: 63,
     paddingBottom: 35,
   },
   securityIcon: {
@@ -655,7 +646,6 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.primaryLight,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 10,
     marginBottom: 16,
   },
   title: {

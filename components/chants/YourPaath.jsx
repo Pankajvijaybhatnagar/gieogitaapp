@@ -5,7 +5,7 @@ import { useAuth } from '@/context/AuthContext';
 import chantServices from '@/lib/services/chantServices';
 
 // ─────────────────────────────────────────────────────────────────────────────
-// YOUR PAATH PROGRESS
+// YOUR Path PROGRESS
 // Personal user statistics
 //
 // API:
@@ -52,10 +52,10 @@ function SectionLabel({ text }) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// YOUR PAATH
+// YOUR Path
 // ─────────────────────────────────────────────────────────────────────────────
 
-export function YourPaath() {
+export function YourPath() {
   // ───────────────────────────────────────────────────────────────────────────
   // AUTH
   // ───────────────────────────────────────────────────────────────────────────
@@ -82,11 +82,11 @@ export function YourPaath() {
     try {
       setStatsLoading(true);
 
-      console.log('[YourPaath] Fetching user paath stats...');
+      console.log('[YourPath] Fetching user Path stats...');
 
       const response = await chantServices.getOneMinuteStats(access_token);
 
-      console.log('[YourPaath] Stats response:', response);
+      console.log('[YourPath] Stats response:', response);
 
       if (response?.success === false) {
         setStats(null);
@@ -94,9 +94,9 @@ export function YourPaath() {
       }
 
       setStats(response);
-      console.log('[YourPaath] Stats response:', response);
+      console.log('[YourPath] Stats response:', response);
     } catch (error) {
-      console.error('[YourPaath] Stats fetch failed:', error);
+      console.error('[YourPath] Stats fetch failed:', error);
 
       setStats(null);
     } finally {
@@ -135,7 +135,7 @@ export function YourPaath() {
   // API VALUES
   // ───────────────────────────────────────────────────────────────────────────
 
-  const totalPaath = stats?.user_total ?? 0;
+  const totalPath = stats?.user_total ?? 0;
 
   const monthProgress = stats?.last_30_days ?? 0;
 
@@ -147,7 +147,7 @@ export function YourPaath() {
 
   return (
     <View style={styles.wrapper}>
-      <SectionLabel text="YOUR PAATH PROGRESS" />
+      <SectionLabel text="YOUR Path PROGRESS" />
 
       {/* ───────────────────────────────────────────────────────────────────── */}
       {/* LOADING */}
@@ -166,11 +166,11 @@ export function YourPaath() {
           {/* ───────────────────────────────────────────────────────────────── */}
 
           <View style={styles.totalBox}>
-            <Text style={styles.totalLabel}>Total{'\n'}Paath</Text>
+            <Text style={styles.totalLabel}>Total{'\n'}Path</Text>
 
             <View style={styles.totalDivider} />
 
-            <Text style={styles.totalNumber}>{totalPaath}</Text>
+            <Text style={styles.totalNumber}>{totalPath}</Text>
 
             <Text style={styles.totalIcon}>📖</Text>
           </View>
@@ -187,7 +187,7 @@ export function YourPaath() {
               </View>
 
               <View style={styles.progressTextCol}>
-                <Text style={styles.progressLabel}>Month Paath</Text>
+                <Text style={styles.progressLabel}>Month Path</Text>
 
                 <Text style={styles.progressNumber}>{monthProgress}</Text>
               </View>
@@ -200,7 +200,7 @@ export function YourPaath() {
               </View>
 
               <View style={styles.progressTextCol}>
-                <Text style={styles.progressLabel}>Week Paath</Text>
+                <Text style={styles.progressLabel}>Week Path</Text>
 
                 <Text style={styles.progressNumber}>{weekProgress}</Text>
               </View>
@@ -229,7 +229,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: hairline,
     ...shadow.card,
-    overflow: 'hidden'
+    overflow: 'hidden',
   },
   // ───────────────────────────────────────────────────────────────────────────
   // SECTION LABEL
@@ -238,20 +238,20 @@ const styles = StyleSheet.create({
   sectionLabelRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 14
+    marginBottom: 14,
   },
   sectionLabelLine: {
     flex: 1,
     height: 1,
-    backgroundColor: hairline
+    backgroundColor: hairline,
   },
   sectionLabelText: {
     fontSize: 12,
     letterSpacing: 2,
-    fontWeight: "600",
+    fontWeight: '600',
     color: COLORS.goldDark,
     marginHorizontal: 10,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   // ───────────────────────────────────────────────────────────────────────────
   // MAIN ROW
@@ -259,7 +259,7 @@ const styles = StyleSheet.create({
 
   row: {
     flexDirection: 'row',
-    alignItems: 'stretch'
+    alignItems: 'stretch',
   },
   // ───────────────────────────────────────────────────────────────────────────
   // TOTAL BOX
@@ -275,32 +275,32 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     paddingHorizontal: 10,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   totalLabel: {
     fontSize: 12,
     lineHeight: 18,
-    fontWeight: "600",
+    fontWeight: '600',
     color: COLORS.cream,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   totalDivider: {
     width: 32,
     height: 1,
     backgroundColor: COLORS.gold,
     marginVertical: 8,
-    opacity: 0.8
+    opacity: 0.8,
   },
   totalNumber: {
     fontSize: 34,
     lineHeight: 40,
     fontWeight: '900',
     color: COLORS.goldLight,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   totalIcon: {
     fontSize: 22,
-    marginTop: 6
+    marginTop: 6,
   },
   // ───────────────────────────────────────────────────────────────────────────
   // MONTH / WEEK COLUMN
@@ -309,7 +309,7 @@ const styles = StyleSheet.create({
   progressCol: {
     flex: 1,
     marginLeft: 12,
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   // ───────────────────────────────────────────────────────────────────────────
   // PROGRESS CARD
@@ -327,10 +327,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     marginBottom: 8,
     shadowOpacity: 0.045,
-    elevation: 2
+    elevation: 2,
   },
   progressCardLast: {
-    marginBottom: 0
+    marginBottom: 0,
   },
   // ───────────────────────────────────────────────────────────────────────────
   // ICON BOX
@@ -345,29 +345,29 @@ const styles = StyleSheet.create({
     borderColor: `rgba(${RGB.gold},0.25)`,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 10
+    marginRight: 10,
   },
   progressIcon: {
-    fontSize: 20
+    fontSize: 20,
   },
   // ───────────────────────────────────────────────────────────────────────────
   // TEXT
   // ───────────────────────────────────────────────────────────────────────────
 
   progressTextCol: {
-    flex: 1
+    flex: 1,
   },
   progressLabel: {
     fontSize: 12,
     fontWeight: '700',
     color: COLORS.warmBrown,
-    marginBottom: 2
+    marginBottom: 2,
   },
   progressNumber: {
     fontSize: 24,
     lineHeight: 28,
     fontWeight: '900',
-    color: COLORS.goldDark
+    color: COLORS.goldDark,
   },
   // ───────────────────────────────────────────────────────────────────────────
   // LOADING
@@ -380,11 +380,11 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.creamDark,
     borderRadius: radii.md,
     borderWidth: 1,
-    borderColor: hairline
+    borderColor: hairline,
   },
   loadingText: {
     marginTop: 8,
     fontSize: 12,
-    color: COLORS.warmBrown
-  }
+    color: COLORS.warmBrown,
+  },
 });

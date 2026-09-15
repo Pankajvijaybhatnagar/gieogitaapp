@@ -4,15 +4,15 @@ import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useEffect, useRef } from 'react';
 
 import {
-    Animated,
-    Dimensions,
-    Image,
-    Linking,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  Animated,
+  Dimensions,
+  Image,
+  Linking,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 
 import { WebView } from 'react-native-webview';
@@ -56,7 +56,7 @@ const YT_VIDEOS = [
   {
     id: 'v2',
     videoId: 'CO0ZTOnzSv8',
-    title: 'Bhagwad Gita Pravachan by Maharaj Ji',
+    title: 'Bhagwad Gita Satsang by Maharaj Ji',
     views: '12K',
     duration: '45:10',
   },
@@ -466,7 +466,7 @@ export default function PromotionalScreen() {
           <Text style={styles.heroAccent}>Live & On Demand</Text>
 
           <Text style={styles.heroDesc}>
-            Pravachans, satsangs, aartis and Bhagwad Gita discourses, available
+            Satsang, satsangs, aartis and Bhagwad Gita discourses, available
             directly from the official channel.
           </Text>
 
@@ -564,12 +564,12 @@ export default function PromotionalScreen() {
         </View>
 
         {/* ===================================================
-            PRAVACHAN
+            Satsang
         =================================================== */}
 
         <SectionHead
           icon="▶"
-          title="Pravachan"
+          title="Satsang"
           accent="Latest videos"
           onAction={openChannel}
           actionLabel="View All"
@@ -633,10 +633,10 @@ export default function PromotionalScreen() {
             <FontAwesome name="youtube-play" size={28} color={YOUTUBE_RED} />
           </View>
 
-          <Text style={styles.ctaHeading}>Never Miss a Pravachan</Text>
+          <Text style={styles.ctaHeading}>Never Miss a Satsang</Text>
 
           <Text style={styles.ctaDesc}>
-            Follow the official channel for Maharaj Ji&apos;s latest pravachans,
+            Follow the official channel for Maharaj Ji&apos;s latest Satsang,
             satsangs and Bhagwad Gita discourses.
           </Text>
 

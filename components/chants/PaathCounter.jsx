@@ -1,6 +1,5 @@
-
 // ─────────────────────────────────────────────────────────────────────────────
-// PAATH COUNTER
+// Paath COUNTER
 // One Minute Chant
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -13,14 +12,14 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
 } from 'react-native';
 
+import { COLORS } from '@/constants/brandColors';
+import { hairline, radii } from '@/constants/theme';
 import { useAppAlert } from '@/context/AppAlertContext';
 import { useAuth } from '@/context/AuthContext';
 import chantServices from '@/lib/services/chantServices';
-import { COLORS, RGB } from '@/constants/brandColors';
-import { hairline, radii } from '@/constants/theme';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // SECTION LABEL
@@ -39,7 +38,7 @@ function SectionLabel({ text }) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// PAATH COUNTER
+// Paath COUNTER
 // ─────────────────────────────────────────────────────────────────────────────
 
 export function PaathCounter({ todayPaath = 0, onSubmit }) {
@@ -239,12 +238,12 @@ export function PaathCounter({ todayPaath = 0, onSubmit }) {
     // ─────────────────────────────────────────────────────────────────────────
 
     if (count <= 0) {
-      alert('No Paath', 'Please add at least 1 paath before submitting.');
+      alert('No Paath', 'Please add at least 1 Paath before submitting.');
 
       return;
     }
 
-    loading('Submitting Paath', 'Please wait while we submit your paath...');
+    loading('Submitting Paath', 'Please wait while we submit your Paath...');
 
     const submittedCount = count;
 
@@ -277,7 +276,7 @@ export function PaathCounter({ todayPaath = 0, onSubmit }) {
         chant_count: submittedCount,
       };
 
-      console.log('[PaathCounter] Submitting paath:', payload);
+      console.log('[PaathCounter] Submitting Paath:', payload);
 
       // ───────────────────────────────────────────────────────────────────────
       // API
@@ -310,12 +309,12 @@ export function PaathCounter({ todayPaath = 0, onSubmit }) {
 
       success(
         'Paath Submitted',
-        `${submittedCount} paath submitted successfully.`,
+        `${submittedCount} Paath submitted successfully.`,
       );
     } catch (error) {
       console.error('[PaathCounter] Submission failed:', error);
 
-      let message = 'Unable to submit your paath. Please try again.';
+      let message = 'Unable to submit your Paath. Please try again.';
 
       if (error?.response?.data) {
         const data = error.response.data;
@@ -357,7 +356,7 @@ export function PaathCounter({ todayPaath = 0, onSubmit }) {
   if (!isAuthenticated || !access_token) {
     return (
       <View style={styles.wrapper}>
-        <SectionLabel text="SUBMIT TODAY'S PAATH" />
+        <SectionLabel text="SUBMIT TODAY'S Paath" />
 
         <View style={styles.loginContainer}>
           <Text style={styles.loginIcon}>🔐</Text>
@@ -365,7 +364,7 @@ export function PaathCounter({ todayPaath = 0, onSubmit }) {
           <Text style={styles.loginTitle}>Login to Submit Paath</Text>
 
           <Text style={styles.loginDescription}>
-            Please login to record your daily paath and track your progress.
+            Please login to record your daily Paath and track your progress.
           </Text>
 
           <TouchableOpacity
@@ -392,7 +391,7 @@ export function PaathCounter({ todayPaath = 0, onSubmit }) {
 
   return (
     <View style={styles.wrapper}>
-      <SectionLabel text="SUBMIT TODAY'S PAATH" />
+      <SectionLabel text="SUBMIT TODAY'S Paath" />
 
       {/* ───────────────────────────────────────────────────────────────────── */}
       {/* TODAY'S SUBMITTED */}
@@ -482,7 +481,7 @@ export function PaathCounter({ todayPaath = 0, onSubmit }) {
               <View style={styles.instrDot} />
 
               <Text style={styles.instrText}>
-                Press Submit to record your paath.
+                Press Submit to record your Paath.
               </Text>
             </View>
           </View>
@@ -537,7 +536,7 @@ const styles = StyleSheet.create({
     borderColor: hairline,
     overflow: 'hidden',
     shadowOpacity: 0.045,
-    elevation: 2
+    elevation: 2,
   },
   // ───────────────────────────────────────────────────────────────────────────
   // SECTION LABEL
@@ -546,20 +545,20 @@ const styles = StyleSheet.create({
   sectionLabelRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 14
+    marginBottom: 14,
   },
   sectionLabelLine: {
     flex: 1,
     height: 1,
-    backgroundColor: hairline
+    backgroundColor: hairline,
   },
   sectionLabelText: {
     fontSize: 12,
     letterSpacing: 2,
-    fontWeight: "600",
+    fontWeight: '600',
     color: COLORS.goldDark,
     marginHorizontal: 10,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   // ───────────────────────────────────────────────────────────────────────────
   // TODAY
@@ -569,43 +568,43 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     alignSelf: 'center',
-    backgroundColor: '#EAF0E8',
+    backgroundColor: COLORS.creamDark,
     borderWidth: 0,
     borderColor: hairline,
     borderRadius: radii.pill,
     paddingHorizontal: 16,
     paddingVertical: 8,
-    marginBottom: 16
+    marginBottom: 16,
   },
   todayBadgeText: {
     fontSize: 12,
-    color: COLORS.warmBrown
+    color: COLORS.warmBrown,
   },
   todayBadgeNumber: {
     fontSize: 14,
-    fontWeight: "600",
-    color: '#3E8E5A',
-    marginLeft: 4
+    fontWeight: '600',
+    color: COLORS.saffron,
+    marginLeft: 4,
   },
   // ───────────────────────────────────────────────────────────────────────────
   // MAIN ROW
   // ───────────────────────────────────────────────────────────────────────────
 
   mainRow: {
-    flexDirection: "column",
+    flexDirection: 'column',
     alignItems: 'center',
-    gap: 24
+    gap: 24,
   },
   // ───────────────────────────────────────────────────────────────────────────
   // COUNTER
   // ───────────────────────────────────────────────────────────────────────────
 
   counterCol: {
-    width: "100%",
+    width: '100%',
     alignItems: 'center',
-    flexDirection: "row",
-    justifyContent: "center",
-    gap: 18
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: 18,
   },
   arrowBtn: {
     width: 46,
@@ -616,12 +615,12 @@ const styles = StyleSheet.create({
     borderColor: COLORS.gold,
     alignItems: 'center',
     justifyContent: 'center',
-    marginVertical: 4
+    marginVertical: 4,
   },
   arrowText: {
     fontSize: 16,
     color: COLORS.goldDark,
-    fontWeight: "600"
+    fontWeight: '600',
   },
   counterBox: {
     width: 148,
@@ -632,23 +631,23 @@ const styles = StyleSheet.create({
     borderColor: COLORS.gold,
     alignItems: 'center',
     justifyContent: 'center',
-    marginVertical: 4
+    marginVertical: 4,
   },
   bookIcon: {
     fontSize: 22,
-    marginBottom: 4
+    marginBottom: 4,
   },
   counterText: {
     fontSize: 52,
-    fontWeight: "400",
-    color: "#FFFFFF",
-    lineHeight: 62
+    fontWeight: '400',
+    color: '#FFFFFF',
+    lineHeight: 62,
   },
   swipeHint: {
     fontSize: 12,
     color: COLORS.goldLight,
     letterSpacing: 0.5,
-    marginTop: 3
+    marginTop: 3,
   },
   // ───────────────────────────────────────────────────────────────────────────
   // RIGHT COLUMN
@@ -657,31 +656,31 @@ const styles = StyleSheet.create({
   rightCol: {
     flex: 0,
     marginLeft: 0,
-    width: "100%"
+    width: '100%',
   },
   // ───────────────────────────────────────────────────────────────────────────
   // INSTRUCTIONS
   // ───────────────────────────────────────────────────────────────────────────
 
   instructionsBox: {
-    backgroundColor: "#FCFAF7",
+    backgroundColor: '#FCFAF7',
     borderRadius: 16,
     padding: 18,
     borderWidth: 1,
     borderColor: hairline,
-    marginBottom: 14
+    marginBottom: 14,
   },
   instrTitle: {
     fontSize: 12,
-    fontWeight: "600",
+    fontWeight: '600',
     color: COLORS.deepBrown,
     marginBottom: 8,
-    letterSpacing: 0.3
+    letterSpacing: 0.3,
   },
   instrRow: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    marginBottom: 7
+    marginBottom: 7,
   },
   instrDot: {
     width: 5,
@@ -689,13 +688,13 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     backgroundColor: COLORS.saffron,
     marginTop: 5,
-    marginRight: 7
+    marginRight: 7,
   },
   instrText: {
     flex: 1,
     fontSize: 13,
     color: COLORS.warmBrown,
-    lineHeight: 21
+    lineHeight: 21,
   },
   // ───────────────────────────────────────────────────────────────────────────
   // SUBMIT BUTTON
@@ -708,22 +707,22 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    minHeight: 54
+    minHeight: 54,
   },
   submitBtnDisabled: {
-    opacity: 0.65
+    opacity: 0.65,
   },
   submitIcon: {
-    marginRight: 6
+    marginRight: 6,
   },
   submitBtnText: {
     color: COLORS.white,
     fontSize: 15,
-    fontWeight: "600",
-    letterSpacing: 0.3
+    fontWeight: '600',
+    letterSpacing: 0.3,
   },
   disabledButton: {
-    opacity: 0.5
+    opacity: 0.5,
   },
   // ───────────────────────────────────────────────────────────────────────────
   // LOGIN
@@ -736,25 +735,25 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: hairline,
     paddingVertical: 24,
-    paddingHorizontal: 18
+    paddingHorizontal: 18,
   },
   loginIcon: {
     fontSize: 30,
-    marginBottom: 8
+    marginBottom: 8,
   },
   loginTitle: {
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: '600',
     color: COLORS.deepBrown,
     textAlign: 'center',
-    marginBottom: 5
+    marginBottom: 5,
   },
   loginDescription: {
     fontSize: 12,
     lineHeight: 18,
     color: COLORS.warmBrown,
     textAlign: 'center',
-    marginBottom: 16
+    marginBottom: 16,
   },
   loginButton: {
     backgroundColor: COLORS.richBrown,
@@ -764,15 +763,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    minHeight: 52
+    minHeight: 52,
   },
   loginButtonIcon: {
-    marginRight: 7
+    marginRight: 7,
   },
   loginButtonText: {
     color: COLORS.white,
     fontSize: 14,
-    fontWeight: "600",
-    letterSpacing: 0.3
-  }
+    fontWeight: '600',
+    letterSpacing: 0.3,
+  },
 });

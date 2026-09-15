@@ -474,7 +474,7 @@ const LoginScreen = () => {
             {/* Card bottom strip */}
             <View style={S.cardBottomStrip}>
               <Text style={S.cardBottomText}>
-                <GitaText /> Jai Shri Krishna • GIEO GITA <GitaText />
+                <GitaText /> Jai Shri Krishan • GIEO GITA <GitaText />
               </Text>
             </View>
           </Animated.View>

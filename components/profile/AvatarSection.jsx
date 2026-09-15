@@ -7,7 +7,7 @@ import PulsingRing from './PulsingRing';
 
 const STATS = [
   { icon: '📿', value: '8,556', label: 'Chants' },
-  { icon: '📖', value: '142', label: 'Paath' },
+  { icon: '📖', value: '142', label: 'Path' },
   { icon: '🔥', value: '21', label: 'Day Streak' },
 ];
 

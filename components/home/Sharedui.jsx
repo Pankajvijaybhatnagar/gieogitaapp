@@ -1,5 +1,5 @@
 import { DESIGN } from '@/constants/design';
-import { FontAwesome } from '@expo/vector-icons';
+import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { hairline, spacing, type } from '@/constants/theme';
 import { COLORS } from './constant';
@@ -15,16 +15,25 @@ export function GoldDivider() {
 export function SectionHeader({
   title,
   accent,
+  icon,
   onSeeAll,
   seeAllLabel = 'See All',
 }) {
   return (
     <View style={styles.sectionHeader}>
-      <Text style={styles.sectionTitle} numberOfLines={1}>
-        {title}
-        {title && accent ? ' ' : ''}
-        {accent ? <Text style={styles.sectionAccent}>{accent}</Text> : null}
-      </Text>
+      <View style={styles.titleRow}>
+        {icon && (
+          <View style={styles.titleIconBadge}>
+            <Ionicons name={icon} size={15} color={DESIGN.colors.plum} />
+          </View>
+        )}
+
+        <Text style={styles.sectionTitle} numberOfLines={1}>
+          {title}
+          {title && accent ? ' ' : ''}
+          {accent ? <Text style={styles.sectionAccent}>{accent}</Text> : null}
+        </Text>
+      </View>
       {onSeeAll && (
         <TouchableOpacity
           style={styles.seeAllBtn}
@@ -54,15 +63,29 @@ const styles = StyleSheet.create({
     paddingBottom: 18,
     gap: 12
   },
+  titleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flexShrink: 1,
+    gap: 8
+  },
+  titleIconBadge: {
+    width: 26,
+    height: 26,
+    borderRadius: 13,
+    backgroundColor: DESIGN.colors.plumSoft,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
   sectionTitle: {
     ...type.title,
     color: DESIGN.colors.ink,
     flexShrink: 1,
     fontFamily: DESIGN.fonts.editorial,
     fontWeight: "400",
-    letterSpacing: -0.4,
-    fontSize: 25,
-    lineHeight: 33
+    letterSpacing: -0.3,
+    fontSize: 19,
+    lineHeight: 25
   },
   sectionAccent: {
     color: DESIGN.colors.plum

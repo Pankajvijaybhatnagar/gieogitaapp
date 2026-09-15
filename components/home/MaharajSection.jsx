@@ -35,7 +35,7 @@ export default function MaharajSection() {
           <Text style={styles.name}>Swami Shri{'\n'}Gyananand Ji Maharaj</Text>
 
           <Text style={styles.mission}>
-            Spreading the eternal wisdom of the Bhagwad Gita through pravachan,
+            Spreading the eternal wisdom of the Bhagwad Gita through Satsang,
             satsang &amp; selfless seva.
           </Text>
 
@@ -43,7 +43,7 @@ export default function MaharajSection() {
             activeOpacity={0.88}
             style={styles.cta}
             onPress={() => router.push('/home/promotional')}>
-            <Text style={styles.ctaText}>Watch Pravachans</Text>
+            <Text style={styles.ctaText}>Watch Satsang</Text>
             <View style={styles.ctaIcon}>
               <Ionicons name="play" size={12} color={COLORS.richBrown} />
             </View>

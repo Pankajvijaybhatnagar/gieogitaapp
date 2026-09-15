@@ -56,8 +56,9 @@ export default function TestimonialsSection() {
   return (
     <>
       <SectionHeader
-        title="✦ What People"
+        title="What People"
         accent="Say"
+        icon="chatbubble-ellipses-outline"
         onSeeAll={() => router.push('/home/testimonials')}
         seeAllLabel="View All"
       />

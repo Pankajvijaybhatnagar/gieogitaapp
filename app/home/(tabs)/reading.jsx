@@ -170,7 +170,7 @@ const SPIRITUAL_READS = [
 const DAILY_SHLOKAS = [
   {
     id: 'ds1',
-    chapter: 2,
+    Path: 2,
     verse: 47,
     shloka: 'कर्मण्येवाधिकारस्ते मा फलेषु कदाचन।',
     meaning:
@@ -178,7 +178,7 @@ const DAILY_SHLOKAS = [
   },
   {
     id: 'ds2',
-    chapter: 4,
+    Path: 4,
     verse: 7,
     shloka: 'यदा यदा हि धर्मस्य ग्लानिर्भवति भारत।',
     meaning:
@@ -186,7 +186,7 @@ const DAILY_SHLOKAS = [
   },
   {
     id: 'ds3',
-    chapter: 9,
+    Path: 9,
     verse: 22,
     shloka: 'अनन्याश्चिन्तयन्तो मां ये जनाः पर्युपासते।',
     meaning:
@@ -194,7 +194,7 @@ const DAILY_SHLOKAS = [
   },
   {
     id: 'ds4',
-    chapter: 18,
+    Path: 18,
     verse: 66,
     shloka: 'सर्वधर्मान्परित्यज्य मामेकं शरणं व्रज।',
     meaning:
@@ -337,9 +337,9 @@ function ShlokaCard({ item }) {
       activeOpacity={0.85}
       onPress={() => setExpanded(!expanded)}>
       <View style={styles.shlokaTopRow}>
-        <View style={styles.shlokaChapterBadge}>
-          <Text style={styles.shlokaChapterText}>
-            Ch. {item.chapter} · V. {item.verse}
+        <View style={styles.shlokaPathBadge}>
+          <Text style={styles.shlokaPathText}>
+            Ch. {item.Path} · V. {item.verse}
           </Text>
         </View>
         <MaterialCommunityIcons
@@ -576,7 +576,7 @@ export default function ReadingScreen() {
                 </Text>
               </View>
               <Text style={styles.featuredShlokaRef}>
-                Gita Ch. {DAILY_SHLOKAS[activeShloka].chapter} · V.{' '}
+                Gita Ch. {DAILY_SHLOKAS[activeShloka].Path} · V.{' '}
                 {DAILY_SHLOKAS[activeShloka].verse}
               </Text>
             </View>
@@ -768,7 +768,7 @@ export default function ReadingScreen() {
             </Text>
           </TouchableOpacity>
           <Text style={styles.ctaNote}>
-            <GitaText /> Jai Shri Krishna • GIEO Gita
+            <GitaText /> Jai Shri Krishan • GIEO Gita
           </Text>
         </View>
 
@@ -1260,13 +1260,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: 8,
   },
-  shlokaChapterBadge: {
+  shlokaPathBadge: {
     backgroundColor: COLORS.creamDark,
     borderRadius: radii.pill,
     paddingHorizontal: 10,
     paddingVertical: 3,
   },
-  shlokaChapterText: {
+  shlokaPathText: {
     color: COLORS.saffron,
     fontSize: 12,
     fontWeight: '700',

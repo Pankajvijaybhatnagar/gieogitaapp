@@ -323,7 +323,7 @@ export default function Index() {
             <PulsingRing size={140} delay={1400} />
             <View style={S.logoOuterRing}>
               <View style={S.logoInnerRing}>
-                {/* Original Image — path unchanged */}
+                {/* Original Image — Path unchanged */}
                 <Image
                   style={S.logoImage}
                   source={require('../assets/logo.png')}
@@ -358,7 +358,7 @@ export default function Index() {
 
           {/* ── FEATURE PILLS ── */}
           <View style={S.pillsRow}>
-            {['📖 Gita Paath', '📿 Daily Chants', '🪷 Gita Seva'].map(p => (
+            {['📖 Gita Path', '📿 Daily Chants', '🪷 Gita Seva'].map(p => (
               <View key={p} style={S.featurePill}>
                 <Text style={S.featurePillText}>{p}</Text>
               </View>
@@ -383,7 +383,7 @@ export default function Index() {
 
           {/* Bottom tagline */}
           <Text style={S.bottomTagline}>
-            <GitaText /> Jai Shri Krishna <GitaText />
+            <GitaText /> Jai Shri Krishan <GitaText />
           </Text>
         </Animated.View>
       )}

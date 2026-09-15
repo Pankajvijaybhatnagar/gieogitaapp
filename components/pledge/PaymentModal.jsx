@@ -13,6 +13,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import ConsentCheckboxes from '@/components/common/ConsentCheckboxes';
 import { C, OCCASIONS, UPI_ID, UPI_NAME } from './constants';
 
 const { width } = Dimensions.get('window');
@@ -23,12 +24,21 @@ export default function PaymentModal({ visible, seva, onClose }) {
   const [phone,     setPhone]     = useState('');
   const [occasion,  setOccasion]  = useState('General Donation');
   const [customAmt, setCustomAmt] = useState('');
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [privacyAccepted, setPrivacyAccepted] = useState(false);
 
   const amount = customAmt ? parseInt(customAmt, 10) : seva?.amount || 0;
 
   const openUPI = (app) => {
     if (!name.trim()) {
       error('🙏 Required', 'Please enter your name before proceeding.');
+      return;
+    }
+    if (!termsAccepted || !privacyAccepted) {
+      error(
+        '🙏 Terms Required',
+        'Please accept the Terms & Conditions and Privacy Policy before proceeding.',
+      );
       return;
     }
     const note   = `${seva?.name} - ${occasion} - ${name}`;
@@ -142,6 +152,15 @@ export default function PaymentModal({ visible, seva, onClose }) {
                 </Text>
               </View>
             )}
+
+            {/* Consent */}
+            <ConsentCheckboxes
+              termsAccepted={termsAccepted}
+              onToggleTerms={() => setTermsAccepted(prev => !prev)}
+              privacyAccepted={privacyAccepted}
+              onTogglePrivacy={() => setPrivacyAccepted(prev => !prev)}
+              style={PM.consentWrap}
+            />
 
             {/* Total */}
             <View style={PM.totalRow}>
@@ -368,6 +387,9 @@ const PM = StyleSheet.create({
     fontSize: 12,
     color: C.warmBrown,
     lineHeight: 18
+  },
+  consentWrap: {
+    marginTop: 14
   },
   totalRow: {
     flexDirection: 'row',

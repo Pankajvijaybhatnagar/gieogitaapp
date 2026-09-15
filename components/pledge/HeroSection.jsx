@@ -30,7 +30,7 @@ export default function HeroSection() {
       </Text>
 
       <Text style={styles.heroDesc}>
-        Every donation is a divine offering to Shri Krishna. Your seva supports
+        Every donation is a divine offering to Shri Krishan. Your seva supports
         temple rituals, cow protection, Vedic education and care for the needy —
         performed in your name with full devotion.
       </Text>

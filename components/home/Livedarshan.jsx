@@ -2,7 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useEffect, useRef } from 'react';
 import { useRouter } from 'expo-router';
-import { Animated, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Animated, Easing, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { RGB } from '@/constants/brandColors';
 import { DESIGN } from '@/constants/design';
 import { radii, spacing, type } from '@/constants/theme';
@@ -14,13 +14,36 @@ export default function LiveDarshan() {
 
   const pulseAnim = useRef(new Animated.Value(1)).current;
   const ringAnim = useRef(new Animated.Value(0)).current;
+  const dotHaloAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
+    // Smooth breathing fade on the LIVE dot — eased, not a hard linear blink.
     Animated.loop(
       Animated.sequence([
-        Animated.timing(pulseAnim, { toValue: 0.2, duration: 700, useNativeDriver: true }),
-        Animated.timing(pulseAnim, { toValue: 1, duration: 700, useNativeDriver: true }),
+        Animated.timing(pulseAnim, {
+          toValue: 0.35,
+          duration: 650,
+          easing: Easing.inOut(Easing.ease),
+          useNativeDriver: true,
+        }),
+        Animated.timing(pulseAnim, {
+          toValue: 1,
+          duration: 650,
+          easing: Easing.inOut(Easing.ease),
+          useNativeDriver: true,
+        }),
       ])
+    ).start();
+
+    // Halo ring that expands and fades outward from the dot, like a live
+    // broadcast ping — runs in lockstep with the breathing fade above.
+    Animated.loop(
+      Animated.timing(dotHaloAnim, {
+        toValue: 1,
+        duration: 1300,
+        easing: Easing.out(Easing.ease),
+        useNativeDriver: true,
+      })
     ).start();
 
     // Broadcasting ring — expands and fades around the play button, looping.
@@ -32,9 +55,12 @@ export default function LiveDarshan() {
   const ringScale = ringAnim.interpolate({ inputRange: [0, 1], outputRange: [1, 1.6] });
   const ringOpacity = ringAnim.interpolate({ inputRange: [0, 0.6, 1], outputRange: [0.5, 0.15, 0] });
 
+  const dotHaloScale = dotHaloAnim.interpolate({ inputRange: [0, 1], outputRange: [1, 2.6] });
+  const dotHaloOpacity = dotHaloAnim.interpolate({ inputRange: [0, 0.7, 1], outputRange: [0.55, 0.15, 0] });
+
   return (
     <>
-      <SectionHeader title="🔴 Live" accent="Darshan" />
+      <SectionHeader title="Live" accent="Darshan" icon="radio-outline" />
 
       <TouchableOpacity
         activeOpacity={0.9}
@@ -55,7 +81,15 @@ export default function LiveDarshan() {
 
             {/* LIVE badge */}
             <View style={styles.liveBadge}>
-              <Animated.View style={[styles.liveDot, { opacity: pulseAnim }]} />
+              <View style={styles.liveDotWrap}>
+                <Animated.View
+                  style={[
+                    styles.liveDotHalo,
+                    { transform: [{ scale: dotHaloScale }], opacity: dotHaloOpacity },
+                  ]}
+                />
+                <Animated.View style={[styles.liveDot, { opacity: pulseAnim }]} />
+              </View>
               <Text style={styles.liveBadgeText}>LIVE NOW</Text>
             </View>
 
@@ -125,6 +159,19 @@ const styles = StyleSheet.create({
     borderRadius: radii.pill,
     paddingHorizontal: 10,
     paddingVertical: 5
+  },
+  liveDotWrap: {
+    width: 6,
+    height: 6,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  liveDotHalo: {
+    position: 'absolute',
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: '#FFFFFF'
   },
   liveDot: {
     width: 6,

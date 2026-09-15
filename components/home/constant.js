@@ -42,7 +42,7 @@ export const exclusiveContent = [
     id: '3',
     icon: '🪔',
     title: 'Purushottam Paas',
-    meta: 'Gita Chapter 15',
+    meta: 'Gita Path 15',
     badge: null,
   },
   {

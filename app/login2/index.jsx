@@ -272,6 +272,7 @@ const Login2 = () => {
     password,
     confirmPassword,
     agreeTerms,
+    agreePrivacy,
   }) => {
     if (!name || !email || !password || !confirmPassword) {
       setError('Please fill all required fields.');
@@ -285,8 +286,8 @@ const Login2 = () => {
       return;
     }
 
-    if (!agreeTerms) {
-      setError('Please agree with Terms & Condition.');
+    if (!agreeTerms || !agreePrivacy) {
+      setError('Please accept the Terms & Conditions and Privacy Policy.');
 
       return;
     }

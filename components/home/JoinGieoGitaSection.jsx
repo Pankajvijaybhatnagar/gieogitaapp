@@ -21,7 +21,7 @@ export default function JoinGieoGitaSection() {
 
         <Text style={styles.desc}>
           We are preparing something beautiful for all those who wish to walk
-          the path of the Gita together. Stay tuned — your journey with us
+          the Path of the Gita together. Stay tuned — your journey with us
           begins soon.
         </Text>
 
@@ -33,7 +33,7 @@ export default function JoinGieoGitaSection() {
         </View>
 
         <Text style={styles.footerNote}>
-          <GitaText /> &nbsp;Hare Krishna • Hare Gita • Hare GIEO
+          <GitaText /> &nbsp;Hare Krishan • Hare Gita • Hare GIEO
         </Text>
       </View>
     </>

@@ -2,13 +2,13 @@ import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { useCallback, useState } from 'react';
 import {
-    ActivityIndicator,
-    RefreshControl,
-    SafeAreaView,
-    ScrollView,
-    StyleSheet,
-    Text,
-    View,
+  ActivityIndicator,
+  RefreshControl,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
 } from 'react-native';
 
 import { useAuth } from '@/context/AuthContext';
@@ -132,7 +132,7 @@ export default function PatrikaLibraryScreen({
     // -----------------------------------------
     if (!subscriptionState.subscribed) {
       router.push({
-        pathname: subscribeRoute,
+        Pathname: subscribeRoute,
         params: {
           patrikaId: String(item?.id ?? ''),
 
@@ -152,7 +152,7 @@ export default function PatrikaLibraryScreen({
     // OPEN ACTUAL SLUG ROUTE
     // -----------------------------------------
     router.push({
-      pathname: readerRoute,
+      Pathname: readerRoute,
       params: {
         slug: String(slug),
 

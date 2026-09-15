@@ -1,9 +1,17 @@
-import { FontAwesome } from '@expo/vector-icons';
-import { useEffect, useRef, useState } from 'react';
-import { Animated, Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Card from '@/components/ui/Card';
 import { COLORS, RGB } from '@/constants/brandColors';
 import { hairline, radii, spacing, type } from '@/constants/theme';
+import { FontAwesome } from '@expo/vector-icons';
+import { useEffect, useRef, useState } from 'react';
+import {
+  Animated,
+  Dimensions,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { SectionHeader } from './Sharedui';
 
 const { width } = Dimensions.get('window');
@@ -26,13 +34,13 @@ const cameras = [
     id: 2,
     location: 'Vrindavan',
     temple: 'Banke Bihari Mandir',
-    description: 'The eternal abode of Shri Krishna',
+    description: 'The eternal abode of Shri Krishan',
     icon: '🪔',
     status: 'live',
     viewers: '5.1K',
     currentEvent: 'Mangala Aarti',
     time: '5:30 AM',
-    tags: ['Krishna', 'Aarti'],
+    tags: ['Krishan', 'Aarti'],
   },
   {
     id: 3,
@@ -49,14 +57,14 @@ const cameras = [
   {
     id: 4,
     location: 'Mathura',
-    temple: 'Shri Krishna Janmabhoomi',
-    description: 'Birthplace of Bhagwan Shri Krishna',
+    temple: 'Shri Krishan Janmabhoomi',
+    description: 'Birthplace of Bhagwan Shri Krishan',
     icon: '✨',
     status: 'upcoming',
     viewers: '—',
     currentEvent: 'Starts at 4:00 PM',
     time: '4:00 PM',
-    tags: ['Krishna', 'Janmabhoomi'],
+    tags: ['Krishan', 'Janmabhoomi'],
   },
 ];
 
@@ -74,12 +82,24 @@ function PulseDot({ color = COLORS.liveRed }) {
   useEffect(() => {
     Animated.loop(
       Animated.sequence([
-        Animated.timing(anim, { toValue: 0.15, duration: 600, useNativeDriver: true }),
-        Animated.timing(anim, { toValue: 1, duration: 600, useNativeDriver: true }),
-      ])
+        Animated.timing(anim, {
+          toValue: 0.15,
+          duration: 600,
+          useNativeDriver: true,
+        }),
+        Animated.timing(anim, {
+          toValue: 1,
+          duration: 600,
+          useNativeDriver: true,
+        }),
+      ]),
     ).start();
   }, []);
-  return <Animated.View style={[styles.pulseDot, { backgroundColor: color, opacity: anim }]} />;
+  return (
+    <Animated.View
+      style={[styles.pulseDot, { backgroundColor: color, opacity: anim }]}
+    />
+  );
 }
 
 function CameraCard({ cam, isActive, onPress }) {
@@ -88,8 +108,16 @@ function CameraCard({ cam, isActive, onPress }) {
 
   const handlePress = () => {
     Animated.sequence([
-      Animated.timing(scaleAnim, { toValue: 0.97, duration: 80, useNativeDriver: true }),
-      Animated.timing(scaleAnim, { toValue: 1, duration: 80, useNativeDriver: true }),
+      Animated.timing(scaleAnim, {
+        toValue: 0.97,
+        duration: 80,
+        useNativeDriver: true,
+      }),
+      Animated.timing(scaleAnim, {
+        toValue: 1,
+        duration: 80,
+        useNativeDriver: true,
+      }),
     ]).start();
     onPress();
   };
@@ -97,7 +125,9 @@ function CameraCard({ cam, isActive, onPress }) {
   return (
     <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
       <TouchableOpacity activeOpacity={0.92} onPress={handlePress}>
-        <Card radius={radii.xl} style={[styles.cameraCard, isActive && styles.cameraCardActive]}>
+        <Card
+          radius={radii.xl}
+          style={[styles.cameraCard, isActive && styles.cameraCardActive]}>
           {/* Fake video screen */}
           <View style={styles.videoScreen}>
             <View style={styles.videoOverlay}>
@@ -115,7 +145,11 @@ function CameraCard({ cam, isActive, onPress }) {
                 )}
                 {isLive && (
                   <View style={styles.viewersBadge}>
-                    <FontAwesome name="eye" size={9} color="rgba(255,255,255,0.85)" />
+                    <FontAwesome
+                      name="eye"
+                      size={9}
+                      color="rgba(255,255,255,0.85)"
+                    />
                     <Text style={styles.viewersText}>{cam.viewers}</Text>
                   </View>
                 )}
@@ -123,7 +157,11 @@ function CameraCard({ cam, isActive, onPress }) {
 
               {/* Center play */}
               <View style={styles.playCircle}>
-                <FontAwesome name={isLive ? 'play' : 'clock-o'} size={20} color={COLORS.goldLight} />
+                <FontAwesome
+                  name={isLive ? 'play' : 'clock-o'}
+                  size={20}
+                  color={COLORS.goldLight}
+                />
               </View>
 
               {/* Bottom info */}
@@ -131,7 +169,9 @@ function CameraCard({ cam, isActive, onPress }) {
                 <Text style={styles.videoIcon}>{cam.icon}</Text>
                 <View style={{ flex: 1 }}>
                   <Text style={styles.videoLocation}>{cam.location}</Text>
-                  <Text style={styles.videoTemple} numberOfLines={1}>{cam.temple}</Text>
+                  <Text style={styles.videoTemple} numberOfLines={1}>
+                    {cam.temple}
+                  </Text>
                 </View>
               </View>
             </View>
@@ -154,7 +194,7 @@ function CameraCard({ cam, isActive, onPress }) {
               <Text style={styles.cardTime}>{cam.time}</Text>
             </View>
             <View style={styles.tagsRow}>
-              {cam.tags.map((tag) => (
+              {cam.tags.map(tag => (
                 <View key={tag} style={styles.tag}>
                   <Text style={styles.tagText}>{tag}</Text>
                 </View>
@@ -170,7 +210,7 @@ function CameraCard({ cam, isActive, onPress }) {
 export default function LiveDarshan() {
   const [activeId, setActiveId] = useState(1);
   const scrollRef = useRef(null);
-  const activeCount = cameras.filter((c) => c.status === 'live').length;
+  const activeCount = cameras.filter(c => c.status === 'live').length;
 
   return (
     <>
@@ -196,9 +236,8 @@ export default function LiveDarshan() {
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
         decelerationRate="fast"
-        snapToInterval={CARD_WIDTH + 12}
-      >
-        {cameras.map((cam) => (
+        snapToInterval={CARD_WIDTH + 12}>
+        {cameras.map(cam => (
           <View key={cam.id} style={{ width: CARD_WIDTH, marginRight: 12 }}>
             <CameraCard
               cam={cam}
@@ -211,33 +250,52 @@ export default function LiveDarshan() {
 
       {/* ── Dot indicators ── */}
       <View style={styles.dotsRow}>
-        {cameras.map((cam) => (
+        {cameras.map(cam => (
           <TouchableOpacity
             key={cam.id}
             onPress={() => {
               setActiveId(cam.id);
-              scrollRef.current?.scrollTo({ x: (cam.id - 1) * (CARD_WIDTH + 12), animated: true });
-            }}
-          >
-            <View style={[styles.pageDot, activeId === cam.id && styles.pageDotActive]} />
+              scrollRef.current?.scrollTo({
+                x: (cam.id - 1) * (CARD_WIDTH + 12),
+                animated: true,
+              });
+            }}>
+            <View
+              style={[
+                styles.pageDot,
+                activeId === cam.id && styles.pageDotActive,
+              ]}
+            />
           </TouchableOpacity>
         ))}
       </View>
 
       {/* ── Quick location tabs ── */}
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.tabsRow}>
-        {cameras.map((cam) => (
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.tabsRow}>
+        {cameras.map(cam => (
           <TouchableOpacity
             key={cam.id}
-            style={[styles.locationTab, activeId === cam.id && styles.locationTabActive]}
+            style={[
+              styles.locationTab,
+              activeId === cam.id && styles.locationTabActive,
+            ]}
             activeOpacity={0.8}
             onPress={() => {
               setActiveId(cam.id);
-              scrollRef.current?.scrollTo({ x: (cam.id - 1) * (CARD_WIDTH + 12), animated: true });
-            }}
-          >
+              scrollRef.current?.scrollTo({
+                x: (cam.id - 1) * (CARD_WIDTH + 12),
+                animated: true,
+              });
+            }}>
             <Text style={styles.locationTabIcon}>{cam.icon}</Text>
-            <Text style={[styles.locationTabText, activeId === cam.id && styles.locationTabTextActive]}>
+            <Text
+              style={[
+                styles.locationTabText,
+                activeId === cam.id && styles.locationTabTextActive,
+              ]}>
               {cam.location}
             </Text>
             {cam.status === 'live' && <View style={styles.tabLiveDot} />}
@@ -249,10 +307,17 @@ export default function LiveDarshan() {
       <Card radius={radii.xl} style={styles.scheduleCard}>
         <View style={styles.scheduleHeader}>
           <Text style={styles.scheduleHeaderIcon}>🗓️</Text>
-          <Text style={styles.scheduleHeaderTitle}>Today&apos;s Aarti Schedule</Text>
+          <Text style={styles.scheduleHeaderTitle}>
+            Today&apos;s Aarti Schedule
+          </Text>
         </View>
         {schedule.map((s, i) => (
-          <View key={s.event} style={[styles.scheduleRow, i === schedule.length - 1 && { borderBottomWidth: 0 }]}>
+          <View
+            key={s.event}
+            style={[
+              styles.scheduleRow,
+              i === schedule.length - 1 && { borderBottomWidth: 0 },
+            ]}>
             <View style={styles.scheduleTimePill}>
               <Text style={styles.scheduleTimePillText}>{s.time}</Text>
             </View>
@@ -271,7 +336,6 @@ export default function LiveDarshan() {
         <Text style={styles.watchAllText}>Watch All Live Cameras</Text>
         <FontAwesome name="chevron-right" size={11} color={COLORS.white} />
       </TouchableOpacity>
-
     </>
   );
 }
@@ -285,37 +349,37 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm
+    paddingVertical: spacing.sm,
   },
   summaryLeft: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 7
+    gap: 7,
   },
   summaryLiveText: {
     color: COLORS.deepBrown,
     fontSize: 12,
-    fontWeight: '700'
+    fontWeight: '700',
   },
   summaryRight: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 5
+    gap: 5,
   },
   summaryViewers: {
     color: COLORS.saffron,
     fontSize: 12,
-    fontWeight: '600'
+    fontWeight: '600',
   },
   pulseDot: {
     width: 8,
     height: 8,
-    borderRadius: 4
+    borderRadius: 4,
   },
   /* Scroll */
   scrollContent: {
     paddingHorizontal: spacing.md,
-    paddingBottom: 4
+    paddingBottom: 4,
   },
   /* Camera card */
   cameraCard: {},
@@ -326,7 +390,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#0D0A06',
     justifyContent: 'center',
     alignItems: 'center',
-    position: 'relative'
+    position: 'relative',
   },
   videoOverlay: {
     position: 'absolute',
@@ -335,12 +399,12 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     padding: 12,
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   videoTopRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   liveBadge: {
     flexDirection: 'row',
@@ -349,25 +413,25 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(229,57,53,0.85)',
     borderRadius: 6,
     paddingHorizontal: 8,
-    paddingVertical: 4
+    paddingVertical: 4,
   },
   liveBadgeText: {
     color: '#fff',
     fontSize: 10,
-    fontWeight: "600",
-    letterSpacing: 1
+    fontWeight: '600',
+    letterSpacing: 1,
   },
   upcomingBadge: {
     backgroundColor: `rgba(${RGB.gold},0.85)`,
     borderRadius: 6,
     paddingHorizontal: 8,
-    paddingVertical: 4
+    paddingVertical: 4,
   },
   upcomingBadgeText: {
     color: COLORS.deepBrown,
     fontSize: 10,
-    fontWeight: "600",
-    letterSpacing: 0.5
+    fontWeight: '600',
+    letterSpacing: 0.5,
   },
   viewersBadge: {
     flexDirection: 'row',
@@ -376,12 +440,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.5)',
     borderRadius: 6,
     paddingHorizontal: 7,
-    paddingVertical: 4
+    paddingVertical: 4,
   },
   viewersText: {
     color: 'rgba(255,255,255,0.85)',
     fontSize: 12,
-    fontWeight: '600'
+    fontWeight: '600',
   },
   playCircle: {
     width: 52,
@@ -392,7 +456,7 @@ const styles = StyleSheet.create({
     borderColor: `rgba(${RGB.gold},0.55)`,
     alignItems: 'center',
     justifyContent: 'center',
-    alignSelf: 'center'
+    alignSelf: 'center',
   },
   videoBottom: {
     flexDirection: 'row',
@@ -400,51 +464,51 @@ const styles = StyleSheet.create({
     gap: 8,
     backgroundColor: 'rgba(0,0,0,0.55)',
     borderRadius: 10,
-    padding: 8
+    padding: 8,
   },
   videoIcon: {
-    fontSize: 18
+    fontSize: 18,
   },
   videoLocation: {
     color: COLORS.goldLight,
     fontSize: 12,
-    fontWeight: "600"
+    fontWeight: '600',
   },
   videoTemple: {
     color: 'rgba(255,255,255,0.7)',
     fontSize: 12,
-    marginTop: 1
+    marginTop: 1,
   },
   /* Card body */
   cardBody: {
-    padding: spacing.md
+    padding: spacing.md,
   },
   cardBodyTop: {
     flexDirection: 'row',
-    marginBottom: spacing.sm
+    marginBottom: spacing.sm,
   },
   cardLocation: {
     color: COLORS.saffron,
     fontSize: 12,
-    fontWeight: "600",
-    marginBottom: 1
+    fontWeight: '600',
+    marginBottom: 1,
   },
   cardTemple: {
     color: COLORS.deepBrown,
     fontSize: 13,
     fontWeight: '700',
-    marginBottom: 3
+    marginBottom: 3,
   },
   cardDesc: {
     color: COLORS.warmBrown,
     fontSize: 12,
-    lineHeight: 18
+    lineHeight: 18,
   },
   cardFooter: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: spacing.sm
+    marginBottom: spacing.sm,
   },
   eventPill: {
     flexDirection: 'row',
@@ -453,54 +517,54 @@ const styles = StyleSheet.create({
     backgroundColor: `rgba(${RGB.saffron},0.1)`,
     borderRadius: radii.pill,
     paddingHorizontal: 10,
-    paddingVertical: 4
+    paddingVertical: 4,
   },
   eventPillText: {
     color: COLORS.saffron,
     fontSize: 10,
-    fontWeight: '600'
+    fontWeight: '600',
   },
   cardTime: {
     color: COLORS.warmBrown,
-    fontSize: 12
+    fontSize: 12,
   },
   tagsRow: {
     flexDirection: 'row',
-    gap: 6
+    gap: 6,
   },
   tag: {
     backgroundColor: COLORS.creamDark,
     borderRadius: 6,
     paddingHorizontal: 8,
-    paddingVertical: 3
+    paddingVertical: 3,
   },
   tagText: {
     color: COLORS.warmBrown,
-    fontSize: 10
+    fontSize: 10,
   },
   /* Dots */
   dotsRow: {
     flexDirection: 'row',
     justifyContent: 'center',
     gap: 6,
-    marginVertical: spacing.sm
+    marginVertical: spacing.sm,
   },
   pageDot: {
     width: 6,
     height: 6,
     borderRadius: 3,
-    backgroundColor: hairline
+    backgroundColor: hairline,
   },
   pageDotActive: {
     width: 18,
     borderRadius: 3,
-    backgroundColor: COLORS.saffron
+    backgroundColor: COLORS.saffron,
   },
   /* Location tabs */
   tabsRow: {
     paddingHorizontal: spacing.md,
     gap: spacing.sm,
-    marginBottom: spacing.md
+    marginBottom: spacing.md,
   },
   locationTab: {
     flexDirection: 'row',
@@ -509,47 +573,47 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.creamDark,
     borderRadius: radii.pill,
     paddingHorizontal: spacing.sm,
-    paddingVertical: 7
+    paddingVertical: 7,
   },
   locationTabActive: {
-    backgroundColor: `rgba(${RGB.saffron},0.14)`
+    backgroundColor: `rgba(${RGB.saffron},0.14)`,
   },
   locationTabIcon: {
-    fontSize: 13
+    fontSize: 13,
   },
   locationTabText: {
     color: COLORS.warmBrown,
     fontSize: 12,
-    fontWeight: '600'
+    fontWeight: '600',
   },
   locationTabTextActive: {
-    color: COLORS.saffron
+    color: COLORS.saffron,
   },
   tabLiveDot: {
     width: 5,
     height: 5,
     borderRadius: 3,
-    backgroundColor: COLORS.liveRed
+    backgroundColor: COLORS.liveRed,
   },
   /* Schedule */
   scheduleCard: {
     marginHorizontal: spacing.md,
     padding: spacing.md,
-    marginBottom: spacing.md
+    marginBottom: spacing.md,
   },
   scheduleHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.sm,
-    marginBottom: spacing.sm
+    marginBottom: spacing.sm,
   },
   scheduleHeaderIcon: {
-    fontSize: 16
+    fontSize: 16,
   },
   scheduleHeaderTitle: {
     ...type.headline,
     fontSize: 14,
-    color: COLORS.deepBrown
+    color: COLORS.deepBrown,
   },
   scheduleRow: {
     flexDirection: 'row',
@@ -557,7 +621,7 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
     paddingVertical: 9,
     borderBottomWidth: 1,
-    borderBottomColor: hairline
+    borderBottomColor: hairline,
   },
   scheduleTimePill: {
     backgroundColor: `rgba(${RGB.saffron},0.1)`,
@@ -565,25 +629,25 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.sm,
     paddingVertical: 4,
     minWidth: 65,
-    alignItems: 'center'
+    alignItems: 'center',
   },
   scheduleTimePillText: {
     color: COLORS.saffron,
     fontSize: 10,
-    fontWeight: '700'
+    fontWeight: '700',
   },
   scheduleDetails: {
-    flex: 1
+    flex: 1,
   },
   scheduleEvent: {
     color: COLORS.deepBrown,
     fontSize: 12,
-    fontWeight: '700'
+    fontWeight: '700',
   },
   scheduleLocation: {
     color: COLORS.warmBrown,
     fontSize: 12,
-    marginTop: 1
+    marginTop: 1,
   },
   /* Watch all CTA */
   watchAllBtn: {
@@ -595,11 +659,11 @@ const styles = StyleSheet.create({
     marginHorizontal: spacing.md,
     borderRadius: radii.lg,
     paddingVertical: spacing.md,
-    marginBottom: spacing.md
+    marginBottom: spacing.md,
   },
   watchAllText: {
     color: COLORS.white,
     fontSize: 13,
-    fontWeight: "600"
-  }
+    fontWeight: '600',
+  },
 });

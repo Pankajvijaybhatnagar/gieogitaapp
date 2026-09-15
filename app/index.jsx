@@ -210,7 +210,7 @@ export default function GetStartedScreen() {
       />
 
       {/* ---------------------------------------------------
-          KRISHNA BACKGROUND
+          Krishan BACKGROUND
       --------------------------------------------------- */}
 
       <ImageBackground

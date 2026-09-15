@@ -76,7 +76,9 @@ export default function GallerySection() {
   return (
     <>
       <SectionHeader
-        title="Gallery"
+        title="Our"
+        accent="Gallery"
+        icon="images-outline"
         onSeeAll={() => router.push('/home/gallery')}
         seeAllLabel="View All"
       />

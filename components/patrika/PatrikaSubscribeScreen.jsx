@@ -18,6 +18,7 @@ import { useAppAlert } from '@/context/AppAlertContext';
 import { useAuth } from '@/context/AuthContext';
 import masikPatrikaServices from '@/lib/services/masikPatrikaServices';
 
+import ConsentCheckboxes from '@/components/common/ConsentCheckboxes';
 import Spacer from '@/components/ui/Spacer';
 import { COLORS } from '@/constants/brandColors';
 import { hairline } from '@/constants/theme';
@@ -37,6 +38,9 @@ export default function PatrikaSubscribeScreen() {
     phone: '',
     email: '',
   });
+
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [privacyAccepted, setPrivacyAccepted] = useState(false);
 
   const patrikaId = Array.isArray(params.patrikaId)
     ? params.patrikaId[0]
@@ -95,6 +99,14 @@ export default function PatrikaSubscribeScreen() {
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       error('Invalid Email', 'Please enter a valid email address.');
+      return false;
+    }
+
+    if (!termsAccepted || !privacyAccepted) {
+      error(
+        'Terms required',
+        'Please accept the Terms & Conditions and Privacy Policy.',
+      );
       return false;
     }
 
@@ -351,6 +363,16 @@ export default function PatrikaSubscribeScreen() {
               </View>
             </View>
           </View>
+
+          {/* Consent */}
+          <ConsentCheckboxes
+            termsAccepted={termsAccepted}
+            onToggleTerms={() => setTermsAccepted(prev => !prev)}
+            privacyAccepted={privacyAccepted}
+            onTogglePrivacy={() => setPrivacyAccepted(prev => !prev)}
+            disabled={submitting}
+            style={styles.consentWrap}
+          />
 
           {/* Security note */}
           <View style={styles.note}>
@@ -615,6 +637,9 @@ const styles = StyleSheet.create({
     paddingVertical: 0,
     fontSize: 15,
     color: COLORS.deepBrown,
+  },
+  consentWrap: {
+    marginTop: 15,
   },
   note: {
     marginTop: 14,

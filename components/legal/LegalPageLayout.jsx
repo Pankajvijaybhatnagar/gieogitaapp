@@ -61,7 +61,7 @@ export default function LegalPageLayout({
   sections,
 }) {
   const router = useRouter();
-  const pathname = usePathname();
+  const Pathname = usePathname();
 
   return (
     <View style={styles.root}>
@@ -136,7 +136,7 @@ export default function LegalPageLayout({
 
           <View style={styles.footerLinksRow}>
             {QUICK_LINKS.map((link, index) => {
-              const isCurrent = pathname === link.route;
+              const isCurrent = Pathname === link.route;
 
               return (
                 <TouchableOpacity

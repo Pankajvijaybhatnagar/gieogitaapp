@@ -22,6 +22,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import * as Haptics from 'expo-haptics';
 import { Link, Stack, useRouter } from 'expo-router';
 
+import ConsentCheckboxes from '@/components/common/ConsentCheckboxes';
 import Button from '@/components/ui/Button';
 import ListBottomSheet from '@/components/ui/ListBottomSheet';
 import Spacer from '@/components/ui/Spacer';
@@ -617,49 +618,6 @@ function DateField({ label, value, onChange, maximumDate }) {
 }
 
 /* ============================================================
-   CHECKBOX
-============================================================ */
-
-function Checkbox({ checked, onPress }) {
-  const scale = useRef(new Animated.Value(checked ? 1 : 0.85)).current;
-
-  useEffect(() => {
-    Animated.spring(scale, {
-      toValue: checked ? 1 : 0.85,
-      friction: 5,
-      tension: 150,
-      useNativeDriver: true,
-    }).start();
-  }, [checked]);
-
-  return (
-    <Pressable onPress={onPress} style={styles.termsRow}>
-      <Animated.View
-        style={[
-          styles.checkbox,
-          checked && styles.checkboxChecked,
-          {
-            transform: [
-              {
-                scale,
-              },
-            ],
-          },
-        ]}>
-        {checked && (
-          <Ionicons name="checkmark" size={14} color={COLORS.white} />
-        )}
-      </Animated.View>
-
-      <Text style={styles.termsText}>
-        I agree to the <Text style={styles.termsLink}>Terms</Text> and{' '}
-        <Text style={styles.termsLink}>Privacy Policy</Text>
-      </Text>
-    </Pressable>
-  );
-}
-
-/* ============================================================
    MAIN
 ============================================================ */
 
@@ -694,6 +652,7 @@ export default function JoinGieoGitaScreen() {
     anniver_date: '',
     interest: '',
     terms: false,
+    privacy: false,
   });
 
   /* ----------------------------------------------------------
@@ -1166,10 +1125,10 @@ export default function JoinGieoGitaScreen() {
       return false;
     }
 
-    if (!formData.terms) {
+    if (!formData.terms || !formData.privacy) {
       showErrorAlert(
         'Terms required',
-        'Please accept the Terms and Privacy Policy.',
+        'Please accept the Terms & Conditions and Privacy Policy.',
       );
 
       return false;
@@ -1516,9 +1475,12 @@ export default function JoinGieoGitaScreen() {
 
           {/* TERMS */}
 
-          <Checkbox
-            checked={formData.terms}
-            onPress={() => updateField('terms', !formData.terms)}
+          <ConsentCheckboxes
+            termsAccepted={formData.terms}
+            onToggleTerms={() => updateField('terms', !formData.terms)}
+            privacyAccepted={formData.privacy}
+            onTogglePrivacy={() => updateField('privacy', !formData.privacy)}
+            style={styles.consentWrap}
           />
 
           {/* SUBMIT */}
@@ -1823,42 +1785,9 @@ const styles = StyleSheet.create({
   },
   /* TERMS */
 
-  termsRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: COLORS.card,
-    borderRadius: radii.md,
-    borderWidth: 1,
-    borderColor: COLORS.border,
+  consentWrap: {
     marginTop: spacing.xs,
     marginBottom: spacing.md,
-    paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.sm,
-  },
-  checkbox: {
-    width: 20,
-    height: 20,
-    borderRadius: 6,
-    borderWidth: 1.5,
-    borderColor: COLORS.brown,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: COLORS.white,
-  },
-  checkboxChecked: {
-    backgroundColor: COLORS.brown,
-    borderColor: COLORS.brown,
-  },
-  termsText: {
-    flex: 1,
-    fontSize: 12,
-    color: COLORS.text,
-    marginLeft: 7,
-    lineHeight: 18,
-  },
-  termsLink: {
-    color: COLORS.brown,
-    fontWeight: '600',
   },
   /* SUBMIT */
 

@@ -19,6 +19,7 @@ import {
 
 import { useAuth } from '@/context/AuthContext';
 import { useAppAlert } from '@/context/AppAlertContext';
+import ConsentCheckboxes from '@/components/common/ConsentCheckboxes';
 import questionSevaServices from '@/lib/services/questionSevaServices';
 
 export default function QuestionSevaForm() {
@@ -47,6 +48,9 @@ export default function QuestionSevaForm() {
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [question, setQuestion] = useState('');
+
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [privacyAccepted, setPrivacyAccepted] = useState(false);
 
   const [loading, setLoading] = useState(false);
 
@@ -158,6 +162,15 @@ export default function QuestionSevaForm() {
       error(
         'Question Too Short',
         'Please write your question in a little more detail.',
+      );
+
+      return false;
+    }
+
+    if (!termsAccepted || !privacyAccepted) {
+      error(
+        'Terms Required',
+        'Please accept the Terms & Conditions and Privacy Policy.',
       );
 
       return false;
@@ -458,6 +471,19 @@ export default function QuestionSevaForm() {
                 ]}
               />
             </View>
+
+            {/* =================================================
+                CONSENT
+            ================================================= */}
+
+            <ConsentCheckboxes
+              termsAccepted={termsAccepted}
+              onToggleTerms={() => setTermsAccepted(prev => !prev)}
+              privacyAccepted={privacyAccepted}
+              onTogglePrivacy={() => setPrivacyAccepted(prev => !prev)}
+              disabled={loading}
+              style={styles.consentWrap}
+            />
 
             {/* =================================================
                 RESPONSE
@@ -791,6 +817,13 @@ const styles = StyleSheet.create({
   questionInputVerySmall: {
     minHeight: 120,
     maxHeight: 180
+  },
+  // ==========================================================
+  // CONSENT
+  // ==========================================================
+
+  consentWrap: {
+    marginBottom: 6
   },
   // ==========================================================
   // MESSAGE

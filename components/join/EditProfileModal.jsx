@@ -15,6 +15,7 @@ import {
   View,
 } from 'react-native';
 
+import ConsentCheckboxes from '@/components/common/ConsentCheckboxes';
 import { COLORS, RGB } from '@/constants/brandColors';
 import { hairline, radii, spacing, type } from '@/constants/theme';
 
@@ -44,6 +45,8 @@ export default function EditProfileModal({
   const [email, setEmail] = useState('');
   const [dob, setDob] = useState('');
   const [anniversary, setAnniversary] = useState('');
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [privacyAccepted, setPrivacyAccepted] = useState(false);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -51,10 +54,21 @@ export default function EditProfileModal({
       setEmail(profile?.email || '');
       setDob(profile?.dob || '');
       setAnniversary(profile?.aniver_date || '');
+      setTermsAccepted(false);
+      setPrivacyAccepted(false);
     }
   }, [visible, profile]);
 
   const handleUpdate = async () => {
+    if (!termsAccepted || !privacyAccepted) {
+      error(
+        'Terms required',
+        'Please accept the Terms & Conditions and Privacy Policy.',
+      );
+
+      return;
+    }
+
     try {
       setLoading(true);
 
@@ -143,6 +157,15 @@ export default function EditProfileModal({
               value={anniversary}
               onChangeText={setAnniversary}
               placeholder="YYYY-MM-DD"
+            />
+
+            <ConsentCheckboxes
+              termsAccepted={termsAccepted}
+              onToggleTerms={() => setTermsAccepted(prev => !prev)}
+              privacyAccepted={privacyAccepted}
+              onTogglePrivacy={() => setPrivacyAccepted(prev => !prev)}
+              disabled={loading}
+              style={styles.consentWrap}
             />
 
             <Pressable
@@ -245,6 +268,9 @@ const styles = StyleSheet.create({
     marginLeft: spacing.sm + 2,
     color: COLORS.deepBrown,
     fontSize: 15
+  },
+  consentWrap: {
+    marginTop: spacing.xs
   },
   saveButton: {
     marginTop: spacing.sm,

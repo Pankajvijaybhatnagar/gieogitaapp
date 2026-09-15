@@ -123,7 +123,7 @@ function EkMinSection() {
     {
       icon: '🪷',
       title: 'Divine Grace',
-      desc: "Krishna's blessings on every devotee",
+      desc: "Krishan's blessings on every devotee",
     },
   ];
 
@@ -131,8 +131,8 @@ function EkMinSection() {
     { icon: '⏰', text: 'Join at the designated time — Ek Minute together' },
     { icon: '📖', text: 'Open your Bhagwad Gita or use the GIEO GITA app' },
     { icon: '🗣️', text: 'Recite the assigned adhyay verse for that day' },
-    { icon: '🙏', text: 'Offer your paath with full devotion and focus' },
-    { icon: '📲', text: 'Submit your paath count through this screen' },
+    { icon: '🙏', text: 'Offer your Paath with full devotion and focus' },
+    { icon: '📲', text: 'Submit your Paath count through this screen' },
     { icon: '🌐', text: 'Share the campaign — invite family & friends' },
   ];
 
@@ -157,7 +157,7 @@ function EkMinSection() {
 
         <Animated.Text
           style={[pmStyles.heroTitle, { opacity: shimmerOpacity }]}>
-          {'एक मिन\n'}
+          {'एक मिनट\n'}
           <Text style={pmStyles.heroTitleAccent}>एक साथ</Text>
         </Animated.Text>
 
@@ -206,7 +206,7 @@ function EkMinSection() {
 
       {/* ── 18 ADHYAYS SCROLL ── */}
       <View style={pmStyles.benefitsSection}>
-        <Text style={pmStyles.pmSectionLabel}>✦ 18 ADHYAYS — GITA PAATH</Text>
+        <Text style={pmStyles.pmSectionLabel}>✦ 18 ADHYAYS — GITA Paath</Text>
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -244,7 +244,7 @@ function EkMinSection() {
 
       {/* ── CAMPAIGN BENEFITS GRID ── */}
       <View style={[pmStyles.benefitsSection, { marginTop: 0 }]}>
-        <Text style={pmStyles.pmSectionLabel}>✦ BENEFITS OF DAILY PAATH</Text>
+        <Text style={pmStyles.pmSectionLabel}>✦ BENEFITS OF DAILY Paath</Text>
         <View style={pmStyles.benefitsGrid}>
           {benefits.map(b => (
             <View key={b.title} style={pmStyles.benefitCard}>
@@ -265,7 +265,7 @@ function EkMinSection() {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// 5. PAATH DETAIL SCREEN
+// 5. Paath DETAIL SCREEN
 // ─────────────────────────────────────────────────────────────────────────────
 function PaathDetailScreen({ setShowPaath, stats, onSubmit }) {
   const headerScrollProps = useHeaderScrollProps();
@@ -369,24 +369,24 @@ export default function EkMinEkSaathScreen() {
           <View style={mainStyles.quoteOverlay} />
           <View style={mainStyles.quoteBody}>
             <Text style={mainStyles.quoteTopLabel}>
-              ✦ EK MIN EK SAATH GITA PAATH ✦
+              ✦ EK MIN EK SAATH GITA Paath ✦
             </Text>
             {/* <Text style={mainStyles.quoteIconText}>❝</Text> */}
             <Text style={mainStyles.quoteText}>
               Let us all recite the Bhagwad Gita together — one minute, one
-              world, one Krishna. Join millions in this divine movement of
+              world, one Krishan. Join millions in this divine movement of
               collective consciousness.
             </Text>
           </View>
         </View>
       </View>
 
-      {/* ── GLOBAL PAATH COUNT ── */}
+      {/* ── GLOBAL Paath COUNT ── */}
       <TotalPaath />
 
       <YourChants />
 
-      {/* ── PAATH COUNTER ── */}
+      {/* ── Paath COUNTER ── */}
       <PaathCounter todayPaath={stats.todayChants} onSubmit={handleSubmit} />
 
       {/* ── LIVE SESSION ── */}
@@ -417,7 +417,7 @@ export default function EkMinEkSaathScreen() {
             </Text>
             <View style={mainStyles.liveMetaRow}>
               <View style={mainStyles.liveTag}>
-                <Text style={mainStyles.liveTagText}>GITA PAATH</Text>
+                <Text style={mainStyles.liveTagText}>GITA Paath</Text>
               </View>
               <Text style={mainStyles.liveWatching}>👁 12.8k reciting</Text>
             </View>
@@ -432,7 +432,7 @@ export default function EkMinEkSaathScreen() {
 
       <GoldDivider />
 
-      {/* ── GO TO PAATH DETAIL ── */}
+      {/* ── GO TO Paath DETAIL ── */}
       <View style={mainStyles.chantsSection}>
         <Text style={mainStyles.chantsSectionTitle}>
           Gita <Text style={mainStyles.chantsSectionAccent}>Paath</Text>
@@ -757,7 +757,7 @@ const pmStyles = StyleSheet.create({
     lineHeight: 20,
   },
   ctaBtn: {
-    backgroundColor: COLORS.saffron,
+    backgroundColor: COLORS.richBrown,
     marginHorizontal: 16,
     borderRadius: radii.pill,
     paddingVertical: 15,
@@ -773,7 +773,7 @@ const pmStyles = StyleSheet.create({
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
-// PAATH DETAIL STYLES
+// Paath DETAIL STYLES
 // ─────────────────────────────────────────────────────────────────────────────
 const cdStyles = StyleSheet.create({
   container: {

@@ -28,25 +28,6 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 10
   },
-  headerTitle: {
-    color: COLORS.deepBrown,
-    fontSize: 30,
-    lineHeight: 38,
-    fontWeight: "400",
-    textAlign: "left",
-    fontFamily: DESIGN.fonts.editorial,
-    letterSpacing: -0.4
-  },
-  headerTitleName: {
-    color: COLORS.saffron,
-    fontSize: 32,
-    lineHeight: 42,
-    fontWeight: "400",
-    textAlign: "left",
-    textTransform: "none",
-    fontFamily: DESIGN.fonts.editorial,
-    letterSpacing: -0.4
-  },
   headerSubtitle: {
     color: COLORS.warmBrown,
     fontSize: 16,

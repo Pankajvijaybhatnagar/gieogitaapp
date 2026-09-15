@@ -48,8 +48,7 @@ export const transformInNineStepsData = [
     slug: 'from-evil-to-goodness',
     step: 'PART 05',
     title: 'Sapt Shloki Gita – From Evil Towards Goodness...',
-    description:
-      'A journey of moving away from negativity towards goodness.',
+    description: 'A journey of moving away from negativity towards goodness.',
     image:
       'https://images.unsplash.com/photo-1612821394773-23f0a7d33ede?auto=format&fit=crop&w=900&q=85',
     duration: 'Part 5 of 9',
@@ -70,8 +69,7 @@ export const transformInNineStepsData = [
     slug: 'brave-youth-dont-give-up',
     step: 'PART 07',
     title: 'Sapt Shloki Gita – Brave Youth, Never Give Up',
-    description:
-      'A message of courage and resilience for the youth.',
+    description: 'A message of courage and resilience for the youth.',
     image:
       'https://images.unsplash.com/photo-1640504409849-da005a55cbd3?auto=format&fit=crop&w=900&q=85',
     duration: 'Part 7 of 9',
@@ -81,8 +79,7 @@ export const transformInNineStepsData = [
     slug: 'from-sorrow-to-yoga',
     step: 'PART 08',
     title: 'Sapt Shloki Gita – From Sorrow Towards Yoga.....',
-    description:
-      'The path of rising from sorrow towards yoga and peace.',
+    description: 'The Path of rising from sorrow towards yoga and peace.',
     image:
       'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=900&q=85',
     duration: 'Part 8 of 9',
@@ -92,8 +89,7 @@ export const transformInNineStepsData = [
     slug: 'balanced-nature-pure-environment',
     step: 'PART 09',
     title: 'Sapt Shloki Gita – Balanced Nature, Pure Environment',
-    description:
-      'The importance of balance in nature and a pure environment.',
+    description: 'The importance of balance in nature and a pure environment.',
     image:
       'https://images.unsplash.com/photo-1595104615356-cbe9c4364513?auto=format&fit=crop&w=900&q=85',
     duration: 'Part 9 of 9',

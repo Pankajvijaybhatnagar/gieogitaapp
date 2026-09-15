@@ -15,6 +15,7 @@ import {
 
 import { SectionHead } from './SharedUI';
 
+import ConsentCheckboxes from '@/components/common/ConsentCheckboxes';
 // Adjust this import only if your service file is in another folder.
 import inquiriesServices from '@/lib/services/inquiriesServices';
 
@@ -64,6 +65,9 @@ export default function ContactSection() {
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
+
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [privacyAccepted, setPrivacyAccepted] = useState(false);
 
   const [loading, setLoading] = useState(false);
 
@@ -155,6 +159,15 @@ export default function ContactSection() {
       error(
         'Inquiry Too Short',
         'Please provide a little more information.',
+      );
+
+      return false;
+    }
+
+    if (!termsAccepted || !privacyAccepted) {
+      error(
+        'Terms Required',
+        'Please accept the Terms & Conditions and Privacy Policy.',
       );
 
       return false;
@@ -506,6 +519,19 @@ export default function ContactSection() {
             style={styles.messageInput}
           />
         </View>
+
+        {/* ===================================================
+            CONSENT
+        =================================================== */}
+
+        <ConsentCheckboxes
+          termsAccepted={termsAccepted}
+          onToggleTerms={() => setTermsAccepted(prev => !prev)}
+          privacyAccepted={privacyAccepted}
+          onTogglePrivacy={() => setPrivacyAccepted(prev => !prev)}
+          disabled={loading}
+          style={styles.consentWrap}
+        />
 
         {/* ===================================================
             RESPONSE MESSAGE
@@ -909,6 +935,13 @@ const styles = StyleSheet.create({
     color: COLORS.darkBrown,
     fontSize: 12,
     lineHeight: 18
+  },
+  // ==========================================================
+  // CONSENT
+  // ==========================================================
+
+  consentWrap: {
+    marginBottom: 4
   },
   // ==========================================================
   // RESPONSE

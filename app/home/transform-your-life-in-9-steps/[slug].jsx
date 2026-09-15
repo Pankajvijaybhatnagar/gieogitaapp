@@ -179,6 +179,7 @@ export default function ProgrammeDetails() {
           <TouchableOpacity
             activeOpacity={0.9}
             style={styles.enrollButton}
+            disabled={true}
             onPress={() => {
               console.log('Start programme:', programme.id);
             }}>
