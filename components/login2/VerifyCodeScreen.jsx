@@ -9,6 +9,7 @@ import {
   Easing,
   KeyboardAvoidingView,
   Platform,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -306,6 +307,10 @@ export default function VerifyCodeScreen({
 
         {/* MAIN */}
 
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+          contentContainerStyle={styles.scrollContent}>
         <Animated.View
           style={[
             styles.content,
@@ -510,6 +515,7 @@ export default function VerifyCodeScreen({
             </Animated.View>
           </Animated.View>
         </Animated.View>
+        </ScrollView>
 
         {/* HOME INDICATOR */}
 
@@ -526,6 +532,10 @@ const styles = StyleSheet.create({
   },
   keyboard: {
     flex: 1
+  },
+  scrollContent: {
+    flexGrow: 1,
+    paddingBottom: 40
   },
   backButton: {
     position: 'absolute',

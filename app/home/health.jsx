@@ -1,6 +1,12 @@
 import Spacer from '@/components/ui/Spacer';
 import { useState } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import {
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  View,
+} from 'react-native';
 import AboutMedanta from '../../components/health/AboutMedanta';
 import ContactSection from '../../components/health/ContactSection';
 import FreeServices from '../../components/health/FreeServices';
@@ -21,29 +27,36 @@ export default function HealthScreen() {
 
   return (
     <View style={styles.root}>
-      <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
-        <HeroSection onBookPress={openBooking} />
+      <KeyboardAvoidingView
+        style={styles.scroll}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+        <ScrollView
+          style={styles.scroll}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled">
+          <HeroSection onBookPress={openBooking} />
 
-        <AboutMedanta />
+          <AboutMedanta />
 
-        <GoldDivider />
+          <GoldDivider />
 
-        <FreeServices />
+          <FreeServices />
 
-        <GoldDivider />
+          <GoldDivider />
 
-        <SpecialtyDoctorTabs onBook={openBooking} />
+          <SpecialtyDoctorTabs onBook={openBooking} />
 
-        <GoldDivider />
+          <GoldDivider />
 
-        <HowItWorks />
+          <HowItWorks />
 
-        <GoldDivider />
+          <GoldDivider />
 
-        <ContactSection />
+          <ContactSection />
 
-        <Spacer height={120} />
-      </ScrollView>
+          <Spacer height={120} />
+        </ScrollView>
+      </KeyboardAvoidingView>
 
       {/* <BookingModal
         visible={modalVisible}

@@ -4,8 +4,10 @@ import { FontAwesome } from '@expo/vector-icons';
 import { useState } from 'react';
 import {
   Dimensions,
+  KeyboardAvoidingView,
   Linking,
   Modal,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -65,146 +67,153 @@ export default function PaymentModal({ visible, seva, onClose }) {
 
   return (
     <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
-      <View style={PM.overlay}>
-        <TouchableOpacity style={StyleSheet.absoluteFill} onPress={onClose} />
-        <View style={PM.sheet}>
-          <View style={PM.handle} />
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+        <View style={PM.overlay}>
+          <TouchableOpacity style={StyleSheet.absoluteFill} onPress={onClose} />
+          <View style={PM.sheet}>
+            <View style={PM.handle} />
 
-          {/* Header */}
-          <View style={PM.header}>
-            <View style={PM.headerBlob} />
-            <Text style={PM.headerEmoji}>{seva.icon}</Text>
-            <Text style={PM.headerTitle}>{seva.name}</Text>
-            <Text style={PM.headerDesc}>{seva.benefit}</Text>
-            <TouchableOpacity style={PM.closeBtn} onPress={onClose}>
-              <FontAwesome name="times" size={14} color={C.goldLight} />
-            </TouchableOpacity>
-          </View>
-
-          <ScrollView style={PM.body} showsVerticalScrollIndicator={false}>
-
-            {/* Amount row */}
-            <View style={PM.amountRow}>
-              <View style={PM.amountBox}>
-                <Text style={PM.amountLabel}>Suggested Amount</Text>
-                <Text style={PM.amountValue}>₹ {seva.amount.toLocaleString()}</Text>
-              </View>
-              <View style={PM.amountInput}>
-                <Text style={PM.amountLabel}>Custom Amount</Text>
-                <TextInput
-                  style={PM.amountTextInput}
-                  placeholder="Enter ₹"
-                  placeholderTextColor={C.goldDark}
-                  keyboardType="numeric"
-                  value={customAmt}
-                  onChangeText={setCustomAmt}
-                />
-              </View>
+            {/* Header */}
+            <View style={PM.header}>
+              <View style={PM.headerBlob} />
+              <Text style={PM.headerEmoji}>{seva.icon}</Text>
+              <Text style={PM.headerTitle}>{seva.name}</Text>
+              <Text style={PM.headerDesc}>{seva.benefit}</Text>
+              <TouchableOpacity style={PM.closeBtn} onPress={onClose}>
+                <FontAwesome name="times" size={14} color={C.goldLight} />
+              </TouchableOpacity>
             </View>
 
-            {/* Name */}
-            <Text style={PM.fieldLabel}>Your Name *</Text>
-            <TextInput
-              style={PM.textInput}
-              placeholder="Enter your name"
-              placeholderTextColor={C.goldDark}
-              value={name}
-              onChangeText={setName}
-            />
+            <ScrollView
+              style={PM.body}
+              showsVerticalScrollIndicator={false}
+              keyboardShouldPersistTaps="handled">
 
-            {/* Phone */}
-            <Text style={PM.fieldLabel}>Phone (optional)</Text>
-            <TextInput
-              style={PM.textInput}
-              placeholder="For donation receipt"
-              placeholderTextColor={C.goldDark}
-              keyboardType="phone-pad"
-              value={phone}
-              onChangeText={setPhone}
-            />
+              {/* Amount row */}
+              <View style={PM.amountRow}>
+                <View style={PM.amountBox}>
+                  <Text style={PM.amountLabel}>Suggested Amount</Text>
+                  <Text style={PM.amountValue}>₹ {seva.amount.toLocaleString()}</Text>
+                </View>
+                <View style={PM.amountInput}>
+                  <Text style={PM.amountLabel}>Custom Amount</Text>
+                  <TextInput
+                    style={PM.amountTextInput}
+                    placeholder="Enter ₹"
+                    placeholderTextColor={C.goldDark}
+                    keyboardType="numeric"
+                    value={customAmt}
+                    onChangeText={setCustomAmt}
+                  />
+                </View>
+              </View>
 
-            {/* Occasion */}
-            <Text style={PM.fieldLabel}>Occasion</Text>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={PM.occasionScroll}>
-              {OCCASIONS.map((o) => (
-                <TouchableOpacity
-                  key={o.label}
-                  style={[PM.occasionChip, occasion === o.label && PM.occasionChipActive]}
-                  onPress={() => setOccasion(o.label)}
-                  activeOpacity={0.8}
-                >
-                  <Text style={PM.occasionIcon}>{o.icon}</Text>
-                  <Text style={[PM.occasionLabel, occasion === o.label && PM.occasionLabelActive]}>
-                    {o.label}
+              {/* Name */}
+              <Text style={PM.fieldLabel}>Your Name *</Text>
+              <TextInput
+                style={PM.textInput}
+                placeholder="Enter your name"
+                placeholderTextColor={C.goldDark}
+                value={name}
+                onChangeText={setName}
+              />
+
+              {/* Phone */}
+              <Text style={PM.fieldLabel}>Phone (optional)</Text>
+              <TextInput
+                style={PM.textInput}
+                placeholder="For donation receipt"
+                placeholderTextColor={C.goldDark}
+                keyboardType="phone-pad"
+                value={phone}
+                onChangeText={setPhone}
+              />
+
+              {/* Occasion */}
+              <Text style={PM.fieldLabel}>Occasion</Text>
+              <ScrollView horizontal showsHorizontalScrollIndicator={false} style={PM.occasionScroll}>
+                {OCCASIONS.map((o) => (
+                  <TouchableOpacity
+                    key={o.label}
+                    style={[PM.occasionChip, occasion === o.label && PM.occasionChipActive]}
+                    onPress={() => setOccasion(o.label)}
+                    activeOpacity={0.8}
+                  >
+                    <Text style={PM.occasionIcon}>{o.icon}</Text>
+                    <Text style={[PM.occasionLabel, occasion === o.label && PM.occasionLabelActive]}>
+                      {o.label}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+
+              {/* Occasion note */}
+              {occasion !== 'General Donation' && (
+                <View style={PM.occasionNote}>
+                  <Text style={PM.occasionNoteText}>
+                    🪷 This seva will be performed on behalf of{' '}
+                    <Text style={{ fontWeight: '800' }}>{name || 'you'}</Text> for{' '}
+                    <Text style={{ fontWeight: '800' }}>{occasion}</Text>. A divine ritual will be
+                    conducted at Gita Gyan Sansthanam, Kurukshetra in your honour.
                   </Text>
-                </TouchableOpacity>
-              ))}
-            </ScrollView>
+                </View>
+              )}
 
-            {/* Occasion note */}
-            {occasion !== 'General Donation' && (
-              <View style={PM.occasionNote}>
-                <Text style={PM.occasionNoteText}>
-                  🪷 This seva will be performed on behalf of{' '}
-                  <Text style={{ fontWeight: '800' }}>{name || 'you'}</Text> for{' '}
-                  <Text style={{ fontWeight: '800' }}>{occasion}</Text>. A divine ritual will be
-                  conducted at Gita Gyan Sansthanam, Kurukshetra in your honour.
-                </Text>
+              {/* Consent */}
+              <ConsentCheckboxes
+                termsAccepted={termsAccepted}
+                onToggleTerms={() => setTermsAccepted(prev => !prev)}
+                privacyAccepted={privacyAccepted}
+                onTogglePrivacy={() => setPrivacyAccepted(prev => !prev)}
+                style={PM.consentWrap}
+              />
+
+              {/* Total */}
+              <View style={PM.totalRow}>
+                <Text style={PM.totalLabel}>Total Donation</Text>
+                <Text style={PM.totalAmount}>₹ {amount.toLocaleString()}</Text>
               </View>
-            )}
 
-            {/* Consent */}
-            <ConsentCheckboxes
-              termsAccepted={termsAccepted}
-              onToggleTerms={() => setTermsAccepted(prev => !prev)}
-              privacyAccepted={privacyAccepted}
-              onTogglePrivacy={() => setPrivacyAccepted(prev => !prev)}
-              style={PM.consentWrap}
-            />
+              {/* Pay buttons */}
+              <Text style={PM.payLabel}>Choose Payment App</Text>
+              <View style={PM.payGrid}>
+                <TouchableOpacity style={[PM.payBtn, { backgroundColor: '#1A73E8' }]} onPress={() => openUPI('gpay')} activeOpacity={0.85}>
+                  <Text style={PM.payBtnEmoji}>G</Text>
+                  <Text style={PM.payBtnText}>Google Pay</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={[PM.payBtn, { backgroundColor: '#00BAF2' }]} onPress={() => openUPI('bhim')} activeOpacity={0.85}>
+                  <Text style={PM.payBtnEmoji}>₹</Text>
+                  <Text style={PM.payBtnText}>BHIM UPI</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={[PM.payBtn, { backgroundColor: '#5F259F' }]} onPress={() => openUPI('phone')} activeOpacity={0.85}>
+                  <Text style={PM.payBtnEmoji}>Pe</Text>
+                  <Text style={PM.payBtnText}>PhonePe</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={[PM.payBtn, { backgroundColor: '#00B9F1' }]} onPress={() => openUPI('paytm')} activeOpacity={0.85}>
+                  <Text style={PM.payBtnEmoji}>P</Text>
+                  <Text style={PM.payBtnText}>Paytm</Text>
+                </TouchableOpacity>
+              </View>
 
-            {/* Total */}
-            <View style={PM.totalRow}>
-              <Text style={PM.totalLabel}>Total Donation</Text>
-              <Text style={PM.totalAmount}>₹ {amount.toLocaleString()}</Text>
-            </View>
-
-            {/* Pay buttons */}
-            <Text style={PM.payLabel}>Choose Payment App</Text>
-            <View style={PM.payGrid}>
-              <TouchableOpacity style={[PM.payBtn, { backgroundColor: '#1A73E8' }]} onPress={() => openUPI('gpay')} activeOpacity={0.85}>
-                <Text style={PM.payBtnEmoji}>G</Text>
-                <Text style={PM.payBtnText}>Google Pay</Text>
+              {/* Any UPI */}
+              <TouchableOpacity style={PM.anyUpiBtn} onPress={() => openUPI('any')} activeOpacity={0.85}>
+                <FontAwesome name="mobile" size={16} color={C.white} style={{ marginRight: 8 }} />
+                <Text style={PM.anyUpiBtnText}>Pay with Any UPI App</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={[PM.payBtn, { backgroundColor: '#00BAF2' }]} onPress={() => openUPI('bhim')} activeOpacity={0.85}>
-                <Text style={PM.payBtnEmoji}>₹</Text>
-                <Text style={PM.payBtnText}>BHIM UPI</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={[PM.payBtn, { backgroundColor: '#5F259F' }]} onPress={() => openUPI('phone')} activeOpacity={0.85}>
-                <Text style={PM.payBtnEmoji}>Pe</Text>
-                <Text style={PM.payBtnText}>PhonePe</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={[PM.payBtn, { backgroundColor: '#00B9F1' }]} onPress={() => openUPI('paytm')} activeOpacity={0.85}>
-                <Text style={PM.payBtnEmoji}>P</Text>
-                <Text style={PM.payBtnText}>Paytm</Text>
-              </TouchableOpacity>
-            </View>
 
-            {/* Any UPI */}
-            <TouchableOpacity style={PM.anyUpiBtn} onPress={() => openUPI('any')} activeOpacity={0.85}>
-              <FontAwesome name="mobile" size={16} color={C.white} style={{ marginRight: 8 }} />
-              <Text style={PM.anyUpiBtnText}>Pay with Any UPI App</Text>
-            </TouchableOpacity>
+              {/* UPI ID */}
+              <View style={PM.upiIdRow}>
+                <Text style={PM.upiIdLabel}>UPI ID: </Text>
+                <Text style={PM.upiIdValue}>{UPI_ID}</Text>
+              </View>
 
-            {/* UPI ID */}
-            <View style={PM.upiIdRow}>
-              <Text style={PM.upiIdLabel}>UPI ID: </Text>
-              <Text style={PM.upiIdValue}>{UPI_ID}</Text>
-            </View>
-
-            <View style={{ height: 20 }} />
-          </ScrollView>
+              <View style={{ height: 20 }} />
+            </ScrollView>
+          </View>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     </Modal>
   );
 }

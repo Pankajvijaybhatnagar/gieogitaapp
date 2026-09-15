@@ -9,6 +9,7 @@ import {
   Easing,
   KeyboardAvoidingView,
   Platform,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -111,6 +112,10 @@ export default function ForgotPasswordScreen({
           </TouchableOpacity>
         </Animated.View>
 
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+          contentContainerStyle={styles.scrollContent}>
         <Animated.View
           style={[
             styles.content,
@@ -246,6 +251,7 @@ export default function ForgotPasswordScreen({
             </TouchableOpacity>
           </Animated.View>
         </Animated.View>
+        </ScrollView>
 
         <View style={styles.homeIndicator} />
       </KeyboardAvoidingView>
@@ -260,6 +266,10 @@ const styles = StyleSheet.create({
   },
   keyboard: {
     flex: 1
+  },
+  scrollContent: {
+    flexGrow: 1,
+    paddingBottom: 40
   },
   backButton: {
     position: 'absolute',
