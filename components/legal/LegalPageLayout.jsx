@@ -4,7 +4,7 @@
 
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
-import { useRouter, usePathname } from 'expo-router';
+import { usePathname, useRouter } from 'expo-router';
 import {
   Linking,
   ScrollView,
@@ -53,7 +53,13 @@ const QUICK_LINKS = [
   { label: 'Help', route: '/home/help' },
 ];
 
-export default function LegalPageLayout({ icon, title, tagline, intro, sections }) {
+export default function LegalPageLayout({
+  icon,
+  title,
+  tagline,
+  intro,
+  sections,
+}) {
   const router = useRouter();
   const pathname = usePathname();
 
@@ -177,7 +183,7 @@ export default function LegalPageLayout({ icon, title, tagline, intro, sections 
 
           <Text style={styles.footerCopyright}>
             © 2026 GIEO Gita — Global Inspiration &amp; Enlightenment
-            Organization of Bhagavad Gita. All Rights Reserved.
+            Organization of Bhagwad Gita. All Rights Reserved.
           </Text>
         </View>
       </ScrollView>

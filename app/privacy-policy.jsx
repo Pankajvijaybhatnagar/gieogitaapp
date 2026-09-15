@@ -69,7 +69,7 @@ export default function PrivacyPolicyScreen() {
       icon="document-text-outline"
       title="Privacy Policy"
       tagline="How we collect, use & protect your information"
-      intro="Welcome to GIEO Gita (Global Inspiration & Enlightenment Organization of Bhagavad Gita), our community platform Parivaar (parivaar.gieogita.org) and the GIEO Gita App. We respect your privacy and are committed to safeguarding the personal information shared with us by donors, volunteers, members, and visitors."
+      intro="Welcome to GIEO Gita (Global Inspiration & Enlightenment Organization of Bhagwad Gita), our community platform Parivaar (parivaar.gieogita.org) and the GIEO Gita App. We respect your privacy and are committed to safeguarding the personal information shared with us by donors, volunteers, members, and visitors."
       sections={SECTIONS}
     />
   );

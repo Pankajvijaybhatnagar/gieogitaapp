@@ -1,13 +1,14 @@
+import GitaText from '@/components/common/GitaText';
 import { FontAwesome } from '@expo/vector-icons';
-import Animated, { FadeInDown } from 'react-native-reanimated';
 import { StyleSheet, Text, View } from 'react-native';
+import Animated, { FadeInDown } from 'react-native-reanimated';
 import { C } from './constants';
 import PulsingRing from './PulsingRing';
 
 const STATS = [
-  { icon: '📿', value: '8,556', label: 'Chants'    },
-  { icon: '📖', value: '142',   label: 'Paath'     },
-  { icon: '🔥', value: '21',    label: 'Day Streak' },
+  { icon: '📿', value: '8,556', label: 'Chants' },
+  { icon: '📖', value: '142', label: 'Paath' },
+  { icon: '🔥', value: '21', label: 'Day Streak' },
 ];
 
 function StatCard({ icon, value, label }) {
@@ -32,7 +33,7 @@ export default function AvatarSection({ user }) {
     <>
       {/* Avatar */}
       <View style={styles.avatarWrap}>
-        <PulsingRing size={110} delay={0}   color={C.gold}      />
+        <PulsingRing size={110} delay={0} color={C.gold} />
         <PulsingRing size={110} delay={800} color={C.goldLight} />
         <View style={styles.avatarOuterRing}>
           <View style={styles.avatarInnerRing}>
@@ -58,14 +59,24 @@ export default function AvatarSection({ user }) {
       )}
 
       {/* Devotee badge */}
-      <Animated.View entering={FadeInDown.delay(200)} style={styles.devoteeBadge}>
-        <Text style={styles.devoteeBadgeText}>🕉️  Gita Devotee  •  GIEO GITA</Text>
+      <Animated.View
+        entering={FadeInDown.delay(200)}
+        style={styles.devoteeBadge}>
+        <Text style={styles.devoteeBadgeText}>
+          <GitaText /> Gita Devotee • GIEO GITA
+        </Text>
       </Animated.View>
 
       {/* Stats row */}
       <View style={styles.statsRow}>
         {STATS.map((stat, i) => (
-          <View key={stat.label} style={{ flexDirection: 'row', alignItems: 'center', flex: i < STATS.length - 1 ? undefined : 1 }}>
+          <View
+            key={stat.label}
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              flex: i < STATS.length - 1 ? undefined : 1,
+            }}>
             <StatCard {...stat} />
             {i < STATS.length - 1 && <View style={styles.statsVertDivider} />}
           </View>
@@ -82,7 +93,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 16,
-    position: 'relative'
+    position: 'relative',
   },
   avatarOuterRing: {
     width: 96,
@@ -91,27 +102,27 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: C.gold,
     padding: 3,
-    backgroundColor: C.goldPale
+    backgroundColor: C.goldPale,
   },
   avatarInnerRing: {
     flex: 1,
     borderRadius: 43,
     borderWidth: 1,
     borderColor: C.goldBorder,
-    padding: 2
+    padding: 2,
   },
   avatarCircle: {
     flex: 1,
     borderRadius: 40,
     backgroundColor: C.saffron,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   avatarText: {
     fontSize: 30,
-    fontWeight: "600",
+    fontWeight: '600',
     color: C.white,
-    letterSpacing: 2
+    letterSpacing: 2,
   },
   onlineDot: {
     position: 'absolute',
@@ -122,24 +133,24 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     backgroundColor: C.green,
     borderWidth: 2.5,
-    borderColor: C.white
+    borderColor: C.white,
   },
   heroName: {
     fontSize: 24,
-    fontWeight: "600",
+    fontWeight: '600',
     color: C.deepBrown,
     letterSpacing: 0.5,
-    marginBottom: 5
+    marginBottom: 5,
   },
   emailRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    marginBottom: 12
+    marginBottom: 12,
   },
   heroEmail: {
     fontSize: 12,
-    color: C.warmBrown
+    color: C.warmBrown,
   },
   devoteeBadge: {
     backgroundColor: C.goldPale,
@@ -148,13 +159,13 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     paddingHorizontal: 16,
     paddingVertical: 6,
-    marginBottom: 20
+    marginBottom: 20,
   },
   devoteeBadgeText: {
     fontSize: 11,
     fontWeight: '700',
     color: C.goldDark,
-    letterSpacing: 0.5
+    letterSpacing: 0.5,
   },
   statsRow: {
     flexDirection: 'row',
@@ -165,32 +176,32 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     paddingHorizontal: 10,
     width: '88%',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   statCard: {
     flex: 1,
     alignItems: 'center',
-    gap: 3
+    gap: 3,
   },
   statCardIcon: {
     fontSize: 18,
-    marginBottom: 2
+    marginBottom: 2,
   },
   statCardValue: {
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: '600',
     color: C.deepBrown,
-    letterSpacing: 0.5
+    letterSpacing: 0.5,
   },
   statCardLabel: {
     fontSize: 12,
     color: C.goldDark,
     letterSpacing: 0.5,
-    fontWeight: '600'
+    fontWeight: '600',
   },
   statsVertDivider: {
     width: 1,
     height: 38,
-    backgroundColor: C.goldBorder
-  }
+    backgroundColor: C.goldBorder,
+  },
 });

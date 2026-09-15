@@ -1,13 +1,14 @@
+import GitaText from '@/components/common/GitaText';
 import { DESIGN } from '@/constants/design';
 import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRef, useState } from 'react';
 import {
-    Dimensions,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  Dimensions,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 
 import Spacer from '@/components/ui/Spacer';
@@ -614,7 +615,9 @@ export default function EventGroupScreen() {
             />
             <Text style={styles.ctaBtnText}>Enable Event Notifications</Text>
           </TouchableOpacity>
-          <Text style={styles.ctaNote}>🕉️ Jai Shri Krishna • GIEO Gita</Text>
+          <Text style={styles.ctaNote}>
+            <GitaText /> Jai Shri Krishna • GIEO Gita
+          </Text>
         </View>
 
         <Spacer height={120} />

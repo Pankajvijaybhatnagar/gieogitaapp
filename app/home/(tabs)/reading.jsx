@@ -1,14 +1,15 @@
+import GitaText from '@/components/common/GitaText';
 import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useState } from 'react';
 import {
-    Dimensions,
-    Linking,
-    Modal,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  Dimensions,
+  Linking,
+  Modal,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 
 import Spacer from '@/components/ui/Spacer';
@@ -26,7 +27,7 @@ const GITA_PRERNA_ISSUES = [
     issue: 'Issue 48',
     theme: 'Karma Yoga & Selfless Action',
     pages: 32,
-    icon: '🕉️',
+    icon: 'Gita',
     new: true,
   },
   {
@@ -702,7 +703,7 @@ export default function ReadingScreen() {
         {showShlokas && (
           <>
             <SectionHead
-              icon="🕉️"
+              icon="Gita"
               title="Sacred Shlokas"
               accent="Bhagwad Gita Verses"
               onAction={() => showAll('Daily Shloka')}
@@ -766,7 +767,9 @@ export default function ReadingScreen() {
               Download Free Digital Copy
             </Text>
           </TouchableOpacity>
-          <Text style={styles.ctaNote}>🕉️ Jai Shri Krishna • GIEO Gita</Text>
+          <Text style={styles.ctaNote}>
+            <GitaText /> Jai Shri Krishna • GIEO Gita
+          </Text>
         </View>
 
         <Spacer height={120} />

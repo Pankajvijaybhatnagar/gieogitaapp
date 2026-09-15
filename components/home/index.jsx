@@ -1,3 +1,4 @@
+import GitaText from '@/components/common/GitaText';
 import { DESIGN } from '@/constants/design';
 import { FontAwesome } from '@expo/vector-icons';
 import { useEffect, useRef } from 'react';
@@ -33,10 +34,34 @@ const COLORS = {
 
 // ─── MOCK DATA ────────────────────────────────────────────────────────────────
 const exclusiveContent = [
-  { id: '1', icon: '🕉️', title: 'Geometry of Life', meta: 'Sadhguru Series', badge: 'NEW' },
-  { id: '2', icon: '📿', title: 'Intimate Moments with Guruji', meta: 'Deep Satsang', badge: null },
-  { id: '3', icon: '🪔', title: 'Path of Devotion', meta: 'Bhakti Series', badge: null },
-  { id: '4', icon: '📖', title: 'Karma Yoga Insights', meta: 'Knowledge Series', badge: null },
+  {
+    id: '1',
+    icon: 'Gita',
+    title: 'Geometry of Life',
+    meta: 'Sadhguru Series',
+    badge: 'NEW',
+  },
+  {
+    id: '2',
+    icon: '📿',
+    title: 'Intimate Moments with Guruji',
+    meta: 'Deep Satsang',
+    badge: null,
+  },
+  {
+    id: '3',
+    icon: '🪔',
+    title: 'Path of Devotion',
+    meta: 'Bhakti Series',
+    badge: null,
+  },
+  {
+    id: '4',
+    icon: '📖',
+    title: 'Karma Yoga Insights',
+    meta: 'Knowledge Series',
+    badge: null,
+  },
 ];
 
 const adhyayList = [
@@ -79,9 +104,15 @@ const upcomingEvents = [
 ];
 
 const sevaList = [
-  'Shringaar Seva', 'Aarti Seva', 'Anna Seva',
-  'Gaushala Seva', 'Vidya Seva', 'Jal Seva',
-  'Gau-Poojan Seva', 'Gau-Grass Seva', 'Chikitsa Seva',
+  'Shringaar Seva',
+  'Aarti Seva',
+  'Anna Seva',
+  'Gaushala Seva',
+  'Vidya Seva',
+  'Jal Seva',
+  'Gau-Poojan Seva',
+  'Gau-Grass Seva',
+  'Chikitsa Seva',
 ];
 
 const aboutInitiatives = [
@@ -139,7 +170,9 @@ function ExclusiveCard({ item }) {
         <View style={styles.excImgOverlay} />
       </View>
       <View style={styles.excCardBody}>
-        <Text style={styles.excCardTitle} numberOfLines={2}>{item.title}</Text>
+        <Text style={styles.excCardTitle} numberOfLines={2}>
+          {item.title}
+        </Text>
         <Text style={styles.excCardMeta}>{item.meta}</Text>
       </View>
     </TouchableOpacity>
@@ -169,7 +202,9 @@ function EventCard({ item }) {
           <Text style={styles.eventDateMonth}>{item.month}</Text>
         </View>
         <View style={styles.eventInfo}>
-          <Text style={styles.eventTitle} numberOfLines={2}>{item.title}</Text>
+          <Text style={styles.eventTitle} numberOfLines={2}>
+            {item.title}
+          </Text>
           <Text style={styles.eventLoc}>📍 {item.location}</Text>
           <Text style={styles.eventTime}>⏰ {item.time}</Text>
         </View>
@@ -206,9 +241,17 @@ export default function GieoGitaHome() {
 
     Animated.loop(
       Animated.sequence([
-        Animated.timing(pulseAnim, { toValue: 0.2, duration: 700, useNativeDriver: true }),
-        Animated.timing(pulseAnim, { toValue: 1, duration: 700, useNativeDriver: true }),
-      ])
+        Animated.timing(pulseAnim, {
+          toValue: 0.2,
+          duration: 700,
+          useNativeDriver: true,
+        }),
+        Animated.timing(pulseAnim, {
+          toValue: 1,
+          duration: 700,
+          useNativeDriver: true,
+        }),
+      ]),
     ).start();
   }, []);
 
@@ -216,8 +259,10 @@ export default function GieoGitaHome() {
     <View style={styles.root}>
       <StatusBar barStyle="light-content" backgroundColor={COLORS.deepBrown} />
 
-      <ScrollView style={styles.container} showsVerticalScrollIndicator={false} bounces>
-
+      <ScrollView
+        style={styles.container}
+        showsVerticalScrollIndicator={false}
+        bounces>
         {/* ── HEADER ─────────────────────────────────────────────── */}
         <View style={styles.header}>
           <View style={styles.headerRow}>
@@ -241,7 +286,7 @@ export default function GieoGitaHome() {
           </View>
           <View style={styles.greetingStrip}>
             <Text style={styles.greetingText}>
-              🕉️  श्री कृष्ण शरणम् ममः — Spread the wisdom of Gita
+              <GitaText /> श्री कृष्ण शरणम् ममः — Spread the wisdom of Gita
             </Text>
           </View>
         </View>
@@ -251,8 +296,7 @@ export default function GieoGitaHome() {
           style={[
             styles.heroBanner,
             { opacity: fadeAnim, transform: [{ translateY: slideAnim }] },
-          ]}
-        >
+          ]}>
           <Text style={styles.peacockBg}>🪶</Text>
           <View style={styles.heroTag}>
             <Text style={styles.heroTagText}>✦ DIVINE WISDOM</Text>
@@ -262,21 +306,24 @@ export default function GieoGitaHome() {
             <Text style={styles.heroTitleAccent}>Gita Wisdom</Text>
           </Text>
           <Text style={styles.heroDesc}>
-            Spreading the timeless teachings of Bhagavad Gita across the globe.
+            Spreading the timeless teachings of Bhagwad Gita across the globe.
           </Text>
           <TouchableOpacity style={styles.heroBtn} activeOpacity={0.85}>
-            <Text style={styles.heroBtnText}>Begin Journey  ›</Text>
+            <Text style={styles.heroBtnText}>Begin Journey ›</Text>
           </TouchableOpacity>
         </Animated.View>
 
         {/* ── EXCLUSIVE CONTENT ──────────────────────────────────── */}
-        <SectionHeader title="✦ Exclusive" accent="Content" onSeeAll={() => {}} />
+        <SectionHeader
+          title="✦ Exclusive"
+          accent="Content"
+          onSeeAll={() => {}}
+        />
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.hScrollContent}
-        >
-          {exclusiveContent.map((item) => (
+          contentContainerStyle={styles.hScrollContent}>
+          {exclusiveContent.map(item => (
             <ExclusiveCard key={item.id} item={item} />
           ))}
         </ScrollView>
@@ -295,16 +342,18 @@ export default function GieoGitaHome() {
               <Text style={styles.liveNowLabel}>LIVE NOW</Text>
             </View>
             <Text style={styles.liveTitle}>Gita Gyan Sansthanam</Text>
-            <Text style={styles.liveSubtitle}>Kurukshetra Mandir  •  Live Aarti</Text>
+            <Text style={styles.liveSubtitle}>
+              Kurukshetra Mandir • Live Aarti
+            </Text>
           </View>
           <FontAwesome name="chevron-right" size={14} color={COLORS.goldDark} />
         </TouchableOpacity>
 
         <GoldDivider />
 
-        {/* ── BHAGAVAD GITA ADHYAY ───────────────────────────────── */}
+        {/* ── Bhagwad GITA ADHYAY ───────────────────────────────── */}
         <SectionHeader
-          title="📖 Bhagavad Gita"
+          title="📖 Bhagwad Gita"
           accent="Adhyay"
           onSeeAll={() => {}}
           seeAllLabel="18 Chapters »"
@@ -312,9 +361,8 @@ export default function GieoGitaHome() {
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.hScrollContent}
-        >
-          {adhyayList.map((item) => (
+          contentContainerStyle={styles.hScrollContent}>
+          {adhyayList.map(item => (
             <AdhyayCard key={item.id} item={item} />
           ))}
         </ScrollView>
@@ -329,7 +377,7 @@ export default function GieoGitaHome() {
           seeAllLabel="View all »"
         />
         <View style={styles.eventsContainer}>
-          {upcomingEvents.map((item) => (
+          {upcomingEvents.map(item => (
             <EventCard key={item.id} item={item} />
           ))}
         </View>
@@ -342,12 +390,14 @@ export default function GieoGitaHome() {
           <Text style={styles.sevaOverlayText}>॥</Text>
           <Text style={styles.sevaLabel}>SUPPORT OUR MISSION</Text>
           <Text style={styles.sevaTitle}>
-            Be Part Of{' '}
-            <Text style={styles.sevaTitleAccent}>Gita Seva</Text>
+            Be Part Of <Text style={styles.sevaTitleAccent}>Gita Seva</Text>
           </Text>
           <View style={styles.sevaChips}>
-            {sevaList.map((seva) => (
-              <TouchableOpacity key={seva} style={styles.sevaChip} activeOpacity={0.75}>
+            {sevaList.map(seva => (
+              <TouchableOpacity
+                key={seva}
+                style={styles.sevaChip}
+                activeOpacity={0.75}>
                 <Text style={styles.sevaChipText}>{seva}</Text>
               </TouchableOpacity>
             ))}
@@ -365,12 +415,16 @@ export default function GieoGitaHome() {
             {'\n'}And Social Responsibility
           </Text>
           <Text style={styles.aboutDesc}>
-            GIEO Gita is a spiritual mission dedicated to spreading the timeless wisdom of
-            the Bhagwad Gita. Our aim is to cultivate values, inspire transformation, and
-            serve society with love, devotion, and selfless service.
+            GIEO Gita is a spiritual mission dedicated to spreading the timeless
+            wisdom of the Bhagwad Gita. Our aim is to cultivate values, inspire
+            transformation, and serve society with love, devotion, and selfless
+            service.
           </Text>
-          {aboutInitiatives.map((init) => (
-            <TouchableOpacity key={init.title} style={styles.initiativeCard} activeOpacity={0.85}>
+          {aboutInitiatives.map(init => (
+            <TouchableOpacity
+              key={init.title}
+              style={styles.initiativeCard}
+              activeOpacity={0.85}>
               <View style={styles.initiativeIcon}>
                 <Text style={styles.initiativeIconText}>{init.icon}</Text>
               </View>
@@ -378,7 +432,11 @@ export default function GieoGitaHome() {
                 <Text style={styles.initiativeTitle}>{init.title}</Text>
                 <Text style={styles.initiativeDesc}>{init.desc}</Text>
               </View>
-              <FontAwesome name="chevron-right" size={12} color={COLORS.goldDark} />
+              <FontAwesome
+                name="chevron-right"
+                size={12}
+                color={COLORS.goldDark}
+              />
             </TouchableOpacity>
           ))}
         </View>
@@ -387,7 +445,6 @@ export default function GieoGitaHome() {
       </ScrollView>
 
       {/* ── BOTTOM NAVIGATION ──────────────────────────────────── */}
-     
     </View>
   );
 }
@@ -396,28 +453,28 @@ export default function GieoGitaHome() {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: COLORS.cream
+    backgroundColor: COLORS.cream,
   },
   container: {
     flex: 1,
-    backgroundColor: COLORS.cream
+    backgroundColor: COLORS.cream,
   },
   // HEADER
   header: {
     backgroundColor: COLORS.deepBrown,
     paddingTop: 16,
     paddingHorizontal: 20,
-    paddingBottom: 14
+    paddingBottom: 14,
   },
   headerRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   logoArea: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10
+    gap: 10,
   },
   logoCircle: {
     width: 40,
@@ -427,27 +484,27 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
     borderColor: COLORS.gold,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   logoCircleIcon: {
-    fontSize: 20
+    fontSize: 20,
   },
   logoMain: {
     color: COLORS.goldLight,
     fontSize: 17,
-    fontWeight: "600",
-    letterSpacing: 1.5
+    fontWeight: '600',
+    letterSpacing: 1.5,
   },
   logoSub: {
     color: COLORS.goldDark,
     fontSize: 12,
     letterSpacing: 1,
-    marginTop: 1
+    marginTop: 1,
   },
   headerIcons: {
     flexDirection: 'row',
     gap: 10,
-    alignItems: 'center'
+    alignItems: 'center',
   },
   iconBtn: {
     width: 34,
@@ -457,7 +514,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(179,149,98,0.28)',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   greetingStrip: {
     marginTop: 12,
@@ -467,12 +524,12 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(179,149,98,0.2)',
     paddingHorizontal: 14,
     paddingVertical: 6,
-    alignSelf: 'flex-start'
+    alignSelf: 'flex-start',
   },
   greetingText: {
     color: 'rgba(232,197,90,0.9)',
     fontSize: 12,
-    fontStyle: 'italic'
+    fontStyle: 'italic',
   },
   // HERO BANNER
   heroBanner: {
@@ -481,7 +538,7 @@ const styles = StyleSheet.create({
     paddingTop: 22,
     paddingBottom: 24,
     position: 'relative',
-    overflow: 'hidden'
+    overflow: 'hidden',
   },
   peacockBg: {
     position: 'absolute',
@@ -489,9 +546,11 @@ const styles = StyleSheet.create({
     top: 10,
     fontSize: 64,
     opacity: 0.18,
-    transform: [{
-      rotate: '-15deg'
-    }]
+    transform: [
+      {
+        rotate: '-15deg',
+      },
+    ],
   },
   heroTag: {
     backgroundColor: 'rgba(166,83,56,0.2)',
@@ -501,25 +560,25 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 4,
     alignSelf: 'flex-start',
-    marginBottom: 12
+    marginBottom: 12,
   },
   heroTagText: {
     color: COLORS.saffronLight,
     fontSize: 10,
     letterSpacing: 2,
-    fontWeight: '700'
+    fontWeight: '700',
   },
   heroTitle: {
     color: COLORS.cream,
     fontSize: 26,
-    fontWeight: "400",
+    fontWeight: '400',
     lineHeight: 32,
     marginBottom: 8,
     fontFamily: DESIGN.fonts.editorial,
-    letterSpacing: -0.4
+    letterSpacing: -0.4,
   },
   heroTitleAccent: {
-    color: COLORS.goldLight
+    color: COLORS.goldLight,
   },
   heroDesc: {
     color: 'rgba(253,246,227,0.65)',
@@ -527,42 +586,44 @@ const styles = StyleSheet.create({
     lineHeight: 19,
     maxWidth: 240,
     fontStyle: 'italic',
-    marginBottom: 16
+    marginBottom: 16,
   },
   heroBtn: {
     backgroundColor: COLORS.gold,
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 22,
-    alignSelf: 'flex-start'
+    alignSelf: 'flex-start',
   },
   heroBtnText: {
     color: COLORS.deepBrown,
     fontSize: 12,
-    fontWeight: "600",
-    letterSpacing: 0.5
+    fontWeight: '600',
+    letterSpacing: 0.5,
   },
   // DIVIDER
   dividerRow: {
     flexDirection: 'row',
     alignItems: 'center',
     marginHorizontal: 20,
-    marginVertical: 12
+    marginVertical: 12,
   },
   dividerLine: {
     flex: 1,
     height: 1,
     backgroundColor: COLORS.goldDark,
-    opacity: 0.35
+    opacity: 0.35,
   },
   dividerDiamond: {
     width: 7,
     height: 7,
     backgroundColor: COLORS.gold,
-    transform: [{
-      rotate: '45deg'
-    }],
-    marginHorizontal: 8
+    transform: [
+      {
+        rotate: '45deg',
+      },
+    ],
+    marginHorizontal: 8,
   },
   // SECTION HEADER
   sectionHeader: {
@@ -571,27 +632,27 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 20,
     paddingTop: 6,
-    paddingBottom: 10
+    paddingBottom: 10,
   },
   sectionTitle: {
     fontSize: 15,
-    fontWeight: "600",
+    fontWeight: '600',
     color: COLORS.deepBrown,
-    letterSpacing: 0.3
+    letterSpacing: 0.3,
   },
   sectionAccent: {
-    color: COLORS.goldDark
+    color: COLORS.goldDark,
   },
   seeAll: {
     fontSize: 12,
     color: COLORS.saffron,
-    fontStyle: 'italic'
+    fontStyle: 'italic',
   },
   // HORIZONTAL SCROLL
   hScrollContent: {
     paddingHorizontal: 20,
     paddingBottom: 6,
-    gap: 12
+    gap: 12,
   },
   // EXCLUSIVE CARDS
   excCard: {
@@ -600,7 +661,7 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: 'rgba(179,149,98,0.3)'
+    borderColor: 'rgba(179,149,98,0.3)',
   },
   excCardImg: {
     width: '100%',
@@ -608,11 +669,11 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.warmBrown,
     alignItems: 'center',
     justifyContent: 'center',
-    position: 'relative'
+    position: 'relative',
   },
   excCardIcon: {
     fontSize: 36,
-    zIndex: 1
+    zIndex: 1,
   },
   excImgOverlay: {
     position: 'absolute',
@@ -620,7 +681,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     height: 32,
-    backgroundColor: 'rgba(44,26,10,0.7)'
+    backgroundColor: 'rgba(44,26,10,0.7)',
   },
   excBadge: {
     position: 'absolute',
@@ -630,28 +691,28 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingHorizontal: 7,
     paddingVertical: 2,
-    zIndex: 2
+    zIndex: 2,
   },
   excBadgeText: {
     color: COLORS.white,
     fontSize: 10,
-    fontWeight: "600",
-    letterSpacing: 0.5
+    fontWeight: '600',
+    letterSpacing: 0.5,
   },
   excCardBody: {
-    padding: 10
+    padding: 10,
   },
   excCardTitle: {
     color: COLORS.cream,
     fontSize: 12,
     fontWeight: '700',
-    lineHeight: 18
+    lineHeight: 18,
   },
   excCardMeta: {
     color: 'rgba(232,197,90,0.6)',
     fontSize: 12,
     marginTop: 4,
-    fontStyle: 'italic'
+    fontStyle: 'italic',
   },
   // LIVE DARSHAN
   liveBanner: {
@@ -664,7 +725,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 14,
     borderWidth: 1,
-    borderColor: 'rgba(179,149,98,0.4)'
+    borderColor: 'rgba(179,149,98,0.4)',
   },
   livePlay: {
     width: 48,
@@ -674,38 +735,38 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: COLORS.gold,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   liveTextCol: {
-    flex: 1
+    flex: 1,
   },
   liveNowRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 5,
-    marginBottom: 3
+    marginBottom: 3,
   },
   liveDot: {
     width: 7,
     height: 7,
     borderRadius: 4,
-    backgroundColor: COLORS.liveRed
+    backgroundColor: COLORS.liveRed,
   },
   liveNowLabel: {
     color: 'rgba(253,246,227,0.6)',
     fontSize: 12,
     fontStyle: 'italic',
-    letterSpacing: 0.5
+    letterSpacing: 0.5,
   },
   liveTitle: {
     color: COLORS.cream,
     fontSize: 14,
-    fontWeight: "600"
+    fontWeight: '600',
   },
   liveSubtitle: {
     color: COLORS.goldLight,
     fontSize: 12,
-    marginTop: 2
+    marginTop: 2,
   },
   // ADHYAY CARDS
   adhyayCard: {
@@ -716,52 +777,52 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: DESIGN.colors.border,
     shadowOpacity: 0.045,
-    elevation: 2
+    elevation: 2,
   },
   adhyayImg: {
     width: '100%',
     height: 76,
     backgroundColor: COLORS.gold,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   adhyayIcon: {
-    fontSize: 30
+    fontSize: 30,
   },
   adhyayBody: {
-    padding: 9
+    padding: 9,
   },
   adhyayNum: {
     fontSize: 12,
     color: COLORS.saffron,
-    fontWeight: "600",
-    letterSpacing: 1
+    fontWeight: '600',
+    letterSpacing: 1,
   },
   adhyayName: {
     fontSize: 12,
     color: COLORS.deepBrown,
     fontWeight: '700',
     lineHeight: 18,
-    marginTop: 2
+    marginTop: 2,
   },
   // EVENTS
   eventsContainer: {
     paddingHorizontal: 20,
-    gap: 10
+    gap: 10,
   },
   eventCard: {
     backgroundColor: COLORS.deepBrown,
     borderRadius: 16,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: 'rgba(179,149,98,0.3)'
+    borderColor: 'rgba(179,149,98,0.3)',
   },
   eventCardTop: {
     backgroundColor: COLORS.richBrown,
     padding: 14,
     flexDirection: 'row',
     gap: 12,
-    alignItems: 'flex-start'
+    alignItems: 'flex-start',
   },
   eventDateBox: {
     backgroundColor: COLORS.gold,
@@ -769,40 +830,40 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 7,
     alignItems: 'center',
-    minWidth: 46
+    minWidth: 46,
   },
   eventDateDay: {
     fontSize: 20,
-    fontWeight: "600",
+    fontWeight: '600',
     color: COLORS.deepBrown,
-    lineHeight: 22
+    lineHeight: 22,
   },
   eventDateMonth: {
     fontSize: 12,
-    fontWeight: "600",
+    fontWeight: '600',
     color: COLORS.deepBrown,
     letterSpacing: 0.5,
-    marginTop: 2
+    marginTop: 2,
   },
   eventInfo: {
-    flex: 1
+    flex: 1,
   },
   eventTitle: {
     color: COLORS.cream,
     fontSize: 13,
     fontWeight: '700',
     marginBottom: 4,
-    lineHeight: 20
+    lineHeight: 20,
   },
   eventLoc: {
     fontSize: 12,
     color: 'rgba(253,246,227,0.6)',
     fontStyle: 'italic',
-    marginBottom: 2
+    marginBottom: 2,
   },
   eventTime: {
     fontSize: 12,
-    color: COLORS.goldLight
+    color: COLORS.goldLight,
   },
   eventFooter: {
     paddingHorizontal: 14,
@@ -811,7 +872,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     borderTopWidth: 1,
-    borderTopColor: 'rgba(179,149,98,0.15)'
+    borderTopColor: 'rgba(179,149,98,0.15)',
   },
   eventTagBadge: {
     backgroundColor: 'rgba(166,83,56,0.2)',
@@ -819,18 +880,18 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(166,83,56,0.4)',
     borderRadius: 10,
     paddingHorizontal: 9,
-    paddingVertical: 3
+    paddingVertical: 3,
   },
   eventTagText: {
     color: COLORS.saffronLight,
     fontSize: 10,
-    fontWeight: "600",
-    letterSpacing: 0.5
+    fontWeight: '600',
+    letterSpacing: 0.5,
   },
   eventCta: {
     fontSize: 12,
     color: COLORS.goldLight,
-    fontStyle: 'italic'
+    fontStyle: 'italic',
   },
   // SEVA
   sevaBg: {
@@ -841,7 +902,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(179,149,98,0.45)',
     position: 'relative',
-    overflow: 'hidden'
+    overflow: 'hidden',
   },
   sevaOverlayText: {
     position: 'absolute',
@@ -849,28 +910,28 @@ const styles = StyleSheet.create({
     top: 6,
     fontSize: 72,
     color: 'rgba(179,149,98,0.1)',
-    lineHeight: 80
+    lineHeight: 80,
   },
   sevaLabel: {
     fontSize: 12,
     letterSpacing: 2,
     color: COLORS.saffron,
-    fontWeight: "600",
-    marginBottom: 4
+    fontWeight: '600',
+    marginBottom: 4,
   },
   sevaTitle: {
     fontSize: 17,
-    fontWeight: "600",
+    fontWeight: '600',
     color: COLORS.deepBrown,
-    marginBottom: 12
+    marginBottom: 12,
   },
   sevaTitleAccent: {
-    color: COLORS.goldDark
+    color: COLORS.goldDark,
   },
   sevaChips: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 8
+    gap: 8,
   },
   sevaChip: {
     backgroundColor: 'rgba(44,26,10,0.08)',
@@ -878,12 +939,12 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(179,149,98,0.5)',
     borderRadius: 20,
     paddingHorizontal: 12,
-    paddingVertical: 5
+    paddingVertical: 5,
   },
   sevaChipText: {
     fontSize: 12,
     color: COLORS.warmBrown,
-    fontWeight: '600'
+    fontWeight: '600',
   },
   // ABOUT
   aboutSection: {
@@ -892,24 +953,24 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 18,
     borderWidth: 1,
-    borderColor: 'rgba(179,149,98,0.3)'
+    borderColor: 'rgba(179,149,98,0.3)',
   },
   aboutHeading: {
     color: COLORS.cream,
     fontSize: 17,
-    fontWeight: "600",
+    fontWeight: '600',
     lineHeight: 24,
-    marginBottom: 10
+    marginBottom: 10,
   },
   aboutHeadingAccent: {
-    color: COLORS.goldLight
+    color: COLORS.goldLight,
   },
   aboutDesc: {
     color: 'rgba(253,246,227,0.65)',
     fontSize: 12,
     lineHeight: 18,
     fontStyle: 'italic',
-    marginBottom: 14
+    marginBottom: 14,
   },
   initiativeCard: {
     flexDirection: 'row',
@@ -921,7 +982,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     marginBottom: 8,
     borderWidth: 1,
-    borderColor: 'rgba(179,149,98,0.2)'
+    borderColor: 'rgba(179,149,98,0.2)',
   },
   initiativeIcon: {
     width: 40,
@@ -929,24 +990,24 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: 'rgba(179,149,98,0.15)',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   initiativeIconText: {
-    fontSize: 20
+    fontSize: 20,
   },
   initiativeText: {
-    flex: 1
+    flex: 1,
   },
   initiativeTitle: {
     color: COLORS.cream,
     fontSize: 13,
-    fontWeight: '700'
+    fontWeight: '700',
   },
   initiativeDesc: {
     color: 'rgba(253,246,227,0.55)',
     fontSize: 12,
     marginTop: 2,
-    fontStyle: 'italic'
+    fontStyle: 'italic',
   },
   // BOTTOM NAV
   bottomNav: {
@@ -956,30 +1017,30 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: 'rgba(179,149,98,0.3)',
     paddingTop: 10,
-    paddingBottom: 18
+    paddingBottom: 18,
   },
   navItem: {
     alignItems: 'center',
     gap: 3,
-    minWidth: 52
+    minWidth: 52,
   },
   navIconActive: {
     backgroundColor: 'rgba(179,149,98,0.15)',
     borderRadius: 12,
     paddingHorizontal: 10,
-    paddingVertical: 4
+    paddingVertical: 4,
   },
   navIconInactive: {
     paddingHorizontal: 10,
-    paddingVertical: 4
+    paddingVertical: 4,
   },
   navLabel: {
     fontSize: 12,
     color: COLORS.goldDark,
     letterSpacing: 0.5,
-    fontWeight: '600'
+    fontWeight: '600',
   },
   navLabelActive: {
-    color: COLORS.goldLight
-  }
+    color: COLORS.goldLight,
+  },
 });

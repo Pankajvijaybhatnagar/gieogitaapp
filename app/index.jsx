@@ -326,7 +326,7 @@ export default function GetStartedScreen() {
             },
           ]}>
           {/* <View style={styles.omCircle}>
-            <Text style={styles.om}>ॐ</Text>
+            <Text style={styles.om}></Text>
           </View> */}
 
           <Text style={styles.brandName}>GIEO GITA</Text>
@@ -359,7 +359,7 @@ export default function GetStartedScreen() {
           <Text style={styles.mainTitleSecond}>एक दिव्य यात्रा</Text>
 
           <Text style={styles.description}>
-            Discover the timeless wisdom of the Bhagavad Gita and bring peace,
+            Discover the timeless wisdom of the Bhagwad Gita and bring peace,
             purpose and clarity into your life.
           </Text> */}
 

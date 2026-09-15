@@ -1,18 +1,43 @@
+import GitaText from '@/components/common/GitaText';
+import Card from '@/components/ui/Card';
+import { COLORS, RGB } from '@/constants/brandColors';
 import { DESIGN } from '@/constants/design';
+import { hairline, radii, spacing, type } from '@/constants/theme';
 import { FontAwesome } from '@expo/vector-icons';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import Card from '@/components/ui/Card';
-import { hairline, radii, spacing, type } from '@/constants/theme';
-import { COLORS, RGB } from '@/constants/brandColors';
 import { SectionHeader } from './Sharedui';
 
 const sevas = [
-  { icon: '🐄', title: 'Gau Seva', desc: 'Daily care, feeding, and tending of each sacred cow with love and devotion' },
-  { icon: '🌿', title: 'Organic Farming', desc: 'Natural cultivation using Panchagavya techniques blessed by Gita wisdom' },
-  { icon: '🍶', title: 'Gau Products', desc: 'Pure A2 milk, ghee, and herbal preparations prepared with sacred intent' },
-  { icon: '🙏', title: 'Gau Puja', desc: 'Devotional rituals honouring the divine presence in every cow' },
-  { icon: '🌾', title: 'Gobar Krishi', desc: 'Cow dung–based natural farming reviving ancient agricultural traditions' },
-  { icon: '💧', title: 'Gomutra Therapy', desc: 'Traditional Ayurvedic wellness using purified cow urine preparations' },
+  {
+    icon: '🐄',
+    title: 'Gau Seva',
+    desc: 'Daily care, feeding, and tending of each sacred cow with love and devotion',
+  },
+  {
+    icon: '🌿',
+    title: 'Organic Farming',
+    desc: 'Natural cultivation using Panchagavya techniques blessed by Gita wisdom',
+  },
+  {
+    icon: '🍶',
+    title: 'Gau Products',
+    desc: 'Pure A2 milk, ghee, and herbal preparations prepared with sacred intent',
+  },
+  {
+    icon: '🙏',
+    title: 'Gau Puja',
+    desc: 'Devotional rituals honouring the divine presence in every cow',
+  },
+  {
+    icon: '🌾',
+    title: 'Gobar Krishi',
+    desc: 'Cow dung–based natural farming reviving ancient agricultural traditions',
+  },
+  {
+    icon: '💧',
+    title: 'Gomutra Therapy',
+    desc: 'Traditional Ayurvedic wellness using purified cow urine preparations',
+  },
 ];
 
 const stats = [
@@ -45,7 +70,9 @@ export default function GieoGaushalaSection() {
       {/* ── Hero ── */}
       <Card radius={radii.xl} style={styles.heroCard}>
         <View style={styles.heroBadge}>
-          <Text style={styles.heroBadgeText}>🕉️  Sacred Cow Sanctuary</Text>
+          <Text style={styles.heroBadgeText}>
+            <GitaText /> Sacred Cow Sanctuary
+          </Text>
         </View>
         <Text style={styles.heroHeading}>
           Where Every Cow Is{'\n'}
@@ -60,7 +87,9 @@ export default function GieoGaushalaSection() {
         {/* Stats */}
         <View style={styles.statsGrid}>
           {stats.map((s, i) => (
-            <View key={s.label} style={[styles.statBox, i % 2 !== 1 && styles.statBoxRight]}>
+            <View
+              key={s.label}
+              style={[styles.statBox, i % 2 !== 1 && styles.statBoxRight]}>
               <Text style={styles.statValue}>{s.value}</Text>
               <Text style={styles.statLabel}>{s.label}</Text>
             </View>
@@ -74,11 +103,13 @@ export default function GieoGaushalaSection() {
           <Text style={styles.sectionIcon}>🌸</Text>
           <View>
             <Text style={styles.sectionTitle}>Our Seva Activities</Text>
-            <Text style={styles.sectionSubtitle}>Six pillars of our daily devotion</Text>
+            <Text style={styles.sectionSubtitle}>
+              Six pillars of our daily devotion
+            </Text>
           </View>
         </View>
         <View style={styles.sevaGrid}>
-          {sevas.map((s) => (
+          {sevas.map(s => (
             <View key={s.title} style={styles.sevaCard}>
               <View style={styles.sevaIconCircle}>
                 <Text style={styles.sevaIconText}>{s.icon}</Text>
@@ -96,11 +127,13 @@ export default function GieoGaushalaSection() {
           <Text style={styles.sectionIcon}>🛕</Text>
           <View>
             <Text style={styles.sectionTitle}>Gaushala Products</Text>
-            <Text style={styles.sectionSubtitle}>Pure, natural, and divinely prepared</Text>
+            <Text style={styles.sectionSubtitle}>
+              Pure, natural, and divinely prepared
+            </Text>
           </View>
         </View>
         <View style={styles.productsRow}>
-          {products.map((p) => (
+          {products.map(p => (
             <View key={p.name} style={styles.productCard}>
               <Text style={styles.productIcon}>{p.icon}</Text>
               <View style={styles.productTag}>
@@ -122,7 +155,9 @@ export default function GieoGaushalaSection() {
           <Text style={styles.sectionIcon}>📿</Text>
           <View>
             <Text style={styles.sectionTitle}>Our Journey</Text>
-            <Text style={styles.sectionSubtitle}>A decade of devotion and growth</Text>
+            <Text style={styles.sectionSubtitle}>
+              A decade of devotion and growth
+            </Text>
           </View>
         </View>
         {timeline.map((t, i) => (
@@ -131,7 +166,11 @@ export default function GieoGaushalaSection() {
               <Text style={styles.timelineYear}>{t.year}</Text>
               {i < timeline.length - 1 && <View style={styles.timelineLine} />}
             </View>
-            <View style={[styles.timelineCard, i === timeline.length - 1 && { marginBottom: 0 }]}>
+            <View
+              style={[
+                styles.timelineCard,
+                i === timeline.length - 1 && { marginBottom: 0 },
+              ]}>
               <Text style={styles.timelineEvent}>{t.event}</Text>
             </View>
           </View>
@@ -144,7 +183,9 @@ export default function GieoGaushalaSection() {
           <Text style={styles.sectionIcon}>🤝</Text>
           <View>
             <Text style={styles.sectionTitle}>Join Our Seva</Text>
-            <Text style={styles.sectionSubtitle}>Come volunteer or visit the Gaushala</Text>
+            <Text style={styles.sectionSubtitle}>
+              Come volunteer or visit the Gaushala
+            </Text>
           </View>
         </View>
         <View style={styles.joinRow}>
@@ -152,7 +193,9 @@ export default function GieoGaushalaSection() {
             <Text style={styles.joinCardIcon}>🌅</Text>
             <Text style={styles.joinCardTitle}>Morning Seva</Text>
             <Text style={styles.joinCardTime}>5:30 – 8:00 AM</Text>
-            <Text style={styles.joinCardDesc}>Feeding, cleaning & Gau Puja</Text>
+            <Text style={styles.joinCardDesc}>
+              Feeding, cleaning & Gau Puja
+            </Text>
           </View>
           <View style={styles.joinCard}>
             <Text style={styles.joinCardIcon}>🌇</Text>
@@ -163,7 +206,9 @@ export default function GieoGaushalaSection() {
         </View>
         <View style={styles.visitInfo}>
           <FontAwesome name="map-marker" size={13} color={COLORS.goldDark} />
-          <Text style={styles.visitText}>GIEO Gaushala, Vrindavan Road, Mathura, UP</Text>
+          <Text style={styles.visitText}>
+            GIEO Gaushala, Vrindavan Road, Mathura, UP
+          </Text>
         </View>
       </Card>
 
@@ -172,12 +217,15 @@ export default function GieoGaushalaSection() {
         <Text style={styles.donateEmoji}>🐄</Text>
         <Text style={styles.donateHeading}>Support Gau Mata Today</Text>
         <Text style={styles.donateSubtext}>
-          Your contribution feeds, shelters, and protects our sacred cows.
-          Even ₹108 makes a meaningful difference.
+          Your contribution feeds, shelters, and protects our sacred cows. Even
+          ₹108 makes a meaningful difference.
         </Text>
         <View style={styles.donateAmounts}>
-          {['₹108', '₹501', '₹1001', '₹5100'].map((amt) => (
-            <TouchableOpacity key={amt} style={styles.amountChip} activeOpacity={0.8}>
+          {['₹108', '₹501', '₹1001', '₹5100'].map(amt => (
+            <TouchableOpacity
+              key={amt}
+              style={styles.amountChip}
+              activeOpacity={0.8}>
               <Text style={styles.amountText}>{amt}</Text>
             </TouchableOpacity>
           ))}
@@ -186,22 +234,23 @@ export default function GieoGaushalaSection() {
           <Text style={styles.donateBtnText}>Donate for Gau Seva</Text>
           <FontAwesome name="heart" size={12} color={COLORS.white} />
         </TouchableOpacity>
-        <Text style={styles.donateNote}>🕉️  Every seva is a step towards moksha</Text>
+        <Text style={styles.donateNote}>
+          <GitaText /> Every seva is a step towards moksha
+        </Text>
       </Card>
-
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   page: {
-    backgroundColor: COLORS.cream
+    backgroundColor: COLORS.cream,
   },
   /* ── Hero ── */
   heroCard: {
     marginHorizontal: spacing.md,
     padding: spacing.md,
-    marginBottom: spacing.md
+    marginBottom: spacing.md,
   },
   heroBadge: {
     alignSelf: 'flex-start',
@@ -211,12 +260,12 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.xs,
     borderWidth: 1,
     borderColor: `rgba(${RGB.saffron},0.3)`,
-    marginBottom: spacing.sm
+    marginBottom: spacing.sm,
   },
   heroBadgeText: {
     color: COLORS.saffron,
     ...type.caption,
-    letterSpacing: 0.4
+    letterSpacing: 0.4,
   },
   heroHeading: {
     ...type.title,
@@ -225,73 +274,73 @@ const styles = StyleSheet.create({
     lineHeight: 28,
     marginBottom: spacing.sm,
     fontFamily: DESIGN.fonts.editorial,
-    fontWeight: "400",
-    letterSpacing: -0.4
+    fontWeight: '400',
+    letterSpacing: -0.4,
   },
   heroAccent: {
-    color: COLORS.saffron
+    color: COLORS.saffron,
   },
   heroDesc: {
     ...type.body,
     color: COLORS.warmBrown,
-    marginBottom: spacing.md
+    marginBottom: spacing.md,
   },
   statsGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: spacing.sm
+    gap: spacing.sm,
   },
   statBox: {
     width: '47%',
     backgroundColor: COLORS.creamDark,
     borderRadius: radii.md,
     padding: spacing.sm,
-    alignItems: 'center'
+    alignItems: 'center',
   },
   statBoxRight: {},
   statValue: {
     color: COLORS.saffron,
     fontSize: 20,
-    fontWeight: "600"
+    fontWeight: '600',
   },
   statLabel: {
     ...type.footnote,
     fontSize: 12,
     color: COLORS.warmBrown,
     marginTop: 3,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   /* ── Section Cards ── */
   sectionCard: {
     marginHorizontal: spacing.md,
     padding: spacing.md,
-    marginBottom: spacing.md
+    marginBottom: spacing.md,
   },
   sectionHeader: {
     flexDirection: 'row',
     alignItems: 'flex-start',
     gap: spacing.sm,
-    marginBottom: spacing.sm
+    marginBottom: spacing.sm,
   },
   sectionIcon: {
     fontSize: 22,
-    marginTop: 1
+    marginTop: 1,
   },
   sectionTitle: {
     ...type.headline,
     fontSize: 15,
-    color: COLORS.deepBrown
+    color: COLORS.deepBrown,
   },
   sectionSubtitle: {
     ...type.footnote,
     color: COLORS.warmBrown,
-    marginTop: 2
+    marginTop: 2,
   },
   /* ── Seva Grid ── */
   sevaGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: spacing.sm
+    gap: spacing.sm,
   },
   sevaCard: {
     width: '47%',
@@ -301,7 +350,7 @@ const styles = StyleSheet.create({
     borderColor: DESIGN.colors.border,
     borderWidth: 1,
     shadowOpacity: 0.045,
-    elevation: 2
+    elevation: 2,
   },
   sevaIconCircle: {
     width: 38,
@@ -310,27 +359,27 @@ const styles = StyleSheet.create({
     backgroundColor: `rgba(${RGB.saffron},0.14)`,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: spacing.xs
+    marginBottom: spacing.xs,
   },
   sevaIconText: {
-    fontSize: 18
+    fontSize: 18,
   },
   sevaTitle: {
     color: COLORS.deepBrown,
     fontSize: 12,
     fontWeight: '700',
-    marginBottom: 4
+    marginBottom: 4,
   },
   sevaDesc: {
     color: COLORS.warmBrown,
     fontSize: 12,
-    lineHeight: 18
+    lineHeight: 18,
   },
   /* ── Products ── */
   productsRow: {
     flexDirection: 'row',
     gap: spacing.sm,
-    marginBottom: spacing.sm
+    marginBottom: spacing.sm,
   },
   productCard: {
     flex: 1,
@@ -341,29 +390,29 @@ const styles = StyleSheet.create({
     borderColor: DESIGN.colors.border,
     borderWidth: 1,
     shadowOpacity: 0.045,
-    elevation: 2
+    elevation: 2,
   },
   productIcon: {
     fontSize: 22,
-    marginBottom: 5
+    marginBottom: 5,
   },
   productTag: {
     backgroundColor: `rgba(${RGB.saffron},0.14)`,
     borderRadius: radii.sm,
     paddingHorizontal: 5,
     paddingVertical: 2,
-    marginBottom: 4
+    marginBottom: 4,
   },
   productTagText: {
     color: COLORS.saffron,
     fontSize: 10,
-    fontWeight: '700'
+    fontWeight: '700',
   },
   productName: {
     color: COLORS.deepBrown,
     fontSize: 12,
     fontWeight: '700',
-    textAlign: 'center'
+    textAlign: 'center',
   },
   productsCta: {
     flexDirection: 'row',
@@ -374,33 +423,33 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: `rgba(${RGB.saffron},0.3)`,
     borderRadius: radii.sm,
-    backgroundColor: `rgba(${RGB.saffron},0.08)`
+    backgroundColor: `rgba(${RGB.saffron},0.08)`,
   },
   productsCtaText: {
     color: COLORS.saffron,
     fontSize: 12,
-    fontWeight: '700'
+    fontWeight: '700',
   },
   /* ── Timeline ── */
   timelineRow: {
     flexDirection: 'row',
-    gap: spacing.sm
+    gap: spacing.sm,
   },
   timelineLeft: {
     alignItems: 'center',
-    width: 40
+    width: 40,
   },
   timelineYear: {
     color: COLORS.saffron,
     fontSize: 12,
-    fontWeight: "600",
-    marginBottom: 4
+    fontWeight: '600',
+    marginBottom: 4,
   },
   timelineLine: {
     width: 2,
     flex: 1,
     backgroundColor: hairline,
-    marginBottom: 4
+    marginBottom: 4,
   },
   timelineCard: {
     flex: 1,
@@ -412,19 +461,19 @@ const styles = StyleSheet.create({
     borderColor: DESIGN.colors.border,
     borderWidth: 1,
     shadowOpacity: 0.045,
-    elevation: 2
+    elevation: 2,
   },
   timelineEvent: {
     color: COLORS.deepBrown,
     fontSize: 12,
     fontWeight: '600',
-    lineHeight: 18
+    lineHeight: 18,
   },
   /* ── Join Seva ── */
   joinRow: {
     flexDirection: 'row',
     gap: spacing.sm,
-    marginBottom: spacing.sm
+    marginBottom: spacing.sm,
   },
   joinCard: {
     flex: 1,
@@ -435,28 +484,28 @@ const styles = StyleSheet.create({
     borderColor: DESIGN.colors.border,
     borderWidth: 1,
     shadowOpacity: 0.045,
-    elevation: 2
+    elevation: 2,
   },
   joinCardIcon: {
     fontSize: 24,
-    marginBottom: 6
+    marginBottom: 6,
   },
   joinCardTitle: {
     color: COLORS.deepBrown,
     fontSize: 12,
     fontWeight: '700',
-    marginBottom: 2
+    marginBottom: 2,
   },
   joinCardTime: {
     color: COLORS.saffron,
     fontSize: 12,
     fontWeight: '700',
-    marginBottom: 4
+    marginBottom: 4,
   },
   joinCardDesc: {
     color: COLORS.warmBrown,
     fontSize: 12,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   visitInfo: {
     flexDirection: 'row',
@@ -464,23 +513,23 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
     backgroundColor: COLORS.creamDark,
     borderRadius: radii.sm,
-    padding: spacing.sm
+    padding: spacing.sm,
   },
   visitText: {
     color: COLORS.warmBrown,
     fontSize: 12,
-    flex: 1
+    flex: 1,
   },
   /* ── Donate ── */
   donateCard: {
     marginHorizontal: spacing.md,
     padding: spacing.lg,
     alignItems: 'center',
-    marginBottom: spacing.md
+    marginBottom: spacing.md,
   },
   donateEmoji: {
     fontSize: 36,
-    marginBottom: spacing.sm
+    marginBottom: spacing.sm,
   },
   donateHeading: {
     ...type.headline,
@@ -489,22 +538,22 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: spacing.sm,
     fontFamily: DESIGN.fonts.editorial,
-    fontWeight: "400",
-    letterSpacing: -0.4
+    fontWeight: '400',
+    letterSpacing: -0.4,
   },
   donateSubtext: {
     ...type.footnote,
     color: COLORS.warmBrown,
     textAlign: 'center',
     lineHeight: 17,
-    marginBottom: spacing.md
+    marginBottom: spacing.md,
   },
   donateAmounts: {
     flexDirection: 'row',
     gap: spacing.sm,
     marginBottom: spacing.md,
     flexWrap: 'wrap',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   amountChip: {
     backgroundColor: `rgba(${RGB.saffron},0.12)`,
@@ -512,12 +561,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.md,
     paddingVertical: 7,
     borderWidth: 1,
-    borderColor: `rgba(${RGB.saffron},0.35)`
+    borderColor: `rgba(${RGB.saffron},0.35)`,
   },
   amountText: {
     color: COLORS.saffron,
     fontSize: 13,
-    fontWeight: '700'
+    fontWeight: '700',
   },
   donateBtn: {
     flexDirection: 'row',
@@ -527,16 +576,16 @@ const styles = StyleSheet.create({
     borderRadius: radii.lg,
     paddingVertical: 13,
     paddingHorizontal: spacing.xl,
-    marginBottom: spacing.sm
+    marginBottom: spacing.sm,
   },
   donateBtnText: {
     color: COLORS.white,
     fontSize: 14,
-    fontWeight: "600"
+    fontWeight: '600',
   },
   donateNote: {
     ...type.footnote,
     fontSize: 12,
-    color: COLORS.warmBrown
-  }
+    color: COLORS.warmBrown,
+  },
 });

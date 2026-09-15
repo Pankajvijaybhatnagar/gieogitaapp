@@ -33,7 +33,7 @@ export default function ProfileScreen() {
           <View style={styles.heroBlob1} />
           <View style={styles.heroBlob2} />
           <View style={styles.heroArc} />
-          <Text style={styles.heroOm}>ॐ</Text>
+          <Text style={styles.heroOm}></Text>
 
           {/* Top bar */}
           <View style={styles.topBar}>

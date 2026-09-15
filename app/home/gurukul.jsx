@@ -47,7 +47,7 @@ export default function GurukulScreen() {
 
         <View style={styles.pointsCard}>
           {[
-            'Traditional Gurukul-style teaching rooted in the Bhagavad Gita',
+            'Traditional Gurukul-style teaching rooted in the Bhagwad Gita',
             'A holistic approach combining spiritual and modern learning',
             'Focus on character, discipline and value-based education',
           ].map((point, index) => (

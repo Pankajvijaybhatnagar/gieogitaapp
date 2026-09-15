@@ -23,7 +23,7 @@ export default function ProfileHero({ profile }) {
           <Ionicons name="arrow-back" size={22} color={COLORS.white} />
         </Pressable>
 
-        <Text style={styles.om}>ॐ</Text>
+        <Text style={styles.om}></Text>
       </View>
 
       <View style={styles.card}>

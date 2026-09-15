@@ -41,7 +41,7 @@ const ADHYAYS = [
   { num: 15, name: 'Purushottama Yoga', verses: 20, icon: '🌳' },
   { num: 16, name: 'Daivasura Vibhaga Yoga', verses: 24, icon: '🛡️' },
   { num: 17, name: 'Shraddhatraya Vibhaga', verses: 28, icon: '🙏' },
-  { num: 18, name: 'Moksha Sanyasa Yoga', verses: 78, icon: '🕉️' },
+  { num: 18, name: 'Moksha Sanyasa Yoga', verses: 78, icon: 'Gita' },
 ];
 
 // ─── REUSABLE: DIVIDER ────────────────────────────────────────────────────────
@@ -129,7 +129,7 @@ function EkMinSection() {
 
   const howToParticipate = [
     { icon: '⏰', text: 'Join at the designated time — Ek Minute together' },
-    { icon: '📖', text: 'Open your Bhagavad Gita or use the GIEO GITA app' },
+    { icon: '📖', text: 'Open your Bhagwad Gita or use the GIEO GITA app' },
     { icon: '🗣️', text: 'Recite the assigned adhyay verse for that day' },
     { icon: '🙏', text: 'Offer your paath with full devotion and focus' },
     { icon: '📲', text: 'Submit your paath count through this screen' },
@@ -164,7 +164,7 @@ function EkMinSection() {
         <Text style={pmStyles.heroSubtitle}>Ek Min Ek Saath Gita Paath</Text>
 
         <Text style={pmStyles.heroDesc}>
-          A divine movement — millions reciting the Bhagavad Gita together, one
+          A divine movement — millions reciting the Bhagwad Gita together, one
           minute at a time, united in devotion across the globe.
         </Text>
 
@@ -188,8 +188,8 @@ function EkMinSection() {
         <Text style={pmStyles.significanceDesc}>
           &quot;Ek Min Ek Saath Gita Paath&quot; is a global initiative by GIEO
           Gita where millions of devotees pause together for one minute every
-          day to recite a verse from the Bhagavad Gita — creating a powerful
-          wave of collective consciousness and divine energy.
+          day to recite a verse from the Bhagwad Gita — creating a powerful wave
+          of collective consciousness and divine energy.
         </Text>
         <View style={pmStyles.shlokaBox}>
           <Text style={pmStyles.shlokaDevanagari}>
@@ -373,7 +373,7 @@ export default function EkMinEkSaathScreen() {
             </Text>
             {/* <Text style={mainStyles.quoteIconText}>❝</Text> */}
             <Text style={mainStyles.quoteText}>
-              Let us all recite the Bhagavad Gita together — one minute, one
+              Let us all recite the Bhagwad Gita together — one minute, one
               world, one Krishna. Join millions in this divine movement of
               collective consciousness.
             </Text>

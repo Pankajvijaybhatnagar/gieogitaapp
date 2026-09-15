@@ -2,15 +2,16 @@ import { DESIGN } from '@/constants/design';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import {
-    ActivityIndicator,
-    Image,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  ActivityIndicator,
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 
+import GitaText from '@/components/common/GitaText';
 import { transformInNineStepsData } from '@/components/dhyanShivir/TransformInNineStepsData';
 import Spacer from '@/components/ui/Spacer';
 import { COLORS } from '@/constants/brandColors';
@@ -124,7 +125,9 @@ export default function ProgrammeDetails() {
 
           <View style={styles.metaRow}>
             <View style={styles.metaBadge}>
-              <Text style={styles.metaText}>🕉 {programme.duration}</Text>
+              <Text style={styles.metaText}>
+                <GitaText /> {programme.duration}
+              </Text>
             </View>
 
             <View style={styles.metaBadge}>
@@ -140,13 +143,13 @@ export default function ProgrammeDetails() {
 
           <Text style={styles.description}>
             This programme is designed to help you understand the wisdom of the
-            Bhagavad Gita in a simple and practical way. Each step focuses on
+            Bhagwad Gita in a simple and practical way. Each step focuses on
             inner growth, clarity, discipline, peace and spiritual
             transformation.
           </Text>
 
           <View style={styles.quoteBox}>
-            <Text style={styles.quoteIcon}>ॐ</Text>
+            <GitaText style={styles.quoteIcon} />
 
             <Text style={styles.quoteText}>
               A journey of transformation begins with one conscious step.
@@ -179,9 +182,9 @@ export default function ProgrammeDetails() {
             onPress={() => {
               console.log('Start programme:', programme.id);
             }}>
-            <Text style={styles.enrollButtonText}>Start This Programme</Text>
+            <Text style={styles.enrollButtonText}>Coming Soon</Text>
 
-            <Text style={styles.enrollArrow}>→</Text>
+            {/* <Text style={styles.enrollArrow}>→</Text> */}
           </TouchableOpacity>
           <Spacer height={120} />
         </View>
@@ -362,12 +365,15 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
+    width: '60%',
+    margin: 'auto',
   },
   enrollButtonText: {
     color: COLORS.white,
-    fontSize: 13,
+    fontSize: 18,
     fontWeight: '900',
+    textAlign: 'center',
   },
   enrollArrow: {
     color: COLORS.white,

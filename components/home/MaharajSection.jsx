@@ -1,8 +1,8 @@
+import { RGB } from '@/constants/brandColors';
+import { radii, shadow, spacing, type } from '@/constants/theme';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { RGB } from '@/constants/brandColors';
-import { radii, shadow, spacing, type } from '@/constants/theme';
 import { COLORS } from './constant';
 import { SectionHeader } from './Sharedui';
 
@@ -11,14 +11,14 @@ export default function MaharajSection() {
 
   return (
     <>
-      <SectionHeader/>
+      <SectionHeader />
 
       <View style={styles.wrapper}>
         <View style={styles.panel}>
           {/* Decorative background rings, same language as the app's hero banners */}
           <View style={styles.ringOne} />
           <View style={styles.ringTwo} />
-          <Text style={styles.omWatermark}>ॐ</Text>
+          <Text style={styles.omWatermark}></Text>
 
           <View style={styles.photoFrame}>
             <Image
@@ -35,7 +35,7 @@ export default function MaharajSection() {
           <Text style={styles.name}>Swami Shri{'\n'}Gyananand Ji Maharaj</Text>
 
           <Text style={styles.mission}>
-            Spreading the eternal wisdom of the Bhagavad Gita through pravachan,
+            Spreading the eternal wisdom of the Bhagwad Gita through pravachan,
             satsang &amp; selfless seva.
           </Text>
 

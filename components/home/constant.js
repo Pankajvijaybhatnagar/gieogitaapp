@@ -26,7 +26,7 @@ export const heroImages = [
 export const exclusiveContent = [
   {
     id: '1',
-    icon: '🕉️',
+    icon: 'Gita',
     title: 'Gita Prerna',
     meta: 'Gita Essence',
     badge: '',
@@ -35,7 +35,7 @@ export const exclusiveContent = [
     id: '2',
     icon: '📿',
     title: 'Ashtadash Shaloki Gita',
-    meta: 'Bhagavad Gita Wisdom',
+    meta: 'Bhagwad Gita Wisdom',
     badge: null,
   },
   {
@@ -69,7 +69,7 @@ export const adhyayList = [
   { id: '5', num: 'ADHYAY 5', name: 'Karma Sanyasa Yoga', icon: '🌺' },
   { id: '6', num: 'ADHYAY 6', name: 'Dhyana Yoga', icon: '🧘' },
   { id: '7', num: 'ADHYAY 7', name: 'Jnana Vijnana Yoga', icon: '📿' },
-  { id: '8', num: 'ADHYAY 8', name: 'Akshara Brahma Yoga', icon: '🕉️' },
+  { id: '8', num: 'ADHYAY 8', name: 'Akshara Brahma Yoga', icon: 'Gita' },
   { id: '9', num: 'ADHYAY 9', name: 'Raja Vidya Raja Guhya Yoga', icon: '👑' },
   { id: '10', num: 'ADHYAY 10', name: 'Vibhuti Yoga', icon: '☀️' },
   { id: '11', num: 'ADHYAY 11', name: 'Vishwarupa Darshana Yoga', icon: '🌌' },

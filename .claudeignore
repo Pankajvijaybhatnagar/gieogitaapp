@@ -1,0 +1,53 @@
+# =========================
+# Sensitive Information
+# =========================
+
+# Environment Variables
+.env
+.env.*
+*.local
+
+# Keystores, Certificates, and Provisioning Profiles
+*.jks
+*.keystore
+*.p12
+*.pem
+*.mobileprovision
+*.cert
+*.der
+
+# Firebase / Google Cloud Credentials
+google-services.json
+GoogleService-Info.plist
+
+# EAS (Expo Application Services) local config
+.eas/
+
+# =========================
+# Build & Dependency Bloat (Improves AI context speed)
+# =========================
+
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Expo & Metro Cache
+.expo/
+dist/
+web-build/
+.metro-health-check
+
+# Native Folders (if using Expo Prebuild / Bare Workflow)
+ios/
+android/
+
+# =========================
+# Logs & System Files
+# =========================
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+.DS_Store

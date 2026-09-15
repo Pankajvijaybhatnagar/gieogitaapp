@@ -13,7 +13,7 @@ const SECTIONS = [
   },
   {
     title: 'About GIEO GITA, Parivaar & the App',
-    body: "GIEO GITA is a spiritual, educational, and cultural organization dedicated to the study, practice, and dissemination of the teachings of the Bhagavad Gita. Parivaar is a community platform created to foster connection, participation, and engagement among devotees, volunteers, and members. The GIEO Gita App is a mobile application designed to provide easy access to GIEO GITA's resources, events, and community features.",
+    body: "GIEO GITA is a spiritual, educational, and cultural organization dedicated to the study, practice, and dissemination of the teachings of the Bhagwad Gita. Parivaar is a community platform created to foster connection, participation, and engagement among devotees, volunteers, and members. The GIEO Gita App is a mobile application designed to provide easy access to GIEO GITA's resources, events, and community features.",
   },
   {
     title: 'User Eligibility & Responsibilities',
@@ -70,7 +70,7 @@ export default function TermsScreen() {
       icon="reader-outline"
       title="Terms & Conditions"
       tagline="The terms that govern your use of GIEO Gita"
-      intro="Welcome to GIEO GITA (Global Inspiration & Enlightenment Organization of Bhagavad Gita). These Terms & Conditions govern your access to and use of www.gieogita.org, our community platform Parivaar (parivaar.gieogita.org), the GIEO Gita App, and all related services, events, donations, and communications."
+      intro="Welcome to GIEO GITA (Global Inspiration & Enlightenment Organization of Bhagwad Gita). These Terms & Conditions govern your access to and use of www.gieogita.org, our community platform Parivaar (parivaar.gieogita.org), the GIEO Gita App, and all related services, events, donations, and communications."
       sections={SECTIONS}
     />
   );

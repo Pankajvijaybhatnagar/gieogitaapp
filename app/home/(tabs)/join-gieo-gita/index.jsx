@@ -1308,7 +1308,7 @@ export default function JoinGieoGitaScreen() {
             <View style={styles.heroBanner}>
               <View style={styles.heroPatternOne} />
               <View style={styles.heroPatternTwo} />
-              <Text style={styles.heroOm}>ॐ</Text>
+              <Text style={styles.heroOm}></Text>
             </View>
 
             <View style={styles.heroIconRing}>
@@ -1537,7 +1537,7 @@ export default function JoinGieoGitaScreen() {
           />
 
           <Text style={styles.footer}>
-            GIEO Gita • Spreading the message of Shri Bhagavad Gita
+            GIEO Gita • Spreading the message of Shri Bhagwad Gita
           </Text>
           <Spacer height={120} />
         </ScrollView>

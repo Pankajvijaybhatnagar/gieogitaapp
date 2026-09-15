@@ -18,7 +18,7 @@ export default function HeroSection() {
     <Animated.View style={[styles.hero, { opacity: fadeAnim }]}>
       <View style={styles.heroBlob1} />
       <View style={styles.heroBlob2} />
-      {/* <Text style={styles.heroOm}>ॐ</Text> */}
+      {/* <Text style={styles.heroOm}></Text> */}
 
       <View style={styles.heroPill}>
         <Text style={styles.heroPillText}>✦ GIEO GITA • SEVA & DONATION ✦</Text>
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 22,
     position: 'relative',
     overflow: 'hidden',
-    borderBottomEndRadius: 90
+    borderBottomEndRadius: 90,
   },
   heroBlob1: {
     position: 'absolute',
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     borderRadius: 120,
     backgroundColor: 'rgba(179,149,98,0.08)',
     top: -80,
-    right: -60
+    right: -60,
   },
   heroBlob2: {
     position: 'absolute',
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     borderRadius: 70,
     backgroundColor: 'rgba(166,83,56,0.08)',
     bottom: -50,
-    left: -40
+    left: -40,
   },
   heroOm: {
     position: 'absolute',
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     top: 10,
     fontSize: 100,
     color: 'rgba(179,149,98,0.05)',
-    lineHeight: 110
+    lineHeight: 110,
   },
   heroPill: {
     backgroundColor: 'rgba(179,149,98,0.12)',
@@ -94,36 +94,36 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 5,
     alignSelf: 'flex-start',
-    marginBottom: 16
+    marginBottom: 16,
   },
   heroPillText: {
     fontSize: 10,
     color: C.goldDark,
     letterSpacing: 2,
-    fontWeight: "600"
+    fontWeight: '600',
   },
   heroTitle: {
     fontSize: 28,
-    fontWeight: "400",
+    fontWeight: '400',
     color: C.deepBrown,
     lineHeight: 34,
     marginBottom: 10,
     fontFamily: DESIGN.fonts.editorial,
-    letterSpacing: -0.4
+    letterSpacing: -0.4,
   },
   heroTitleAccent: {
-    color: C.saffron
+    color: C.saffron,
   },
   heroDesc: {
     fontSize: 13,
     color: C.warmBrown,
     lineHeight: 20,
-    marginBottom: 16
+    marginBottom: 16,
   },
   heroPillsRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 8
+    gap: 8,
   },
   heroFeaturePill: {
     backgroundColor: 'rgba(166,83,56,0.15)',
@@ -131,11 +131,11 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(166,83,56,0.35)',
     borderRadius: 20,
     paddingHorizontal: 10,
-    paddingVertical: 5
+    paddingVertical: 5,
   },
   heroFeaturePillText: {
     fontSize: 10,
     color: C.saffron,
-    fontWeight: '700'
-  }
+    fontWeight: '700',
+  },
 });

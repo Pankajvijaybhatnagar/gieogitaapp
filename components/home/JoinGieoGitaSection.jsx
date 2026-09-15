@@ -1,6 +1,7 @@
+import GitaText from '@/components/common/GitaText';
 import { DESIGN } from '@/constants/design';
-import { StyleSheet, Text, View } from 'react-native';
 import { hairline, radii, shadow, spacing, type } from '@/constants/theme';
+import { StyleSheet, Text, View } from 'react-native';
 import { COLORS } from './constant';
 import { SectionHeader } from './Sharedui';
 
@@ -15,27 +16,24 @@ export default function JoinGieoGitaSection() {
         </View>
 
         <Text style={styles.heading}>
-          Be Part Of{' '}
-          <Text style={styles.headingAccent}>Something Sacred</Text>
+          Be Part Of <Text style={styles.headingAccent}>Something Sacred</Text>
         </Text>
 
         <Text style={styles.desc}>
-          We are preparing something beautiful for all those who wish to walk the
-          path of the Gita together. Stay tuned — your journey with us begins soon.
+          We are preparing something beautiful for all those who wish to walk
+          the path of the Gita together. Stay tuned — your journey with us
+          begins soon.
         </Text>
 
         {/* Placeholder dots */}
         <View style={styles.dotsRow}>
-          {[0, 1, 2].map((i) => (
-            <View
-              key={i}
-              style={[styles.dot, i === 1 && styles.dotLarge]}
-            />
+          {[0, 1, 2].map(i => (
+            <View key={i} style={[styles.dot, i === 1 && styles.dotLarge]} />
           ))}
         </View>
 
         <Text style={styles.footerNote}>
-          🕉 &nbsp;Hare Krishna • Hare Gita • Hare GIEO
+          <GitaText /> &nbsp;Hare Krishna • Hare Gita • Hare GIEO
         </Text>
       </View>
     </>
@@ -51,7 +49,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     minHeight: 220,
     justifyContent: 'center',
-    ...shadow.card
+    ...shadow.card,
   },
   badge: {
     backgroundColor: COLORS.creamDark,
@@ -60,11 +58,11 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     borderWidth: 1,
     borderColor: hairline,
-    marginBottom: spacing.md
+    marginBottom: spacing.md,
   },
   badgeText: {
     ...type.caption,
-    color: COLORS.saffron
+    color: COLORS.saffron,
   },
   heading: {
     ...type.title,
@@ -74,40 +72,40 @@ const styles = StyleSheet.create({
     lineHeight: 26,
     marginBottom: spacing.sm,
     fontFamily: DESIGN.fonts.editorial,
-    fontWeight: "400",
-    letterSpacing: -0.4
+    fontWeight: '400',
+    letterSpacing: -0.4,
   },
   headingAccent: {
-    color: COLORS.saffron
+    color: COLORS.saffron,
   },
   desc: {
     ...type.body,
     color: COLORS.warmBrown,
     textAlign: 'center',
     marginBottom: spacing.lg,
-    paddingHorizontal: 8
+    paddingHorizontal: 8,
   },
   dotsRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    marginBottom: spacing.lg
+    marginBottom: spacing.lg,
   },
   dot: {
     width: 6,
     height: 6,
     borderRadius: 3,
-    backgroundColor: COLORS.goldLight
+    backgroundColor: COLORS.goldLight,
   },
   dotLarge: {
     width: 10,
     height: 10,
     borderRadius: 5,
-    backgroundColor: COLORS.saffron
+    backgroundColor: COLORS.saffron,
   },
   footerNote: {
     ...type.footnote,
     color: COLORS.warmBrown,
-    letterSpacing: 0.5
-  }
+    letterSpacing: 0.5,
+  },
 });

@@ -76,7 +76,7 @@ function Hero({ count }) {
       <Text style={styles.heroTitle}>Testimonials</Text>
       <View style={styles.heroDivider} />
       <Text style={styles.heroSubtitle}>
-        {count} voices on the message of the Bhagavad Gita
+        {count} voices on the message of the Bhagwad Gita
       </Text>
     </View>
   );

@@ -8,12 +8,12 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import {
-    FlatList,
-    ImageBackground,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  FlatList,
+  ImageBackground,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 
 import { exclusiveContent } from '@/components/home/constant';
@@ -68,7 +68,7 @@ function Hero({ count }) {
       <View style={styles.heroBanner}>
         <View style={styles.heroPatternOne} />
         <View style={styles.heroPatternTwo} />
-        <Text style={styles.heroOm}>ॐ</Text>
+        <Text style={styles.heroOm}></Text>
       </View>
 
       <View style={styles.heroIconRing}>

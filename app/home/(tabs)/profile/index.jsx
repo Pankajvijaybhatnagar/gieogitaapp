@@ -1,20 +1,20 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import {
-    ActivityIndicator,
-    Animated,
-    Easing,
-    KeyboardAvoidingView,
-    Linking,
-    Platform,
-    RefreshControl,
-    ScrollView,
-    StyleSheet,
-    Switch,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  ActivityIndicator,
+  Animated,
+  Easing,
+  KeyboardAvoidingView,
+  Linking,
+  Platform,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  Switch,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 
 import { Ionicons } from '@expo/vector-icons';
@@ -660,7 +660,7 @@ export default function ProfileScreen() {
             <View style={styles.heroBanner}>
               <View style={styles.heroPatternOne} />
               <View style={styles.heroPatternTwo} />
-              <Text style={styles.heroOm}>ॐ</Text>
+              <Text style={styles.heroOm}></Text>
             </View>
 
             <View style={styles.heroIconRing}>
@@ -765,7 +765,7 @@ export default function ProfileScreen() {
               <View style={styles.heroBanner}>
                 <View style={styles.heroPatternOne} />
                 <View style={styles.heroPatternTwo} />
-                <Text style={styles.heroOm}>ॐ</Text>
+                <Text style={styles.heroOm}></Text>
 
                 <TouchableOpacity
                   style={styles.heroTopButton}

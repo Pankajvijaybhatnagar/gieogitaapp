@@ -1,4 +1,8 @@
+import GitaText from '@/components/common/GitaText';
+import { COLORS, RGB } from '@/constants/brandColors';
 import { DESIGN } from '@/constants/design';
+import { hairline, radii, shadow } from '@/constants/theme';
+import { AntDesign, FontAwesome } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React, { useEffect, useRef, useState } from 'react';
 import {
@@ -7,14 +11,14 @@ import {
   Dimensions,
   Easing,
   Image,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -23,34 +27,31 @@ import {
   loginSuccess,
   verifyOtpSuccess,
 } from '../redux/authSlice';
-import { FontAwesome, AntDesign } from '@expo/vector-icons';
-import { COLORS, RGB } from '@/constants/brandColors';
-import { hairline, radii, shadow } from '@/constants/theme';
 
 const { width, height } = Dimensions.get('window');
 
 // ─── ORIGINAL CONSTANTS (unchanged) ──────────────────────────────────────────
 const FALL_DURATION = 6000;
-const NUM_LEAVES    = 10;
+const NUM_LEAVES = 10;
 
 // ─── COLOR PALETTE (mapped onto the shared design system) ────────────────────
 const C = {
-  deepBrown:   COLORS.deepBrown,
-  warmBrown:   COLORS.warmBrown,
-  richBrown:   COLORS.richBrown,
-  gold:        COLORS.gold,
-  goldLight:   COLORS.goldLight,
-  goldDark:    COLORS.goldDark,
-  goldBorder:  'rgba(179,149,98,0.30)',
-  cream:       COLORS.cream,
-  creamDark:   COLORS.creamDark,
-  saffron:     COLORS.saffron,
-  saffronLight:COLORS.saffronLight,
-  white:       COLORS.white,
-  black:       '#000000',
-  error:       COLORS.dangerRed,
-  googleRed:   '#DB4437',
-  appleBlack:  '#1C1C1E',
+  deepBrown: COLORS.deepBrown,
+  warmBrown: COLORS.warmBrown,
+  richBrown: COLORS.richBrown,
+  gold: COLORS.gold,
+  goldLight: COLORS.goldLight,
+  goldDark: COLORS.goldDark,
+  goldBorder: 'rgba(179,149,98,0.30)',
+  cream: COLORS.cream,
+  creamDark: COLORS.creamDark,
+  saffron: COLORS.saffron,
+  saffronLight: COLORS.saffronLight,
+  white: COLORS.white,
+  black: '#000000',
+  error: COLORS.dangerRed,
+  googleRed: '#DB4437',
+  appleBlack: '#1C1C1E',
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -59,8 +60,8 @@ const C = {
 const FallingLeaf = ({ source, startX, startY, delay }) => {
   const translateY = useRef(new Animated.Value(startY)).current;
   const translateX = useRef(new Animated.Value(startX)).current;
-  const rotate     = useRef(new Animated.Value(0)).current;
-  const opacity    = useRef(new Animated.Value(0)).current;
+  const rotate = useRef(new Animated.Value(0)).current;
+  const opacity = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     const startFallingAnimation = () => {
@@ -116,7 +117,10 @@ const FallingLeaf = ({ source, startX, startY, delay }) => {
       source={source}
       style={[
         S.leaf,
-        { transform: [{ translateY }, { translateX }, { rotate: spin }], opacity },
+        {
+          transform: [{ translateY }, { translateX }, { rotate: spin }],
+          opacity,
+        },
       ]}
     />
   );
@@ -126,53 +130,90 @@ const FallingLeaf = ({ source, startX, startY, delay }) => {
 // LOGIN SCREEN
 // ─────────────────────────────────────────────────────────────────────────────
 const LoginScreen = () => {
-
   // ── original state ────────────────────────────────────────────────────────
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
-  const auth     = useSelector((state) => state.auth);
+  const auth = useSelector(state => state.auth);
 
   // ── changed: email + password instead of phone ────────────────────────────
-  const [email,    setEmail]    = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPass, setShowPass] = useState(false);
 
   // ── animation values ──────────────────────────────────────────────────────
-  const cardSlide    = useRef(new Animated.Value(60)).current;
-  const cardFade     = useRef(new Animated.Value(0)).current;
-  const logoScale    = useRef(new Animated.Value(0.7)).current;
-  const logoFade     = useRef(new Animated.Value(0)).current;
-  const btnPulse     = useRef(new Animated.Value(1)).current;
-  const emailFocus   = useRef(new Animated.Value(0)).current;
-  const passFocus    = useRef(new Animated.Value(0)).current;
+  const cardSlide = useRef(new Animated.Value(60)).current;
+  const cardFade = useRef(new Animated.Value(0)).current;
+  const logoScale = useRef(new Animated.Value(0.7)).current;
+  const logoFade = useRef(new Animated.Value(0)).current;
+  const btnPulse = useRef(new Animated.Value(1)).current;
+  const emailFocus = useRef(new Animated.Value(0)).current;
+  const passFocus = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     Animated.stagger(150, [
       Animated.parallel([
-        Animated.spring(logoScale, { toValue: 1, friction: 5, useNativeDriver: true }),
-        Animated.timing(logoFade,  { toValue: 1, duration: 700, useNativeDriver: true }),
+        Animated.spring(logoScale, {
+          toValue: 1,
+          friction: 5,
+          useNativeDriver: true,
+        }),
+        Animated.timing(logoFade, {
+          toValue: 1,
+          duration: 700,
+          useNativeDriver: true,
+        }),
       ]),
       Animated.parallel([
-        Animated.timing(cardSlide, { toValue: 0, duration: 600, useNativeDriver: true }),
-        Animated.timing(cardFade,  { toValue: 1, duration: 600, useNativeDriver: true }),
+        Animated.timing(cardSlide, {
+          toValue: 0,
+          duration: 600,
+          useNativeDriver: true,
+        }),
+        Animated.timing(cardFade, {
+          toValue: 1,
+          duration: 600,
+          useNativeDriver: true,
+        }),
       ]),
     ]).start(() => {
       Animated.loop(
         Animated.sequence([
-          Animated.timing(btnPulse, { toValue: 1.03, duration: 1400, useNativeDriver: true }),
-          Animated.timing(btnPulse, { toValue: 1,    duration: 1400, useNativeDriver: true }),
-        ])
+          Animated.timing(btnPulse, {
+            toValue: 1.03,
+            duration: 1400,
+            useNativeDriver: true,
+          }),
+          Animated.timing(btnPulse, {
+            toValue: 1,
+            duration: 1400,
+            useNativeDriver: true,
+          }),
+        ]),
       ).start();
     });
   }, []);
 
-  const focusAnim = (anim) =>
-    Animated.timing(anim, { toValue: 1, duration: 200, useNativeDriver: false }).start();
-  const blurAnim = (anim) =>
-    Animated.timing(anim, { toValue: 0, duration: 200, useNativeDriver: false }).start();
+  const focusAnim = anim =>
+    Animated.timing(anim, {
+      toValue: 1,
+      duration: 200,
+      useNativeDriver: false,
+    }).start();
+  const blurAnim = anim =>
+    Animated.timing(anim, {
+      toValue: 0,
+      duration: 200,
+      useNativeDriver: false,
+    }).start();
 
-  const emailBorder = emailFocus.interpolate({ inputRange: [0, 1], outputRange: [hairline, C.saffron] });
-  const passBorder  = passFocus.interpolate({  inputRange: [0, 1], outputRange: [hairline, C.saffron] });
+  const emailBorder = emailFocus.interpolate({
+    inputRange: [0, 1],
+    outputRange: [hairline, C.saffron],
+  });
+  const passBorder = passFocus.interpolate({
+    inputRange: [0, 1],
+    outputRange: [hairline, C.saffron],
+  });
 
   // ── email login handler (original dispatch logic preserved) ───────────────
   const handleLogin = async () => {
@@ -191,11 +232,11 @@ const LoginScreen = () => {
     try {
       dispatch(
         loginSuccess({
-          name:    'Guest',
-          email:   email,
-          dob:     '',
+          name: 'Guest',
+          email: email,
+          dob: '',
           address: '',
-        })
+        }),
       );
       dispatch(verifyOtpSuccess({ email }));
       setLoading(false);
@@ -228,7 +269,6 @@ const LoginScreen = () => {
 
   return (
     <View style={S.root}>
-
       {/* ── BACKGROUND ── */}
       <View style={S.bgBlob1} />
       <View style={S.bgBlob2} />
@@ -240,25 +280,24 @@ const LoginScreen = () => {
       {/* ── KEYBOARD AWARE ── */}
       <KeyboardAvoidingView
         style={{ flex: 1, width: '100%' }}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      >
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <ScrollView
           contentContainerStyle={S.scroll}
           showsVerticalScrollIndicator={false}
-          keyboardShouldPersistTaps="handled"
-        >
-
+          keyboardShouldPersistTaps="handled">
           {/* ── TOP DECORATION ── */}
           <View style={S.topDeco}>
             <View style={S.topDecoLine} />
-            <Text style={S.topDecoOm}>ॐ</Text>
+            <Text style={S.topDecoOm}></Text>
             <View style={S.topDecoLine} />
           </View>
 
           {/* ── LOGO ── */}
           <Animated.View
-            style={[S.logoWrap, { opacity: logoFade, transform: [{ scale: logoScale }] }]}
-          >
+            style={[
+              S.logoWrap,
+              { opacity: logoFade, transform: [{ scale: logoScale }] },
+            ]}>
             <View style={S.logoOuterRing}>
               <View style={S.logoInnerRing}>
                 <Image
@@ -280,8 +319,10 @@ const LoginScreen = () => {
               LOGIN CARD
           ══════════════════════════════════════ */}
           <Animated.View
-            style={[S.card, { opacity: cardFade, transform: [{ translateY: cardSlide }] }]}
-          >
+            style={[
+              S.card,
+              { opacity: cardFade, transform: [{ translateY: cardSlide }] },
+            ]}>
             {/* Card top strip */}
             <View style={S.cardTopStrip}>
               <Text style={S.cardTopStripText}>✦ LOGIN TO YOUR ACCOUNT ✦</Text>
@@ -290,7 +331,6 @@ const LoginScreen = () => {
             <View style={S.cardBlob} />
 
             <View style={S.cardBody}>
-
               <Text style={S.cardGreeting}>Namaskaram 🙏</Text>
               <Text style={S.cardDesc}>
                 Sign in to continue your spiritual journey with GIEO GITA
@@ -298,13 +338,11 @@ const LoginScreen = () => {
 
               {/* ─── SOCIAL LOGIN BUTTONS ─────────────────────────────── */}
               <View style={S.socialRow}>
-
                 {/* Google */}
                 <TouchableOpacity
                   style={S.googleBtn}
                   onPress={handleGoogleLogin}
-                  activeOpacity={0.85}
-                >
+                  activeOpacity={0.85}>
                   <AntDesign name="google" size={18} color={C.white} />
                   <Text style={S.googleBtnText}>Continue with Google</Text>
                 </TouchableOpacity>
@@ -313,12 +351,10 @@ const LoginScreen = () => {
                 <TouchableOpacity
                   style={S.appleBtn}
                   onPress={handleAppleLogin}
-                  activeOpacity={0.85}
-                >
+                  activeOpacity={0.85}>
                   <AntDesign name="apple1" size={18} color={C.white} />
                   <Text style={S.appleBtnText}>Continue with Apple</Text>
                 </TouchableOpacity>
-
               </View>
 
               {/* ─── OR DIVIDER ───────────────────────────────────────── */}
@@ -332,9 +368,14 @@ const LoginScreen = () => {
 
               {/* ─── EMAIL INPUT ──────────────────────────────────────── */}
               <Text style={S.inputLabel}>Email Address</Text>
-              <Animated.View style={[S.inputWrap, { borderColor: emailBorder }]}>
+              <Animated.View
+                style={[S.inputWrap, { borderColor: emailBorder }]}>
                 <View style={S.inputIconBox}>
-                  <FontAwesome name="envelope-o" size={14} color={C.warmBrown} />
+                  <FontAwesome
+                    name="envelope-o"
+                    size={14}
+                    color={C.warmBrown}
+                  />
                 </View>
                 <TextInput
                   style={S.input}
@@ -346,7 +387,7 @@ const LoginScreen = () => {
                   autoCapitalize="none"
                   autoCorrect={false}
                   onFocus={() => focusAnim(emailFocus)}
-                  onBlur={()  => blurAnim(emailFocus)}
+                  onBlur={() => blurAnim(emailFocus)}
                 />
               </Animated.View>
 
@@ -366,13 +407,12 @@ const LoginScreen = () => {
                   autoCapitalize="none"
                   autoCorrect={false}
                   onFocus={() => focusAnim(passFocus)}
-                  onBlur={()  => blurAnim(passFocus)}
+                  onBlur={() => blurAnim(passFocus)}
                 />
                 <TouchableOpacity
                   style={S.eyeBtn}
-                  onPress={() => setShowPass((p) => !p)}
-                  activeOpacity={0.7}
-                >
+                  onPress={() => setShowPass(p => !p)}
+                  activeOpacity={0.7}>
                   <FontAwesome
                     name={showPass ? 'eye' : 'eye-slash'}
                     size={15}
@@ -392,8 +432,7 @@ const LoginScreen = () => {
                   style={[S.loginBtn, loading && S.loginBtnDisabled]}
                   onPress={handleLogin}
                   disabled={loading}
-                  activeOpacity={0.88}
-                >
+                  activeOpacity={0.88}>
                   {loading ? (
                     <ActivityIndicator size="small" color={C.white} />
                   ) : (
@@ -413,7 +452,11 @@ const LoginScreen = () => {
               {/* ── ERROR MESSAGE (original — unchanged) ── */}
               {auth.error && (
                 <View style={S.errorBox}>
-                  <FontAwesome name="exclamation-circle" size={13} color={C.error} />
+                  <FontAwesome
+                    name="exclamation-circle"
+                    size={13}
+                    color={C.error}
+                  />
                   <Text style={S.errorText}>{auth.error}</Text>
                 </View>
               )}
@@ -421,16 +464,17 @@ const LoginScreen = () => {
               {/* ── WELCOME MESSAGE (original — unchanged) ── */}
               {auth.isLoggedIn && (
                 <View style={S.welcomeBox}>
-                  <Text style={S.welcomeText}>🪷  Welcome, {auth.user?.name}!</Text>
+                  <Text style={S.welcomeText}>
+                    🪷 Welcome, {auth.user?.name}!
+                  </Text>
                 </View>
               )}
-
             </View>
 
             {/* Card bottom strip */}
             <View style={S.cardBottomStrip}>
               <Text style={S.cardBottomText}>
-                🕉️  Jai Shri Krishna  •  GIEO GITA  🕉️
+                <GitaText /> Jai Shri Krishna • GIEO GITA <GitaText />
               </Text>
             </View>
           </Animated.View>
@@ -438,9 +482,11 @@ const LoginScreen = () => {
           {/* ── BOTTOM VERSE ── */}
           <Animated.View style={[S.verseBox, { opacity: cardFade }]}>
             <Text style={S.verseText}>
-              {"\"अनन्याश्चिन्तयन्तो मां ये जनाः पर्युपासते।\nतेषां नित्याभियुक्तानां योगक्षेमं वहाम्यहम्॥\""}
+              {
+                '"अनन्याश्चिन्तयन्तो मां ये जनाः पर्युपासते।\nतेषां नित्याभियुक्तानां योगक्षेमं वहाम्यहम्॥"'
+              }
             </Text>
-            <Text style={S.verseRef}>— Bhagavad Gita 9.22</Text>
+            <Text style={S.verseRef}>— Bhagwad Gita 9.22</Text>
           </Animated.View>
 
           <View style={{ height: 30 }} />
@@ -455,7 +501,7 @@ const S = StyleSheet.create({
   // ── ROOT ───────────────────────────────────────────────────────────────────
   root: {
     flex: 1,
-    backgroundColor: C.cream
+    backgroundColor: C.cream,
   },
   bgBlob1: {
     position: 'absolute',
@@ -464,7 +510,7 @@ const S = StyleSheet.create({
     borderRadius: 150,
     backgroundColor: 'rgba(179,149,98,0.07)',
     top: -80,
-    right: -80
+    right: -80,
   },
   bgBlob2: {
     position: 'absolute',
@@ -473,7 +519,7 @@ const S = StyleSheet.create({
     borderRadius: 100,
     backgroundColor: 'rgba(166,83,56,0.06)',
     bottom: 100,
-    left: -60
+    left: -60,
   },
   bgBlob3: {
     position: 'absolute',
@@ -482,37 +528,37 @@ const S = StyleSheet.create({
     borderRadius: 60,
     backgroundColor: 'rgba(166,83,56,0.05)',
     top: height * 0.4,
-    right: 20
+    right: 20,
   },
   // ── SCROLL ─────────────────────────────────────────────────────────────────
   scroll: {
     alignItems: 'center',
     paddingHorizontal: 24,
-    paddingTop: 60
+    paddingTop: 60,
   },
   // ── TOP DECORATION ─────────────────────────────────────────────────────────
   topDeco: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 28,
-    width: 200
+    width: 200,
   },
   topDecoLine: {
     flex: 1,
     height: 1,
-    backgroundColor: hairline
+    backgroundColor: hairline,
   },
   topDecoOm: {
     fontSize: 20,
     color: C.saffron,
     marginHorizontal: 12,
-    opacity: 0.9
+    opacity: 0.9,
   },
   // ── LOGO ───────────────────────────────────────────────────────────────────
   logoWrap: {
     marginBottom: 18,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   logoOuterRing: {
     width: 110,
@@ -521,7 +567,7 @@ const S = StyleSheet.create({
     borderWidth: 2,
     borderColor: C.gold,
     padding: 5,
-    backgroundColor: 'rgba(179,149,98,0.08)'
+    backgroundColor: 'rgba(179,149,98,0.08)',
   },
   logoInnerRing: {
     flex: 1,
@@ -531,33 +577,33 @@ const S = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     overflow: 'hidden',
-    backgroundColor: C.creamDark
+    backgroundColor: C.creamDark,
   },
   logo: {
     width: 72,
     height: 72,
-    resizeMode: 'contain'
+    resizeMode: 'contain',
   },
   // ── APP NAME ───────────────────────────────────────────────────────────────
   appName: {
     fontSize: 30,
-    fontWeight: "600",
+    fontWeight: '600',
     color: C.deepBrown,
     letterSpacing: 5,
-    marginBottom: 4
+    marginBottom: 4,
   },
   appSub: {
     fontSize: 14,
     color: C.warmBrown,
     letterSpacing: 2,
-    marginBottom: 12
+    marginBottom: 12,
   },
   nameDivider: {
     width: 80,
     height: 1.5,
     backgroundColor: hairline,
     borderRadius: 1,
-    marginBottom: 20
+    marginBottom: 20,
   },
   // ── CARD ───────────────────────────────────────────────────────────────────
   card: {
@@ -570,20 +616,20 @@ const S = StyleSheet.create({
     borderColor: DESIGN.colors.border,
     borderWidth: 1,
     shadowOpacity: 0.045,
-    elevation: 2
+    elevation: 2,
   },
   cardTopStrip: {
     backgroundColor: C.creamDark,
     paddingVertical: 10,
     alignItems: 'center',
     borderBottomWidth: 1,
-    borderBottomColor: hairline
+    borderBottomColor: hairline,
   },
   cardTopStripText: {
     fontSize: 12,
-    fontWeight: "600",
+    fontWeight: '600',
     color: C.saffron,
-    letterSpacing: 2.5
+    letterSpacing: 2.5,
   },
   cardBlob: {
     position: 'absolute',
@@ -592,27 +638,27 @@ const S = StyleSheet.create({
     borderRadius: 90,
     backgroundColor: 'rgba(179,149,98,0.04)',
     top: -60,
-    right: -40
+    right: -40,
   },
   cardBody: {
-    padding: 22
+    padding: 22,
   },
   cardGreeting: {
     fontSize: 20,
-    fontWeight: "600",
+    fontWeight: '600',
     color: C.deepBrown,
-    marginBottom: 4
+    marginBottom: 4,
   },
   cardDesc: {
     fontSize: 12,
     color: C.warmBrown,
     lineHeight: 18,
-    marginBottom: 20
+    marginBottom: 20,
   },
   // ── SOCIAL BUTTONS ─────────────────────────────────────────────────────────
   socialRow: {
     gap: 11,
-    marginBottom: 20
+    marginBottom: 20,
   },
   googleBtn: {
     flexDirection: 'row',
@@ -626,16 +672,16 @@ const S = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowOffset: {
       width: 0,
-      height: 4
+      height: 4,
     },
     shadowRadius: 8,
-    elevation: 4
+    elevation: 4,
   },
   googleBtnText: {
     fontSize: 14,
-    fontWeight: "600",
+    fontWeight: '600',
     color: C.white,
-    letterSpacing: 0.3
+    letterSpacing: 0.3,
   },
   appleBtn: {
     flexDirection: 'row',
@@ -651,27 +697,27 @@ const S = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowOffset: {
       width: 0,
-      height: 4
+      height: 4,
     },
     shadowRadius: 8,
-    elevation: 4
+    elevation: 4,
   },
   appleBtnText: {
     fontSize: 14,
-    fontWeight: "600",
+    fontWeight: '600',
     color: C.white,
-    letterSpacing: 0.3
+    letterSpacing: 0.3,
   },
   // ── OR DIVIDER ─────────────────────────────────────────────────────────────
   orRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 18
+    marginBottom: 18,
   },
   orLine: {
     flex: 1,
     height: 1,
-    backgroundColor: C.goldBorder
+    backgroundColor: C.goldBorder,
   },
   orPill: {
     backgroundColor: C.creamDark,
@@ -680,13 +726,13 @@ const S = StyleSheet.create({
     borderRadius: 20,
     paddingHorizontal: 12,
     paddingVertical: 4,
-    marginHorizontal: 10
+    marginHorizontal: 10,
   },
   orText: {
     fontSize: 12,
-    fontWeight: "600",
+    fontWeight: '600',
     color: C.goldDark,
-    letterSpacing: 1.5
+    letterSpacing: 1.5,
   },
   // ── INPUTS ─────────────────────────────────────────────────────────────────
   inputLabel: {
@@ -694,7 +740,7 @@ const S = StyleSheet.create({
     fontWeight: '700',
     color: C.deepBrown,
     letterSpacing: 0.5,
-    marginBottom: 7
+    marginBottom: 7,
   },
   inputWrap: {
     flexDirection: 'row',
@@ -703,7 +749,7 @@ const S = StyleSheet.create({
     borderRadius: 14,
     overflow: 'hidden',
     marginBottom: 14,
-    backgroundColor: C.creamDark
+    backgroundColor: C.creamDark,
   },
   inputIconBox: {
     width: 44,
@@ -712,7 +758,7 @@ const S = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: C.cream,
     borderRightWidth: 1,
-    borderRightColor: hairline
+    borderRightColor: hairline,
   },
   input: {
     flex: 1,
@@ -720,24 +766,24 @@ const S = StyleSheet.create({
     paddingHorizontal: 14,
     fontSize: 15,
     color: C.deepBrown,
-    fontWeight: '600'
+    fontWeight: '600',
   },
   eyeBtn: {
     paddingHorizontal: 14,
     height: 50,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   // ── FORGOT PASSWORD ────────────────────────────────────────────────────────
   forgotRow: {
     alignItems: 'flex-end',
     marginBottom: 18,
-    marginTop: -6
+    marginTop: -6,
   },
   forgotText: {
     fontSize: 12,
     color: C.saffron,
-    fontWeight: '700'
+    fontWeight: '700',
   },
   // ── LOGIN BUTTON ───────────────────────────────────────────────────────────
   loginBtn: {
@@ -746,20 +792,20 @@ const S = StyleSheet.create({
     height: 52,
     alignItems: 'center',
     justifyContent: 'center',
-    ...shadow.card
+    ...shadow.card,
   },
   loginBtnDisabled: {
-    opacity: 0.7
+    opacity: 0.7,
   },
   loginBtnInner: {
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   loginBtnText: {
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: '600',
     color: C.white,
-    letterSpacing: 0.5
+    letterSpacing: 0.5,
   },
   // ── ERROR & WELCOME ────────────────────────────────────────────────────────
   errorBox: {
@@ -772,13 +818,13 @@ const S = StyleSheet.create({
     borderRadius: 10,
     paddingHorizontal: 12,
     paddingVertical: 9,
-    marginTop: 12
+    marginTop: 12,
   },
   errorText: {
     color: C.error,
     fontSize: 12,
     fontWeight: '600',
-    flex: 1
+    flex: 1,
   },
   welcomeBox: {
     backgroundColor: 'rgba(39,174,96,0.1)',
@@ -788,12 +834,12 @@ const S = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 10,
     marginTop: 12,
-    alignItems: 'center'
+    alignItems: 'center',
   },
   welcomeText: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#27AE60'
+    color: '#27AE60',
   },
   // ── CARD BOTTOM STRIP ─────────────────────────────────────────────────────
   cardBottomStrip: {
@@ -801,12 +847,12 @@ const S = StyleSheet.create({
     paddingVertical: 9,
     alignItems: 'center',
     borderTopWidth: 1,
-    borderTopColor: hairline
+    borderTopColor: hairline,
   },
   cardBottomText: {
     fontSize: 12,
     color: C.warmBrown,
-    letterSpacing: 1.5
+    letterSpacing: 1.5,
   },
   // ── VERSE BOX ──────────────────────────────────────────────────────────────
   verseBox: {
@@ -818,28 +864,28 @@ const S = StyleSheet.create({
     borderWidth: 1,
     borderColor: hairline,
     borderLeftWidth: 3,
-    borderLeftColor: C.saffron
+    borderLeftColor: C.saffron,
   },
   verseText: {
     fontSize: 12,
     color: C.warmBrown,
     lineHeight: 18,
-    marginBottom: 6
+    marginBottom: 6,
   },
   verseRef: {
     fontSize: 12,
     color: C.richBrown,
     fontWeight: '700',
     letterSpacing: 0.5,
-    textAlign: 'right'
+    textAlign: 'right',
   },
   // ── LEAF (original) ────────────────────────────────────────────────────────
   leaf: {
     position: 'absolute',
     width: 80,
     height: 80,
-    resizeMode: 'contain'
-  }
+    resizeMode: 'contain',
+  },
 });
 
 // ─── ORIGINAL CONFIG (unchanged) ─────────────────────────────────────────────

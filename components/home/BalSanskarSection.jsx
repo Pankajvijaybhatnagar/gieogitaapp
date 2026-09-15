@@ -1,26 +1,76 @@
+import Card from '@/components/ui/Card';
+import { RGB } from '@/constants/brandColors';
 import { DESIGN } from '@/constants/design';
+import { hairline, radii, spacing, type } from '@/constants/theme';
 import { FontAwesome } from '@expo/vector-icons';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import Card from '@/components/ui/Card';
-import { hairline, radii, spacing, type } from '@/constants/theme';
-import { RGB } from '@/constants/brandColors';
 import { COLORS } from './constant';
 import { SectionHeader } from './Sharedui';
 
 const curriculum = [
-  { icon: '📖', title: 'Gita Shloka Recitation', desc: 'Daily memorisation and chanting of all 18 chapters', level: 'Foundation' },
-  { icon: '🧘', title: 'Yoga & Pranayama', desc: 'Holistic wellness through ancient yogic practices', level: 'Wellness' },
-  { icon: '🎨', title: 'Cultural Arts', desc: 'Classical music, dance, and devotional expression', level: 'Creative' },
-  { icon: '🤝', title: 'Seva & Values', desc: 'Building character through selfless service', level: 'Character' },
-  { icon: '🕉️', title: 'Sanskrit & Vedic Maths', desc: 'Ancient language and mathematical wisdom', level: 'Academic' },
-  { icon: '🌱', title: 'Nature & Ecology', desc: 'Reverence for creation through Gita teachings', level: 'Spiritual' },
+  {
+    icon: '📖',
+    title: 'Gita Shloka Recitation',
+    desc: 'Daily memorisation and chanting of all 18 chapters',
+    level: 'Foundation',
+  },
+  {
+    icon: '🧘',
+    title: 'Yoga & Pranayama',
+    desc: 'Holistic wellness through ancient yogic practices',
+    level: 'Wellness',
+  },
+  {
+    icon: '🎨',
+    title: 'Cultural Arts',
+    desc: 'Classical music, dance, and devotional expression',
+    level: 'Creative',
+  },
+  {
+    icon: '🤝',
+    title: 'Seva & Values',
+    desc: 'Building character through selfless service',
+    level: 'Character',
+  },
+  {
+    icon: 'Gita',
+    title: 'Sanskrit & Vedic Maths',
+    desc: 'Ancient language and mathematical wisdom',
+    level: 'Academic',
+  },
+  {
+    icon: '🌱',
+    title: 'Nature & Ecology',
+    desc: 'Reverence for creation through Gita teachings',
+    level: 'Spiritual',
+  },
 ];
 
 const teachers = [
-  { name: 'Pandit Ramesh Sharma', role: 'Head — Gita & Sanskrit', exp: '22 yrs', icon: '🪔' },
-  { name: 'Dr. Meera Devi', role: 'Yoga & Meditation', exp: '15 yrs', icon: '🧘' },
-  { name: 'Acharya Sunil Ji', role: 'Vedic Philosophy', exp: '18 yrs', icon: '📿' },
-  { name: 'Smt. Kavita Gupta', role: 'Cultural Arts', exp: '12 yrs', icon: '🎶' },
+  {
+    name: 'Pandit Ramesh Sharma',
+    role: 'Head — Gita & Sanskrit',
+    exp: '22 yrs',
+    icon: '🪔',
+  },
+  {
+    name: 'Dr. Meera Devi',
+    role: 'Yoga & Meditation',
+    exp: '15 yrs',
+    icon: '🧘',
+  },
+  {
+    name: 'Acharya Sunil Ji',
+    role: 'Vedic Philosophy',
+    exp: '18 yrs',
+    icon: '📿',
+  },
+  {
+    name: 'Smt. Kavita Gupta',
+    role: 'Cultural Arts',
+    exp: '12 yrs',
+    icon: '🎶',
+  },
 ];
 
 const ageGroups = [
@@ -37,10 +87,22 @@ const stats = [
 ];
 
 const schedule = [
-  { day: 'Mon & Wed', time: '4:00 – 6:00 PM', topic: 'Gita Shlokas & Sanskrit' },
+  {
+    day: 'Mon & Wed',
+    time: '4:00 – 6:00 PM',
+    topic: 'Gita Shlokas & Sanskrit',
+  },
   { day: 'Tue & Thu', time: '4:00 – 5:30 PM', topic: 'Yoga & Pranayama' },
-  { day: 'Saturday', time: '10:00 AM – 1:00 PM', topic: 'Cultural Arts & Seva' },
-  { day: 'Sunday', time: '9:00 – 11:00 AM', topic: 'Vedic Philosophy & Satsang' },
+  {
+    day: 'Saturday',
+    time: '10:00 AM – 1:00 PM',
+    topic: 'Cultural Arts & Seva',
+  },
+  {
+    day: 'Sunday',
+    time: '9:00 – 11:00 AM',
+    topic: 'Vedic Philosophy & Satsang',
+  },
 ];
 
 export default function BalSanskarSection() {
@@ -54,8 +116,7 @@ export default function BalSanskarSection() {
           <Text style={styles.badgeText}>✨ Vedic Education Program</Text>
         </View>
         <Text style={styles.heroHeading}>
-          Nurturing{' '}
-          <Text style={styles.accent}>Young Minds</Text>
+          Nurturing <Text style={styles.accent}>Young Minds</Text>
           {'\n'}With Timeless Values
         </Text>
         <Text style={styles.desc}>
@@ -63,7 +124,7 @@ export default function BalSanskarSection() {
           modern learning — building spiritual character from an early age.
         </Text>
         <View style={styles.statsRow}>
-          {stats.map((s) => (
+          {stats.map(s => (
             <View key={s.label} style={styles.statItem}>
               <Text style={styles.statValue}>{s.value}</Text>
               <Text style={styles.statLabel}>{s.label}</Text>
@@ -79,10 +140,13 @@ export default function BalSanskarSection() {
           <Text style={styles.sectionTitle}>Age Groups</Text>
         </View>
         <View style={styles.ageRow}>
-          {ageGroups.map((g) => (
+          {ageGroups.map(g => (
             <View
               key={g.label}
-              style={[styles.ageCard, { backgroundColor: `rgba(${RGB.saffron},${g.tint})` }]}>
+              style={[
+                styles.ageCard,
+                { backgroundColor: `rgba(${RGB.saffron},${g.tint})` },
+              ]}>
               <Text style={styles.ageNum}>{g.age}</Text>
               <Text style={styles.ageLabel}>{g.label}</Text>
               <Text style={styles.ageDesc}>{g.desc}</Text>
@@ -98,7 +162,7 @@ export default function BalSanskarSection() {
           <Text style={styles.sectionTitle}>Our Curriculum</Text>
         </View>
         <View style={styles.grid}>
-          {curriculum.map((item) => (
+          {curriculum.map(item => (
             <View key={item.title} style={styles.currCard}>
               <Text style={styles.currIcon}>{item.icon}</Text>
               <View style={styles.levelBadge}>
@@ -120,7 +184,7 @@ export default function BalSanskarSection() {
         <Text style={styles.subText}>
           Experienced spiritual educators devoted to shaping the next generation
         </Text>
-        {teachers.map((t) => (
+        {teachers.map(t => (
           <View key={t.name} style={styles.teacherCard}>
             <View style={styles.avatar}>
               <Text style={styles.avatarIcon}>{t.icon}</Text>
@@ -143,7 +207,12 @@ export default function BalSanskarSection() {
           <Text style={styles.sectionTitle}>Weekly Schedule</Text>
         </View>
         {schedule.map((s, i) => (
-          <View key={s.day} style={[styles.scheduleRow, i === schedule.length - 1 && { borderBottomWidth: 0 }]}>
+          <View
+            key={s.day}
+            style={[
+              styles.scheduleRow,
+              i === schedule.length - 1 && { borderBottomWidth: 0 },
+            ]}>
             <View style={styles.dot} />
             <View style={styles.scheduleInfo}>
               <Text style={styles.scheduleDay}>{s.day}</Text>
@@ -158,7 +227,8 @@ export default function BalSanskarSection() {
       <Card radius={radii.xl} style={[styles.card, styles.ctaCard]}>
         <Text style={styles.ctaHeading}>Enroll Your Child Today</Text>
         <Text style={styles.ctaSubtext}>
-          Give your child the gift of Gita wisdom.{'\n'}Admissions open for all age groups.
+          Give your child the gift of Gita wisdom.{'\n'}Admissions open for all
+          age groups.
         </Text>
         <TouchableOpacity style={styles.ctaButton} activeOpacity={0.85}>
           <Text style={styles.ctaButtonText}>Apply for Admission</Text>
@@ -176,7 +246,7 @@ const styles = StyleSheet.create({
   card: {
     marginHorizontal: spacing.md,
     padding: spacing.md,
-    marginBottom: spacing.md
+    marginBottom: spacing.md,
   },
   badge: {
     alignSelf: 'flex-start',
@@ -186,12 +256,12 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.xs,
     borderWidth: 1,
     borderColor: `rgba(${RGB.saffron},0.3)`,
-    marginBottom: spacing.sm
+    marginBottom: spacing.sm,
   },
   badgeText: {
     color: COLORS.saffron,
     ...type.caption,
-    letterSpacing: 0.4
+    letterSpacing: 0.4,
   },
   heroHeading: {
     ...type.title,
@@ -200,91 +270,91 @@ const styles = StyleSheet.create({
     lineHeight: 28,
     marginBottom: spacing.sm,
     fontFamily: DESIGN.fonts.editorial,
-    fontWeight: "400",
-    letterSpacing: -0.4
+    fontWeight: '400',
+    letterSpacing: -0.4,
   },
   accent: {
-    color: COLORS.saffron
+    color: COLORS.saffron,
   },
   desc: {
     ...type.body,
     color: COLORS.warmBrown,
-    marginBottom: spacing.md
+    marginBottom: spacing.md,
   },
   statsRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     backgroundColor: COLORS.creamDark,
     borderRadius: radii.md,
-    padding: spacing.sm
+    padding: spacing.sm,
   },
   statItem: {
     alignItems: 'center',
-    flex: 1
+    flex: 1,
   },
   statValue: {
     color: COLORS.saffron,
     fontSize: 16,
-    fontWeight: "600"
+    fontWeight: '600',
   },
   statLabel: {
     ...type.footnote,
     fontSize: 12,
     color: COLORS.warmBrown,
     marginTop: 2,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   rowTitle: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.sm,
-    marginBottom: spacing.sm
+    marginBottom: spacing.sm,
   },
   rowIcon: {
-    fontSize: 18
+    fontSize: 18,
   },
   sectionTitle: {
     ...type.headline,
     fontSize: 15,
-    color: COLORS.deepBrown
+    color: COLORS.deepBrown,
   },
   subText: {
     ...type.footnote,
     color: COLORS.warmBrown,
     marginBottom: spacing.sm,
-    lineHeight: 16
+    lineHeight: 16,
   },
   ageRow: {
     flexDirection: 'row',
-    gap: spacing.sm
+    gap: spacing.sm,
   },
   ageCard: {
     flex: 1,
     borderRadius: radii.md,
     padding: spacing.sm,
-    alignItems: 'center'
+    alignItems: 'center',
   },
   ageNum: {
     color: COLORS.saffron,
     fontSize: 15,
-    fontWeight: "600"
+    fontWeight: '600',
   },
   ageLabel: {
     color: COLORS.deepBrown,
     fontSize: 12,
     fontWeight: '700',
-    marginTop: 2
+    marginTop: 2,
   },
   ageDesc: {
     color: COLORS.warmBrown,
     fontSize: 12,
     marginTop: 3,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   grid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: spacing.sm
+    gap: spacing.sm,
   },
   currCard: {
     width: '47%',
@@ -294,11 +364,11 @@ const styles = StyleSheet.create({
     borderColor: DESIGN.colors.border,
     borderWidth: 1,
     shadowOpacity: 0.045,
-    elevation: 2
+    elevation: 2,
   },
   currIcon: {
     fontSize: 22,
-    marginBottom: spacing.xs
+    marginBottom: spacing.xs,
   },
   levelBadge: {
     alignSelf: 'flex-start',
@@ -306,23 +376,23 @@ const styles = StyleSheet.create({
     borderRadius: radii.sm,
     paddingHorizontal: 6,
     paddingVertical: 2,
-    marginBottom: 5
+    marginBottom: 5,
   },
   levelText: {
     color: COLORS.saffron,
     fontSize: 12,
-    fontWeight: '700'
+    fontWeight: '700',
   },
   currTitle: {
     color: COLORS.deepBrown,
     fontSize: 12,
     fontWeight: '700',
-    marginBottom: 3
+    marginBottom: 3,
   },
   currDesc: {
     color: COLORS.warmBrown,
     fontSize: 12,
-    lineHeight: 18
+    lineHeight: 18,
   },
   teacherCard: {
     flexDirection: 'row',
@@ -336,7 +406,7 @@ const styles = StyleSheet.create({
     borderColor: DESIGN.colors.border,
     borderWidth: 1,
     shadowOpacity: 0.045,
-    elevation: 2
+    elevation: 2,
   },
   avatar: {
     width: 42,
@@ -344,34 +414,34 @@ const styles = StyleSheet.create({
     borderRadius: 21,
     backgroundColor: `rgba(${RGB.saffron},0.14)`,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   avatarIcon: {
-    fontSize: 20
+    fontSize: 20,
   },
   teacherInfo: {
-    flex: 1
+    flex: 1,
   },
   teacherName: {
     color: COLORS.deepBrown,
     fontSize: 13,
-    fontWeight: '700'
+    fontWeight: '700',
   },
   teacherRole: {
     color: COLORS.warmBrown,
     fontSize: 12,
-    marginTop: 2
+    marginTop: 2,
   },
   expBadge: {
     backgroundColor: `rgba(${RGB.saffron},0.12)`,
     borderRadius: radii.sm,
     paddingHorizontal: spacing.xs,
-    paddingVertical: 4
+    paddingVertical: 4,
   },
   expText: {
     color: COLORS.saffron,
     fontSize: 12,
-    fontWeight: '700'
+    fontWeight: '700',
   },
   scheduleRow: {
     flexDirection: 'row',
@@ -379,49 +449,49 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
     paddingVertical: 9,
     borderBottomWidth: 1,
-    borderBottomColor: hairline
+    borderBottomColor: hairline,
   },
   dot: {
     width: 7,
     height: 7,
     borderRadius: 4,
-    backgroundColor: COLORS.saffron
+    backgroundColor: COLORS.saffron,
   },
   scheduleInfo: {
-    flex: 1
+    flex: 1,
   },
   scheduleDay: {
     color: COLORS.deepBrown,
     fontSize: 12,
-    fontWeight: '700'
+    fontWeight: '700',
   },
   scheduleTopic: {
     color: COLORS.warmBrown,
     fontSize: 12,
-    marginTop: 1
+    marginTop: 1,
   },
   scheduleTime: {
     color: COLORS.saffron,
     fontSize: 12,
-    fontWeight: '600'
+    fontWeight: '600',
   },
   ctaCard: {
     alignItems: 'center',
-    padding: spacing.lg
+    padding: spacing.lg,
   },
   ctaHeading: {
     ...type.headline,
     fontSize: 17,
     color: COLORS.deepBrown,
     textAlign: 'center',
-    marginBottom: spacing.sm
+    marginBottom: spacing.sm,
   },
   ctaSubtext: {
     ...type.footnote,
     color: COLORS.warmBrown,
     textAlign: 'center',
     lineHeight: 16,
-    marginBottom: spacing.md
+    marginBottom: spacing.md,
   },
   ctaButton: {
     flexDirection: 'row',
@@ -431,19 +501,19 @@ const styles = StyleSheet.create({
     borderRadius: radii.lg,
     paddingVertical: 13,
     paddingHorizontal: spacing.xl,
-    marginBottom: spacing.sm
+    marginBottom: spacing.sm,
   },
   ctaButtonText: {
     color: COLORS.white,
     fontSize: 13,
-    fontWeight: "600"
+    fontWeight: '600',
   },
   secondaryBtn: {
-    paddingVertical: spacing.xs
+    paddingVertical: spacing.xs,
   },
   secondaryText: {
     color: COLORS.warmBrown,
     fontSize: 12,
-    textDecorationLine: 'underline'
-  }
+    textDecorationLine: 'underline',
+  },
 });

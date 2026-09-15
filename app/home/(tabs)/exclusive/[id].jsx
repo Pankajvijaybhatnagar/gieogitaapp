@@ -8,13 +8,14 @@
 import { Ionicons } from '@expo/vector-icons';
 import { router, useLocalSearchParams } from 'expo-router';
 import {
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 
+import GitaText from '@/components/common/GitaText';
 import AshtaDashShalokiGita from '@/components/join/AshtaDashShalokiGita';
 import Card from '@/components/ui/Card';
 import Spacer from '@/components/ui/Spacer';
@@ -33,14 +34,13 @@ const EXCLUSIVE_DETAILS = {
   2: {
     icon: '📿',
     title: 'Ashtadash Shaloki Gita',
-    subtitle: 'Eighteen verses said to hold the essence of the Bhagavad Gita',
+    subtitle: 'Eighteen verses said to hold the essence of the Bhagwad Gita',
     render: 'ashtadash',
   },
   3: {
     icon: '🪔',
     title: 'Purushottam Yoga',
-    subtitle:
-      'Chapter 15 of the Bhagavad Gita — the Yoga of the Supreme Person',
+    subtitle: 'Chapter 15 of the Bhagwad Gita — the Yoga of the Supreme Person',
     body: [
       'In this chapter, Shri Krishna describes the eternal tree of the material world — its roots above and its branches spread below — and explains how one must cut this tree with the axe of detachment to reach the imperishable, original position.',
       'He then reveals the nature of the Purushottama, the Supreme Person who is beyond both the perishable material world and the imperishable individual soul, and who pervades and sustains the entire universe.',
@@ -51,9 +51,9 @@ const EXCLUSIVE_DETAILS = {
     icon: '📖',
     title: 'Sapta Shloki Gita',
     subtitle:
-      'Seven verses said to carry the complete essence of the Bhagavad Gita',
+      'Seven verses said to carry the complete essence of the Bhagwad Gita',
     body: [
-      'Sapta Shloki Gita is a small, traditional collection of seven verses drawn from the Bhagavad Gita, believed by many devotees to condense the scripture’s teaching into a form that can be easily remembered and recited every day.',
+      'Sapta Shloki Gita is a small, traditional collection of seven verses drawn from the Bhagwad Gita, believed by many devotees to condense the scripture’s teaching into a form that can be easily remembered and recited every day.',
       'These verses are often chanted as a daily reminder of the Gita’s core message — performing one’s duty without attachment to results, and surrendering with devotion to the Divine.',
     ],
   },
@@ -87,7 +87,7 @@ export default function ExclusiveDetail() {
           <Ionicons name="chevron-back" size={22} color={COLORS.white} />
         </TouchableOpacity>
 
-        <Text style={styles.notFoundIcon}>🕉️</Text>
+        <GitaText style={styles.notFoundIcon} />
         <Text style={styles.notFoundTitle}>Content Not Found</Text>
         <Text style={styles.notFoundText}>
           This piece of exclusive content isn&apos;t available right now.
@@ -122,7 +122,7 @@ export default function ExclusiveDetail() {
               <Ionicons name="chevron-back" size={22} color={COLORS.white} />
             </TouchableOpacity>
 
-            <Text style={styles.heroOm}>ॐ</Text>
+            <Text style={styles.heroOm}></Text>
           </View>
 
           <View style={styles.heroIconRing}>
