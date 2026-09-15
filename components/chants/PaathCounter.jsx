@@ -556,7 +556,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     letterSpacing: 2,
     fontWeight: '600',
-    color: COLORS.goldDark,
+    color: COLORS.richBrown,
     marginHorizontal: 10,
     textAlign: 'center',
   },
@@ -619,7 +619,7 @@ const styles = StyleSheet.create({
   },
   arrowText: {
     fontSize: 16,
-    color: COLORS.goldDark,
+    color: COLORS.richBrown,
     fontWeight: '600',
   },
   counterBox: {

@@ -169,7 +169,7 @@ function EkMinSection() {
         </Text>
 
         <View style={pmStyles.datePill}>
-          <FontAwesome name="users" size={11} color={COLORS.warmBrown} />
+          <FontAwesome name="users" size={11} color={COLORS.richBrown} />
           <Text style={pmStyles.datePillText}>
             18 Adhyays • Daily Recitation Campaign
           </Text>
@@ -279,7 +279,7 @@ function PaathDetailScreen({ setShowPaath, stats, onSubmit }) {
         <TouchableOpacity
           style={cdStyles.backBtn}
           onPress={() => setShowPaath(false)}>
-          <FontAwesome name="chevron-left" size={14} color={COLORS.saffron} />
+          <FontAwesome name="chevron-left" size={14} color={COLORS.dangerRed} />
         </TouchableOpacity>
         <Text style={cdStyles.headerTitle}>Gita Paath</Text>
         <View style={{ width: 36 }} />
@@ -527,7 +527,7 @@ const sharedStyles = StyleSheet.create({
     fontSize: 12,
     letterSpacing: 2,
     fontWeight: '600',
-    color: COLORS.goldDark,
+    color: COLORS.dangerRed,
     marginHorizontal: 10,
   },
 });
@@ -599,7 +599,7 @@ const pmStyles = StyleSheet.create({
     fontFamily: DESIGN.fonts.editorial,
   },
   heroTitleAccent: {
-    color: COLORS.saffron,
+    color: COLORS.dangerRed,
     fontSize: 34,
     fontWeight: '600',
   },
@@ -648,7 +648,7 @@ const pmStyles = StyleSheet.create({
   pmSectionLabel: {
     fontSize: 12,
     letterSpacing: 2,
-    color: COLORS.saffron,
+    color: COLORS.dangerRed,
     fontWeight: '600',
     marginBottom: 6,
   },
@@ -658,7 +658,7 @@ const pmStyles = StyleSheet.create({
     marginBottom: 10,
   },
   significanceTitleAccent: {
-    color: COLORS.saffron,
+    color: COLORS.dangerRed,
   },
   significanceDesc: {
     ...type.body,
@@ -670,7 +670,7 @@ const pmStyles = StyleSheet.create({
     borderRadius: radii.md,
     padding: 14,
     borderLeftWidth: 3,
-    borderLeftColor: COLORS.saffron,
+    borderLeftColor: COLORS.dangerRed,
   },
   shlokaDevanagari: {
     fontSize: 12,
@@ -827,7 +827,7 @@ const mainStyles = StyleSheet.create({
   },
   greetingSmall: {
     fontSize: 12,
-    color: COLORS.goldDark,
+    color: COLORS.dangerRed,
     letterSpacing: 0.5,
     marginBottom: 2,
   },
@@ -854,7 +854,7 @@ const mainStyles = StyleSheet.create({
     width: 7,
     height: 7,
     borderRadius: 4,
-    backgroundColor: COLORS.saffron,
+    backgroundColor: COLORS.dangerRed,
     borderWidth: 1,
     borderColor: COLORS.cream,
   },
@@ -875,7 +875,7 @@ const mainStyles = StyleSheet.create({
   },
   quoteTopLabel: {
     fontSize: 15,
-    color: COLORS.saffron,
+    color: COLORS.dangerRed,
     letterSpacing: 2,
     fontWeight: '700',
   },
@@ -1017,7 +1017,7 @@ const mainStyles = StyleSheet.create({
   },
   liveTagText: {
     fontSize: 10,
-    color: COLORS.saffron,
+    color: COLORS.dangerRed,
     fontWeight: '600',
     letterSpacing: 0.5,
   },
@@ -1041,7 +1041,7 @@ const mainStyles = StyleSheet.create({
     marginBottom: 6,
   },
   chantsSectionAccent: {
-    color: COLORS.saffron,
+    color: COLORS.dangerRed,
   },
   chantsSectionDesc: {
     fontSize: 12,

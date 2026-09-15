@@ -369,7 +369,7 @@ const YourChants = () => {
           description="Chants completed today"
           value={today}
           iconBackground={`rgba(${RGB.gold},0.18)`}
-          iconColor={BASE.goldDark}
+          iconColor={BASE.richBrown}
         />
 
         <StatCapsule
@@ -743,7 +743,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '600',
     letterSpacing: 1.4,
-    color: COLORS.secondary,
+    color: BASE.richBrown,
     marginBottom: 2,
   },
   sectionTitle: {

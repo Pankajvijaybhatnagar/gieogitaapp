@@ -22,9 +22,9 @@ export const COLORS = {
   saffronLight: '#CD8B6E',
   textDark: DESIGN.colors.ink,
   white: '#FFFFFF',
-  liveRed: '#D6483A',
-  dangerRed: '#C0392B',
-  dangerLight: '#E15C4D',
+  liveRed: '#5A2606',
+  dangerRed: '#5A2606',
+  dangerLight: '#5A2606',
 };
 
 // RGB triplets for the same tokens, for spots that use rgba(r,g,b,alpha) literals.

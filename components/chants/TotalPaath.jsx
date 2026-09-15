@@ -404,7 +404,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '700',
     letterSpacing: 1,
-    color: COLORS.muted,
+    color: BASE.richBrown,
   },
   countText: {
     fontSize: 43,
